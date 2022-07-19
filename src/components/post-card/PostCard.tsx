@@ -9,16 +9,21 @@ export const PostCard = forwardRef<HTMLDivElement, PostCardProps>(
   ({ thumbnail, title, excerpt, slug, publishedAt, ...props }, ref) => {
     return (
       <div ref={ref} {...props}>
-        <Image
-          src={thumbnail}
-          alt={title}
-          className="rounded"
-          width={480}
-          height={320}
-        />
-        <Link href={slug} passHref>
-          <a className="mt-4 font-bold text-xl">{title}</a>
-        </Link>
+        <div className="relative h-[320px] w-full">
+          <Image
+            src={thumbnail}
+            alt={title}
+            height={320}
+            layout="fill"
+            objectFit="cover"
+            className="rounded"
+          />
+        </div>
+        <div className="mt-4">
+          <Link href={slug} passHref>
+            <a className="font-bold text-xl">{title}</a>
+          </Link>
+        </div>
         <p className="mt-2 text-gray-700">{excerpt}</p>
         <p className="mt-2 font-semibold">
           Published at :{' '}

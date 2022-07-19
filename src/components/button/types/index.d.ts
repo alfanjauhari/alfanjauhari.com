@@ -1,5 +1,3 @@
-import { ButtonHTMLAttributes } from 'react';
-
 export declare type VariantType = 'primary' | 'secondary';
 
 export declare type SizeType = 'sm' | 'md' | 'lg';

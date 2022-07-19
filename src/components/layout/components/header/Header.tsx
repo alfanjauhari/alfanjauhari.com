@@ -18,11 +18,7 @@ export const Header = forwardRef<HTMLElement, HeaderProps>((props, ref) => {
       <div>
         <Link href="/" passHref>
           <a className="flex items-center">
-            <Avatar
-              src="/images/profile-image.webp"
-              alt={profile.name}
-              size="lg"
-            />
+            <Avatar src="/images/profile-image.webp" alt={profile.name} />
             <h1 className="font-semibold ml-2">{profile.name}</h1>
           </a>
         </Link>
