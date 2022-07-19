@@ -12,14 +12,8 @@ export function Avatar({
   ...props
 }: AvatarProps) {
   return (
-    <Image
-      src={src}
-      alt={alt}
-      className="rounded-full"
-      width={40}
-      height={40}
-      objectFit="cover"
-      {...props}
-    />
+    <div className="w-12 h-12 relative">
+      <Image src={src} alt={alt} layout="fill" objectFit="cover" {...props} />
+    </div>
   );
 }
