@@ -56,7 +56,7 @@ export function Blog({ articles }: BlogProps) {
             things.
           </h2>
         </div>
-        <div className="flex flex-col justify-center md:flex-row flex-wrap -mx-4">
+        <div className="flex flex-col md:flex-row flex-wrap -mx-4">
           {articles.length > 0 ? (
             currentArticles.map((frontMatter) => (
               <PostCard

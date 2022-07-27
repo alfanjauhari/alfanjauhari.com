@@ -31,7 +31,7 @@ export function Home({ articles }: HomeProps) {
         <h1 className="font-bold text-4xl lg:text-5xl leading-none">
           Latest articles
         </h1>
-        <article className="flex flex-col md:flex-row justify-center flex-wrap -mx-4">
+        <article className="flex flex-col md:flex-row flex-wrap -mx-4">
           {articles.length > 0 &&
             articles
               .slice(0, 4)
