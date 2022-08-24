@@ -1,7 +1,7 @@
 const profile = {
   name: 'Alfan Jauhari',
-  job: 'Frontend Developer',
-  tagline: 'Realizing digital dreams come true as frontend developer',
+  job: 'Product Engineer',
+  tagline: 'Realizing digital dreams come true as product engineer',
   baseURL: 'https://alfanjauhari.com',
   twitter: '@alfanjauhari_',
 };
