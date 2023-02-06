@@ -7,11 +7,13 @@ export type AvatarProps = Overwrite<
   ImageProps
 >;
 
+// #region Styled
 const StyledAvatarWrapper = styled('div', {
   width: '48px',
   height: '48px',
   position: 'relative',
 });
+// #endregion Styled
 
 export function Avatar({
   src,

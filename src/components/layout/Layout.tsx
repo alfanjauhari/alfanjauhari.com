@@ -2,6 +2,7 @@ import { styled } from '@/theme';
 import { HTMLAttributes, PropsWithChildren } from 'react';
 import { Header } from './components';
 
+// #region Styled
 const StyledMain = styled('main', {
   width: '100%',
   overflow: 'hidden',
@@ -19,6 +20,7 @@ const StyledMain = styled('main', {
     px: '288px',
   },
 });
+// #endregion Styled
 
 export function Layout({
   children,

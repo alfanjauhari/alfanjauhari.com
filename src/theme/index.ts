@@ -1,11 +1,18 @@
-import { Inter } from '@next/font/google';
+import { Inter, JetBrains_Mono as JetBrainsMono } from '@next/font/google';
 import { createStitches } from '@stitches/react';
 import { breakpoints } from './breakpoints';
 import { utils } from './utils';
 
+// #region Fonts
 const inter = Inter({
   subsets: ['latin'],
 });
+
+const jetBrainsMono = JetBrainsMono({
+  subsets: ['latin'],
+  weight: ['400', '600'],
+});
+// #endregion Fonts
 
 export const { styled, getCssText } = createStitches({
   theme: {
@@ -49,6 +56,7 @@ export const { styled, getCssText } = createStitches({
     },
     fonts: {
       sans: inter.style.fontFamily,
+      mono: jetBrainsMono.style.fontFamily,
     },
     colors: {
       gray1: 'rgb(243 244 246)',

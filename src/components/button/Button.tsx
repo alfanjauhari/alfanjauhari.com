@@ -1,6 +1,7 @@
 import { styled } from '@/theme';
 import { ComponentProps } from 'react';
 
+// #region Styled
 export const Button = styled('button', {
   borderRadius: '4px',
   '&:focus': {
@@ -48,5 +49,6 @@ export const Button = styled('button', {
     },
   },
 });
+// #endregion Styled
 
 export type ButtonProps = ComponentProps<typeof Button>;

@@ -7,6 +7,7 @@ import { Avatar, MenuList, TogglerButton } from './components';
 
 export type HeaderProps = HTMLAttributes<HTMLElement>;
 
+// #region Styled
 const StyledHeader = styled('header', {
   position: 'sticky',
   top: 0,
@@ -63,6 +64,7 @@ const StyledMenuListItem = styled('li', {
 const StyledMenuListItemLink = styled(Link, {
   fontWeight: '600',
 });
+// #endregion Styled
 
 export const Header = forwardRef<HTMLElement, HeaderProps>((props, ref) => {
   const [isMenuOpen, toggleMenu] = useToggle();

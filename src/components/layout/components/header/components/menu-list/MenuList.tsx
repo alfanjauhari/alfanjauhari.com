@@ -1,6 +1,7 @@
 import { styled } from '@/theme';
 import { ComponentProps } from 'react';
 
+// #region Styled
 export const MenuList = styled('ul', {
   variants: {
     isMenuOpen: {
@@ -35,5 +36,6 @@ export const MenuList = styled('ul', {
     },
   },
 });
+// #endregion Styled
 
 export type MenuListProps = ComponentProps<typeof MenuList>;
