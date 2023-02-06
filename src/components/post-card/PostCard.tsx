@@ -13,14 +13,13 @@ export const PostCard = forwardRef<HTMLDivElement, PostCardProps>(
           <Image
             src={thumbnail}
             alt={title}
-            height={320}
             layout="fill"
             objectFit="cover"
             className="rounded"
           />
         </div>
         <div className="mt-4">
-          <Link href={slug} passHref>
+          <Link href={slug} passHref legacyBehavior>
             <a className="font-bold text-xl">{title}</a>
           </Link>
         </div>

@@ -10,10 +10,13 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@next/font": "^13.1.6",
+    "@radix-ui/colors": "^0.1.8",
+    "@stitches/react": "^1.2.8",
     "clsx": "^1.2.1",
     "esbuild": "^0.14.49",
     "mdx-bundler": "^9.0.1",
-    "next": "12.2.2",
+    "next": "13.1.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "rehype-prism-plus": "^1.4.2",

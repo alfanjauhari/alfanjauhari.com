@@ -1,3 +1,4 @@
+import { styled } from '@/theme';
 import Image, { ImageProps } from 'next/image';
 import { ImgHTMLAttributes } from 'react';
 
@@ -6,14 +7,20 @@ export type AvatarProps = Overwrite<
   ImageProps
 >;
 
+const StyledAvatarWrapper = styled('div', {
+  width: '48px',
+  height: '48px',
+  position: 'relative',
+});
+
 export function Avatar({
   src,
   alt = 'Uncaptioned Image',
   ...props
 }: AvatarProps) {
   return (
-    <div className="w-12 h-12 relative">
+    <StyledAvatarWrapper>
       <Image src={src} alt={alt} layout="fill" objectFit="cover" {...props} />
-    </div>
+    </StyledAvatarWrapper>
   );
 }

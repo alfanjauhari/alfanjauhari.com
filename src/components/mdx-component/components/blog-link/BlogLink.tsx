@@ -14,6 +14,7 @@ export function BlogLink({
       <Link
         className="text-blue-600 hover:text-blue-500 duration-300"
         href={href}
+        legacyBehavior
         {...props}
       />
     );

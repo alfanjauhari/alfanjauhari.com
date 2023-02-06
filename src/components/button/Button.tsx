@@ -1,39 +1,52 @@
-import clsx from 'clsx';
-import { ButtonHTMLAttributes, forwardRef } from 'react';
-import { baseButtonClassNames, buttonSizes, buttonVariants } from './configs';
-import { CustomButtonProps } from './types';
+import { styled } from '@/theme';
+import { ComponentProps } from 'react';
 
-export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
-  CustomButtonProps;
-
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    {
-      children,
-      variant = 'primary',
-      size = 'md',
-      block = false,
-      className,
-      ...props
-    },
-    ref,
-  ) => {
-    return (
-      <button
-        className={clsx(
-          baseButtonClassNames,
-          {
-            [buttonSizes[size]]: !block,
-            'w-full': block,
-          },
-          buttonVariants[variant],
-          className,
-        )}
-        ref={ref}
-        {...props}
-      >
-        {children}
-      </button>
-    );
+export const Button = styled('button', {
+  borderRadius: '4px',
+  '&:focus': {
+    outline: 'none',
+    boxShadow: 'inset 0 0 0 1px $colors$blue8, 0 0 0 1px $colors$gray8',
   },
-);
+  variants: {
+    variant: {
+      primary: {
+        backgroundColor: '$gray9',
+        color: 'White',
+        '&:hover': {
+          backgroundColor: '$gray7',
+          transitionDuration: '300ms',
+        },
+      },
+      secondary: {
+        backgroundColor: '$gray3',
+        color: '$gray9',
+        '&:hover': {
+          backgroundColor: '$gray2',
+          transitionDuration: '300ms',
+        },
+      },
+    },
+    size: {
+      sm: {
+        py: '$2',
+        px: '$4',
+      },
+      md: {
+        py: '$2',
+        px: '$6',
+        '@md': {
+          px: '$8',
+        },
+      },
+      lg: {
+        py: '$3',
+        px: '$6',
+        '@md': {
+          px: '$8',
+        },
+      },
+    },
+  },
+});
+
+export type ButtonProps = ComponentProps<typeof Button>;
