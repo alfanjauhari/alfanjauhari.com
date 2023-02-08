@@ -1,7 +1,9 @@
 import { Button, SEO } from '@/components';
 import { PostCard } from '@/components/post-card';
 import { styled } from '@/theme';
-import { getArticles } from '@/utils';
+import { allPosts, Post } from '@contentlayer/generated';
+import { compareDesc, format } from 'date-fns';
+import { GetStaticPropsResult, InferGetStaticPropsType } from 'next';
 import { useCallback, useEffect, useState } from 'react';
 
 // #region Styled
@@ -55,40 +57,54 @@ const StyledArticles = styled('section', {
 // #endregion Styled
 
 export type BlogProps = {
-  articles: PostType[];
+  articles: Post[];
 };
 
-export default function Blog({ articles }: BlogProps) {
-  const postsPerPage = 4;
+export async function getStaticProps(): Promise<
+  GetStaticPropsResult<{
+    posts: Post[];
+  }>
+> {
+  const posts = allPosts
+    .sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)))
+    .map(({ date, ...post }) => ({
+      ...post,
+      date: format(new Date(date), 'dd LLLL yyyy'),
+    }));
 
-  const [nextArticles, setNextArticles] = useState<number>(2);
-  const [currentArticles, setCurrentArticles] = useState<PostType[]>([]);
+  return {
+    props: {
+      posts,
+    },
+  };
+}
 
-  const sortedArticles = articles.sort(
-    (a, b) => Number(new Date(b.publishedAt)) - Number(new Date(a.publishedAt)),
-  );
+export default function Blog({
+  posts,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
+  const POSTS_PER_PAGE = 4;
+
+  const [nextPosts, setNextPosts] = useState(2);
+  const [currentPosts, setCurrentPosts] = useState<Post[]>([]);
 
   const slicePost = useCallback(
     (start: number, end: number) => {
-      const slicedArticles = sortedArticles.slice(start, end);
+      const slicedPosts = posts.slice(start, end);
 
-      setCurrentArticles((prevArticles) => [
-        ...prevArticles,
-        ...slicedArticles,
-      ]);
+      setCurrentPosts((prevPosts) => [...prevPosts, ...slicedPosts]);
     },
-    [sortedArticles],
+    [posts],
   );
 
   const loadMore = () => {
-    slicePost(nextArticles, nextArticles + postsPerPage);
-    setNextArticles((prevNextArticles) => prevNextArticles + postsPerPage);
+    slicePost(nextPosts, nextPosts + POSTS_PER_PAGE);
+    setNextPosts((prevPosts) => prevPosts + POSTS_PER_PAGE);
   };
 
   useEffect(() => {
-    setCurrentArticles([]);
-    setNextArticles(2);
-    slicePost(0, postsPerPage);
+    setCurrentPosts([]);
+    setNextPosts(2);
+    slicePost(0, POSTS_PER_PAGE);
   }, [slicePost]);
 
   return (
@@ -106,16 +122,16 @@ export default function Blog({ articles }: BlogProps) {
             things.
           </h2>
         </div>
-        {articles.length > 0 ? (
+        {posts.length > 0 ? (
           <article className="articles-list">
-            {currentArticles.map((frontMatter) => (
+            {currentPosts.map((post) => (
               <PostCard
-                title={frontMatter.title}
-                excerpt={frontMatter.excerpt}
-                thumbnail={frontMatter.thumbnail}
-                slug={`/blog/${frontMatter.slug}`}
-                publishedAt={frontMatter.publishedAt}
-                key={frontMatter.slug}
+                title={post.title}
+                excerpt={post.excerpt}
+                thumbnail={post.thumbnail}
+                slug={`/blog/${post.slug}`}
+                publishedAt={post.date}
+                key={post.slug}
               />
             ))}
           </article>
@@ -124,8 +140,8 @@ export default function Blog({ articles }: BlogProps) {
             Articles not found. Maybe i&lsquo;m so lazy to make an article :p
           </h1>
         )}
-        {articles.length > postsPerPage &&
-          articles.length !== currentArticles.length && (
+        {posts.length > POSTS_PER_PAGE &&
+          posts.length !== currentPosts.length && (
             <div className="load-more-wrapper">
               <Button variant="primary" size="lg" onClick={loadMore}>
                 Load More
@@ -135,17 +151,4 @@ export default function Blog({ articles }: BlogProps) {
       </StyledArticles>
     </>
   );
-}
-
-export async function getStaticProps() {
-  const articles: PostType[] = (await getArticles()) as PostType[];
-  const sortedArticles = articles.sort(
-    (a, b) => Number(new Date(b.publishedAt)) - Number(new Date(a.publishedAt)),
-  );
-
-  return {
-    props: {
-      articles: sortedArticles,
-    },
-  };
 }

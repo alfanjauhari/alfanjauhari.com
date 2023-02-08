@@ -2,7 +2,9 @@ import { ButtonLink, SEO } from '@/components';
 import { PostCard } from '@/components/post-card';
 import { profile } from '@/configs';
 import { styled } from '@/theme';
-import { getArticles } from '@/utils';
+import { allPosts, Post } from '@contentlayer/generated';
+import { compareDesc, format } from 'date-fns';
+import { GetStaticPropsResult, InferGetStaticPropsType } from 'next';
 
 // #region Styled
 const StyledHero = styled('section', {
@@ -71,11 +73,28 @@ const StyledArticles = styled('section', {
 });
 // #endregion Styled
 
-interface HomeProps {
-  articles: PostType[];
+export async function getStaticProps(): Promise<
+  GetStaticPropsResult<{
+    posts: Post[];
+  }>
+> {
+  const posts = allPosts
+    .sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)))
+    .map(({ date, ...post }) => ({
+      ...post,
+      date: format(new Date(date), 'dd LLLL yyyy'),
+    }));
+
+  return {
+    props: {
+      posts,
+    },
+  };
 }
 
-export default function Home({ articles }: HomeProps) {
+export default function Home({
+  posts,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
       <SEO
@@ -97,21 +116,21 @@ export default function Home({ articles }: HomeProps) {
       <StyledArticles id="articles">
         <h1 className="articles-title">Latest articles</h1>
         <article className="articles-list">
-          {articles.length > 0 &&
-            articles
+          {posts.length > 0 &&
+            posts
               .slice(0, 4)
-              .map((frontMatter) => (
+              .map((post) => (
                 <PostCard
-                  title={frontMatter.title}
-                  excerpt={frontMatter.excerpt}
-                  thumbnail={frontMatter.thumbnail}
-                  slug={`/blog/${frontMatter.slug}`}
-                  publishedAt={frontMatter.publishedAt}
-                  key={frontMatter.slug}
+                  title={post.title}
+                  excerpt={post.excerpt}
+                  thumbnail={post.thumbnail}
+                  slug={`/blog/${post.slug}`}
+                  publishedAt={post.date}
+                  key={post.slug}
                 />
               ))}
         </article>
-        {articles.length > 4 && (
+        {posts.length > 4 && (
           <div className="load-more-wrapper">
             <ButtonLink variant="primary" size="lg" href="/blog">
               Load More Articles
@@ -121,17 +140,4 @@ export default function Home({ articles }: HomeProps) {
       </StyledArticles>
     </>
   );
-}
-
-export async function getStaticProps() {
-  const articles: PostType[] = (await getArticles()) as PostType[];
-  const sortedArticles = articles.sort(
-    (a, b) => Number(new Date(b.publishedAt)) - Number(new Date(a.publishedAt)),
-  );
-
-  return {
-    props: {
-      articles: sortedArticles,
-    },
-  };
 }

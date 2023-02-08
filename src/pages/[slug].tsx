@@ -1,10 +1,13 @@
-import { getFileBySlug, GetFileBySlugType, getPages } from '@/utils';
-import { GetStaticPropsContext } from 'next';
+import {
+  GetStaticPropsContext,
+  GetStaticPropsResult,
+  InferGetStaticPropsType,
+} from 'next';
 
 import { MDXComponent, SEO } from '@/components';
 import { styled } from '@/theme';
-import { getMDXComponent } from 'mdx-bundler/client';
-import { useMemo } from 'react';
+import { allPages, Page as TPage } from '@contentlayer/generated';
+import { useMDXComponent } from 'next-contentlayer/hooks';
 
 // #region Styled
 const StyledWrapper = styled('div', {
@@ -36,32 +39,9 @@ const StyledWrapper = styled('div', {
 });
 // #endregion Styled
 
-export default function Page({ mdx, frontMatter }: GetFileBySlugType) {
-  const Component = useMemo(() => {
-    return getMDXComponent(mdx.code);
-  }, [mdx.code]);
-
-  return (
-    <>
-      <SEO
-        canonical={frontMatter.slug}
-        description={frontMatter.description}
-        title={frontMatter.title}
-      />
-      <StyledWrapper>
-        <div className="title-wrapper">
-          <h1 className="page-title">{frontMatter.title}</h1>
-        </div>
-        <div className="content-wrapper prose">
-          <Component components={MDXComponent} />
-        </div>
-      </StyledWrapper>
-    </>
-  );
-}
-
+// #region NextJS Data Fetching Function
 export async function getStaticPaths() {
-  const pages = await getPages();
+  const pages = allPages;
   const paths = pages.map((page) => ({
     params: {
       slug: page.slug,
@@ -76,10 +56,39 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({
   params,
-}: GetStaticPropsContext<{ slug: string }>) {
-  const props = await getFileBySlug('pages', params?.slug || '');
+}: GetStaticPropsContext<{ slug: string }>): Promise<
+  GetStaticPropsResult<{ page: TPage }>
+> {
+  const page = allPages.find((record) => record.slug === params?.slug) as TPage;
 
   return {
-    props,
+    props: {
+      page,
+    },
   };
+}
+// #endregion NextJS Data Fetching Function
+
+export default function Page({
+  page,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
+  const MDXContent = useMDXComponent(page.body.code);
+
+  return (
+    <>
+      <SEO
+        canonical={page.slug}
+        description={page.description}
+        title={page.title}
+      />
+      <StyledWrapper>
+        <div className="title-wrapper">
+          <h1 className="page-title">{page.title}</h1>
+        </div>
+        <div className="content-wrapper prose">
+          <MDXContent components={MDXComponent} />
+        </div>
+      </StyledWrapper>
+    </>
+  );
 }

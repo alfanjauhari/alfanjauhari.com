@@ -49,14 +49,7 @@ export const PostCard = forwardRef<HTMLDivElement, PostCardProps>(
           <StyledLink href={slug}>{title}</StyledLink>
         </StyledLinkWrapper>
         <StyledExcerpt>{excerpt}</StyledExcerpt>
-        <StyledDate>
-          Published at :{' '}
-          {new Date(publishedAt).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          })}
-        </StyledDate>
+        <StyledDate>Published at : {publishedAt}</StyledDate>
       </div>
     );
   },

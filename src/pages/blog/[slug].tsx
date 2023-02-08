@@ -1,10 +1,17 @@
 import { MDXComponent, SEO } from '@/components';
 import { profile } from '@/configs';
 import { styled } from '@/theme';
-import { getArticles, getFileBySlug, GetFileBySlugType } from '@/utils';
-import { getMDXComponent } from 'mdx-bundler/client';
-import { GetStaticPropsContext } from 'next';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { allPosts, Post } from '@contentlayer/generated';
+import { format } from 'date-fns';
+import {
+  GetStaticPathsResult,
+  GetStaticPropsContext,
+  GetStaticPropsResult,
+  InferGetStaticPropsType,
+} from 'next';
+import { useMDXComponent } from 'next-contentlayer/hooks';
+import { useRef } from 'react';
+import readTime from 'reading-time';
 
 // #region Styled
 const StyledWrapper = styled('div', {
@@ -78,77 +85,11 @@ const StyledWrapper = styled('div', {
 });
 // #endregion Styled
 
-export default function BlogPost({ mdx, frontMatter }: GetFileBySlugType) {
-  const [readingTime, setReadingTime] = useState<number>(0);
-
-  const articleRef = useRef<HTMLDivElement>(null);
-
-  const Component = useMemo(() => {
-    return getMDXComponent(mdx.code);
-  }, [mdx.code]);
-
-  useEffect(() => {
-    const articleText = articleRef.current?.innerText;
-    const wpm = 225;
-    const words = articleText?.trim().split(/\s+/).length;
-
-    setReadingTime(Math.ceil((words || 0) / wpm));
-  }, []);
-
-  return (
-    <>
-      <SEO
-        title={frontMatter.title}
-        canonical={frontMatter.slug}
-        description={frontMatter.description}
-        image={frontMatter.thumbnail}
-        keywords={frontMatter.category}
-      />
-      <StyledWrapper>
-        <h1 className="title">{frontMatter.title}</h1>
-        <h2 className="excerpt">{frontMatter.excerpt}</h2>
-        <div className="date-wrapper">
-          <p>
-            Published at :{' '}
-            {new Date(frontMatter.publishedAt).toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })}
-          </p>
-          <p className="reading-time">{readingTime} minute read</p>
-        </div>
-        <div className="article-wrapper prose" ref={articleRef}>
-          <Component components={MDXComponent} />
-        </div>
-        <div className="sharer-wrapper">
-          <ul className="sharer-lists">
-            <li className="sharer-item">
-              <a
-                className="sharer-link"
-                href={`https://www.facebook.com/sharer/sharer.php?u=${profile.baseURL}/blog/${frontMatter.slug}`}
-              >
-                Share to Facebook
-              </a>
-            </li>
-            <li className="sharer-item">
-              <a
-                className="sharer-link"
-                href={`https://twitter.com/intent/tweet?url=${profile.baseURL}/blog/${frontMatter.slug}&text=${frontMatter.title}`}
-              >
-                Share to Twitter
-              </a>
-            </li>
-          </ul>
-        </div>
-      </StyledWrapper>
-    </>
-  );
-}
-
-export async function getStaticPaths() {
-  const articles = await getArticles();
-  const paths = articles.map((article) => ({
+// #region NextJS Data Fetching Functions
+export async function getStaticPaths(): Promise<
+  GetStaticPathsResult<{ slug: string }>
+> {
+  const paths = allPosts.map((article) => ({
     params: {
       slug: article.slug,
     },
@@ -162,10 +103,79 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({
   params,
-}: GetStaticPropsContext<{ slug: string }>) {
-  const props = await getFileBySlug('posts', params?.slug || '');
+}: GetStaticPropsContext<{ slug: string }>): Promise<
+  GetStaticPropsResult<{ post: Post; readingTime: string }>
+> {
+  const currentPost = allPosts.find(
+    (record) => record.slug === params?.slug,
+  ) as Post;
+
+  const post = {
+    ...currentPost,
+    date: format(new Date(currentPost.date), 'dd LLLL yyyy'),
+  };
+
+  const readingTime = readTime(post.body.raw, {
+    wordsPerMinute: 255,
+  }).text;
 
   return {
-    props,
+    props: {
+      post,
+      readingTime,
+    },
   };
+}
+// #endregion NextJS Data Fetching Functions
+
+export default function BlogPost({
+  post,
+  readingTime,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
+  const articleRef = useRef<HTMLDivElement>(null);
+
+  const MDXContent = useMDXComponent(post.body.code);
+
+  return (
+    <>
+      <SEO
+        title={post.title}
+        canonical={post.slug}
+        description={post.description}
+        image={post.thumbnail}
+        keywords={post.category}
+      />
+      <StyledWrapper>
+        <h1 className="title">{post.title}</h1>
+        <h2 className="excerpt">{post.excerpt}</h2>
+        <div className="date-wrapper">
+          <p>Published at : {post.date}</p>
+          <p className="reading-time">{readingTime}</p>
+        </div>
+        <div className="article-wrapper prose" ref={articleRef}>
+          <MDXContent components={MDXComponent} />
+        </div>
+        <div className="sharer-wrapper">
+          <ul className="sharer-lists">
+            <li className="sharer-item">
+              <a
+                className="sharer-link"
+                href={`https://www.facebook.com/sharer/sharer.php?u=${profile.baseURL}/blog/${post.slug}`}
+              >
+                Share to Facebook
+              </a>
+            </li>
+            <li className="sharer-item">
+              <a
+                className="sharer-link"
+                href={`https://twitter.com/intent/tweet?url=${profile.baseURL}/blog/${post.slug}&text=${post.title}`}
+              >
+                Share to Twitter
+              </a>
+            </li>
+          </ul>
+        </div>
+      </StyledWrapper>
+    </>
+  );
 }

@@ -1,7 +1,10 @@
+import { styled } from '@/theme';
 import { HTMLAttributes } from 'react';
 
 export type HrProps = HTMLAttributes<HTMLHRElement>;
 
-export function Hr(props: HrProps) {
-  return <hr className="border-gray-400" {...props} />;
-}
+export const Hr = styled('hr', {
+  borderTop: 0,
+  borderBottom: '1px solid $colors$gray2',
+  my: '$5',
+});
