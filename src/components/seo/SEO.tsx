@@ -18,7 +18,7 @@ export function SEO({
 }: SEOProps) {
   return (
     <Head>
-      <title>{`${title} &ndash; ${profile.name}`}</title>
+      <title>{`${title} - ${profile.name}`}</title>
 
       <link rel="canonical" href={profile.baseURL + canonical} />
 

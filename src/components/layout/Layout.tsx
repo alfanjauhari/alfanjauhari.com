@@ -7,6 +7,7 @@ const StyledMain = styled('main', {
   width: '100%',
   overflow: 'hidden',
   px: '$4',
+  fontFamily: '$sans',
   '@md': {
     px: '64px',
   },

@@ -18,6 +18,56 @@ const StyledHero = styled('section', {
       fontFamily: '$mono',
     },
   },
+  '& h1.tagline': {
+    fontWeight: '700',
+    fontSize: '48px',
+    width: '100%',
+    mt: '$3',
+    lineHeight: 1,
+    '@md': {
+      fontSize: '60px',
+      width: '83.333333%',
+    },
+    '@lg': {
+      fontSize: '72px',
+    },
+    '@xxl': {
+      fontSize: '128px',
+    },
+  },
+  '& div.button-wrapper': {
+    display: 'flex',
+    mt: '$6',
+  },
+});
+
+const StyledArticles = styled('section', {
+  my: '64px',
+  '@md': {
+    my: '112px',
+  },
+  '& h1.articles-title': {
+    fontWeight: 'bold',
+    fontSize: '36px',
+    lineHeight: '$xxxl',
+    '@lg': {
+      fontSize: '60px',
+      lineHeight: 1,
+    },
+  },
+  '& article.articles-list': {
+    mt: '$8',
+    display: 'grid',
+    gridTemplateColumns: '1fr',
+    gap: '$8',
+    '@md': {
+      gridTemplateColumns: 'repeat(2, 1fr)',
+    },
+  },
+  '& div.load-more-wrapper': {
+    mt: '$8',
+    width: '100%',
+  },
 });
 // #endregion Styled
 
@@ -33,24 +83,20 @@ export default function Home({ articles }: HomeProps) {
         description="Realizing digital dreams come true as frontend developer"
         title="Home"
       />
-      <StyledHero>
+      <StyledHero id="hero">
         <p className="profile">
           {profile.name}, {profile.job}
         </p>
-        <h1 className="font-bold text-5xl md:text-6xl lg:text-7xl 2xl:text-10xl w-full md:w-5/6 leading-none mt-3">
-          {profile.tagline}
-        </h1>
-        <div className="flex mt-6">
+        <h1 className="tagline">{profile.tagline}</h1>
+        <div className="button-wrapper">
           <ButtonLink variant="primary" href="/about" size="lg">
             More About Me
           </ButtonLink>
         </div>
       </StyledHero>
-      <section id="articles" className="my-16 md:my-28">
-        <h1 className="font-bold text-4xl lg:text-5xl leading-none">
-          Latest articles
-        </h1>
-        <article className="flex flex-col md:flex-row flex-wrap -mx-4">
+      <StyledArticles id="articles">
+        <h1 className="articles-title">Latest articles</h1>
+        <article className="articles-list">
           {articles.length > 0 &&
             articles
               .slice(0, 4)
@@ -61,19 +107,18 @@ export default function Home({ articles }: HomeProps) {
                   thumbnail={frontMatter.thumbnail}
                   slug={`/blog/${frontMatter.slug}`}
                   publishedAt={frontMatter.publishedAt}
-                  className="w-full md:w-1/2 px-4 mt-6"
                   key={frontMatter.slug}
                 />
               ))}
         </article>
         {articles.length > 4 && (
-          <div className="w-full mt-8">
+          <div className="load-more-wrapper">
             <ButtonLink variant="primary" size="lg" href="/blog">
-              <span className="font-semibold">Load More Articles</span>
+              Load More Articles
             </ButtonLink>
           </div>
         )}
-      </section>
+      </StyledArticles>
     </>
   );
 }

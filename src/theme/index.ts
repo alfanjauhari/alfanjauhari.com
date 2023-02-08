@@ -1,6 +1,7 @@
 import { Inter, JetBrains_Mono as JetBrainsMono } from '@next/font/google';
 import { createStitches } from '@stitches/react';
 import { breakpoints } from './breakpoints';
+import { globalStyles } from './global-styles';
 import { utils } from './utils';
 
 // #region Fonts
@@ -14,7 +15,7 @@ const jetBrainsMono = JetBrainsMono({
 });
 // #endregion Fonts
 
-export const { styled, getCssText } = createStitches({
+export const { styled, getCssText, config, globalCss } = createStitches({
   theme: {
     space: {
       1: '4px',
@@ -43,8 +44,8 @@ export const { styled, getCssText } = createStitches({
       md: '16px',
       lg: '18px',
       xl: '20px',
-      xxl: '32px',
-      xxxl: '48px',
+      xxl: '24px',
+      xxxl: '30px',
     },
     lineHeights: {
       sm: '20px',
@@ -59,17 +60,28 @@ export const { styled, getCssText } = createStitches({
       mono: jetBrainsMono.style.fontFamily,
     },
     colors: {
-      gray1: 'rgb(243 244 246)',
-      gray2: 'rgb(229 231 235)',
-      gray3: 'rgb(209 213 219)',
-      gray4: 'rgb(156 163 175)',
-      gray5: 'rgb(107 114 128)',
-      gray6: 'rgb(75 85 99)',
-      gray7: 'rgb(55 65 81)',
-      gray8: 'rgb(31 41 55)',
-      gray9: 'rgb(17 24 39)',
+      gray1: '#f9fafb',
+      gray2: '#f3f4f6',
+      gray3: '#e5e7eb',
+      gray4: '#d1d5db',
+      gray5: '#9ca3af',
+      gray6: '#6b7280',
+      gray7: '#4b5563',
+      gray8: '#374151',
+      gray9: '#1f2937',
+      blue1: '#eff6ff',
+      blue2: '#dbeafe',
+      blue3: '#bfdbfe',
+      blue4: '#93c1fd',
+      blue5: '#60a3fa',
+      blue6: '#3b8df6',
+      blue7: '#257ceb',
+      blue8: '#1d6fd8',
+      blue9: '#1e5daf',
     },
   },
   utils,
   media: breakpoints,
 });
+
+export const globalCSS = globalCss(globalStyles);

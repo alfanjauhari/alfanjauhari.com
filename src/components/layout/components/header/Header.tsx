@@ -1,9 +1,15 @@
 import { menu, profile } from '@/configs';
 import { useToggle } from '@/hooks';
 import { styled } from '@/theme';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { forwardRef, HTMLAttributes } from 'react';
-import { Avatar, MenuList, TogglerButton } from './components';
+import { Avatar, MenuList, TogglerButtonProps } from './components';
+
+const TogglerButton = dynamic<TogglerButtonProps>(
+  () => import('./components').then((res) => res.TogglerButton),
+  { ssr: false },
+);
 
 export type HeaderProps = HTMLAttributes<HTMLElement>;
 
