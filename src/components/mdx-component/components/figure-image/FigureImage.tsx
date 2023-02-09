@@ -1,16 +1,46 @@
+import { styled } from '@/theme';
 import Image, { ImageProps } from 'next/image';
 
 export type FigureImageProps = ImageProps & { caption: string };
 
+// #region Styled
+const StyledFigureImage = styled('figure', {
+  my: '$5',
+  '& div.image-wrapper': {
+    width: '100%',
+    height: '192px',
+    position: 'relative',
+    '& img.image': {
+      objectFit: 'cover',
+      borderTopLeftRadius: '5px',
+      borderTopRightRadius: '5px',
+    },
+    '@md': {
+      height: '400px',
+    },
+    '@lg': {
+      height: '512px',
+    },
+  },
+  '& figcaption.caption': {
+    textAlign: 'center',
+    p: '$4',
+    backgroundColor: '$gray2',
+    bottom: 0,
+    width: '100%',
+    borderBottomLeftRadius: '5px',
+    borderBottomRightRadius: '5px',
+  },
+});
+// #endregion Styled
+
 export function FigureImage({ caption, alt, ...props }: FigureImageProps) {
   return (
-    <figure>
-      <div className="w-full h-[12rem] md:h-[25rem] lg:h-[32rem] relative">
-        <Image layout="fill" objectFit="cover" alt={alt} {...props} />
+    <StyledFigureImage>
+      <div className="image-wrapper">
+        <Image className="image" fill alt={alt} {...props} />
       </div>
-      <figcaption className="text-center p-4 bg-gray-50 bottom-0 w-full">
-        {caption}
-      </figcaption>
-    </figure>
+      {caption && <figcaption className="caption">{caption}</figcaption>}
+    </StyledFigureImage>
   );
 }

@@ -1,41 +1,94 @@
 import { menu, profile } from '@/configs';
 import { useToggle } from '@/hooks';
+import { styled } from '@/theme';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { forwardRef, HTMLAttributes } from 'react';
-import { Avatar, MenuList, TogglerButton } from './components';
+import { Avatar, MenuList, TogglerButtonProps } from './components';
+
+const TogglerButton = dynamic<TogglerButtonProps>(
+  () => import('./components').then((res) => res.TogglerButton),
+  { ssr: false },
+);
 
 export type HeaderProps = HTMLAttributes<HTMLElement>;
+
+// #region Styled
+const StyledHeader = styled('header', {
+  position: 'sticky',
+  top: 0,
+  width: '100%',
+  px: '$4',
+  py: '$4',
+  backgroundColor: 'rgb(255 255 255/0.7)',
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  zIndex: '10',
+  backdropFilter: 'blur(12px)',
+  '@md': {
+    px: '64px',
+  },
+  '@lg': {
+    px: '128px',
+  },
+  '@xl': {
+    px: '160px',
+  },
+  '@xxl': {
+    px: '288px',
+  },
+});
+
+const StyledAvatarLink = styled(Link, {
+  display: 'flex',
+  alignItems: 'center',
+});
+
+const StyledAvatarHeading = styled('h1', {
+  all: 'unset',
+  fontWeight: '600',
+  ml: '$2',
+});
+
+const StyledMenuListItem = styled('li', {
+  '&:first': {
+    mr: 0,
+    mt: 0,
+    '@md': {
+      mr: '$4',
+    },
+  },
+  mt: '$6',
+  mr: 0,
+  '@md': {
+    mr: '$4',
+    mt: 0,
+  },
+});
+
+const StyledMenuListItemLink = styled(Link, {
+  fontWeight: '600',
+});
+// #endregion Styled
 
 export const Header = forwardRef<HTMLElement, HeaderProps>((props, ref) => {
   const [isMenuOpen, toggleMenu] = useToggle();
 
   return (
-    <header
-      className="sticky top-0 w-full px-4 md:px-16 lg:px-32 xl:px-40 2xl:px-72 py-4 bg-white bg-opacity-90 flex justify-between items-center z-10 backdrop-filter backdrop-blur-md"
-      ref={ref}
-      {...props}
-    >
-      <div>
-        <Link href="/" passHref>
-          <a className="flex items-center">
-            <Avatar src="/images/profile-image.webp" alt={profile.name} />
-            <h1 className="font-semibold ml-2">{profile.name}</h1>
-          </a>
-        </Link>
-      </div>
+    <StyledHeader ref={ref} {...props}>
+      <StyledAvatarLink href="/">
+        <Avatar src="/images/profile-image.webp" alt={profile.name} />
+        <StyledAvatarHeading>{profile.name}</StyledAvatarHeading>
+      </StyledAvatarLink>
       <TogglerButton isMenuOpen={isMenuOpen} onClick={toggleMenu} />
       <MenuList isMenuOpen={isMenuOpen}>
         {menu.map(({ path, name }) => (
-          <li
-            className="first:mr-0 first:mt-0 first:md:mr-4 mt-6 mr-0 md:mr-4 md:mt-0"
-            key={path}
-          >
-            <Link href={path}>
-              <a className="font-semibold">{name}</a>
-            </Link>
-          </li>
+          <StyledMenuListItem key={path}>
+            <StyledMenuListItemLink href={path}>{name}</StyledMenuListItemLink>
+          </StyledMenuListItem>
         ))}
       </MenuList>
-    </header>
+    </StyledHeader>
   );
 });

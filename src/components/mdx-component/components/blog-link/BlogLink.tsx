@@ -1,7 +1,20 @@
+import { styled } from '@/theme';
 import Link from 'next/link';
 import { AnchorHTMLAttributes, PropsWithChildren } from 'react';
 
 export type BlogLinkProps = AnchorHTMLAttributes<HTMLAnchorElement>;
+
+// #region Styled
+const StyledInternalLink = styled(Link, {
+  color: '$blue6',
+  '&:hover': {
+    color: '$blue8',
+    transitionDuration: '300ms',
+  },
+});
+const StyledExternalLink = styled('a', StyledInternalLink);
+// #endregion Styled
+
 export function BlogLink({
   href,
   children,
@@ -10,17 +23,11 @@ export function BlogLink({
   const isInternalLink = href?.startsWith('/') || href?.startsWith('#');
 
   if (isInternalLink && href) {
-    return (
-      <Link
-        className="text-blue-600 hover:text-blue-500 duration-300"
-        href={href}
-        {...props}
-      />
-    );
+    return <StyledInternalLink href={href} {...props} />;
   }
 
   return (
-    <a
+    <StyledExternalLink
       target="_blank"
       href={href}
       className="text-blue-600 hover:text-blue-500 duration-300"
@@ -28,6 +35,6 @@ export function BlogLink({
       {...props}
     >
       {children}
-    </a>
+    </StyledExternalLink>
   );
 }

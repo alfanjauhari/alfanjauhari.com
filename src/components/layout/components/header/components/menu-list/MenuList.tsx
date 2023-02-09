@@ -1,24 +1,41 @@
-import clsx from 'clsx';
-import { forwardRef, HTMLAttributes } from 'react';
+import { styled } from '@/theme';
+import { ComponentProps } from 'react';
 
-export type MenuListProps = HTMLAttributes<HTMLUListElement> & {
-  isMenuOpen?: boolean;
-};
-
-export const MenuList = forwardRef<HTMLUListElement, MenuListProps>(
-  ({ children, isMenuOpen, ...props }, ref) => {
-    const ON_MENU_OPEN_CLASSNAMES =
-      'flex flex-col fixed md:static w-full md:w-auto h-screen md:h-auto inset-0 md:inset-auto items-center justify-center md:justify-start bg-white md:bg-transparent md:flex-row z-10';
-    const ON_MENU_CLOSE_CLASSNAMES = 'hidden md:flex items-center';
-
-    const classNames = clsx(
-      isMenuOpen ? ON_MENU_OPEN_CLASSNAMES : ON_MENU_CLOSE_CLASSNAMES,
-    );
-
-    return (
-      <ul className={classNames} ref={ref} {...props}>
-        {children}
-      </ul>
-    );
+// #region Styled
+export const MenuList = styled('ul', {
+  variants: {
+    isMenuOpen: {
+      true: {
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'fixed',
+        width: '100%',
+        height: '100vh',
+        inset: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'White',
+        zIndex: 10,
+        '@md': {
+          position: 'sticky',
+          width: 'auto',
+          height: 'auto',
+          inset: 'auto',
+          justifyContent: 'start',
+          backgroundColor: 'transparent',
+          flexDirection: 'row',
+        },
+      },
+      false: {
+        display: 'none',
+        '@md': {
+          display: 'flex',
+          alignItems: 'center',
+        },
+      },
+    },
   },
-);
+});
+// #endregion Styled
+
+export type MenuListProps = ComponentProps<typeof MenuList>;
