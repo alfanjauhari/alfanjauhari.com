@@ -38,7 +38,7 @@ export function FigureImage({ caption, alt, ...props }: FigureImageProps) {
   return (
     <StyledFigureImage>
       <div className="image-wrapper">
-        <Image className="image" layout="fill" alt={alt} {...props} />
+        <Image className="image" fill alt={alt} {...props} />
       </div>
       {caption && <figcaption className="caption">{caption}</figcaption>}
     </StyledFigureImage>

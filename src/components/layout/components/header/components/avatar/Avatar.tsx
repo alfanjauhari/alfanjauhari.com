@@ -22,7 +22,7 @@ export function Avatar({
 }: AvatarProps) {
   return (
     <StyledAvatarWrapper>
-      <Image src={src} alt={alt} layout="fill" {...props} />
+      <Image src={src} alt={alt} fill {...props} />
     </StyledAvatarWrapper>
   );
 }

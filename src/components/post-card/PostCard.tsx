@@ -43,7 +43,7 @@ export const PostCard = forwardRef<HTMLDivElement, PostCardProps>(
     return (
       <div ref={ref} {...props}>
         <StyledImageWrapper>
-          <StyledImage src={thumbnail} alt={title} layout="fill" />
+          <StyledImage src={thumbnail} alt={title} fill />
         </StyledImageWrapper>
         <StyledLinkWrapper>
           <StyledLink href={slug}>{title}</StyledLink>

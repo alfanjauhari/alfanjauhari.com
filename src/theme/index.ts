@@ -1,12 +1,13 @@
-import { Inter, JetBrains_Mono as JetBrainsMono } from '@next/font/google';
+import { JetBrains_Mono as JetBrainsMono, Poppins } from '@next/font/google';
 import { createStitches } from '@stitches/react';
 import { breakpoints } from './breakpoints';
 import { globalStyles } from './global-styles';
 import { utils } from './utils';
 
 // #region Fonts
-const inter = Inter({
+const poppins = Poppins({
   subsets: ['latin'],
+  weight: ['400', '600', '700'],
 });
 
 const jetBrainsMono = JetBrainsMono({
@@ -56,7 +57,7 @@ export const { styled, getCssText, config, globalCss } = createStitches({
       xxxl: '40px',
     },
     fonts: {
-      sans: inter.style.fontFamily,
+      sans: poppins.style.fontFamily,
       mono: jetBrainsMono.style.fontFamily,
     },
     colors: {
