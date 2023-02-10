@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MDXComponent/Ol should match snapshot 1`] = `
+<ol
+  class="c-vUMlb c-vUMlb-ifxbzET-css"
+>
+  <li>
+    First Item
+  </li>
+  <li>
+    Second Item
+  </li>
+</ol>
+`;

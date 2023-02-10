@@ -2,6 +2,7 @@ import { ButtonLink, SEO } from '@/components';
 import { PostCard } from '@/components/post-card';
 import { profile } from '@/configs';
 import { styled } from '@/theme';
+import { omit } from '@/utils';
 import { allPosts, Post } from '@contentlayer/generated';
 import { compareDesc, format } from 'date-fns';
 import { GetStaticPropsResult, InferGetStaticPropsType } from 'next';
@@ -15,9 +16,9 @@ const StyledHero = styled('section', {
   '& p.profile': {
     color: '$gray7',
     fontSize: '$xl',
+    fontFamily: '$mono',
     '@md': {
       fontSize: '$xxl',
-      fontFamily: '$mono',
     },
   },
   '& h1.tagline': {
@@ -75,13 +76,13 @@ const StyledArticles = styled('section', {
 
 export async function getStaticProps(): Promise<
   GetStaticPropsResult<{
-    posts: Post[];
+    posts: Omit<Post, '_id' | '_raw' | 'body' | 'category' | 'type'>[];
   }>
 > {
   const posts = allPosts
     .sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)))
     .map(({ date, ...post }) => ({
-      ...post,
+      ...omit(post, ['_id', '_raw', 'body', 'category', 'type']),
       date: format(new Date(date), 'dd LLLL yyyy'),
     }));
 

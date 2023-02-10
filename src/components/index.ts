@@ -1,4 +1,5 @@
 export * from './button';
+export * from './button-link';
 export * from './layout';
 export * from './mdx-component';
 export * from './seo';

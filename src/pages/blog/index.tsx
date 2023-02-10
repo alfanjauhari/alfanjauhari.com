@@ -1,6 +1,7 @@
 import { Button, SEO } from '@/components';
 import { PostCard } from '@/components/post-card';
 import { styled } from '@/theme';
+import { omit } from '@/utils';
 import { allPosts, Post } from '@contentlayer/generated';
 import { compareDesc, format } from 'date-fns';
 import { GetStaticPropsResult, InferGetStaticPropsType } from 'next';
@@ -56,19 +57,17 @@ const StyledArticles = styled('section', {
 });
 // #endregion Styled
 
-export type BlogProps = {
-  articles: Post[];
-};
+type OmittedPost = Omit<Post, '_id' | '_raw' | 'body' | 'category' | 'type'>;
 
 export async function getStaticProps(): Promise<
   GetStaticPropsResult<{
-    posts: Post[];
+    posts: Omit<Post, '_id' | '_raw' | 'body' | 'category' | 'type'>[];
   }>
 > {
   const posts = allPosts
     .sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)))
     .map(({ date, ...post }) => ({
-      ...post,
+      ...omit(post, ['_id', '_raw', 'body', 'category', 'type']),
       date: format(new Date(date), 'dd LLLL yyyy'),
     }));
 
@@ -85,7 +84,7 @@ export default function Blog({
   const POSTS_PER_PAGE = 4;
 
   const [nextPosts, setNextPosts] = useState(2);
-  const [currentPosts, setCurrentPosts] = useState<Post[]>([]);
+  const [currentPosts, setCurrentPosts] = useState<OmittedPost[]>([]);
 
   const slicePost = useCallback(
     (start: number, end: number) => {

@@ -1,1 +1,2 @@
-export * from './FigureImage';
+export * from './figure-image';
+export * from './figure-image.styles';

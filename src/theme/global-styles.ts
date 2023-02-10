@@ -7,7 +7,7 @@ export const globalStyles = {
     borderColor: '#eee',
   },
   html: {
-    lineHeight: 1.5,
+    lineHeight: 1.75,
     '-webkit-text-size-adjust': '100%',
     '-moz-tab-size': 4,
     tabSize: 4,
@@ -31,9 +31,9 @@ export const globalStyles = {
     fontWeight: 'inherit',
   },
   a: {
+    fontFamily: 'var(--font-sans)',
     color: 'inherit',
     textDecoration: 'inherit',
-    fontFamily: '$sans',
     '&:hover': {
       color: '$blue8',
       transitionDuration: '300ms',
@@ -43,7 +43,7 @@ export const globalStyles = {
     fontWeight: 'bolder',
   },
   'code, kbd, samp, pre': {
-    fontFamily: '$mono',
+    fontFamily: 'var(--font-mono)',
     fontSize: '1em',
   },
   small: {
