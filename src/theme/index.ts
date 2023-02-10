@@ -1,20 +1,7 @@
-import { JetBrains_Mono as JetBrainsMono, Poppins } from '@next/font/google';
 import { createStitches } from '@stitches/react';
 import { breakpoints } from './breakpoints';
 import { globalStyles } from './global-styles';
 import { utils } from './utils';
-
-// #region Fonts
-const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['400', '600', '700'],
-});
-
-const jetBrainsMono = JetBrainsMono({
-  subsets: ['latin'],
-  weight: ['400', '600'],
-});
-// #endregion Fonts
 
 export const { styled, getCssText, config, globalCss } = createStitches({
   theme: {
@@ -56,10 +43,6 @@ export const { styled, getCssText, config, globalCss } = createStitches({
       xxl: '36px',
       xxxl: '40px',
     },
-    fonts: {
-      sans: poppins.style.fontFamily,
-      mono: jetBrainsMono.style.fontFamily,
-    },
     colors: {
       gray1: '#f9fafb',
       gray2: '#f3f4f6',
@@ -80,9 +63,15 @@ export const { styled, getCssText, config, globalCss } = createStitches({
       blue8: '#1d6fd8',
       blue9: '#1e5daf',
     },
+    fonts: {
+      sans: 'var(--font-sans)',
+      mono: 'var(--font-mono)',
+    },
   },
   utils,
   media: breakpoints,
 });
 
-export const globalCSS = globalCss(globalStyles);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const globalCSS = (...styles: Record<string, any>[]) =>
+  globalCss(globalStyles, ...styles);

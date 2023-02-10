@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MDXComponent/Pre should match snapshot 1`] = `
+<pre
+  class="c-ieGfll"
+  data-testid="pre-component"
+/>
+`;

@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MDXComponent/Ul should match snapshot 1`] = `
+<ul
+  class="c-ecBcCj"
+>
+  <li>
+    List Item 1
+  </li>
+  <li>
+    List Item 2
+  </li>
+</ul>
+`;

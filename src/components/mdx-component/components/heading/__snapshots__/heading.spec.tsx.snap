@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MDXComponent/Heading should match snapshot 1`] = `
+<h1
+  class="c-gmKUXI"
+>
+  Heading 1
+</h1>
+`;

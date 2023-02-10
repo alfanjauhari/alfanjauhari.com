@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MDXComponent/Paragraph should match snapshot 1`] = `
+<p
+  class="c-jcoCuS"
+>
+  Paragraph
+</p>
+`;

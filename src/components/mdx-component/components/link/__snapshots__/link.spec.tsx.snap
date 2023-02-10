@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MDXComponent/Link should match snapshot 1`] = `
+<a
+  class="c-ktVJdH"
+  href="/"
+>
+  Home
+</a>
+`;

@@ -1,1 +1,1 @@
-export * from './Hr';
+export * from './hr';

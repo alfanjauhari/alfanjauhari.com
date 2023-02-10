@@ -1,6 +1,7 @@
 import { MDXComponent, SEO } from '@/components';
 import { profile } from '@/configs';
 import { styled } from '@/theme';
+import { omit } from '@/utils';
 import { allPosts, Post } from '@contentlayer/generated';
 import { format } from 'date-fns';
 import {
@@ -10,7 +11,6 @@ import {
   InferGetStaticPropsType,
 } from 'next';
 import { useMDXComponent } from 'next-contentlayer/hooks';
-import { useRef } from 'react';
 import readTime from 'reading-time';
 
 // #region Styled
@@ -104,14 +104,17 @@ export async function getStaticPaths(): Promise<
 export async function getStaticProps({
   params,
 }: GetStaticPropsContext<{ slug: string }>): Promise<
-  GetStaticPropsResult<{ post: Post; readingTime: string }>
+  GetStaticPropsResult<{
+    post: Omit<Post, '_id' | '_raw' | 'type'>;
+    readingTime: string;
+  }>
 > {
   const currentPost = allPosts.find(
     (record) => record.slug === params?.slug,
   ) as Post;
 
   const post = {
-    ...currentPost,
+    ...omit(currentPost, ['_id', '_raw', 'type']),
     date: format(new Date(currentPost.date), 'dd LLLL yyyy'),
   };
 
@@ -132,8 +135,6 @@ export default function BlogPost({
   post,
   readingTime,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  const articleRef = useRef<HTMLDivElement>(null);
-
   const MDXContent = useMDXComponent(post.body.code);
 
   return (
@@ -152,7 +153,7 @@ export default function BlogPost({
           <p>Published at : {post.date}</p>
           <p className="reading-time">{readingTime}</p>
         </div>
-        <div className="article-wrapper prose" ref={articleRef}>
+        <div className="article-wrapper prose">
           <MDXContent components={MDXComponent} />
         </div>
         <div className="sharer-wrapper">

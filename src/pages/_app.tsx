@@ -1,10 +1,28 @@
 import { Layout } from '@/components';
 import { globalCSS } from '@/theme';
+import { JetBrains_Mono as JetBrainsMono, Poppins } from '@next/font/google';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 
+const poppins = Poppins({
+  weight: ['400', '600', '700'],
+  subsets: ['latin'],
+  display: 'swap',
+});
+
+const jetBrainsMono = JetBrainsMono({
+  weight: ['400', '600', '700'],
+  subsets: ['latin'],
+  display: 'swap',
+});
+
 export default function MyApp({ Component, pageProps }: AppProps) {
-  globalCSS();
+  globalCSS({
+    html: {
+      '--font-sans': poppins.style.fontFamily,
+      '--font-mono': jetBrainsMono.style.fontFamily,
+    },
+  })();
 
   return (
     <Layout>
