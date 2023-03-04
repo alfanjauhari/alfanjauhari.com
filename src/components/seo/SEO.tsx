@@ -24,11 +24,13 @@ export function SEO({
 
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
-      <meta content={profile.baseURL + image} property="og:image" />
       <meta content={profile.baseURL + canonical} property="og:url" />
       <meta content={`${title} - ${profile.name}`} property="og:title" />
       <meta content={description} property="og:description" />
-      <meta content={profile.baseURL + image} property="og:image" />
+      <meta
+        content={`${profile.baseURL}/api/og?title=${title}`}
+        property="og:image"
+      />
       <meta
         content={image ? 'summary_large_image' : 'summary'}
         name="twitter:card"
@@ -37,7 +39,10 @@ export function SEO({
       <meta content={profile.twitter} name="twitter:site" />
       <meta content={`${title} - ${profile.name}`} name="twitter:title" />
       <meta content={description} name="twitter:description" />
-      <meta content={profile.baseURL + image} name="twitter:image" />
+      <meta
+        content={`${profile.baseURL}/api/og?title=${title}`}
+        name="twitter:image"
+      />
       <meta content={`${title} - ${profile.name}`} name="twitter:alt" />
     </Head>
   );
