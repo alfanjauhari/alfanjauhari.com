@@ -16,5 +16,14 @@ export const StyledButtonLink = styled(Link, StyledButton, {
         },
       },
     },
+    size: {
+      sm: {},
+      md: {},
+      lg: {},
+    },
+  },
+  defaultVariants: {
+    variant: 'primary',
+    size: 'md',
   },
 });

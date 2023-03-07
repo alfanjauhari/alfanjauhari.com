@@ -71,9 +71,38 @@ export const Page = defineDocumentType(() => ({
   },
 }));
 
+export const Thought = defineDocumentType(() => ({
+  name: 'Thought',
+  filePathPattern: `thoughts/**/*.mdx`,
+  contentType: 'mdx',
+  fields: {
+    title: {
+      type: 'string',
+      description: 'The title of the thought',
+      required: true,
+    },
+    description: {
+      type: 'string',
+      description: 'The description of the thought. Used for SEO',
+      required: true,
+    },
+    date: {
+      type: 'date',
+      description: 'The date of the thought',
+      required: true,
+    },
+  },
+  computedFields: {
+    slug: {
+      type: 'string',
+      resolve: ({ _raw }) => _raw.flattenedPath.replace('thoughts/', ''),
+    },
+  },
+}));
+
 export default makeSource({
   contentDirPath: 'contents',
-  documentTypes: [Post, Page],
+  documentTypes: [Post, Page, Thought],
   disableImportAliasWarning: true,
   mdx: {
     rehypePlugins: [rehypePrism],

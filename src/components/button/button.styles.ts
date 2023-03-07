@@ -48,4 +48,8 @@ export const StyledButton = styled('button', {
       },
     },
   },
+  defaultVariants: {
+    variant: 'primary',
+    size: 'md',
+  },
 });
