@@ -43,7 +43,7 @@ export const Layout = forwardRef<HTMLElement, LayoutProps>(
           <StyledMenuList isMenuOpen={isMenuOpen}>
             {menu.map(({ path, name }) => (
               <StyledMenuListItem key={path}>
-                <StyledMenuListItemLink href={path}>
+                <StyledMenuListItemLink onClick={toggleMenu} href={path}>
                   {name}
                 </StyledMenuListItemLink>
               </StyledMenuListItem>
