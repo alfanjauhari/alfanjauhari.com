@@ -1,6 +1,7 @@
 import { ButtonLink, SEO } from '@/components';
 import { PostCard } from '@/components/post-card';
 import { profile } from '@/configs';
+import { MainLayout } from '@/layouts';
 import { styled } from '@/theme';
 import { omit } from '@/utils';
 import { allPosts, Post } from '@contentlayer/generated';
@@ -97,7 +98,7 @@ export default function Home({
   posts,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
-    <>
+    <MainLayout>
       <SEO
         canonical="/"
         description="Realizing digital dreams come true as frontend developer"
@@ -139,6 +140,6 @@ export default function Home({
           </div>
         )}
       </StyledArticles>
-    </>
+    </MainLayout>
   );
 }

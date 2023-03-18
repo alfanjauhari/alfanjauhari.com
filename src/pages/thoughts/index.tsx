@@ -1,5 +1,6 @@
 import { allThoughts, Thought } from '@/../.contentlayer/generated';
-import { Button, ButtonLink, SEO, SimpleCard } from '@/components';
+import { SEO, SimpleCard } from '@/components';
+import { RestrictedLayout } from '@/layouts';
 import { styled } from '@/theme';
 import { omit } from '@/utils';
 import * as Dialog from '@radix-ui/react-dialog';
@@ -123,41 +124,12 @@ export default function Thoughts({
   if (!customLocalStorage) return null;
 
   return (
-    <>
+    <RestrictedLayout>
       <SEO
         title="Thoughts"
         canonical="/thoughts"
         description='A collection of my thoughts about anything. Be careful, some of them are not suitable for "children".'
       />
-
-      <Dialog.Root defaultOpen={!isAccepted}>
-        <Dialog.Portal>
-          <StyledPromptOverlay />
-          <StyledPromptContent
-            onInteractOutside={(event) => event.preventDefault()}
-          >
-            <StyledPromptTitle>
-              Are you sure to open this page?
-            </StyledPromptTitle>
-            <Dialog.Description>
-              Any feelings of disapproval, dislike, and other feelings are not
-              my responsibility if you choose to click <code>Yes!</code> :p
-            </Dialog.Description>
-            <StyledPromptCTA>
-              <Dialog.Close
-                asChild
-                onClick={() => localStorage.setItem('isAccepted', 'true')}
-              >
-                <Button size="sm">Yes!</Button>
-              </Dialog.Close>
-              <ButtonLink href="/" size="sm">
-                Nope!
-              </ButtonLink>
-            </StyledPromptCTA>
-          </StyledPromptContent>
-        </Dialog.Portal>
-      </Dialog.Root>
-
       <StyledArticles id="articles">
         <div className="title-description-wrapper">
           <h1 className="title">Thoughts</h1>
@@ -185,6 +157,6 @@ export default function Thoughts({
           </h1>
         )}
       </StyledArticles>
-    </>
+    </RestrictedLayout>
   );
 }

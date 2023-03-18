@@ -1,4 +1,3 @@
-import { Layout } from '@/components';
 import { globalCSS } from '@/theme';
 import { JetBrains_Mono as JetBrainsMono, Poppins } from '@next/font/google';
 import { AppProps } from 'next/app';
@@ -25,11 +24,11 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   })();
 
   return (
-    <Layout>
+    <>
       <Head>
         <link rel="icon" href="/images/icon.webp" type="image/x-icon" />
       </Head>
       <Component {...pageProps} />
-    </Layout>
+    </>
   );
 }

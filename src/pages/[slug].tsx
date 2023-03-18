@@ -5,6 +5,7 @@ import {
 } from 'next';
 
 import { MDXComponent, SEO } from '@/components';
+import { MainLayout } from '@/layouts';
 import { styled } from '@/theme';
 import { allPages, Page as TPage } from '@contentlayer/generated';
 import { useMDXComponent } from 'next-contentlayer/hooks';
@@ -75,7 +76,7 @@ export default function Page({
   const MDXContent = useMDXComponent(page.body.code);
 
   return (
-    <>
+    <MainLayout>
       <SEO
         canonical={page.slug}
         description={page.description}
@@ -89,6 +90,6 @@ export default function Page({
           <MDXContent components={MDXComponent} />
         </div>
       </StyledWrapper>
-    </>
+    </MainLayout>
   );
 }

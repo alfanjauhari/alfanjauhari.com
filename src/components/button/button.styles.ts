@@ -47,7 +47,41 @@ export const StyledButton = styled('button', {
         },
       },
     },
+    outlined: {
+      false: {},
+      true: {
+        backgroundColor: 'transparent',
+      },
+    },
   },
+  compoundVariants: [
+    {
+      variant: 'primary',
+      outlined: true,
+      css: {
+        border: '1px solid $gray9',
+        color: '$gray9',
+        transitionDuration: '300ms',
+        '&:hover': {
+          backgroundColor: '$gray9',
+          color: 'White',
+        },
+      },
+    },
+    {
+      variant: 'secondary',
+      outlined: true,
+      css: {
+        border: '1px solid $gray3',
+        color: '$gray3',
+        transitionDuration: '300ms',
+        '&:hover': {
+          backgroundColor: '$gray3',
+          color: 'White',
+        },
+      },
+    },
+  ],
   defaultVariants: {
     variant: 'primary',
     size: 'md',

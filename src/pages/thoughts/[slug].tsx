@@ -6,6 +6,7 @@ import {
 } from 'next';
 
 import { MDXComponent, SEO } from '@/components';
+import { RestrictedLayout } from '@/layouts';
 import { styled } from '@/theme';
 import { omit } from '@/utils';
 import { allThoughts, Thought } from '@contentlayer/generated';
@@ -116,7 +117,7 @@ export default function ThoughtDetail({
   const MDXContent = useMDXComponent(thought.body.code);
 
   return (
-    <>
+    <RestrictedLayout>
       <SEO
         title={thought.title}
         canonical={thought.slug}
@@ -133,6 +134,6 @@ export default function ThoughtDetail({
           <MDXContent components={MDXComponent} />
         </div>
       </StyledWrapper>
-    </>
+    </RestrictedLayout>
   );
 }

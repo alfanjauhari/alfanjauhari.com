@@ -1,5 +1,6 @@
 import { MDXComponent, SEO } from '@/components';
 import { profile } from '@/configs';
+import { MainLayout } from '@/layouts';
 import { styled } from '@/theme';
 import { omit } from '@/utils';
 import { allPosts, Post } from '@contentlayer/generated';
@@ -138,7 +139,7 @@ export default function BlogPost({
   const MDXContent = useMDXComponent(post.body.code);
 
   return (
-    <>
+    <MainLayout>
       <SEO
         title={post.title}
         canonical={post.slug}
@@ -177,6 +178,6 @@ export default function BlogPost({
           </ul>
         </div>
       </StyledWrapper>
-    </>
+    </MainLayout>
   );
 }

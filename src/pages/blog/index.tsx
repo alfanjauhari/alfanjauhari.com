@@ -1,5 +1,6 @@
 import { Button, SEO } from '@/components';
 import { PostCard } from '@/components/post-card';
+import { MainLayout } from '@/layouts';
 import { styled } from '@/theme';
 import { omit } from '@/utils';
 import { allPosts, Post } from '@contentlayer/generated';
@@ -107,7 +108,7 @@ export default function Blog({
   }, [slicePost]);
 
   return (
-    <>
+    <MainLayout>
       <SEO
         title="Blog"
         canonical="/blog"
@@ -148,6 +149,6 @@ export default function Blog({
             </div>
           )}
       </StyledArticles>
-    </>
+    </MainLayout>
   );
 }
