@@ -1,0 +1,31 @@
+{{template "base" .}}
+<main class="main">
+  <article class="article">
+    <h1 class="article__title">{{.Title}}</h1>
+    <hr />
+    <div class="article__content">{{.Content}}</div>
+  </article>
+</main>
+
+<script type="module">
+  const codes = document.querySelectorAll("pre > code");
+
+  if (codes.length > 0) {
+    const { refractor } = await import(
+      "https://esm.sh/refractor@4?bundle-deps"
+    );
+    const jsx = await import("https://esm.sh/refractor@4/lang/jsx?bundle-deps");
+    const { toHtml } = await import(
+      "https://esm.sh/hast-util-to-html@9?bundle-deps"
+    );
+
+    refractor.register(jsx);
+
+    for (const code of codes) {
+      const lang = code.className.split("-")[1];
+      const tree = refractor.highlight(code.textContent, lang);
+      const html = toHtml(tree, { allowDangerousHtml: true });
+      code.innerHTML = html;
+    }
+  }
+</script>

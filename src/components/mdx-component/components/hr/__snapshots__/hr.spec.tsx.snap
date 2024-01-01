@@ -1,8 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`MDXComponent/Hr should match snapshot 1`] = `
-<hr
-  class="c-cPXaNr"
-  data-testid="hr-component"
-/>
-`;

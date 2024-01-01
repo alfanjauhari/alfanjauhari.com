@@ -1,0 +1,12 @@
+{{define "postcard"}}
+<div class="postcard">
+  <img
+    src="https://res.cloudinary.com/db8cfpaih/image/upload/f_auto,q_auto,h_320/v1/blog/{{.Slug}}"
+    alt="{{.Title}} Thumbnail"
+    class="postcard__image"
+  />
+  <a href="/blog/{{.Slug}}"><h1 class="postcard__title">{{.Title}}</h1></a>
+  <p class="postcard__excerpt">{{.Description}}</p>
+  <p class="postcard__date">{{.Date}}</p>
+</div>
+{{end}}

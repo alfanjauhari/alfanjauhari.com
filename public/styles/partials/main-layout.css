@@ -1,0 +1,29 @@
+.main {
+  width: 100%;
+  max-width: 1440px;
+  margin: 64px auto;
+  padding-left: var(--size-md);
+  padding-right: var(--size-md);
+}
+
+@media screen and (min-width: 768px) {
+  .main {
+    margin: 112px auto;
+    padding-left: 64px;
+    padding-right: 64px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .main {
+    padding-left: 128px;
+    padding-right: 128px;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .main {
+    padding-left: 160px;
+    padding-right: 160px;
+  }
+}

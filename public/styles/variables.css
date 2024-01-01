@@ -1,0 +1,27 @@
+:root {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol";
+  --font-mono: "JetBrains Mono", "Fira Code", "Fira Mono", "Roboto Mono",
+    monospace;
+  --font-semibold: 600;
+  --font-bold: 700;
+  --font-black: 900;
+
+  --color-primary: #1f1f1f;
+  --color-primary-pressed: #1b1c1e;
+  --color-secondary: #cae0ed;
+  --color-secondary-pressed: #295d7b;
+
+  --size-xs: 8px;
+  --size-sm: 12px;
+  --size-md: 16px;
+  --size-lg: 24px;
+  --size-xl: 32px;
+  --size-xxl: 48px;
+
+  --breakpoints-sm: 640px;
+  --breakpoints-md: 768px;
+  --breakpoints-lg: 1024px;
+  --breakpoints-xl: 1280px;
+}

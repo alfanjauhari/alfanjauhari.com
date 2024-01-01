@@ -1,0 +1,8 @@
+@import "./fonts.css";
+@import "./variables.css";
+@import "./reset.css";
+
+@import "./partials/button.css";
+
+@import "./partials/header.css";
+@import "./partials/main-layout.css";

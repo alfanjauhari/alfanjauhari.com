@@ -1,0 +1,88 @@
+.button {
+  border-radius: var(--size-xs);
+  font-weight: var(--font-semibold);
+}
+
+.button:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 2px var(--color-primary);
+}
+
+/* #region Variant Primary */
+.button--primary {
+  background-color: var(--color-primary);
+  color: var(--color-secondary);
+}
+/* #endregion */
+
+/* #region Variant Secondary */
+.button--secondary {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+}
+
+.button--secondary:hover {
+  background-color: var(--color-secondary-pressed);
+  transition-duration: 300ms;
+}
+/* #endregion */
+
+/* #region Variant Outlined */
+.button--outlined {
+  background-color: transparent;
+}
+
+.button--primary.button--outlined {
+  border: 1px solid var(--color-primary);
+  color: var(--color-primary);
+}
+
+.button--primary.button--outlined:hover {
+  background-color: var(--color-primary);
+  transition-duration: 300ms;
+  color: white;
+}
+
+.button--secondary.button--outlined {
+  border: 1px solid var(--color-secondary);
+  color: var(--color-secondary);
+}
+
+.button--secondary.button--outlined:hover {
+  background-color: var(--color-secondary);
+  transition-duration: 300ms;
+  color: var(--color-primary);
+}
+/* #endregion */
+
+/* #region Variant Small */
+.button--small {
+  padding: var(--size-xs) var(--size-md);
+}
+/* #endregion */
+
+/* #region Variant Medium */
+.button--medium {
+  padding: var(--size-xs) var(--size-lg);
+}
+
+@media screen and (min-width: 768px) {
+  .button--medium {
+    padding-left: var(--size-xl);
+    padding-right: var(--size-xl);
+  }
+}
+/* #endregion */
+
+/* #region Variant Large */
+.button--large {
+  padding: var(--size-sm) var(--size-md);
+}
+
+@media screen and (min-width: 768px) {
+  .button--large {
+    padding-left: var(--size-xl);
+    padding-right: var(--size-xl);
+  }
+}
+/* #endregion */

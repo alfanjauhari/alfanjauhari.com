@@ -1,0 +1,25 @@
+{{template "base" .}}
+<main class="main">
+  <section class="hero">
+    <p class="hero__profile">{{.Profile.Name}}, {{.Profile.JobTitle}}</p>
+    <h1 class="hero__tagline">{{.Profile.Tagline}}</h1>
+    <div class="hero__buttons">
+      <a class="button button--primary button--large" href="/about">
+        More About Me
+      </a>
+    </div>
+  </section>
+  <section class="articles">
+    <h1 class="articles__title">Latest articles</h1>
+    <div class="articles__list">
+      {{range $post := .Posts}}{{template "postcard" .}}{{end}}
+    </div>
+    {{if gt .TotalPosts (len .Posts)}}
+    <div class="articles__more-wrapper">
+      <a class="button button--large button--primary" href="/blog">
+        Load More Posts
+      </a>
+    </div>
+    {{end}}
+  </section>
+</main>
