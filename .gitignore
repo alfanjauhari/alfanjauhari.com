@@ -1,0 +1,9 @@
+tmp/
+
+.env*
+!.env*.example
+
+.DS_Store
+
+public/styles/app.min.css
+public/scripts/app.min.js
