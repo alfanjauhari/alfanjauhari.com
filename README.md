@@ -35,9 +35,9 @@
 
 ### Website
 
-- Create your pages markdown file within `web/contents/pages/{pagename}.md`
-- Create your blog article markdown file within `web/contents/blogs/{postname}.md`
-- The markdown file support frontmatter with these format:
+- Create your page markdown file by running `web/contents/pages/{pagename}.md`
+- Create your blog article markdown file by running `web/contents/blogs/{postname}.md`
+- The markdown file supports frontmatter with this format:
   ```markdown
   ---fm
   title: "Blabla"
@@ -62,7 +62,7 @@
 docker build -t blog .
 ```
 
-2. Create docker container
+2. Create a docker container
 
 ```sh
 docker container create --name blog -e APP_ENV=production -p 8080:8080 blog
