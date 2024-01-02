@@ -19,17 +19,25 @@
     />
     <link rel="canonical" href="{{.Canonical}}" />
 
+    {{if .IsProduction}}
     <link
       rel="stylesheet"
-      href="/styles/app{{if .IsProduction}}.min{{end}}.css"
+      href="https://res.cloudinary.com/db8cfpaih/raw/upload/v1/assets/app.min.css"
     />
-    {{range $style := .Styles}}
-    <link rel="stylesheet" href="{{$style}}" />
+    {{else}}
+    <link
+      rel="stylesheet"
+      href="/styles/app.css"
+    />
     {{end}}
+    {{if .IsProduction}}
     <script
       type="module"
-      src="/scripts/app{{if .IsProduction}}.min{{end}}.js"
+      src="https://res.cloudinary.com/db8cfpaih/raw/upload/v1/assets/app.min.js"
     ></script>
+    {{else}}
+    <script type="module" src="/scripts/app.js"></script>
+    {{end}}
   </head>
   <body>
     <header class="header">

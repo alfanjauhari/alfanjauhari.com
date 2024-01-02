@@ -35,7 +35,6 @@ func (p Page) RenderPage(w http.ResponseWriter, r *http.Request) {
 	fm, _ := blog.FormatFrontMatter(file)
 
 	var data struct {
-		Styles       []string
 		Title        string
 		Description  string
 		Content      template.HTML
@@ -46,9 +45,6 @@ func (p Page) RenderPage(w http.ResponseWriter, r *http.Request) {
 	data.Title = fm.Title
 	data.Description = fm.Description
 	data.Content = template.HTML(blog.MdToHTML(file))
-	data.Styles = []string{
-		"/styles/pages/article.css",
-	}
 	data.IsProduction = os.Getenv("APP_ENV") == "production"
 	data.Canonical = helpers.GetCanonical(r)
 

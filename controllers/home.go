@@ -20,7 +20,6 @@ func (h Home) HomePage(w http.ResponseWriter, r *http.Request) {
 	var data struct {
 		Title       string
 		Description string
-		Styles      []string
 		Profile     struct {
 			Name     string
 			JobTitle string
@@ -38,10 +37,6 @@ func (h Home) HomePage(w http.ResponseWriter, r *http.Request) {
 
 	tagline := "Realizing digital dreams come true as a product engineer"
 
-	data.Styles = []string{
-		"/styles/pages/home.css",
-		"/styles/partials/postcard.css",
-	}
 	data.Profile.Name = "Alfan Jauhari"
 	data.Profile.JobTitle = "Product Engineer"
 	data.Profile.Tagline = tagline

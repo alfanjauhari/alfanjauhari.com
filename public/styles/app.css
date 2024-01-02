@@ -3,6 +3,10 @@
 @import "./reset.css";
 
 @import "./partials/button.css";
-
 @import "./partials/header.css";
 @import "./partials/main-layout.css";
+@import "./partials/postcard.css";
+
+@import "./pages/article.css";
+@import "./pages/home.css";
+@import "./pages/blog.css";

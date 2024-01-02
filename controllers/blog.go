@@ -37,7 +37,6 @@ func (b Blog) ArticlePage(w http.ResponseWriter, r *http.Request) {
 	fm, _ := blog.FormatFrontMatter(file)
 
 	var data struct {
-		Styles       []string
 		Title        string
 		Description  string
 		FrontMatter  blog.FrontMatter
@@ -55,9 +54,6 @@ func (b Blog) ArticlePage(w http.ResponseWriter, r *http.Request) {
 	data.Description = fm.Description
 	data.FrontMatter = *fm
 	data.Content = template.HTML(blog.MdToHTML(file))
-	data.Styles = []string{
-		"/styles/pages/article.css",
-	}
 	data.IsProduction = os.Getenv("APP_ENV") == "production"
 	data.Canonical = helpers.GetCanonical(r)
 
@@ -77,7 +73,6 @@ func (b Blog) BlogPage(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
 	var data struct {
-		Styles       []string
 		Title        string
 		Description  string
 		IsProduction bool
@@ -90,10 +85,6 @@ func (b Blog) BlogPage(w http.ResponseWriter, r *http.Request) {
 	posts, totalPosts := blog.GetPosts(int(pageInt), 4)
 	data.Title = "Blog"
 	data.Description = "Some of my writings are about of technology, programming, and random things."
-	data.Styles = []string{
-		"/styles/pages/blog.css",
-		"/styles/partials/postcard.css",
-	}
 	data.IsProduction = os.Getenv("APP_ENV") == "production"
 	data.TotalPosts = totalPosts
 	data.NextPage = int(pageInt) + 1
