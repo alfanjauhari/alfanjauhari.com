@@ -9,6 +9,7 @@
   align-items: center;
   z-index: 10;
   backdrop-filter: blur(var(--size-md));
+  background-color: white;
   max-width: 1440px;
   margin: 0 auto;
 }
@@ -99,7 +100,6 @@
 
 .menu__toggler {
   z-index: 50;
-  position: fixed;
   right: var(--size-md);
   font-weight: var(--font-bold);
 }

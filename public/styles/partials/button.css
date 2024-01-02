@@ -23,6 +23,7 @@
 
 .button--secondary:hover {
   background-color: var(--color-secondary-pressed);
+  color: var(--color-secondary);
   transition-duration: 300ms;
 }
 /* #endregion */
