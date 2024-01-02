@@ -16,13 +16,13 @@
 
   if (codes.length > 0) {
     const { refractor } = await import(
-      "https://esm.sh/refractor@4?bundle-deps"
+      "https://cdn.jsdelivr.net/npm/refractor@4/+esm"
     );
     const jsx = await import(
-      "https://esm.sh/refractor@4/lang/jsx?bundle-deps"
+      "https://cdn.jsdelivr.net/npm/refractor@4/lang/jsx/+esm"
     ).then((res) => res.default);
     const { toHtml } = await import(
-      "https://esm.sh/hast-util-to-html@9?bundle-deps"
+      "https://cdn.jsdelivr.net/npm/hast-util-to-html@9/+esm"
     );
 
     refractor.register(jsx);
