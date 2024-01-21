@@ -3,7 +3,6 @@
 ## Requirements
 
 - Go v1.21.5
-- Bun [https://bun.sh/](https://bun.sh/)
 - Air [https://github.com/cosmtrek/air](https://github.com/cosmtrek/air)
 
 ## Installation
@@ -46,12 +45,10 @@
   --endfm
   ```
   Make sure you are using `---fm` and `---endfm` for the frontmatter!
-- You can minify the style files and the scripts file with these commands
+- You can get the bundled of the style and the scripts files with these commands
 
   ```sh
-  bunx lightningcss-cli --minify --bundle --targets '>= 0.25%' public/styles/app.css -o public/styles/app.min.css
-
-  bun build ./public/scripts/app.js --outfile public/scripts/app.min.js --minify
+  go run ./cmd/build
   ```
 
 ### Docker
