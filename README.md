@@ -1,80 +1,81 @@
-# Alfan Jauhari - Personal Website
+# Turborepo starter
 
-## Requirements
+This is an official starter Turborepo.
 
-- Go v1.21.5
-- Air [https://github.com/cosmtrek/air](https://github.com/cosmtrek/air)
+## Using this example
 
-## Installation
-
-1. Clone the repository:
-
-   ```sh
-   git clone https://github.com/alfanjauhari/alfanjauhari.com.git
-   ```
-
-2. Navigate to the project directory:
-
-   ```sh
-   cd alfanjauhari.com
-   ```
-
-3. Install the dependencies:
-
-   ```sh
-   go mod tidy
-   ```
-
-4. Build the project:
-   ```sh
-   go build -o tmp/main ./cmd/web
-   ```
-
-## Usage
-
-### Website
-
-- Create your page markdown file by running `web/contents/pages/{pagename}.md`
-- Create your blog article markdown file by running `web/contents/blogs/{postname}.md`
-- The markdown file supports frontmatter with this format:
-  ```markdown
-  ---fm
-  title: "Blabla"
-  description: 'blabla'
-  date: 2022-09-07 12:00:00
-  --endfm
-  ```
-  Make sure you are using `---fm` and `---endfm` for the frontmatter!
-- You can get the bundled of the style and the scripts files with these commands
-
-  ```sh
-  go run ./cmd/build
-  ```
-
-### Docker
-
-1. Run docker build
+Run the following command:
 
 ```sh
-docker build -t blog .
+npx create-turbo@latest
 ```
 
-2. Create a docker container
+## What's inside?
 
-```sh
-docker container create --name blog -e APP_ENV=production -p 8080:8080 blog
+This Turborepo includes the following packages/apps:
+
+### Apps and Packages
+
+- `docs`: a [Next.js](https://nextjs.org/) app
+- `web`: another [Next.js](https://nextjs.org/) app
+- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
+- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
+- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+
+Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+
+### Utilities
+
+This Turborepo has some additional tools already setup for you:
+
+- [TypeScript](https://www.typescriptlang.org/) for static type checking
+- [ESLint](https://eslint.org/) for code linting
+- [Prettier](https://prettier.io) for code formatting
+
+### Build
+
+To build all apps and packages, run the following command:
+
+```
+cd my-turborepo
+pnpm build
 ```
 
-3. Run docker container
+### Develop
 
-```sh
-docker container start blog
+To develop all apps and packages, run the following command:
+
+```
+cd my-turborepo
+pnpm dev
 ```
 
-## Deployment
+### Remote Caching
 
-You can easily deploy this app using [fly.io](https://fly.io). Just run the `fly launch` (for the first launch) and `fly deploy` for the sequential run.
+Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
 
-## LICENSE
+By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
 
-[GNU General Public License v3.0](https://github.com/alfanjauhari/alfanjauhari.com/blob/main/LICENSE)
+```
+cd my-turborepo
+npx turbo login
+```
+
+This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+
+Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+
+```
+npx turbo link
+```
+
+## Useful Links
+
+Learn more about the power of Turborepo:
+
+- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
+- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
+- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
+- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
+- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
+- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
