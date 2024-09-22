@@ -1,0 +1,23 @@
+---
+import Head from "@/components/base/Head.astro";
+import "@/styles/fonts.css";
+import "@fontsource/anton/latin.css";
+
+import { Header } from "@/components/ui/Header";
+
+const { title } = Astro.props;
+---
+
+<html lang="en" class="m-0 p-0">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <Head title={title} />
+  </head>
+  <body class="bg-gray-100 m-0 p-0">
+    <Header pathname={Astro.url.pathname} />
+    <main class="w-full px-6">
+      <slot />
+    </main>
+  </body>
+</html>
