@@ -1,7 +1,10 @@
 ---
-import { Tagline } from "@/components/pages/home/Tagline";
 import { SelectedWorksHeading } from "@/components/pages/home/SelectedWorksHeading";
+import { Tagline } from "@/components/pages/home/Tagline";
+import { RevealHeading } from "@/components/ui/RevealHeading";
 import SiteLayout from "@/layouts/SiteLayout.astro";
+import { PROJECTS } from "@/libs/config";
+import { cn } from "@/libs/utils";
 import { Image } from "astro:assets";
 ---
 
@@ -18,37 +21,39 @@ import { Image } from "astro:assets";
     <div class="space-y-12">
       <SelectedWorksHeading client:visible />
       <div>
-        <div
-          class="grid grid-cols-4 items-center gap-12 border-t border-b border-gray-900 h-32 group relative"
-        >
-          <h1 class="text-3xl">Michelle Oh Website</h1>
-          <p class="text-2xl italic">2023</p>
-          <p class="text-2xl">Product Engineer</p>
-          <p class="text-2xl">Shopify</p>
-          <Image
-            src="https://res.cloudinary.com/db8cfpaih/image/upload/f_avif,q_50,w_240,h_180/images/projects/Michelle-Oh.png"
-            alt="Michelle Oh Website Screenshot"
-            width={240}
-            height={180}
-            class="absolute right-0 rounded-lg opacity-0 invisible group-hover:opacity-100 duration-300 group-hover:visible translate-y-10 group-hover:translate-y-0"
-          />
-        </div>
-        <div
-          class="grid grid-cols-4 items-center gap-12 border-b border-gray-900 h-32 relative group"
-        >
-          <h1 class="text-3xl">BAKTI DNA</h1>
-          <p class="text-2xl italic">2022</p>
-          <p class="text-2xl">Product Engineer</p>
-          <p class="text-2xl">Nx, NextJS, Chakra UI</p>
-          <Image
-            src="https://res.cloudinary.com/db8cfpaih/image/upload/f_avif,q_50,w_240,h_180/images/projects/BAKTI-DNA.png"
-            alt="BAKTI DNA Website Screenshot"
-            width={240}
-            height={180}
-            class="absolute right-0 rounded-lg opacity-0 invisible group-hover:opacity-100 duration-300 group-hover:visible translate-y-10 group-hover:translate-y-0"
-          />
-        </div>
+        {
+          PROJECTS.map((project, index) => (
+            <div
+              class={cn(
+                "grid grid-cols-[1.5fr_0.5fr_1fr_1fr] items-center gap-12 border-b border-gray-900 h-32 group relative",
+                {
+                  "border-t": index === 0,
+                }
+              )}
+            >
+              <h1 class="text-3xl">{project.name}</h1>
+              <p class="text-2xl italic">{project.year}</p>
+              <p class="text-2xl">{project.role}</p>
+              <p class="text-2xl">{project.stacks.join(", ")}</p>
+              <Image
+                src={`https://res.cloudinary.com/db8cfpaih/image/upload/f_avif,q_50,w_240,h_180/images/projects/${project.image}`}
+                alt={`${project.name} Website`}
+                width={240}
+                height={180}
+                class="absolute right-0 rounded-lg opacity-0 invisible group-hover:opacity-100 duration-300 group-hover:visible translate-y-10 group-hover:translate-y-0"
+              />
+            </div>
+          ))
+        }
       </div>
     </div>
+  </section>
+  <section
+    id="skills"
+    class="h-screen bg-gray-100 -mx-6 sticky top-0 px-6 pt-20"
+  >
+    <RevealHeading client:visible className="text-9xl"
+      >My Beloved Tech Stacks</RevealHeading
+    >
   </section>
 </SiteLayout>

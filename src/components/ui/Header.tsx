@@ -21,11 +21,9 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(
       >
         <a
           href="/"
-          className="flex items-center gap-3 font-semibold z-20 relative text-stone-700"
+          className="flex items-center gap-3 z-20 relative text-stone-700"
         >
-          <h1 className="font-black tracking-wide text-stone-700">
-            alfanjauhari
-          </h1>
+          alfanjauhari
         </a>
         <nav>
           <ul className="flex items-center justify-center gap-4">
@@ -34,7 +32,7 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(
                 <a
                   href={menu.href}
                   aria-current={pathname === menu.href ? "page" : undefined}
-                  className="text-sm font-bold aria-[current]:underline aria-[current]:decoration-dotted text-stone-700"
+                  className="text-sm aria-[current]:underline aria-[current]:decoration-dotted text-stone-700"
                 >
                   {menu.name}
                 </a>

@@ -18,6 +18,9 @@ import {
   wrap,
 } from "framer-motion";
 
+// Adjust this value to change the speed/velocity
+const VELOCITY = 5;
+
 export const SelectedWorksHeading = forwardRef<
   HTMLDivElement,
   ComponentProps<"div">
@@ -41,8 +44,8 @@ export const SelectedWorksHeading = forwardRef<
 
   const x = useTransform(baseX, (v) => `${wrap(-100 / repetitions, 0, v)}%`);
 
-  useAnimationFrame((t, delta) => {
-    let moveBy = directionFactor.current * 5 * (delta / 1000);
+  useAnimationFrame((_, delta) => {
+    let moveBy = directionFactor.current * VELOCITY * (delta / 1000);
 
     if (velocityFactor.get() < 0) {
       directionFactor.current = -1;
@@ -55,14 +58,14 @@ export const SelectedWorksHeading = forwardRef<
     baseX.set(baseX.get() + moveBy);
   });
 
+  useImperativeHandle(ref, () => containerRef.current!);
+
   useEffect(() => {
     const calculateRepetitions = () => {
       if (containerRef.current && textRef.current) {
         const containerWidth = containerRef.current.offsetWidth;
         const textWidth = textRef.current.offsetWidth;
         const newRepetitions = Math.ceil(containerWidth / textWidth) + 2;
-
-        console.log({ containerWidth, textWidth, newRepetitions });
 
         setRepetitions(newRepetitions);
       }

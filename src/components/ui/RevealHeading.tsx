@@ -1,3 +1,4 @@
+import { cn } from "@/libs/utils";
 import { motion, type HTMLMotionProps } from "framer-motion";
 import { forwardRef } from "react";
 
@@ -10,7 +11,10 @@ export const RevealHeading = forwardRef<HTMLHeadingElement, RevealHeadingProps>(
     return (
       <div className="overflow-y-hidden">
         <motion.h1
-          className="text-[180px] tracking-wide text-stone-700 font-heading uppercase leading-none"
+          className={cn(
+            "text-[180px] tracking-wide text-stone-700 font-heading uppercase leading-none",
+            className
+          )}
           initial={{
             y: "-100%",
           }}
