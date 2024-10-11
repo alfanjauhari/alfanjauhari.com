@@ -6,8 +6,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Satoshi-Variable", ...defaultTheme.fontFamily.sans],
-        heading: ["Anton"],
+        sans: ["Bebas Neue", ...defaultTheme.fontFamily.sans],
+        heading: ["Bebas Neue"],
       },
     },
   },
