@@ -1,4 +1,4 @@
-import { cn } from "@/libs/utils";
+import { cn } from '@/libs/utils'
 import {
   forwardRef,
   useEffect,
@@ -6,7 +6,7 @@ import {
   useRef,
   useState,
   type ComponentProps,
-} from "react";
+} from 'react'
 import {
   motion,
   useAnimationFrame,
@@ -16,98 +16,99 @@ import {
   useTransform,
   useVelocity,
   wrap,
-} from "framer-motion";
+} from 'framer-motion'
 
 // Adjust this value to change the speed/velocity
-const VELOCITY = 5;
+const VELOCITY = 5
 
 export const SelectedWorksHeading = forwardRef<
   HTMLDivElement,
-  ComponentProps<"div">
+  ComponentProps<'div'>
 >(({ className, ...props }, ref) => {
-  const baseX = useMotionValue(0);
-  const { scrollYProgress } = useScroll();
-  const scrollVelocity = useVelocity(scrollYProgress);
+  const baseX = useMotionValue(0)
+  const { scrollYProgress } = useScroll()
+  const scrollVelocity = useVelocity(scrollYProgress)
   const smoothVelocity = useSpring(scrollVelocity, {
     damping: 50,
     stiffness: 400,
-  });
+  })
   const velocityFactor = useTransform(smoothVelocity, [0, 1000], [0, 5], {
     clamp: false,
-  });
+  })
 
-  const [repetitions, setRepetitions] = useState(1);
+  const [repetitions, setRepetitions] = useState(1)
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLHeadingElement>(null);
-  const directionFactor = useRef<number>(1);
+  const containerRef = useRef<HTMLDivElement>(null)
+  const textRef = useRef<HTMLHeadingElement>(null)
+  const directionFactor = useRef<number>(1)
 
-  const x = useTransform(baseX, (v) => `${wrap(-100 / repetitions, 0, v)}%`);
+  const x = useTransform(baseX, (v) => `${wrap(-100 / repetitions, 0, v)}%`)
 
   useAnimationFrame((_, delta) => {
-    let moveBy = directionFactor.current * VELOCITY * (delta / 1000);
+    let moveBy = directionFactor.current * VELOCITY * (delta / 1000)
 
     if (velocityFactor.get() < 0) {
-      directionFactor.current = -1;
+      directionFactor.current = -1
     } else if (velocityFactor.get() > 0) {
-      directionFactor.current = 1;
+      directionFactor.current = 1
     }
 
-    moveBy += directionFactor.current * moveBy * velocityFactor.get();
+    moveBy += directionFactor.current * moveBy * velocityFactor.get()
 
-    baseX.set(baseX.get() + moveBy);
-  });
+    baseX.set(baseX.get() + moveBy)
+  })
 
-  useImperativeHandle(ref, () => containerRef.current!);
+  useImperativeHandle(ref, () => containerRef.current!)
 
   useEffect(() => {
     const calculateRepetitions = () => {
       if (containerRef.current && textRef.current) {
-        const containerWidth = containerRef.current.offsetWidth;
-        const textWidth = textRef.current.offsetWidth;
-        const newRepetitions = Math.ceil(containerWidth / textWidth) + 2;
+        const containerWidth = containerRef.current.offsetWidth
+        const textWidth = textRef.current.offsetWidth
+        const newRepetitions = Math.ceil(containerWidth / textWidth) + 2
 
-        setRepetitions(newRepetitions);
+        setRepetitions(newRepetitions)
       }
-    };
+    }
 
-    calculateRepetitions();
+    calculateRepetitions()
 
-    window.addEventListener("resize", calculateRepetitions);
+    window.addEventListener('resize', calculateRepetitions)
 
-    return () => window.removeEventListener("resize", calculateRepetitions);
-  }, []);
+    return () => window.removeEventListener('resize', calculateRepetitions)
+  }, [])
 
   return (
     <div
-      className={cn("w-full overflow-hidden whitespace-nowrap", className)}
+      className={cn('w-full overflow-hidden whitespace-nowrap', className)}
       {...props}
       ref={containerRef}
     >
       <motion.div
         className={cn(
-          "inline-block text-[180px] tracking-wide text-stone-700 font-heading uppercase leading-none",
-          className
+          'inline-block text-10xl tracking-wide text-stone-700 font-heading uppercase',
+          className,
         )}
         initial={{
-          y: "100%",
+          y: '100%',
         }}
-        whileInView={{
-          y: 0,
+        animate={{
+          y: '0',
         }}
         transition={{
-          type: "spring",
-          ease: "easeOut",
+          type: 'spring',
+          ease: 'easeOut',
           duration: 0.5,
+          delay: 1.5,
         }}
         style={{ x }}
       >
         {Array.from({ length: repetitions }).map((_, i) => (
           <span key={i} ref={i === 0 ? textRef : null}>
-            Selected Works{" "}
+            Selected Works{' '}
           </span>
         ))}
       </motion.div>
     </div>
-  );
-});
+  )
+})

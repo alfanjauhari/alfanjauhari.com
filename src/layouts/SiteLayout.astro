@@ -4,6 +4,7 @@ import "@/styles/fonts.css";
 import "@fontsource/anton/latin.css";
 
 import { Header } from "@/components/ui/Header";
+import { Footer } from "@/components/ui/Footer";
 
 const { title } = Astro.props;
 ---
@@ -13,11 +14,26 @@ const { title } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <Head title={title} />
+
+    <script>
+      import "lenis/dist/lenis.css";
+      import Lenis from "lenis";
+
+      const lenis = new Lenis();
+
+      function raf(time: number) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
+
+      requestAnimationFrame(raf);
+    </script>
   </head>
   <body class="bg-gray-100 m-0 p-0">
-    <Header pathname={Astro.url.pathname} />
+    <Header pathname={Astro.url.pathname} client:load />
     <main class="w-full px-6">
       <slot />
     </main>
+    <Footer client:visible={{ rootMargin: "200px" }} />
   </body>
 </html>
