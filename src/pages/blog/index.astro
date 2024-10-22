@@ -7,7 +7,10 @@ import { getCollection } from "astro:content";
 const posts = await getCollection("blog");
 ---
 
-<SiteLayout title="Blog">
+<SiteLayout
+    title="Blog"
+    description="Latest articles, thought and random stuffs mixed in one place"
+>
     <div class="space-y-12 py-20">
         <RevealHeading
             client:visible
