@@ -1,17 +1,43 @@
 ---
+import SiteLayout from "@/layouts/SiteLayout.astro";
 import { getCollection } from "astro:content";
 
 export async function getStaticPaths() {
-    const blogEntries = await getCollection("blog");
-    return blogEntries.map((entry) => ({
-        params: { slug: entry.slug },
-        props: { entry },
-    }));
+  const blogEntries = await getCollection("blog");
+  return blogEntries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
 }
 
 const { entry } = Astro.props;
 const { Content } = await entry.render();
 ---
 
-<h1>{entry.data.title}</h1>
-<Content />
+<SiteLayout title={entry.data.title}>
+  <div class="space-y-12 py-20 flex flex-col items-center">
+    <div class="flex items-center gap-2">
+      <div class="bg-stone-700 text-white font-semibold p-2 w-fit text-sm">
+        {entry.data.tag}
+      </div>
+      <span>&mdash;</span>
+      <p class="text-stone-700 text-sm">
+        {
+          Intl.DateTimeFormat("en-ID", {
+            dateStyle: "medium",
+          }).format(entry.data.date)
+        }
+      </p>
+    </div>
+    <div class="space-y-4 max-w-prose mx-auto border-b border-b-stone-300 pb-4">
+      <h1 class="font-heading text-7xl text-stone-700 text-center">
+        {entry.data.title}
+      </h1>
+      <p class="text-center italic">{entry.data.description}</p>
+    </div>
+
+    <article class="mx-auto prose prose-stone">
+      <Content />
+    </article>
+  </div>
+</SiteLayout>
