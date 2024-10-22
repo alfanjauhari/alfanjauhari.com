@@ -6,14 +6,19 @@ import "@fontsource/anton/latin.css";
 import { Header } from "@/components/ui/Header";
 import { Footer } from "@/components/ui/Footer";
 
-const { title } = Astro.props;
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
 ---
 
 <html lang="en" class="m-0 p-0">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <Head title={`${title} — Alfan Jauhari`} />
+    <Head title={`${title} — Alfan Jauhari`} description={description} />
 
     <script>
       import Lenis from "lenis";

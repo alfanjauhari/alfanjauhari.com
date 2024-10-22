@@ -3,7 +3,7 @@ import SiteLayout from "./SiteLayout.astro";
 
 interface Props {
     title: string;
-    description?: string;
+    description: string;
     date?: Date;
     tag?: string;
 }
@@ -11,7 +11,7 @@ interface Props {
 const { title, description, date, tag } = Astro.props;
 ---
 
-<SiteLayout title={title}>
+<SiteLayout title={title} description={description}>
     <div class="space-y-12 py-20 flex flex-col items-center">
         {
             (tag || date) && (
