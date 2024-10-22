@@ -13,7 +13,10 @@ import { getCollection } from "astro:content";
 const posts = await getCollection("blog");
 ---
 
-<SiteLayout title="Home">
+<SiteLayout
+  title="Home"
+  description="Architecting Tomorrow's Digital Landscape"
+>
   <section id="hero" class="flex flex-col justify-center pb-32 py-12">
     <Tagline client:load className="text-6xl lg:text-10xl" />
   </section>
