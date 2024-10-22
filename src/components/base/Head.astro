@@ -1,7 +1,14 @@
 ---
-const { title } = Astro.props;
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
 ---
 
 <head>
   <title>{title}</title>
+
+  <meta name="description" content={description} />
 </head>
