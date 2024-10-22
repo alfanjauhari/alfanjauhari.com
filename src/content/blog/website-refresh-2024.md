@@ -32,7 +32,7 @@ I choosed these stacks because i love the simplicity and scalability
 - UI Library: React JS
 - Animation Library: Framer Motion
 - Runtime: Bun
-- Hosting: Self-Host Hetzner
+- Hosting: Vercel
 
 ## How It's Build
 It took many days to build this website because i have to work on some projects at my office that make me highly focused to those project and "abandoning" this website.
