@@ -6,7 +6,7 @@ import {
   useScroll,
   type Variants,
 } from 'framer-motion'
-import { SOCIAL_MEDIA } from '@/libs/config'
+import { FOOTER_MENU, SOCIAL_MEDIA } from '@/libs/config'
 
 const NAME = 'ALFAN'
 
@@ -64,28 +64,22 @@ export const Footer = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
             <p>My home, my heaven and my personal digital sanctuary</p>
           </div>
           <div className="flex gap-12 mt-12 md:mt-0">
-            <div className="space-y-4">
-              <h1 className="font-bold font-heading uppercase text-stone-700 tracking-wider">
-                Explore
-              </h1>
-              <ul className="space-y-2">
-                <li>
-                  <a href="/about" className="text-stone-700">
-                    About
-                  </a>
-                </li>
-                <li>
-                  <a href="/writing" className="text-stone-700">
-                    Writing
-                  </a>
-                </li>
-                <li>
-                  <a href="/uses" className="text-stone-700">
-                    Uses
-                  </a>
-                </li>
-              </ul>
-            </div>
+            {FOOTER_MENU.map((menu) => (
+              <div className="space-y-4" key={menu.key}>
+                <h1 className="font-bold font-heading uppercase text-stone-700 tracking-wider">
+                  {menu.name}
+                </h1>
+                <ul className="space-y-2">
+                  {menu.children.map((child) => (
+                    <li key={child.href}>
+                      <a href={child.href} className="text-stone-700">
+                        {child.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
             <div className="space-y-4">
               <h1 className="font-bold font-heading uppercase text-stone-700 tracking-wider">
                 Connect with Me

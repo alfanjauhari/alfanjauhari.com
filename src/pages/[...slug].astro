@@ -3,9 +3,9 @@ import SingleLayout from "@/layouts/SingleLayout.astro";
 import { getCollection } from "astro:content";
 
 export async function getStaticPaths() {
-  const blogEntries = await getCollection("blog");
+  const pageEntries = await getCollection("pages");
 
-  return blogEntries.map((entry) => ({
+  return pageEntries.map((entry) => ({
     params: { slug: entry.slug },
     props: { entry },
   }));

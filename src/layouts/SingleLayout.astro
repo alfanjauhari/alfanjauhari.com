@@ -1,0 +1,44 @@
+---
+import SiteLayout from "./SiteLayout.astro";
+
+interface Props {
+    title: string;
+    description?: string;
+    date?: Date;
+    tag?: string;
+}
+
+const { title, description, date, tag } = Astro.props;
+---
+
+<SiteLayout title={title}>
+    <div class="space-y-12 py-20 flex flex-col items-center">
+        {
+            (tag || date) && (
+                <div class="flex items-center gap-2">
+                    <div class="bg-stone-700 text-white font-semibold p-2 w-fit text-sm">
+                        {tag}
+                    </div>
+                    <span>&mdash;</span>
+                    <p class="text-stone-700 text-sm">
+                        {Intl.DateTimeFormat("en-ID", {
+                            dateStyle: "medium",
+                        }).format(date)}
+                    </p>
+                </div>
+            )
+        }
+        <div
+            class="space-y-4 max-w-prose mx-auto border-b border-b-stone-300 pb-4"
+        >
+            <h1 class="font-heading text-7xl text-stone-700 text-center">
+                {title}
+            </h1>
+            <p class="text-center italic">{description}</p>
+        </div>
+
+        <article class="mx-auto prose prose-stone">
+            <slot />
+        </article>
+    </div>
+</SiteLayout>

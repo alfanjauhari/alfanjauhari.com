@@ -7,6 +7,31 @@ export const NAVIGATION_MENU = [
     name: 'About',
     href: '/about',
   },
+  {
+    name: 'Blog',
+    href: '/blog',
+  },
+]
+
+export const FOOTER_MENU = [
+  {
+    name: 'Explore',
+    key: 'explore',
+    children: [
+      {
+        name: 'About',
+        href: '/about',
+      },
+      {
+        name: 'Blog',
+        href: '/blog',
+      },
+      {
+        name: 'Uses',
+        href: '/uses',
+      },
+    ],
+  },
 ]
 
 export const PROJECTS = [

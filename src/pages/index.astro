@@ -2,6 +2,7 @@
 import ExternalLinkIcon from "@/components/icons/ExternalLinkIcon.astro";
 import { SelectedWorksHeading } from "@/components/pages/home/SelectedWorksHeading";
 import { Tagline } from "@/components/pages/home/Tagline";
+import ArticleCard from "@/components/ui/ArticleCard.astro";
 import { RevealHeading } from "@/components/ui/RevealHeading";
 import SiteLayout from "@/layouts/SiteLayout.astro";
 import { PROJECTS } from "@/libs/config";
@@ -133,7 +134,7 @@ const posts = await getCollection("blog");
   </section>
   <section
     id="writing"
-    class="min-h-screen bg-stone-700 px-6 -mx-6 py-20 gap-12 flex flex-col"
+    class="bg-stone-700 px-6 -mx-6 py-20 gap-12 flex flex-col"
   >
     <RevealHeading client:visible className="text-6xl lg:text-10xl text-white"
       >Latest Articles</RevealHeading
@@ -141,25 +142,13 @@ const posts = await getCollection("blog");
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
       {
         posts.map((post) => (
-          <a
-            href={`/blog/${post.slug}`}
-            class="p-6 border border-stone-200 relative after:bg-white after:absolute after:inset-0 after:-translate-y-full after:duration-300 hover:after:translate-y-0 overflow-y-hidden group/article"
-          >
-            <div class="space-y-2 relative z-10">
-              <p class="text-white text-sm group-hover/article:text-stone-700 duration-300">
-                {post.data.tag} &mdash;{" "}
-                {Intl.DateTimeFormat("en-ID", {
-                  dateStyle: "medium",
-                }).format(post.data.date)}
-              </p>
-              <h1 class="text-white text-4xl font-heading uppercase my-2 group-hover/article:text-stone-700 duration-300">
-                {post.data.title}
-              </h1>
-              <p class="text-white text-balance group-hover/article:text-stone-700 duration-300">
-                {post.data.description}
-              </p>
-            </div>
-          </a>
+          <ArticleCard
+            title={post.data.title}
+            description={post.data.description}
+            tag={post.data.tag}
+            date={post.data.date}
+            slug={post.slug}
+          />
         ))
       }
     </div>
