@@ -1,0 +1,43 @@
+---
+import ArticleCard from "@/components/ui/ArticleCard.astro";
+import { RevealHeading } from "@/components/ui/RevealHeading";
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import type { GetStaticPathsResult } from "astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths(): Promise<GetStaticPathsResult> {
+    const posts = await getCollection("blog");
+
+    return posts.map((entry) => ({
+        params: { tag: entry.data.tag },
+    }));
+}
+
+const posts = await getCollection("blog");
+---
+
+<SiteLayout
+    title="Blog"
+    description="Latest articles, thought and random stuffs mixed in one place"
+>
+    <div class="space-y-12 py-20">
+        <RevealHeading
+            client:visible
+            className="text-6xl lg:text-10xl text-stone-700"
+            >Latest Articles</RevealHeading
+        >
+        <div class="grid grid-cols-1 lg:grid-cols-2">
+            {
+                posts.map((post) => (
+                    <ArticleCard
+                        title={post.data.title}
+                        description={post.data.description}
+                        tag={post.data.tag}
+                        date={post.data.date}
+                        slug={post.slug}
+                    />
+                ))
+            }
+        </div>
+    </div>
+</SiteLayout>

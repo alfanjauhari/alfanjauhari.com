@@ -16,9 +16,12 @@ const { title, description, date, tag } = Astro.props;
         {
             (tag || date) && (
                 <div class="flex items-center gap-2">
-                    <div class="bg-stone-700 text-white font-semibold p-2 w-fit text-sm">
+                    <a
+                        href={`/blog/${tag}`}
+                        class="bg-stone-700 text-white font-semibold p-2 w-fit text-sm"
+                    >
                         {tag}
-                    </div>
+                    </a>
                     <span>&mdash;</span>
                     <p class="text-stone-700 text-sm">
                         {Intl.DateTimeFormat("en-ID", {
