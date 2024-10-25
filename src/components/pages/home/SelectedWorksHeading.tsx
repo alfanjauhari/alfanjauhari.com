@@ -99,7 +99,6 @@ export const SelectedWorksHeading = forwardRef<
           type: 'spring',
           ease: 'easeOut',
           duration: 0.5,
-          delay: 1.5,
         }}
         style={{ x }}
       >

@@ -17,7 +17,7 @@ const posts = await getCollection("blog");
             className="text-6xl lg:text-10xl text-stone-700"
             >Latest Articles</RevealHeading
         >
-        <div class="grid grid-cols-1 lg:grid-cols-2">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
             {
                 posts.map((post) => (
                     <ArticleCard
