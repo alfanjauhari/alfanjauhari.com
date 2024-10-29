@@ -11,4 +11,25 @@ const { title, description } = Astro.props;
   <title>{title}</title>
 
   <meta name="description" content={description} />
+
+  <link rel="icon" type="image/x-icon" href="/images/favicon.webp" />
+
+  <script>
+    import Lenis from "lenis";
+    import "lenis/dist/lenis.css";
+
+    const lenis = new Lenis();
+
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+  </script>
+
+  <script
+    defer
+    src="https://cloud.umami.is/script.js"
+    data-website-id="18e6a5e0-bc4f-4ab6-bb8b-79009d2f547c"></script>
 </head>

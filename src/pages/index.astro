@@ -10,7 +10,9 @@ import { cn } from "@/libs/utils";
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
 
-const posts = await getCollection("blog");
+const posts = await getCollection("blog").then((posts) =>
+  posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+);
 ---
 
 <SiteLayout
@@ -31,7 +33,7 @@ const posts = await getCollection("blog");
                 "grid grid-cols-1 lg:grid-cols-[1.5fr_0.5fr_1fr_1fr] items-center gap-4 lg:gap-12 border-b border-gray-900 py-6 lg:h-32 group relative",
                 {
                   "border-t": index === 0,
-                },
+                }
               )}
             >
               <h1 class="text-2xl lg:text-3xl">{project.name}</h1>

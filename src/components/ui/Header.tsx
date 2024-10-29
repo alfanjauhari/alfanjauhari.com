@@ -32,7 +32,7 @@ export const Header = forwardRef<HTMLElement, HeaderProps>(
                 <a
                   href={menu.href}
                   aria-current={pathname === menu.href ? "page" : undefined}
-                  className="text-sm aria-[current]:underline aria-[current]:decoration-dotted text-stone-700"
+                  className="text-sm aria-[current=page]:underline aria-[current=page]:decoration-dotted text-stone-700"
                 >
                   {menu.name}
                 </a>

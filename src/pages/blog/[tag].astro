@@ -6,38 +6,42 @@ import type { GetStaticPathsResult } from "astro";
 import { getCollection } from "astro:content";
 
 export async function getStaticPaths(): Promise<GetStaticPathsResult> {
-    const posts = await getCollection("blog");
+  const posts = await getCollection("blog");
 
-    return posts.map((entry) => ({
-        params: { tag: entry.data.tag },
-    }));
+  return posts.map((entry) => ({
+    params: { tag: entry.data.tag },
+  }));
 }
 
-const posts = await getCollection("blog");
+const posts = await getCollection("blog").then((posts) =>
+  posts
+    .filter((post) => post.data.tag === Astro.params.tag)
+    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+);
 ---
 
 <SiteLayout
-    title="Blog"
-    description="Latest articles, thought and random stuffs mixed in one place"
+  title="Blog"
+  description="Latest articles, thought and random stuffs mixed in one place"
 >
-    <div class="space-y-12 py-20">
-        <RevealHeading
-            client:visible
-            className="text-6xl lg:text-10xl text-stone-700"
-            >Latest Articles</RevealHeading
-        >
-        <div class="grid grid-cols-1 lg:grid-cols-2">
-            {
-                posts.map((post) => (
-                    <ArticleCard
-                        title={post.data.title}
-                        description={post.data.description}
-                        tag={post.data.tag}
-                        date={post.data.date}
-                        slug={post.slug}
-                    />
-                ))
-            }
-        </div>
+  <div class="space-y-12 py-20">
+    <RevealHeading
+      client:visible
+      className="text-6xl lg:text-10xl text-stone-700"
+      >Latest Articles</RevealHeading
+    >
+    <div class="grid grid-cols-1 lg:grid-cols-2">
+      {
+        posts.map((post) => (
+          <ArticleCard
+            title={post.data.title}
+            description={post.data.description}
+            tag={post.data.tag}
+            date={post.data.date}
+            slug={post.slug}
+          />
+        ))
+      }
     </div>
+  </div>
 </SiteLayout>
