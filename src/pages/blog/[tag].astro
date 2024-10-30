@@ -16,7 +16,7 @@ export async function getStaticPaths(): Promise<GetStaticPathsResult> {
 const posts = await getCollection("blog").then((posts) =>
   posts
     .filter((post) => post.data.tag === Astro.params.tag)
-    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime()),
 );
 ---
 

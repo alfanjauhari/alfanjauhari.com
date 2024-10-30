@@ -5,7 +5,7 @@ import SiteLayout from "@/layouts/SiteLayout.astro";
 import { getCollection } from "astro:content";
 
 const posts = await getCollection("blog").then((posts) =>
-  posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime()),
 );
 ---
 

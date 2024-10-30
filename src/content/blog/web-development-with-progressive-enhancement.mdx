@@ -5,16 +5,109 @@ tag: Web Technologies
 date: 2024-10-30
 ---
 
-import { ProgressiveForm } from "./_components/progressive-form";
+import FormSandpack from './_components/web-development-with-progressive-enhancement/FormSandpack.astro'
 
-Have you ever opened some website but it doesn’t work on your ancient devices? It’s kinda stressful isn’t it when you try surfing on the internet you need to spend your money to buy a new device first. Well, if you feel that way, when building a website you need to pay attention to backward compatibility so more users can use your websites smoothly without a problem. And that's where you need progressive enhancement when building websites for more accessibility and backward compatibility.
+Have you ever opened some website, but it doesn’t work on your ancient devices? It’s kinda stressful isn’t it when you try surfing on the internet you need to spend your money to buy a new device first. Well, if you feel that way, when building a website you need to pay attention to backward compatibility, so more users can use your websites smoothly without a problem. And that's where you need progressive enhancement when building websites for more accessibility and backward compatibility.
 
 ## Progressive Enhancement
 
 Quoted from [MDN](https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement) :
 
 > Progressive enhancement is a design philosophy that provides a baseline of essential content and functionality to as many users as possible, while delivering the best possible experience only to users of the most modern browsers that can run all the required code.
+> 
 
-This means with progressive enhancement we can improve user experience regardless of their user agent. So, although the user opens it from IE 1 it can still be working fine (but what kind of psycho is using IE in this economy?) with some features reduced probably, but hey it works!
+This means that with progressive enhancement, we can improve user experience regardless of their user agent. So, although the user opens it from IE 1, it can still work fine, with some features probably reduced (but what kind of psycho is using IE in this economy?).
 
-<ProgressiveForm />
+As a web developer, we usually decide which baseline for the users of our websites, so we can easily maintain what kind of features we can deliver to our users baseline and the features we can’t.
+
+### Why is Progressive Enhancement Important?
+
+Progressive enhancement is important when you are targeting a wider user base for your websites and want them to be accessible to older browser versions, and that should be your default approach when building websites, tho.
+
+With that in mind, your websites can visited by any users from any background and maybe can increase your sales from specific customers. Customers with old browsers, customers with old devices, etc. Because, sometimes we never know where our customers come from, what are their economic condition, what are their internet speed and what are their special conditions they had.
+
+***But, isn't it like we're making bad assumptions about the user's browser?***
+
+Although the progressive enhancement objective is to improve backward compatibility and accessibility, we don’t make assumptions or presume anything about our users. We just make sure our website still works fine in old browsers and has all the features available in modern browsers without sacrificing users' experience with old browsers.
+
+### When Should I Care About Progressive Enhancement
+
+Well, progressive enhancement is not a technology it’s more about the developer's approach when building websites, you can choose to care about it or not but, I really recommend you to use it when creating a website. Specifically, when you are trying to target more customer/user base for your websites, this approach will help you with that.
+
+## Difference with Graceful Degradation
+
+When you were learning progressive enhancement, you will likely introduce to graceful degradation also. It has almost same philosophy with progressive enhancement, the differences are while with progressive enhancement we as a developer starting from basic and functional version of website first and then add more advanced features for modern web browsers and devices that support them, the graceful degradation *dictates* us to start from most advanced features for modern browsers and devices and add supports for less capable browsers or devices version by “degrading” certain features as needed.
+
+So, by that explanation before, progressive enhancement is a bottom-up approach to web development while the graceful degradation is a top-down approach. You can be using progressive enhancement and graceful degradation at the same time to complement each other while building websites.
+
+## Progressive Enhancement Layers
+
+![Untitled.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/75064e5e-ab01-46bd-ade9-689ad3988478/e6c4d0e6-ccc8-4e0e-99cd-307555e5a4cf/Untitled.png)
+
+In that image, we can see we have 3 layers of progressive enhancement which is HTML, CSS and JavaScript. Those layers play important part for progressive enhancement and have different specification on each layer.
+
+### HTML
+
+HTML is the first layer of progressive enhancement, which has the largest support on any browsers. You can deliver your website with HTML in almost every browser (with some of the element have constrained for availability in some browser version).
+
+HTML is a starting point when we're implementing progressive enhancement in our website, it is important because you need HTML to build your website layout and structure.
+
+### CSS
+
+You absolutely can build your website with only HTML, but in the ideal world your website should be having styles, and you MUST style your website damn it.
+
+When it comes to CSS, we start to face compatibility issues more often. It’s because there is larger new CSS features that comes recently than HTML, for example: [`@container` at-rule](https://developer.mozilla.org/en-US/docs/Web/CSS/@container) that released in 2023 and only supported by few browsers at the moment. But, CSS have [`@supports`](https://developer.mozilla.org/en-US/docs/Web/CSS/@supports) which give us some flexibility to choose which selector, properties and functions supported by browsers and the fallback when it doesn't.
+
+### JavaScript
+
+Finally, we have the last part of the progressive enhancement layers, which is JavaScript. This is the most tricky part when implementing progressive enhancement because JavaScript API supports varies from browser-to-browser even though browser with same engine like edge and chrome.
+
+Some people think when we implement progressive enhancement we cannot be using JavaScript at all, because they think JavaScript will be disabled by users most of the time, but disabling JavaScript is not a simple way by a regular user who doesn’t understand how JavaScript works. Even though, we need to define baseline for our website how they behave when JavaScript enabled or disabled.
+
+## Fallback and Backward Compatibility
+
+Okay, but how we can make sure our users have the same experience even though they are using an old browser or device?
+
+The answer to that question is ***fallback.*** Fallback is a substitute or alternative solution that ensures a feature or content is still available to users if the preferred or advanced version cannot be used.
+
+This snippet showing how we maintain form compatibility when implementing progressive enhancement :
+
+<FormSandpack />
+
+
+```astro
+<SiteLayout title={title} description={description}>
+    <div class="space-y-12 py-20 flex flex-col items-center">
+        {
+            (tag || date) && (
+                <div class="flex items-center gap-2">
+                    <a
+                        href={`/blog/${tag}`}
+                        class="bg-stone-700 text-white font-semibold p-2 w-fit text-sm"
+                    >
+                        {tag}
+                    </a>
+                    <span>&mdash;</span>
+                    <p class="text-stone-700 text-sm">
+                        {Intl.DateTimeFormat("en-ID", {
+                            dateStyle: "medium",
+                        }).format(date)}
+                    </p>
+                </div>
+            )
+        }
+        <div
+            class="space-y-4 max-w-screen-lg mx-auto border-b border-b-stone-300 pb-4"
+        >
+            <h1 class="font-heading text-7xl text-stone-700 text-center">
+                {title}
+            </h1>
+            <p class="text-center italic">{description}</p>
+        </div>
+
+        <article class="mx-auto max-w-screen-lg prose prose-stone">
+            <slot />
+        </article>
+    </div>
+</SiteLayout>
+```

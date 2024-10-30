@@ -13,3 +13,8 @@
   font-display: swap;
   font-style: italic;
 }
+
+/* Code Fonts */
+html .prose pre {
+  font-size: 14px !important;
+}

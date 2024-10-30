@@ -1,6 +1,10 @@
 ---
 import SingleLayout from "@/layouts/SingleLayout.astro";
-import { getCollection } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
+
+interface Props {
+  entry: CollectionEntry<"pages">;
+}
 
 export async function getStaticPaths() {
   const pageEntries = await getCollection("pages");

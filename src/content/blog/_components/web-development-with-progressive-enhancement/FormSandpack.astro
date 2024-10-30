@@ -1,0 +1,9 @@
+---
+import Sandpack from "@/components/ui/Sandpack.astro";
+
+const files = ["/sandpack-files/App.tsx"].map(
+  (path) => import.meta.dirname + path,
+);
+---
+
+<Sandpack files={files} />

@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "bunx --bun astro dev",
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
@@ -14,7 +14,10 @@
     "@astrojs/mdx": "^3.1.6",
     "@astrojs/react": "^3.6.2",
     "@astrojs/tailwind": "^5.1.1",
+    "@codesandbox/sandpack-react": "^2.19.9",
+    "@codesandbox/sandpack-themes": "^2.0.21",
     "@fontsource-variable/dm-sans": "^5.1.0",
+    "@fontsource-variable/fira-code": "^5.1.0",
     "@fontsource/anton": "^5.1.0",
     "@types/react": "^18.3.7",
     "@types/react-dom": "^18.3.0",
@@ -31,6 +34,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@tailwindcss/typography": "^0.5.15"
+    "@tailwindcss/typography": "^0.5.15",
+    "@types/bun": "^1.1.12"
   }
 }

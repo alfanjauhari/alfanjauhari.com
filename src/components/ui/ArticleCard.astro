@@ -1,39 +1,39 @@
 ---
 interface Props {
-    slug: string;
-    tag: string;
-    title: string;
-    date: Date;
-    description: string;
+  slug: string;
+  tag: string;
+  title: string;
+  date: Date;
+  description: string;
 }
 
 const post = Astro.props;
 ---
 
 <a
-    href={`/blog/${post.slug}`}
-    class="p-6 border border-stone-200 relative after:bg-white after:absolute after:inset-0 after:-translate-y-full after:duration-300 hover:after:translate-y-0 overflow-y-hidden group/article bg-stone-700"
+  href={`/blog/${post.slug}`}
+  class="p-6 border border-stone-200 relative after:bg-white after:absolute after:inset-0 after:-translate-y-full after:duration-300 hover:after:translate-y-0 overflow-y-hidden group/article bg-stone-700"
 >
-    <div class="space-y-2 relative z-10">
-        <p
-            class="text-white text-sm group-hover/article:text-stone-700 duration-300"
-        >
-            {post.tag} &mdash;{" "}
-            {
-                Intl.DateTimeFormat("en-ID", {
-                    dateStyle: "medium",
-                }).format(post.date)
-            }
-        </p>
-        <h1
-            class="text-white text-4xl font-heading uppercase my-2 group-hover/article:text-stone-700 duration-300"
-        >
-            {post.title}
-        </h1>
-        <p
-            class="text-white text-balance group-hover/article:text-stone-700 duration-300"
-        >
-            {post.description}
-        </p>
-    </div>
+  <div class="space-y-2 relative z-10">
+    <p
+      class="text-white text-sm group-hover/article:text-stone-700 duration-300"
+    >
+      {post.tag} &mdash;{" "}
+      {
+        Intl.DateTimeFormat("en-ID", {
+          dateStyle: "medium",
+        }).format(post.date)
+      }
+    </p>
+    <h1
+      class="text-white text-4xl font-heading uppercase my-2 group-hover/article:text-stone-700 duration-300"
+    >
+      {post.title}
+    </h1>
+    <p
+      class="text-white text-balance group-hover/article:text-stone-700 duration-300"
+    >
+      {post.description}
+    </p>
+  </div>
 </a>

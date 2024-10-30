@@ -1,14 +1,16 @@
 ---
-import SiteLayout from "./SiteLayout.astro";
+import SiteLayout from './SiteLayout.astro'
+
+import '@fontsource-variable/fira-code'
 
 interface Props {
-    title: string;
-    description: string;
-    date?: Date;
-    tag?: string;
+  title: string
+  description: string
+  date?: Date
+  tag?: string
 }
 
-const { title, description, date, tag } = Astro.props;
+const { title, description, date, tag } = Astro.props
 ---
 
 <SiteLayout title={title} description={description}>
@@ -32,7 +34,7 @@ const { title, description, date, tag } = Astro.props;
             )
         }
         <div
-            class="space-y-4 max-w-prose mx-auto border-b border-b-stone-300 pb-4"
+            class="space-y-4 max-w-screen-lg mx-auto border-b border-b-stone-300 pb-4"
         >
             <h1 class="font-heading text-7xl text-stone-700 text-center">
                 {title}
@@ -40,7 +42,7 @@ const { title, description, date, tag } = Astro.props;
             <p class="text-center italic">{description}</p>
         </div>
 
-        <article class="mx-auto prose prose-stone">
+        <article class="mx-auto max-w-screen-lg prose prose-stone">
             <slot />
         </article>
     </div>
