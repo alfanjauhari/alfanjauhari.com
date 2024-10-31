@@ -1,13 +1,13 @@
 ---
 import { fileReader } from "@/libs/file-reader";
-import { Sandpack as ReactSandpack } from "@codesandbox/sandpack-react";
-import { githubLight } from "@codesandbox/sandpack-themes";
+import { type SandpackProviderProps } from "@codesandbox/sandpack-react";
+import { ClientSandpack } from "./ClientSandpack";
 
-interface Props {
+interface Props extends Omit<SandpackProviderProps, "files"> {
   files: string[];
 }
 
-const { files: filePaths } = Astro.props;
+const { files: filePaths, ...props } = Astro.props;
 
 const files = await Promise.all(
   filePaths.map(async (path) => {
@@ -18,29 +18,10 @@ const files = await Promise.all(
       key,
       content,
     };
-  }),
+  })
 ).then((files) =>
-  Object.fromEntries(files.map((file) => [file.key, file.content])),
+  Object.fromEntries(files.map((file) => [file.key, file.content]))
 );
 ---
 
-<ReactSandpack
-  files={files}
-  template="react-ts"
-  options={{
-    showConsoleButton: true,
-    showInlineErrors: true,
-    showNavigator: true,
-    showLineNumbers: true,
-    showTabs: true,
-  }}
-  theme={{
-    ...githubLight,
-    font: {
-      size: "14px",
-      body: "Fira Code Variable",
-      mono: "Fira Code Variable",
-    },
-  }}
-  client:visible
-/>
+<ClientSandpack client:visible files={files} {...props} />
