@@ -1,10 +1,9 @@
 ---
 import Head from "@/components/base/Head.astro";
 import "@/styles/fonts.css";
-import "@fontsource/anton/latin.css";
 
-import { Header } from "@/components/ui/Header";
 import { Footer } from "@/components/ui/Footer";
+import { Header } from "@/components/ui/Header";
 
 interface Props {
   title: string;
@@ -18,21 +17,8 @@ const { title, description } = Astro.props;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <Head title={`${title} — Alfan Jauhari`} description={description} />
-
-    <script>
-      import Lenis from "lenis";
-      import "lenis/dist/lenis.css";
-
-      const lenis = new Lenis();
-
-      function raf(time: number) {
-        lenis.raf(time);
-        requestAnimationFrame(raf);
-      }
-
-      requestAnimationFrame(raf);
-    </script>
   </head>
   <body class="bg-gray-100 m-0 p-0">
     <Header pathname={Astro.url.pathname} client:load />

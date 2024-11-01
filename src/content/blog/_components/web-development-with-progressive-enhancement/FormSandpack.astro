@@ -1,0 +1,19 @@
+---
+import Sandpack from "@/components/ui/Sandpack.astro";
+import { join } from "path";
+
+const files = ["/sandpack-files/App.tsx", "/sandpack-files/App.module.css"].map(
+  (path) =>
+    join(
+      process.cwd(),
+      "src",
+      "content",
+      "blog",
+      "_components",
+      "web-development-with-progressive-enhancement",
+      path,
+    ),
+);
+---
+
+<Sandpack files={files} template="react-ts" />

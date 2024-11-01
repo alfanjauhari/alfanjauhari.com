@@ -10,7 +10,9 @@ import { cn } from "@/libs/utils";
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
 
-const posts = await getCollection("blog");
+const posts = await getCollection("blog").then((posts) =>
+  posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime()),
+);
 ---
 
 <SiteLayout
@@ -39,7 +41,7 @@ const posts = await getCollection("blog");
               <p class="text-xl lg:text-2xl">{project.role}</p>
               <p class="text-xl lg:text-2xl">{project.stacks.join(", ")}</p>
               <Image
-                src={`https://res.cloudinary.com/db8cfpaih/image/upload/f_avif,q_50,w_240,h_180/images/projects/${project.image}`}
+                src={import(`../assets/projects/${project.image}`)}
                 alt={`${project.name} Website`}
                 width={240}
                 height={180}
@@ -122,8 +124,9 @@ const posts = await getCollection("blog");
             can say "database optimization"
           </p>
         </div>
-        <button
+        <a
           class="relative bg-stone-700 p-4 w-full text-left text-white text-xl lg:text-4xl font-heading uppercase tracking-wider flex items-center justify-between group/collection-button overflow-hidden"
+          href="/uses"
         >
           <span>All Curated Collection of My Essential Instruments</span>
           <div
@@ -131,7 +134,7 @@ const posts = await getCollection("blog");
           >
             <ExternalLinkIcon class="text-stone-700 size-8" />
           </div>
-        </button>
+        </a>
       </div>
     </div>
   </section>

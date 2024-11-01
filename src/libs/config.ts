@@ -43,6 +43,13 @@ export const PROJECTS = [
     image: 'GCBC.png',
   },
   {
+    name: 'Tempea',
+    year: '2024',
+    role: 'Product Engineer',
+    stacks: ['Wordpress'],
+    image: 'Tempea.png',
+  },
+  {
     name: 'Michelle Oh Jewelry',
     year: '2023',
     role: 'Product Engineer',

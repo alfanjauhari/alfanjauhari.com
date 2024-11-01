@@ -1,4 +1,20 @@
 @font-face {
+  font-family: "Anton";
+  src: url("/fonts/Anton400.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Fira Code Variable";
+  src: url("/fonts/FiraCode-VF.woff2") format("woff2");
+  font-weight: 300 900;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
   font-family: "Satoshi-Variable";
   src: url("/fonts/Satoshi-Variable.woff2") format("woff2");
   font-weight: 300 900;
@@ -12,4 +28,13 @@
   font-weight: 300 900;
   font-display: swap;
   font-style: italic;
+}
+
+/* Code Fonts */
+html .astro-code {
+  font-size: 14px !important;
+}
+
+.sp-code-editor .cm-lineNumbers {
+  font-size: 0.8rem !important;
 }
