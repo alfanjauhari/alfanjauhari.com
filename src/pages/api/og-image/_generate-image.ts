@@ -1,6 +1,5 @@
 import { OGImage, type OGImageProps } from '@/components/ui/OGImage'
 import { ImageResponse } from '@vercel/og'
-import type { APIContext } from 'astro'
 import path from 'path'
 
 const FONTS = [

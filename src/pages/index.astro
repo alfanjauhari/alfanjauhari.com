@@ -13,9 +13,6 @@ import { getCollection } from "astro:content";
 const posts = await getCollection("blog").then((posts) =>
   posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime()),
 );
-
-// TODO: Remove it
-console.log(Astro.url, Astro.request);
 ---
 
 <SiteLayout

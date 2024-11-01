@@ -28,4 +28,5 @@ export default defineConfig({
       './src/content/blog/_components/web-development-with-progressive-enhancement/sandpack-files/App.module.css',
     ],
   }),
+  site: process.env.BASE_URL || 'http://localhost:4321',
 })
