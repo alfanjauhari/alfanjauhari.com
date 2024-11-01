@@ -1,3 +1,8 @@
+import GCBCImage from '@/assets/projects/GCBC.png'
+import TempeaImage from '@/assets/projects/Tempea.png'
+import MichelleOhImage from '@/assets/projects/Michelle-Oh.png'
+import BAKTIDNAImage from '@/assets/projects/BAKTI-DNA.png'
+
 export const NAVIGATION_MENU = [
   {
     name: 'Home',
@@ -40,28 +45,28 @@ export const PROJECTS = [
     year: '2024',
     role: 'Product Engineer',
     stacks: ['Full Stack Next JS', 'TypeScript', 'Tailwind CSS'],
-    image: 'GCBC.png',
+    image: GCBCImage,
   },
   {
     name: 'Tempea',
     year: '2024',
     role: 'Product Engineer',
     stacks: ['Wordpress'],
-    image: 'Tempea.png',
+    image: TempeaImage,
   },
   {
     name: 'Michelle Oh Jewelry',
     year: '2023',
     role: 'Product Engineer',
     stacks: ['Shopify'],
-    image: 'Michelle-Oh.png',
+    image: MichelleOhImage,
   },
   {
     name: 'BAKTI DNA',
     year: '2022',
     role: 'Product Engineer',
     stacks: ['Nx', 'Next JS', 'TypeScript', 'Chakra UI'],
-    image: 'BAKTI-DNA.png',
+    image: BAKTIDNAImage,
   },
 ]
 

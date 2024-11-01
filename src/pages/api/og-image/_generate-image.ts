@@ -1,37 +1,37 @@
 import { OGImage, type OGImageProps } from '@/components/ui/OGImage'
 import { ImageResponse } from '@vercel/og'
 import type { APIContext } from 'astro'
+import path from 'path'
 
-export async function generateImage(
-  props: OGImageProps,
-  request: APIContext['request'],
-) {
-  // #region Font Data
-  const antonFontData = await fetch(
-    new URL('/fonts/Anton400-Vercel-OG.ttf', request.url),
-  ).then((res) => res.arrayBuffer())
-  const satoshiFontData = await fetch(
-    new URL('/fonts/Satoshi-Regular-Vercel-OG.ttf', request.url),
-  ).then((res) => res.arrayBuffer())
-  const satoshiItalicFontData = await fetch(
-    new URL('/fonts/Satoshi-Italic-Vercel-OG.ttf', request.url),
-  ).then((res) => res.arrayBuffer())
-  // #endregion
+const FONTS = [
+  'Anton400-Vercel-OG.ttf',
+  'Satoshi-Regular-Vercel-OG.ttf',
+  'Satoshi-Italic-Vercel-OG.ttf',
+]
+export async function generateImage(props: OGImageProps) {
+  const basePath = path.join(process.cwd(), 'src', 'assets', 'fonts')
+  const fonts = await Promise.all(
+    FONTS.map((font) =>
+      fetch(import.meta.resolve(path.join(basePath, font))).then((res) =>
+        res.arrayBuffer(),
+      ),
+    ),
+  )
 
   return new ImageResponse(OGImage(props), {
     fonts: [
       {
-        data: antonFontData,
+        data: fonts[0],
         name: 'Anton',
         style: 'normal',
       },
       {
-        data: satoshiFontData,
+        data: fonts[1],
         name: 'Satoshi',
         style: 'normal',
       },
       {
-        data: satoshiItalicFontData,
+        data: fonts[2],
         name: 'Satoshi',
         style: 'italic',
       },
