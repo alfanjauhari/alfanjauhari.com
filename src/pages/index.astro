@@ -41,7 +41,7 @@ const posts = await getCollection("blog").then((posts) =>
               <p class="text-xl lg:text-2xl">{project.role}</p>
               <p class="text-xl lg:text-2xl">{project.stacks.join(", ")}</p>
               <Image
-                src={`https://res.cloudinary.com/db8cfpaih/image/upload/f_avif,q_50,w_240,h_180/images/projects/${project.image}`}
+                src={import(`../assets/projects/${project.image}`)}
                 alt={`${project.name} Website`}
                 width={240}
                 height={180}
