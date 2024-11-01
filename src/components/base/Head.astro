@@ -21,10 +21,15 @@ const slug = Astro.url.pathname.split("/").pop();
   <meta property="og:url" content={Astro.url} />
 
   {
-    Astro.url.pathname !== "/" && (
+    Astro.url.pathname !== "/" ? (
       <meta
         property="og:image"
         content={`${Astro.url.origin}/api/og-image/${type}/${slug}.png`}
+      />
+    ) : (
+      <meta
+        property="og:image"
+        content={`${Astro.url.origin}/api/og-image/global.png`}
       />
     )
   }
