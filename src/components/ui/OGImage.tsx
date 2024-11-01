@@ -14,6 +14,7 @@ export function OGImage({ title, description, date, tag }: OGImageProps) {
         width: '100%',
         height: '100%',
         padding: '1rem',
+        backgroundColor: 'white',
       }}
     >
       <h1
