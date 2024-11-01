@@ -58,7 +58,7 @@ export const Footer = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
       >
         <div className="flex flex-col md:flex-row justify-between">
           <div className="space-y-2">
-            <h1 className="font-bold text-4xl font-heading text-stone-700 uppercase tracking-wider">
+            <h1 className="text-4xl font-heading text-stone-700 uppercase tracking-wider">
               Alfan Jauhari
             </h1>
             <p>My home, my heaven and my personal digital sanctuary</p>
@@ -66,7 +66,7 @@ export const Footer = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
           <div className="flex gap-12 mt-12 md:mt-0">
             {FOOTER_MENU.map((menu) => (
               <div className="space-y-4" key={menu.key}>
-                <h1 className="font-bold font-heading uppercase text-stone-700 tracking-wider">
+                <h1 className="font-heading uppercase text-stone-700 tracking-wider">
                   {menu.name}
                 </h1>
                 <ul className="space-y-2">
@@ -81,7 +81,7 @@ export const Footer = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
               </div>
             ))}
             <div className="space-y-4">
-              <h1 className="font-bold font-heading uppercase text-stone-700 tracking-wider">
+              <h1 className="font-heading uppercase text-stone-700 tracking-wider">
                 Connect with Me
               </h1>
               <ul className="space-y-2">
