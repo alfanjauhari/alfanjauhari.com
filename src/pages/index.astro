@@ -124,8 +124,9 @@ const posts = await getCollection("blog").then((posts) =>
             can say "database optimization"
           </p>
         </div>
-        <button
+        <a
           class="relative bg-stone-700 p-4 w-full text-left text-white text-xl lg:text-4xl font-heading uppercase tracking-wider flex items-center justify-between group/collection-button overflow-hidden"
+          href="/uses"
         >
           <span>All Curated Collection of My Essential Instruments</span>
           <div
@@ -133,7 +134,7 @@ const posts = await getCollection("blog").then((posts) =>
           >
             <ExternalLinkIcon class="text-stone-700 size-8" />
           </div>
-        </button>
+        </a>
       </div>
     </div>
   </section>
