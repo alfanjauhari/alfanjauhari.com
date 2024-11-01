@@ -1,6 +1,6 @@
 ---
 title: Elden Ring and My Engineering Ways
-description: Elden ring was one of the best game i ever played. And it actually changed my perspective about engineering and i didn't expect that came from games
+description: Elden ring was one of the best game i ever played. And it actually changed my perspective about engineering and i didn't expect that came from games.
 tag: Thoughts
 date: 2024-10-25
 ---

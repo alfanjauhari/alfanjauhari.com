@@ -18,3 +18,7 @@
 html .astro-code {
   font-size: 14px !important;
 }
+
+.sp-code-editor .cm-lineNumbers {
+  font-size: 0.8rem !important;
+}

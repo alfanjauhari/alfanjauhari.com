@@ -1,49 +1,55 @@
 ---
-import SiteLayout from './SiteLayout.astro'
+import SiteLayout from "./SiteLayout.astro";
+import { getSandpackCssText } from "@codesandbox/sandpack-react";
 
-import '@fontsource-variable/fira-code'
+import "@fontsource-variable/fira-code";
 
 interface Props {
-  title: string
-  description: string
-  date?: Date
-  tag?: string
+  title: string;
+  description: string;
+  date?: Date;
+  tag?: string;
 }
 
-const { title, description, date, tag } = Astro.props
+const { title, description, date, tag } = Astro.props;
 ---
 
 <SiteLayout title={title} description={description}>
-    <div class="space-y-12 py-20 flex flex-col items-center">
-        {
-            (tag || date) && (
-                <div class="flex items-center gap-2">
-                    <a
-                        href={`/blog/${tag}`}
-                        class="bg-stone-700 text-white font-semibold p-2 w-fit text-sm"
-                    >
-                        {tag}
-                    </a>
-                    <span>&mdash;</span>
-                    <p class="text-stone-700 text-sm">
-                        {Intl.DateTimeFormat("en-ID", {
-                            dateStyle: "medium",
-                        }).format(date)}
-                    </p>
-                </div>
-            )
-        }
-        <div
-            class="space-y-4 max-w-screen-lg mx-auto border-b border-b-stone-300 pb-4"
-        >
-            <h1 class="font-heading text-7xl text-stone-700 text-center">
-                {title}
-            </h1>
-            <p class="text-center italic">{description}</p>
+  <style set:html={getSandpackCssText()} id="sandpack"></style>
+  <div
+    class="space-y-12 py-20 flex flex-col items-center max-w-screen-lg mx-auto"
+  >
+    {
+      (tag || date) && (
+        <div class="flex items-center gap-2">
+          <a
+            href={`/blog/${tag}`}
+            class="bg-stone-700 text-white font-semibold p-2 w-fit text-sm"
+          >
+            {tag}
+          </a>
+          <span>&mdash;</span>
+          <p class="text-stone-700 text-sm">
+            {Intl.DateTimeFormat("en-ID", {
+              dateStyle: "medium",
+            }).format(date)}
+          </p>
         </div>
-
-        <article class="mx-auto max-w-screen-lg prose prose-stone">
-            <slot />
-        </article>
+      )
+    }
+    <div class="space-y-4 w-full border-b border-b-stone-300 pb-4">
+      <h1
+        class="font-heading text-7xl leading-tight text-stone-700 text-center"
+      >
+        {title}
+      </h1>
+      <p class="text-center italic">{description}</p>
     </div>
+
+    <article
+      class="mx-auto max-w-screen-lg prose prose-stone prose-pre:[tab-size:2] prose-a:decoration-dotted"
+    >
+      <slot />
+    </article>
+  </div>
 </SiteLayout>

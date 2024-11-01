@@ -28,7 +28,7 @@ export default {
             '--tw-prose-quotes': theme('colors.stone[900]'),
             '--tw-prose-quote-borders': theme('colors.stone[300]'),
             '--tw-prose-captions': theme('colors.stone[700]'),
-            '--tw-prose-code': theme('colors.stone[900]'),
+            '--tw-prose-code': theme('colors.stone[700]'),
             '--tw-prose-pre-code': theme('colors.stone[100]'),
             '--tw-prose-pre-bg': theme('colors.stone[900]'),
             '--tw-prose-th-borders': theme('colors.stone[300]'),

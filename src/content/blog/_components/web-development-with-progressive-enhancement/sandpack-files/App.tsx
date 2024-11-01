@@ -7,7 +7,7 @@ export default function App() {
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     // @ts-ignore
-    // You can comment this line out if you want to see the form submission without fetch
+    // You can comment this line out if you want to see the form submission with fetch
     delete window.fetch
 
     if ('fetch' in window) {
