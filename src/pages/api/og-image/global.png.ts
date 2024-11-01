@@ -1,29 +1,36 @@
 import { GlobalOGImage } from '@/components/ui/GlobalOGImage'
 import { ImageResponse } from '@vercel/og'
-import type { APIContext } from 'astro'
+import path from 'path'
 
-export async function GET({ request }: APIContext) {
-  // #region Font Data
-  const antonFontData = await fetch(
-    new URL('/fonts/Anton400-Vercel-OG.ttf', request.url),
-  ).then((res) => res.arrayBuffer())
-  const satoshiFontData = await fetch(
-    new URL('/fonts/Satoshi-Regular-Vercel-OG.ttf', request.url),
-  ).then((res) => res.arrayBuffer())
-  const satoshiItalicFontData = await fetch(
-    new URL('/fonts/Satoshi-Italic-Vercel-OG.ttf', request.url),
-  ).then((res) => res.arrayBuffer())
-  // #endregion
+const FONTS = [
+  'Anton400-Vercel-OG.ttf',
+  'Satoshi-Regular-Vercel-OG.ttf',
+  'Satoshi-Italic-Vercel-OG.ttf',
+]
+export async function GET() {
+  const basePath = path.join(process.cwd(), 'src', 'assets', 'fonts')
+  const fonts = await Promise.all(
+    FONTS.map((font) =>
+      fetch(import.meta.resolve(path.join(basePath, font))).then((res) =>
+        res.arrayBuffer(),
+      ),
+    ),
+  )
 
   return new ImageResponse(GlobalOGImage(), {
     fonts: [
       {
-        data: antonFontData,
+        data: fonts[0],
         name: 'Anton',
         style: 'normal',
       },
       {
-        data: satoshiItalicFontData,
+        data: fonts[1],
+        name: 'Satoshi',
+        style: 'normal',
+      },
+      {
+        data: fonts[2],
         name: 'Satoshi',
         style: 'italic',
       },

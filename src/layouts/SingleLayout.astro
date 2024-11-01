@@ -1,15 +1,15 @@
 ---
-import SiteLayout from "./SiteLayout.astro";
-import { getSandpackCssText } from "@codesandbox/sandpack-react";
+import SiteLayout from './SiteLayout.astro'
+import { getSandpackCssText } from '@codesandbox/sandpack-react'
 
 interface Props {
-  title: string;
-  description: string;
-  date?: Date;
-  tag?: string;
+  title: string
+  description: string
+  date?: Date
+  tag?: string
 }
 
-const { title, description, date, tag } = Astro.props;
+const { title, description, date, tag } = Astro.props
 ---
 
 <SiteLayout title={title} description={description}>
