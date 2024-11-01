@@ -36,6 +36,28 @@ const slug = Astro.url.pathname.replace(/\/$/, "").split("/").pop();
 
   <link rel="icon" type="image/x-icon" href="/images/favicon.webp" />
 
+  <link
+    rel="preload"
+    href="/fonts/Anton400.woff2"
+    as="font"
+    type="font/woff2"
+    crossorigin
+  />
+  <link
+    rel="preload"
+    href="/fonts/Satoshi-Variable.woff2"
+    as="font"
+    type="font/woff2"
+    crossorigin
+  />
+  <link
+    rel="preload"
+    href="/fonts/Satoshi-VariableItalic.woff2"
+    as="font"
+    type="font/woff2"
+    crossorigin
+  />
+
   <script>
     import Lenis from "lenis";
     import "lenis/dist/lenis.css";
