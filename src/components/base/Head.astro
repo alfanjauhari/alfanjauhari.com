@@ -20,17 +20,35 @@ const slug = Astro.url.pathname.replace(/\/$/, "").split("/").pop();
   <meta property="og:type" content="website" />
   <meta property="og:url" content={Astro.url} />
 
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta property="twitter:domain" content={Astro.site} />
+  <meta property="twitter:url" content={Astro.url} />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+
   {
     Astro.url.pathname !== "/" ? (
-      <meta
-        property="og:image"
-        content={`${Astro.url.origin}/api/og-image/${type}/${slug}.png`}
-      />
+      <Fragment>
+        <meta
+          name="twitter:image"
+          content={`${Astro.url.origin}/api/og-image/${type}/${slug}.png`}
+        />
+        <meta
+          property="og:image"
+          content={`${Astro.url.origin}/api/og-image/${type}/${slug}.png`}
+        />
+      </Fragment>
     ) : (
-      <meta
-        property="og:image"
-        content={`${Astro.url.origin}/api/og-image/global.png`}
-      />
+      <Fragment>
+        <meta
+          name="twitter:image"
+          content={`${Astro.url.origin}/api/og-image/global.png`}
+        />
+        <meta
+          property="og:image"
+          content={`${Astro.url.origin}/api/og-image/global.png`}
+        />
+      </Fragment>
     )
   }
 
