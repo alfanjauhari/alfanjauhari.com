@@ -1,18 +1,21 @@
 ---
-import ExternalLinkIcon from '@/components/icons/ExternalLinkIcon.astro'
-import { SelectedWorksHeading } from '@/components/pages/home/SelectedWorksHeading'
-import { Tagline } from '@/components/pages/home/Tagline'
-import ArticleCard from '@/components/ui/ArticleCard.astro'
-import { RevealHeading } from '@/components/ui/RevealHeading'
-import SiteLayout from '@/layouts/SiteLayout.astro'
-import { PROJECTS } from '@/libs/config'
-import { cn } from '@/libs/utils'
-import { Image } from 'astro:assets'
-import { getCollection } from 'astro:content'
+import ExternalLinkIcon from "@/components/icons/ExternalLinkIcon.astro";
+import { SelectedWorksHeading } from "@/components/pages/home/SelectedWorksHeading";
+import { Tagline } from "@/components/pages/home/Tagline";
+import ArticleCard from "@/components/ui/ArticleCard.astro";
+import { RevealHeading } from "@/components/ui/RevealHeading";
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import { PROJECTS } from "@/libs/config";
+import { cn } from "@/libs/utils";
+import { Image } from "astro:assets";
+import { getCollection } from "astro:content";
 
-const posts = await getCollection('blog').then((posts) =>
+const posts = await getCollection("blog").then((posts) =>
   posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime()),
-)
+);
+
+// TODO: Remove it
+console.log(Astro.url, Astro.request);
 ---
 
 <SiteLayout
