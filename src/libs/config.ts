@@ -1,7 +1,7 @@
-import GCBCImage from '@/assets/projects/GCBC.png'
-import TempeaImage from '@/assets/projects/Tempea.png'
-import MichelleOhImage from '@/assets/projects/Michelle-Oh.png'
 import BAKTIDNAImage from '@/assets/projects/BAKTI-DNA.png'
+import GCBCImage from '@/assets/projects/GCBC.png'
+import MichelleOhImage from '@/assets/projects/Michelle-Oh.png'
+import TempeaImage from '@/assets/projects/Tempea.png'
 
 export const NAVIGATION_MENU = [
   {

@@ -3,14 +3,15 @@
   "type": "module",
   "version": "1.0.0",
   "scripts": {
-    "dev": "bunx --bun astro dev",
+    "dev": "astro dev",
     "start": "astro dev",
-    "build": "bunx --bun astro check && bunx --bun astro build",
+    "build": "astro build",
+    "check": "astro check",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/check": "0.9.4",
+    "@astrojs/check": "^0.9.4",
     "@astrojs/mdx": "4.3.0",
     "@astrojs/react": "4.3.0",
     "@astrojs/tailwind": "6.0.2",
@@ -20,7 +21,7 @@
     "@types/react": "^18.3.7",
     "@types/react-dom": "^18.3.0",
     "@vercel/og": "^0.6.3",
-    "astro": "5.9.0",
+    "astro": "5.9.3",
     "clsx": "^2.1.1",
     "framer-motion": "^11.5.4",
     "lenis": "^1.1.14",
@@ -29,7 +30,7 @@
     "react-dom": "^18.3.1",
     "tailwind-merge": "^2.5.2",
     "tailwindcss": "^3.4.12",
-    "typescript": "^5.6.2"
+    "typescript": "^5.8.3"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",

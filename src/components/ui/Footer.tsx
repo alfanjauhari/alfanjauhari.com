@@ -1,12 +1,12 @@
-import { forwardRef, useRef, type HTMLAttributes } from 'react'
+import { FOOTER_MENU, SOCIAL_MEDIA } from '@/libs/config'
 import {
+  type Variants,
   motion,
   useAnimation,
   useMotionValueEvent,
   useScroll,
-  type Variants,
 } from 'framer-motion'
-import { FOOTER_MENU, SOCIAL_MEDIA } from '@/libs/config'
+import { type HTMLAttributes, forwardRef, useRef } from 'react'
 
 const NAME = 'ALFAN'
 

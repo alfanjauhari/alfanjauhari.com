@@ -1,7 +1,7 @@
+import path from 'path'
 import { GlobalOGImage } from '@/components/ui/GlobalOGImage'
 import { ImageResponse } from '@vercel/og'
 import { fileURLToPath } from 'bun'
-import path from 'path'
 
 const FONTS = [
   'Anton400-Vercel-OG.ttf',

@@ -1,5 +1,5 @@
 import { cn } from '@/libs/utils'
-import { motion, type HTMLMotionProps } from 'framer-motion'
+import { type HTMLMotionProps, motion } from 'framer-motion'
 import { forwardRef } from 'react'
 
 export interface RevealHeadingProps extends HTMLMotionProps<'h1'> {

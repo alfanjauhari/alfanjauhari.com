@@ -1,13 +1,5 @@
 import { cn } from '@/libs/utils'
 import {
-  forwardRef,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-  type ComponentProps,
-} from 'react'
-import {
   motion,
   useAnimationFrame,
   useMotionValue,
@@ -17,6 +9,14 @@ import {
   useVelocity,
   wrap,
 } from 'framer-motion'
+import {
+  type ComponentProps,
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react'
 
 // Adjust this value to change the speed/velocity
 const VELOCITY = 5

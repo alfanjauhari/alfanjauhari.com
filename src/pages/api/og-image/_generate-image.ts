@@ -1,6 +1,6 @@
+import path from 'path'
 import { OGImage, type OGImageProps } from '@/components/ui/OGImage'
 import { ImageResponse } from '@vercel/og'
-import path from 'path'
 
 const FONTS = [
   'Anton400-Vercel-OG.ttf',

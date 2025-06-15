@@ -1,2 +1,3 @@
-biome format --write $(git diff --cached --name-only --diff-filter=ACMR | sed 's| |\\ |g') --no-errors-on-unmatched
+bun run biome check $(git diff --cached --name-only --diff-filter=ACMR | sed 's| |\\ |g')--files-ignore-unknown
 git update-index --again
+bun run astro check
