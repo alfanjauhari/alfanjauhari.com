@@ -1,23 +1,25 @@
 ---
-import ArticleCard from '@/components/ui/ArticleCard.astro'
-import { RevealHeading } from '@/components/ui/RevealHeading'
-import SiteLayout from '@/layouts/SiteLayout.astro'
-import type { GetStaticPathsResult } from 'astro'
-import { getCollection } from 'astro:content'
+export const prerender = true;
+
+import ArticleCard from "@/components/ui/ArticleCard.astro";
+import { RevealHeading } from "@/components/ui/RevealHeading";
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import type { GetStaticPathsResult } from "astro";
+import { getCollection } from "astro:content";
 
 export async function getStaticPaths(): Promise<GetStaticPathsResult> {
-  const posts = await getCollection('blog')
+  const posts = await getCollection("blog");
 
   return posts.map((entry) => ({
     params: { tag: entry.data.tag },
-  }))
+  }));
 }
 
-const posts = await getCollection('blog').then((posts) =>
+const posts = await getCollection("blog").then((posts) =>
   posts
     .filter((post) => post.data.tag === Astro.params.tag)
-    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime()),
-)
+    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+);
 ---
 
 <SiteLayout

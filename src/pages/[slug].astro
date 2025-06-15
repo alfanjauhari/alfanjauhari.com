@@ -1,22 +1,25 @@
 ---
-import SingleLayout from '@/layouts/SingleLayout.astro'
-import { getCollection, type CollectionEntry } from 'astro:content'
+export const prerender = true;
+
+import SingleLayout from "@/layouts/SingleLayout.astro";
+import { render } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
 
 interface Props {
-  entry: CollectionEntry<'pages'>
+  entry: CollectionEntry<"pages">;
 }
 
 export async function getStaticPaths() {
-  const pageEntries = await getCollection('pages')
+  const pageEntries = await getCollection("pages");
 
   return pageEntries.map((entry) => ({
-    params: { slug: entry.slug },
+    params: { slug: entry.id },
     props: { entry },
-  }))
+  }));
 }
 
-const { entry } = Astro.props
-const { Content } = await entry.render()
+const { entry } = Astro.props;
+const { Content } = await render(entry);
 ---
 
 <SingleLayout {...entry.data}>

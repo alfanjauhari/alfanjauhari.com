@@ -7,11 +7,12 @@ const FONTS = [
   'Satoshi-Regular-Vercel-OG.ttf',
   'Satoshi-Italic-Vercel-OG.ttf',
 ]
+
 export async function generateImage(props: OGImageProps) {
   const basePath = path.join(process.cwd(), 'src', 'assets', 'fonts')
   const fonts = await Promise.all(
     FONTS.map((font) =>
-      fetch(import.meta.resolve(path.join(basePath, font))).then((res) =>
+      fetch(new URL(path.join(basePath, font), import.meta.url)).then((res) =>
         res.arrayBuffer(),
       ),
     ),

@@ -7,10 +7,8 @@ import tailwind from '@astrojs/tailwind'
 
 import react from '@astrojs/react'
 
-import vercel from '@astrojs/vercel/serverless'
-import path from 'path'
+import vercel from '@astrojs/vercel'
 
-// https://astro.build/config
 export default defineConfig({
   integrations: [mdx(), tailwind(), react()],
 
@@ -21,7 +19,7 @@ export default defineConfig({
     },
   },
 
-  output: 'hybrid',
+  output: 'server',
   adapter: vercel({
     includeFiles: [
       './src/content/blog/_components/web-development-with-progressive-enhancement/sandpack-files/App.tsx',

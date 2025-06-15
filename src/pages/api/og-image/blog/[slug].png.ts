@@ -1,25 +1,17 @@
-import { getCollection, getEntry } from 'astro:content'
+import { getEntry } from 'astro:content'
 import type { APIContext } from 'astro'
 import { generateImage } from '../_generate-image'
 
-export async function getStaticPaths() {
-  return getCollection('blog').then((posts) =>
-    posts.map((post) => ({
-      params: {
-        slug: post.slug,
-      },
-    })),
-  )
-}
-
-type Slug = Awaited<ReturnType<typeof getStaticPaths>>[number]['params']['slug']
-
 export async function GET({
   params,
-}: APIContext<Record<string, string>, { slug: Slug }>) {
+}: APIContext<Record<string, string>, { slug: string }>) {
   const slug = params.slug
 
   const post = await getEntry('blog', slug)
+
+  if (!post) {
+    return new Response('Not Found', { status: 404 })
+  }
 
   return generateImage({
     title: post.data.title,

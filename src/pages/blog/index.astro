@@ -1,12 +1,12 @@
 ---
-import ArticleCard from '@/components/ui/ArticleCard.astro'
-import { RevealHeading } from '@/components/ui/RevealHeading'
-import SiteLayout from '@/layouts/SiteLayout.astro'
-import { getCollection } from 'astro:content'
+import ArticleCard from "@/components/ui/ArticleCard.astro";
+import { RevealHeading } from "@/components/ui/RevealHeading";
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import { getCollection } from "astro:content";
 
-const posts = await getCollection('blog').then((posts) =>
-  posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime()),
-)
+const posts = await getCollection("blog").then((posts) =>
+  posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+);
 ---
 
 <SiteLayout
@@ -27,7 +27,7 @@ const posts = await getCollection('blog').then((posts) =>
             description={post.data.description}
             tag={post.data.tag}
             date={post.data.date}
-            slug={post.slug}
+            slug={post.id}
           />
         ))
       }

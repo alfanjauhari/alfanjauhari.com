@@ -1,5 +1,6 @@
 import { GlobalOGImage } from '@/components/ui/GlobalOGImage'
 import { ImageResponse } from '@vercel/og'
+import { fileURLToPath } from 'bun'
 import path from 'path'
 
 const FONTS = [
@@ -11,7 +12,7 @@ export async function GET() {
   const basePath = path.join(process.cwd(), 'src', 'assets', 'fonts')
   const fonts = await Promise.all(
     FONTS.map((font) =>
-      fetch(import.meta.resolve(path.join(basePath, font))).then((res) =>
+      fetch(fileURLToPath(path.join(basePath, font))).then((res) =>
         res.arrayBuffer(),
       ),
     ),

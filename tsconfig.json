@@ -8,5 +8,6 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*"]
+  "include": [".astro/types.d.ts", "**/*"],
+  "exclude": ["dist"]
 }
