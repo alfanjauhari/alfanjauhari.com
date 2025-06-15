@@ -3,12 +3,11 @@
   "type": "module",
   "version": "1.0.0",
   "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro build",
-    "check": "astro check",
-    "preview": "astro preview",
-    "astro": "astro"
+    "dev": "bunx --bun astro dev",
+    "start": "bunx --bun astro dev",
+    "build": "bunx --bun astro build",
+    "check": "bunx --bun astro check",
+    "preview": "bunx --bun astro preview"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
