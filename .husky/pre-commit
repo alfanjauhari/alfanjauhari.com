@@ -1,4 +1,4 @@
 # Run
-bun run biome check $(git diff --cached --name-only --diff-filter=ACMR | sed 's| |\\ |g') --files-ignore-unknown=true
+bun run biome check $(git diff --cached --name-only --diff-filter=ACMR | sed 's| |\\ |g') --files-ignore-unknown=true --no-errors-on-unmatched
 git update-index --again
 bun run astro check
