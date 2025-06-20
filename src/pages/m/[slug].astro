@@ -1,0 +1,39 @@
+---
+export const prerender = false
+
+import { render } from 'astro:content'
+import { getEntry } from 'astro:content'
+import SingleLayout from '@/layouts/SingleLayout.astro'
+import { sql } from 'bun'
+
+const token = Astro.cookies.get('auth_token')
+if (!token) {
+  return Astro.redirect('/login')
+}
+
+const session = await sql`
+  SELECT id FROM sessions WHERE token = ${token.value} AND expired_at > NOW()
+`
+
+if (!session || session.length === 0) {
+  return Astro.redirect('/login')
+}
+
+const { slug } = Astro.params
+
+if (!slug) {
+  return Astro.redirect('/404')
+}
+
+const entry = await getEntry('restricted', slug)
+
+if (!entry) {
+  return Astro.redirect('/404')
+}
+
+const { Content } = await render(entry)
+---
+
+<SingleLayout {...entry.data}>
+  <Content />
+</SingleLayout>

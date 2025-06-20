@@ -24,3 +24,8 @@ pnpm-debug.log*
 
 # Vercel
 .vercel
+
+#libSQL DB
+local.db
+local.db-wal
+local.db-shm
