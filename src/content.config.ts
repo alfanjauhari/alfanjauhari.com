@@ -1,5 +1,6 @@
 import { defineCollection, z } from 'astro:content'
 import { glob } from 'astro/loaders'
+import { restrictedContentLoader } from './libs/loaders'
 
 const blogCollection = defineCollection({
   loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/blog' }),
@@ -19,7 +20,12 @@ const pageCollection = defineCollection({
   }),
 })
 
+const restrictedCollection = defineCollection({
+  loader: restrictedContentLoader(),
+})
+
 export const collections = {
   blog: blogCollection,
   pages: pageCollection,
+  restricted: restrictedCollection,
 }

@@ -1,0 +1,1 @@
+DELETE FROM users WHERE email = 'hi@alfanjauhari.com';

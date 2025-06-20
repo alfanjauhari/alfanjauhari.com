@@ -1,0 +1,8 @@
+DROP FUNCTION IF EXISTS cache_get(TEXT);
+DROP FUNCTION IF EXISTS cache_set(TEXT, TEXT, INTERVAL);
+DROP FUNCTION IF EXISTS cache_del(TEXT);
+DROP FUNCTION IF EXISTS cleanup_expired_cache();
+
+DROP INDEX IF EXISTS idx_cache_expired_at;
+
+DROP TABLE IF EXISTS cache;

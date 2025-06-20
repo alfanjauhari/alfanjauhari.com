@@ -23,4 +23,7 @@ export default defineConfig({
     ],
   }),
   site: process.env.BASE_URL || 'http://localhost:4321',
+  server: {
+    allowedHosts: process.env.NODE_ENV === 'development' ? true : undefined,
+  },
 })
