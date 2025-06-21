@@ -23,8 +23,10 @@ services:
     build:
       context: .
       secrets:
-        - db_url
+        - DATABASE_URL
     env_file: .env
+    depends_on:
+      - pg
     ports:
       - ${APP_PORT:-4321}:4321
     volumes:
@@ -36,5 +38,5 @@ volumes:
   app_data:
     driver: local
 secrets:
-  db_url:
+  DATABASE_URL:
     environment: DATABASE_URL

@@ -6,6 +6,7 @@ COPY package.json bun.lockb ./
 RUN bun install --frozen-lockfile --production
 
 FROM installer AS builder
+ENV NODE_ENV=production
 COPY . .
 RUN --mount=type=secret,id=DATABASE_URL,env=DATABASE_URL \
   bun run build
