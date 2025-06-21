@@ -18,6 +18,23 @@ services:
       timeout: 20s
       retries: 3
 
+  app:
+    container_name: alfanjauhari-com-app
+    build:
+      context: .
+      secrets:
+        - db_url
+    env_file: .env
+    ports:
+      - ${APP_PORT:-4321}:4321
+    volumes:
+      - app_data:/usr/src/app
+
 volumes:
   pg_data:
     driver: local
+  app_data:
+    driver: local
+secrets:
+  db_url:
+    environment: DATABASE_URL

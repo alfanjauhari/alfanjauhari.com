@@ -19,6 +19,7 @@ export function restrictedContentLoader(): Loader {
   return {
     name: 'restricted-content',
     load: async ({ store, parseData, renderMarkdown }) => {
+      console.log(process.env.DATABASE_URL)
       try {
         const data = (await sql`
           SELECT

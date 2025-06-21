@@ -19,7 +19,7 @@ const { title, description, date, tag } = Astro.props
       (tag || date) && (
         <div class="flex items-center gap-2">
           <a
-            href={`/blog/${tag}`}
+            href={`/blog/tag/${tag}`}
             class="bg-stone-700 text-white font-semibold p-2 w-fit text-sm"
           >
             {tag}
