@@ -3,6 +3,17 @@ import type { ActionInputError } from 'astro:actions'
 import { isInputError } from 'astro:actions'
 import { actions } from 'astro:actions'
 import SiteLayout from '@/layouts/SiteLayout.astro'
+import { sql } from 'bun'
+
+const token = Astro.cookies.get('auth_token')?.value || ''
+
+const session = await sql`
+  SELECT id FROM sessions WHERE token = ${token} AND expired_at > NOW()
+`
+
+if (session.length > 0) {
+  return Astro.redirect('/')
+}
 
 const result = Astro.getActionResult(actions.login)
 
