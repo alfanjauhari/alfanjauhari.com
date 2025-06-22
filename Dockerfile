@@ -8,7 +8,7 @@ RUN bun install --frozen-lockfile --production
 FROM installer AS builder
 ENV NODE_ENV=production
 COPY . .
-RUN --mount=type=secret,id=BUILD_DATABASE_URL,env=BUILD_DATABASE_URL \
+RUN --mount=type=secret,id=BUILD_DATABASE_URL,env=DATABASE_URL \
   bun run build
 
 FROM base AS runner
