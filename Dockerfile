@@ -1,9 +1,13 @@
 FROM oven/bun:latest AS base
 WORKDIR /app
 
-FROM base AS installer
 COPY package.json bun.lockb ./
+
+FROM base AS prod-deps
 RUN bun install --frozen-lockfile --production
+
+FROM base AS installer
+RUN bun install --frozen-lockfile
 
 FROM installer AS builder
 ENV NODE_ENV=production
@@ -12,7 +16,7 @@ RUN --mount=type=secret,id=BUILD_DATABASE_URL,env=DATABASE_URL \
   bun run build
 
 FROM base AS runner
-COPY --from=installer /app/node_modules ./node_modules
+COPY --from=prod-deps /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 
 ENV HOST=0.0.0.0
