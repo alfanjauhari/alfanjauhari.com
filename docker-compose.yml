@@ -22,7 +22,7 @@ services:
     build:
       context: .
       secrets:
-        - DATABASE_URL
+        - BUILD_DATABASE_URL
     environment:
       DATABASE_URL: $DATABASE_URL
       NOTION_ACCESS_TOKEN: $NOTION_ACCESS_TOKEN
@@ -52,5 +52,5 @@ volumes:
   app_data:
     driver: local
 secrets:
-  DATABASE_URL:
-    environment: DATABASE_URL
+  BUILD_DATABASE_URL:
+    environment: BUILD_DATABASE_URL
