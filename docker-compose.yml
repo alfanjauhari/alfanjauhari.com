@@ -9,8 +9,10 @@ services:
     volumes:
       - pg_data:/var/lib/postgresql/data
     ports:
-      - ${DB_PORT:-5432}:5432
+      - :5432
     shm_size: '512mb'
+    networks:
+      - default
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-alfanjauhari} -d ${DB_NAME:-alfanjauhari-com}"]
       interval: 30s
@@ -33,9 +35,11 @@ services:
       - :4321
     volumes:
       - app_data:/usr/src/app
+    networks:
+      - default
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.app.rule=Host(`${TRAEFIK_URL}`) || Host(`www.${TRAEFIK_URL}`)"
+      - "traefik.http.routers.app.rule=Host(`${TRAEFIK_URL:-alfanjauhari.localhost}`) || Host(`www.${TRAEFIK_URL:-alfanjauhari.localhost}`)"
       - "traefik.http.routers.app.entrypoints=app,appsecure"
       - "traefik.http.routers.app.tls.certresolver=letsencrypt"
 
@@ -52,13 +56,15 @@ services:
       - "--entryPoints.appsecure.address=:443"
       - "--entryPoints.app.http.redirections.entryPoint.to=appsecure"
       - "--entryPoints.app.http.redirections.entryPoint.scheme=https"
-      - "--certificatesresolvers.letsencrypt.acme.email=${TRAEFIK_SSL_EMAIL}"
+      - "--certificatesresolvers.letsencrypt.acme.email=${TRAEFIK_SSL_EMAIL:-hi@alfanjauhari.com}"
       - "--certificatesresolvers.letsencrypt.acme.storage=/certs/acme.json"
       - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
     ports:
       - "80:80"
       - "443:443"
       - "8080:8080"
+    networks:
+      - default
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - traefik-certs:/certs
@@ -70,6 +76,10 @@ volumes:
     driver: local
   traefik-certs:
     driver: local
+
+networks:
+  default:
+    driver: bridge
 
 secrets:
   BUILD_DATABASE_URL:
