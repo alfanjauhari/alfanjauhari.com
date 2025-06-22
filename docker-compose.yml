@@ -35,7 +35,7 @@ services:
       - app_data:/usr/src/app
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.app.rule=Host(`${TRAEFIK_URL}`)"
+      - "traefik.http.routers.app.rule=Host(`${TRAEFIK_URL}`) || Host(`www.${TRAEFIK_URL}`)"
       - "traefik.http.routers.app.entrypoints=app,appsecure"
       - "traefik.http.routers.app.tls.certresolver=letsencrypt"
 
