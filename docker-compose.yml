@@ -35,8 +35,8 @@ services:
       - app_data:/usr/src/app
     labels:
       - "traefik.http.routers.app.rule=Host(`${TRAEFIK_URL}`)"
+      - "traefik.http.routers.app.entrypoints=appsecure"
       - "traefik.http.routers.app.tls.certresolver=default"
-      - "traefik.http.routers.app.tls=true"
 
   alfanjauhari_com_traefik:
     image: traefik:v3.4
@@ -44,14 +44,13 @@ services:
     environment:
       TRAEFIK_SSL_EMAIL: ${TRAEFIK_SSL_EMAIL:-hi@alfanjauhari.com}
     command:
+      - "--log.level=DEBUG"
       - "--providers.docker=true"
-      - "--entrypoints.app.address=:80"
-      - "--entrypoints.appsecure.address=:443"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entryPoints.appsecure.address=:443"
       - "--certificatesresolvers.default.acme.email=${TRAEFIK_SSL_EMAIL}"
-      - "--certificatesresolvers.default.acme.storage=acme.json"
-      - "--certificatesresolvers.default.acme.httpchallenge.entrypoint=app"
+      - "--certificatesresolvers.default.acme.tlschallenge=true"
     ports:
-      - "80:80"
       - "443:443"
       - "8080:8080"
     volumes:
