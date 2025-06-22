@@ -14,7 +14,7 @@ const { title, description, date, tag } = Astro.props
 
 <SiteLayout title={title} description={description}>
   <style set:html={getSandpackCssText()} id="sandpack"></style>
-  <div class="py-20 flex flex-col items-center max-w-screen-lg mx-auto">
+  <div class="py-20 flex flex-col items-center max-w-(--breakpoint-lg) mx-auto">
     {
       (tag || date) && (
         <div class="flex items-center gap-2">
@@ -35,7 +35,7 @@ const { title, description, date, tag } = Astro.props
     }
     <div class="mt-4 space-y-4 w-full border-b border-b-stone-300 pb-4">
       <h1
-        class="font-heading text-5xl lg:text-7xl !leading-tight text-stone-700 text-center"
+        class="font-heading text-5xl lg:text-7xl leading-tight! text-stone-700 text-center"
       >
         {title}
       </h1>
@@ -43,7 +43,7 @@ const { title, description, date, tag } = Astro.props
     </div>
 
     <article
-      class="mx-auto w-full max-w-screen-lg prose prose-stone prose-pre:[tab-size:2] prose-a:decoration-dotted mt-12"
+      class="mx-auto w-full max-w-(--breakpoint-lg) prose prose-stone prose-pre:[tab-size:2] prose-a:decoration-dotted mt-12"
     >
       <slot />
     </article>
