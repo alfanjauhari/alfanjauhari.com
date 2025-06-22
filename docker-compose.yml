@@ -34,9 +34,10 @@ services:
     volumes:
       - app_data:/usr/src/app
     labels:
+      - "traefik.enable=true"
       - "traefik.http.routers.app.rule=Host(`${TRAEFIK_URL}`)"
-      - "traefik.http.routers.app.entrypoints=appsecure"
-      - "traefik.http.routers.app.tls.certresolver=default"
+      - "traefik.http.routers.app.entrypoints=app,appsecure"
+      - "traefik.http.routers.app.tls.certresolver=letsencrypt"
 
   alfanjauhari_com_traefik:
     image: traefik:v3.4
@@ -47,20 +48,29 @@ services:
       - "--log.level=DEBUG"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
+      - "--entryPoints.app.address=:80"
       - "--entryPoints.appsecure.address=:443"
-      - "--certificatesresolvers.default.acme.email=${TRAEFIK_SSL_EMAIL}"
-      - "--certificatesresolvers.default.acme.tlschallenge=true"
+      - "--entryPoints.app.http.redirections.entryPoint.to=appsecure"
+      - "--entryPoints.app.http.redirections.entryPoint.scheme=https"
+      - "--certificatesresolvers.letsencrypt.acme.email=${TRAEFIK_SSL_EMAIL}"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/certs/acme.json"
+      - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
     ports:
+      - "80:80"
       - "443:443"
       - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - traefik-certs:/certs
 
 volumes:
   pg_data:
     driver: local
   app_data:
     driver: local
+  traefik-certs:
+    driver: local
+
 secrets:
   BUILD_DATABASE_URL:
     environment: BUILD_DATABASE_URL
