@@ -1,1 +1,12 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@config "../../tailwind.config.mjs";
+
+@theme {
+  --font-sans: "Satoshi-Variable", sans-serif;
+  --font-heading: "Anton", sans-serif;
+  --font-mono: "Fira Code Variable", monospace;
+
+  --text-10xl: 10rem;
+  --text-10xl-line-height: 1;
+}

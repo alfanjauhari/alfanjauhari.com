@@ -1,19 +1,7 @@
-import tailwindTypography from '@tailwindcss/typography'
-import defaultTheme from 'tailwindcss/defaultTheme'
-
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
   theme: {
     extend: {
-      fontFamily: {
-        sans: ['Satoshi-Variable', ...defaultTheme.fontFamily.sans],
-        heading: ['Anton'],
-        mono: ['Fira Code Variable'],
-      },
-      fontSize: {
-        '10xl': ['10rem', 1],
-      },
       typography: ({ theme }) => ({
         stone: {
           css: {
@@ -54,5 +42,4 @@ export default {
       }),
     },
   },
-  plugins: [tailwindTypography()],
 }

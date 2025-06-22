@@ -26,7 +26,7 @@ export function ClientSandpack(props: SandpackProviderProps) {
       }
       {...props}
     >
-      <SandpackLayout className="!border-none">
+      <SandpackLayout className="border-none!">
         <SandpackCodeEditor
           showLineNumbers
           showInlineErrors
