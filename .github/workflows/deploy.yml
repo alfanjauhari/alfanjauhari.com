@@ -10,10 +10,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Execute SSH command
+        env:
+          FOLDER: ${{ secrets.SERVER_FOLDER }}
+          BUILD_DATABASE_URL: ${{ secrets.BUILD_DATABASE_URL }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          NOTION_ACCESS_TOKEN: ${{ secrets.NOTION_ACCESS_TOKEN }}
+          TRAEFIK_SSL_EMAIL: ${{ secrets.TRAEFIK_SSL_EMAIL }}
+          TRAEFIK_URL: alfanjauhari.com
+          NODE_ENV: production
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
-          script: whoami
+          script: |
+            git -C pull $FOLDER || https://github.com/alfanjauhari/alfanjauhari.com $FOLDER
+            cd $FOLDER
+            docker compose -d --build
