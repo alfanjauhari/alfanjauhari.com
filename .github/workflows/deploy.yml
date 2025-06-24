@@ -30,4 +30,4 @@ jobs:
           script: |
             git -C pull $FOLDER || git clone https://github.com/alfanjauhari/alfanjauhari.com $FOLDER
             cd $FOLDER
-            docker compose -d --build
+            docker compose up -d --build
