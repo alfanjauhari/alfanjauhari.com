@@ -11,7 +11,6 @@ jobs:
     steps:
       - name: Execute SSH command
         env:
-          FOLDER: ${{ secrets.FOLDER }}
           BUILD_DATABASE_URL: ${{ secrets.BUILD_DATABASE_URL }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           DB_NAME: ${{ secrets.DB_NAME }}
@@ -28,6 +27,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            git -C pull $FOLDER || git clone https://github.com/alfanjauhari/alfanjauhari.com $FOLDER
-            cd $FOLDER
+            git -C pull alfanjauhari.com || git clone https://github.com/alfanjauhari/alfanjauhari.com alfanjauhari.com
+            cd alfanjauhari.com
             docker compose up -d --build
