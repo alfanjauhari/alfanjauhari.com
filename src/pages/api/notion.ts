@@ -1,3 +1,5 @@
+export const prerender = false
+
 import { APIResponseError, Client } from '@notionhq/client'
 import { sql } from 'bun'
 import { NotionConverter } from 'notion-to-md'
@@ -6,7 +8,7 @@ export async function GET({ request }: { request: Request }) {
   const pageId = new URL(request.url).searchParams.get('pageId')
 
   if (!pageId) {
-    return new Response('Page ID is required', { status: 400 })
+    throw new Error('Missing pageId query parameter')
   }
 
   try {
@@ -36,13 +38,24 @@ export async function GET({ request }: { request: Request }) {
     })
   } catch (error) {
     if (error instanceof APIResponseError) {
-      return new Response(`Notion API Error: ${error.message}`, {
-        status: error.status,
-      })
+      return new Response(
+        JSON.stringify({
+          error: 'Notion API error',
+          details: error.message,
+        }),
+        {
+          status: error.status,
+          headers: { 'Content-Type': 'application/json' },
+        },
+      )
     }
 
-    console.error('Error generating Notion markdown:', error)
-
-    return new Response('Failed to generate notion markdown', { status: 500 })
+    return new Response(
+      JSON.stringify({
+        error: 'Failed to generate Notion markdown',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } },
+    )
   }
 }
