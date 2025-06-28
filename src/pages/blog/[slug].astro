@@ -1,18 +1,19 @@
 ---
 import { render } from 'astro:content'
 import { getEntry } from 'astro:content'
+import { getCollection } from 'astro:content'
 import SingleLayout from '@/layouts/SingleLayout.astro'
 
-const slug = Astro.params.slug
-if (!slug) {
-  return Astro.redirect('/404')
+export async function getStaticPaths() {
+  const entries = await getCollection('blog')
+
+  return entries.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }))
 }
 
-const entry = await getEntry('blog', slug)
-if (!entry) {
-  return Astro.redirect('/404')
-}
-
+const { entry } = Astro.props
 const { Content } = await render(entry)
 ---
 

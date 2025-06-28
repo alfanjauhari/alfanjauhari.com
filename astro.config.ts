@@ -1,8 +1,8 @@
 import { defineConfig } from 'astro/config'
 
 import mdx from '@astrojs/mdx'
-import node from '@astrojs/node'
 import react from '@astrojs/react'
+import vercel from '@astrojs/vercel'
 
 import tailwindcss from '@tailwindcss/vite'
 
@@ -16,11 +16,15 @@ export default defineConfig({
     },
   },
 
-  adapter: node({
-    mode: 'standalone',
+  adapter: vercel({
+    includeFiles: [
+      './src/content/blog/_components/web-development-with-progressive-enhancement/sandpack-files/App.tsx',
+
+      './src/content/blog/_components/web-development-with-progressive-enhancement/sandpack-files/App.module.css',
+    ],
   }),
 
-  output: 'server',
+  output: 'static',
   site: process.env.BASE_URL || 'http://localhost:4321',
 
   server: {

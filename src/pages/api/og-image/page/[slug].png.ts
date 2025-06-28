@@ -1,6 +1,15 @@
-import { getEntry } from 'astro:content'
+import { getCollection, getEntry } from 'astro:content'
 import type { APIContext } from 'astro'
 import { generateImage } from '../_generate-image'
+
+export async function getStaticPaths() {
+  const posts = await getCollection('pages')
+
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { slug: post.id },
+  }))
+}
 
 export async function GET({
   params,

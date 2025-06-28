@@ -4,10 +4,17 @@ import ArticleCard from '@/components/ui/ArticleCard.astro'
 import { RevealHeading } from '@/components/ui/RevealHeading'
 import SiteLayout from '@/layouts/SiteLayout.astro'
 
-const tag = Astro.params.tag
-if (!tag) {
-  return Astro.redirect('/404')
+export async function getStaticPaths() {
+  const posts = await getCollection('blog')
+  const tags = new Set(posts.map((post) => post.data.tag))
+
+  return Array.from(tags).map((tag) => ({
+    params: { tag },
+    props: { tag },
+  }))
 }
+
+const { tag } = Astro.params
 
 const posts = await getCollection('blog').then((posts) =>
   posts

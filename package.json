@@ -9,7 +9,8 @@
     "check": "bunx --bun astro check",
     "preview": "bunx --bun astro preview",
     "db:migrate": "bun ./db/migrate.ts",
-    "db:seed": "bun ./db/seed.ts"
+    "db:seed": "bun ./db/seed.ts",
+    "prepare": "husky"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -17,7 +18,7 @@
     "@astrojs/node": "^9.2.2",
     "@astrojs/react": "4.3.0",
     "@astrojs/tailwind": "6.0.2",
-    "@astrojs/vercel": "8.1.5",
+    "@astrojs/vercel": "8.2.0",
     "@codesandbox/sandpack-react": "^2.19.9",
     "@codesandbox/sandpack-themes": "^2.0.21",
     "@notionhq/client": "^3.1.3",
@@ -26,7 +27,7 @@
     "@types/react-dom": "^18.3.0",
     "@vercel/og": "^0.6.3",
     "ajv": "^8.17.1",
-    "astro": "5.9.3",
+    "astro": "5.10.1",
     "clsx": "^2.1.1",
     "framer-motion": "^11.5.4",
     "lenis": "^1.1.14",
@@ -42,6 +43,7 @@
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@tailwindcss/typography": "^0.5.15",
-    "@types/bun": "^1.2.16"
+    "@types/bun": "^1.2.16",
+    "husky": "^9.1.7"
   }
 }
