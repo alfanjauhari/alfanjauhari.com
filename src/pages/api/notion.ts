@@ -1,17 +1,20 @@
 export const prerender = false
 
 import { sql } from '@/libs/db'
-import { APIResponseError, Client } from '@notionhq/client'
+import { APIError } from '@/libs/errors'
+import { Client, APIResponseError as NotionAPIError } from '@notionhq/client'
 import { NotionConverter } from 'notion-to-md'
 
 export async function GET({ request }: { request: Request }) {
   const pageId = new URL(request.url).searchParams.get('pageId')
 
-  if (!pageId) {
-    throw new Error('Missing pageId query parameter')
-  }
-
   try {
+    if (!pageId) {
+      throw new APIError('Missing pageId query parameter', {
+        status: 404,
+      })
+    }
+
     const cached = await sql`SELECT cache_get(${pageId}) AS cached_value`
 
     if (cached.length && cached[0].cached_value) {
@@ -37,17 +40,24 @@ export async function GET({ request }: { request: Request }) {
       },
     })
   } catch (error) {
-    if (error instanceof APIResponseError) {
+    if (error instanceof NotionAPIError) {
       return new Response(
         JSON.stringify({
-          error: 'Notion API error',
-          details: error.message,
+          name: 'NotionAPIError',
+          message: error.message,
         }),
         {
           status: error.status,
           headers: { 'Content-Type': 'application/json' },
         },
       )
+    }
+
+    if (error instanceof APIError) {
+      return new Response(JSON.stringify(error.toJSON()), {
+        status: error.status,
+        headers: { 'Content-Type': 'application/json' },
+      })
     }
 
     return new Response(
