@@ -1,5 +1,5 @@
 import path from 'node:path'
-import { sql } from 'bun'
+import { sql } from '@/libs/db'
 import { Umzug } from 'umzug'
 
 export const migrator = new Umzug({
@@ -28,11 +28,11 @@ export const migrator = new Umzug({
         )
       `
 
-      const results = await sql`
+      const results = await sql<{ name: string }[]>`
         SELECT name FROM migrations_logs
       `
 
-      return results.map((r: { name: string }) => r.name)
+      return results.map((r) => r.name)
     },
     async logMigration({ name }) {
       await sql`
@@ -77,11 +77,11 @@ export const seeder = new Umzug({
         )
       `
 
-      const results = await sql`
+      const results = await sql<{ name: string }[]>`
         SELECT name FROM seeders_logs
       `
 
-      return results.map((r: { name: string }) => r.name)
+      return results.map((r) => r.name)
     },
     async logMigration({ name }) {
       await sql`
@@ -98,6 +98,14 @@ export const seeder = new Umzug({
   create: {
     folder: path.join(__dirname, 'seeders'),
   },
+})
+
+migrator.on('afterCommand', async () => {
+  await sql.end()
+})
+
+seeder.on('afterCommand', async () => {
+  await sql.end()
 })
 
 export type Migration = typeof migrator._types.migration

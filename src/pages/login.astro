@@ -3,7 +3,7 @@ import type { ActionInputError } from 'astro:actions'
 import { isInputError } from 'astro:actions'
 import { actions } from 'astro:actions'
 import SiteLayout from '@/layouts/SiteLayout.astro'
-import { sql } from 'bun'
+import { sql } from '@/libs/db'
 
 const token = Astro.cookies.get('auth_token')?.value || ''
 

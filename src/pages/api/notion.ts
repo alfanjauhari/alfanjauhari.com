@@ -1,7 +1,7 @@
 export const prerender = false
 
+import { sql } from '@/libs/db'
 import { APIResponseError, Client } from '@notionhq/client'
-import { sql } from 'bun'
 import { NotionConverter } from 'notion-to-md'
 
 export async function GET({ request }: { request: Request }) {

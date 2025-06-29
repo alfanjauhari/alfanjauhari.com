@@ -4,7 +4,19 @@ export const prerender = false
 import { render } from 'astro:content'
 import { getEntry } from 'astro:content'
 import SingleLayout from '@/layouts/SingleLayout.astro'
-import { sql } from 'bun'
+import { sql } from '@/libs/db'
+
+const { slug } = Astro.params
+
+if (!slug) {
+  return Astro.redirect('/404')
+}
+
+const entry = await getEntry('restricted', slug)
+
+if (!entry) {
+  return Astro.redirect('/404')
+}
 
 const token = Astro.cookies.get('auth_token')
 if (!token) {
@@ -17,18 +29,6 @@ const session = await sql`
 
 if (!session || session.length === 0) {
   return Astro.redirect('/login')
-}
-
-const { slug } = Astro.params
-
-if (!slug) {
-  return Astro.redirect('/404')
-}
-
-const entry = await getEntry('restricted', slug)
-
-if (!entry) {
-  return Astro.redirect('/404')
 }
 
 const { Content } = await render(entry)

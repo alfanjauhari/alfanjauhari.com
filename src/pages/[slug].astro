@@ -1,14 +1,13 @@
 ---
 import { render } from 'astro:content'
 import { type CollectionEntry } from 'astro:content'
-import { getEntry } from 'astro:content'
 import { getCollection } from 'astro:content'
 import SingleLayout from '@/layouts/SingleLayout.astro'
 
 export async function getStaticPaths() {
-  const entries = await getCollection('blog')
+  const entries = await getCollection('pages')
 
-  return entries.map((entry: CollectionEntry<'blog'>) => ({
+  return entries.map((entry: CollectionEntry<'pages'>) => ({
     params: { slug: entry.id },
     props: { entry },
   }))

@@ -1,6 +1,6 @@
 import { ActionError, defineAction } from 'astro:actions'
 import { z } from 'astro:schema'
-import { sql } from 'bun'
+import { sql } from '@/libs/db'
 
 export const server = {
   login: defineAction({

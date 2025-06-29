@@ -1,6 +1,6 @@
 import { z } from 'astro:schema'
+import { sql } from '@/libs/db'
 import type { Loader } from 'astro/loaders'
-import { sql } from 'bun'
 
 export const RestrictedContentResultSchema = z.object({
   id: z.string(),
@@ -20,7 +20,7 @@ export function restrictedContentLoader(): Loader {
     name: 'restricted-content',
     load: async ({ store, parseData, renderMarkdown }) => {
       try {
-        const data = (await sql`
+        const data = await sql<RestrictedContentResult[]>`
           SELECT
             contents.*,
             ARRAY_AGG(tags.name) AS tags
@@ -34,7 +34,7 @@ export function restrictedContentLoader(): Loader {
             contents.id
           ORDER BY
             contents.published_at DESC;
-        `) as RestrictedContentResult[]
+        `
 
         store.clear()
 
