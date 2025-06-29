@@ -69,12 +69,26 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - traefik-certs:/certs
 
+  alfanjauhari_com_n8n:
+    image: docker.n8n.io/n8nio/n8n
+    restart: always
+    container_name: alfanjauhari_com_n8n
+    environment:
+      NODE_ENV: production
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ./n8n:/files
+    ports:
+      - 5678:5678
+
 volumes:
   pg_data:
     driver: local
   app_data:
     driver: local
   traefik-certs:
+    driver: local
+  n8n_data:
     driver: local
 
 networks:

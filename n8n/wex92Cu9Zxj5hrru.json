@@ -1,0 +1,141 @@
+{
+  "createdAt": "2025-06-29T04:27:53.445Z",
+  "updatedAt": "2025-06-29T04:32:16.000Z",
+  "id": "wex92Cu9Zxj5hrru",
+  "name": "Notion Sync",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{}]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0],
+      "id": "83d0a2b6-ff39-4242-8c22-5a6ecfba1b7b",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "resource": "database",
+        "databaseId": {
+          "__rl": true,
+          "value": "2148a490-2886-807a-a4ce-e195a6a9822b",
+          "mode": "list",
+          "cachedResultName": "Contents",
+          "cachedResultUrl": "https://www.notion.so/2148a4902886807aa4cee195a6a9822b"
+        }
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [220, 0],
+      "id": "89ef166b-4a84-47f0-ab0b-179b5e27adbd",
+      "name": "Get a database",
+      "credentials": {
+        "notionApi": {
+          "id": "NRVFLGzgmHSnM5sW",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "operation": "getAll",
+        "databaseId": {
+          "__rl": true,
+          "value": "2148a490-2886-807a-a4ce-e195a6a9822b",
+          "mode": "list",
+          "cachedResultName": "Contents",
+          "cachedResultUrl": "https://www.notion.so/2148a4902886807aa4cee195a6a9822b"
+        },
+        "returnAll": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [440, 0],
+      "id": "884ed7fe-35d1-4a3c-8f06-6f4fdd49d27f",
+      "name": "Get many database pages",
+      "credentials": {
+        "notionApi": {
+          "id": "NRVFLGzgmHSnM5sW",
+          "name": "Notion account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "block",
+        "operation": "getAll",
+        "blockId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "returnAll": true,
+        "fetchNestedBlocks": true
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [660, 0],
+      "id": "0c1c2d41-7621-4bef-bd60-6b198c9649a9",
+      "name": "Get many child blocks",
+      "credentials": {
+        "notionApi": {
+          "id": "NRVFLGzgmHSnM5sW",
+          "name": "Notion account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get a database",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a database": {
+      "main": [
+        [
+          {
+            "node": "Get many database pages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many database pages": {
+      "main": [
+        [
+          {
+            "node": "Get many child blocks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "e92fcb60-1207-40d1-a6a2-ca955e46465c",
+  "triggerCount": 0,
+  "tags": []
+}
