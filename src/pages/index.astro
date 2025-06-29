@@ -55,87 +55,85 @@ const posts = await getCollection('blog').then((posts) =>
     </div>
   </section>
   <section id="skills" class="min-h-screen bg-gray-100 -mx-6 px-6 py-20">
-    <div class="space-y-12">
-      <RevealHeading client:visible className="text-6xl lg:text-10xl"
-        >My Beloved Tech Stacks</RevealHeading
-      >
+    <RevealHeading client:visible className="text-6xl lg:text-10xl mb-12"
+      >My Beloved Tech Stacks</RevealHeading
+    >
 
-      <div class="gap-2 grid grid-cols-2 lg:grid-cols-1">
-        <div class="bg-stone-700 p-4">
-          <h1
-            class="text-white text-xl lg:text-4xl font-heading uppercase tracking-wider"
-          >
-            React JS
-          </h1>
-          <p class="text-white mt-2">
-            The king of components. Making my UI so interactive
-          </p>
-        </div>
-        <div class="bg-stone-700 p-4">
-          <h1
-            class="text-white text-xl lg:text-4xl font-heading uppercase tracking-wider"
-          >
-            Next JS
-          </h1>
-          <p class="text-white mt-2">
-            My Swiss Army knife for web development. Ready to slice through
-            server-side rendering like butter
-          </p>
-        </div>
-        <div class="bg-stone-700 p-4">
-          <h1
-            class="text-white text-xl lg:text-4xl font-heading uppercase tracking-wider"
-          >
-            TypeScript
-          </h1>
-          <p class="text-white mt-2">
-            Keeping my code type-safe and my sanity intact
-          </p>
-        </div>
-        <div class="bg-stone-700 p-4">
-          <h1
-            class="text-white text-xl lg:text-4xl font-heading uppercase tracking-wider"
-          >
-            CSS
-          </h1>
-          <p class="text-white mt-2">
-            The magic wand that transforms my ideas into beautiful designs
-          </p>
-        </div>
-        <div class="bg-stone-700 p-4">
-          <h1
-            class="text-white text-xl lg:text-4xl font-heading uppercase tracking-wider"
-          >
-            TanStack
-          </h1>
-          <p class="text-white mt-2">
-            A utilities for making my web development feel much easier and
-            achieve "weekend transquility"
-          </p>
-        </div>
-        <div class="bg-stone-700 p-4">
-          <h1
-            class="text-white text-xl lg:text-4xl font-heading uppercase tracking-wider"
-          >
-            GoLang
-          </h1>
-          <p class="text-white mt-2">
-            The language that i use for my backend development faster before you
-            can say "database optimization"
-          </p>
-        </div>
-        <a
-          class="relative bg-stone-700 p-4 w-full max-md:col-span-2 text-left text-white text-xl lg:text-4xl font-heading uppercase tracking-wider flex items-center justify-between group/collection-button overflow-hidden"
-          href="/uses"
+    <div class="gap-2 grid grid-cols-2 lg:grid-cols-1">
+      <div class="bg-stone-700 p-4">
+        <h1
+          class="text-white text-xl lg:text-4xl font-heading uppercase tracking-wider"
         >
-          <span>All Curated Collection of My Essential Instruments</span>
-          <div
-            class="absolute bg-white inset-0 -translate-y-full group-hover/collection-button:translate-y-0 duration-300 flex flex-col justify-center items-center"
-          >
-            <ExternalLinkIcon class="text-stone-700 size-8" />
-          </div>
-        </a>
+          React JS
+        </h1>
+        <p class="text-white mt-2">
+          The king of components. Making my UI so interactive
+        </p>
       </div>
+      <div class="bg-stone-700 p-4">
+        <h1
+          class="text-white text-xl lg:text-4xl font-heading uppercase tracking-wider"
+        >
+          Next JS
+        </h1>
+        <p class="text-white mt-2">
+          My Swiss Army knife for web development. Ready to slice through
+          server-side rendering like butter
+        </p>
+      </div>
+      <div class="bg-stone-700 p-4">
+        <h1
+          class="text-white text-xl lg:text-4xl font-heading uppercase tracking-wider"
+        >
+          TypeScript
+        </h1>
+        <p class="text-white mt-2">
+          Keeping my code type-safe and my sanity intact
+        </p>
+      </div>
+      <div class="bg-stone-700 p-4">
+        <h1
+          class="text-white text-xl lg:text-4xl font-heading uppercase tracking-wider"
+        >
+          CSS
+        </h1>
+        <p class="text-white mt-2">
+          The magic wand that transforms my ideas into beautiful designs
+        </p>
+      </div>
+      <div class="bg-stone-700 p-4">
+        <h1
+          class="text-white text-xl lg:text-4xl font-heading uppercase tracking-wider"
+        >
+          TanStack
+        </h1>
+        <p class="text-white mt-2">
+          A utilities for making my web development feel much easier and achieve
+          "weekend transquility"
+        </p>
+      </div>
+      <div class="bg-stone-700 p-4">
+        <h1
+          class="text-white text-xl lg:text-4xl font-heading uppercase tracking-wider"
+        >
+          GoLang
+        </h1>
+        <p class="text-white mt-2">
+          The language that i use for my backend development faster before you
+          can say "database optimization"
+        </p>
+      </div>
+      <a
+        class="relative bg-stone-700 p-4 w-full max-md:col-span-2 text-left text-white text-xl lg:text-4xl font-heading uppercase tracking-wider flex items-center justify-between group/collection-button overflow-hidden"
+        href="/uses"
+      >
+        <span>All Curated Collection of My Essential Instruments</span>
+        <div
+          class="absolute bg-white inset-0 -translate-y-full group-hover/collection-button:translate-y-0 duration-300 flex flex-col justify-center items-center"
+        >
+          <ExternalLinkIcon class="text-stone-700 size-8" />
+        </div>
+      </a>
     </div>
   </section>
   <section

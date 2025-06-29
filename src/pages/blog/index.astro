@@ -13,7 +13,7 @@ const posts = await getCollection('blog').then((posts) =>
   title="Blog"
   description="Latest articles, thought and random stuffs mixed in one place"
 >
-  <div class="space-y-12 py-20">
+  <div class="flex flex-col gap-12 py-20">
     <RevealHeading
       client:visible
       className="text-6xl lg:text-10xl text-stone-700"
