@@ -1,13 +1,16 @@
-CREATE UNLOGGED TABLE IF NOT EXISTS cache (
+CREATE UNLOGGED TABLE IF NOT EXISTS
+  cache (
     key TEXT NOT NULL UNIQUE,
     value TEXT NOT NULL,
     expired_at TIMESTAMP
-);
+  );
 
-CREATE INDEX IF NOT EXISTS idx_cache_expired_at ON cache (expired_at) WHERE expired_at IS NOT NULL;
+CREATE INDEX IF NOT EXISTS idx_cache_expired_at ON cache (expired_at)
+WHERE
+  expired_at IS NOT NULL;
 
-CREATE OR REPLACE FUNCTION cache_set(p_key TEXT, p_value TEXT, p_ttl INT DEFAULT 3600)
-RETURNS BOOLEAN AS $$
+CREATE
+OR REPLACE FUNCTION cache_set (p_key TEXT, p_value TEXT, p_ttl INT DEFAULT 3600) RETURNS BOOLEAN AS $$
 BEGIN
     INSERT INTO cache (key, value, expired_at) 
     VALUES (p_key, p_value, 
@@ -20,8 +23,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION cache_get(p_key TEXT)
-RETURNS TEXT AS $$
+CREATE
+OR REPLACE FUNCTION cache_get (p_key TEXT) RETURNS TEXT AS $$
 DECLARE
     result TEXT;
 BEGIN
@@ -32,8 +35,8 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- DEL key
-CREATE OR REPLACE FUNCTION cache_del(p_key TEXT)
-RETURNS BOOLEAN AS $$
+CREATE
+OR REPLACE FUNCTION cache_del (p_key TEXT) RETURNS BOOLEAN AS $$
 DECLARE
     deleted BOOLEAN;
 BEGIN
@@ -43,8 +46,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION cleanup_expired_cache()
-RETURNS INT AS $$
+CREATE
+OR REPLACE FUNCTION cleanup_expired_cache () RETURNS INT AS $$
 DECLARE
     deleted_count INT;
 BEGIN
@@ -56,4 +59,9 @@ $$ LANGUAGE plpgsql;
 
 CREATE EXTENSION IF NOT EXISTS pg_cron;
 
-SELECT cron.schedule('cache-cleanup', '0 0 * * *', 'SELECT cleanup_expired_cache()');
+SELECT
+  cron.schedule (
+    'cache-cleanup',
+    '0 0 * * *',
+    'SELECT cleanup_expired_cache()'
+  );

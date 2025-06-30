@@ -2,11 +2,18 @@ export const prerender = false
 
 import { sql } from '@/libs/db'
 import { APIError } from '@/libs/errors'
-import { Client, APIResponseError as NotionAPIError } from '@notionhq/client'
+import {
+  Client,
+  LogLevel,
+  APIResponseError as NotionAPIError,
+} from '@notionhq/client'
 import { NotionConverter } from 'notion-to-md'
+
+const cacheDuration = 60 * 60 * 1000 // 1 hour in milliseconds
 
 export async function GET({ request }: { request: Request }) {
   const pageId = new URL(request.url).searchParams.get('pageId')
+  const lastUpdated = new URL(request.url).searchParams.get('lastUpdated')
 
   try {
     if (!pageId) {
@@ -15,18 +22,32 @@ export async function GET({ request }: { request: Request }) {
       })
     }
 
-    const cached = await sql`SELECT cache_get(${pageId}) AS cached_value`
+    const cached = await sql<
+      { expired: Date; result: string }[]
+    >`SELECT * FROM cache_get(${pageId})`
 
-    if (cached.length && cached[0].cached_value) {
-      return new Response(JSON.stringify({ body: cached[0].cached_value }), {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+    if (cached.length && cached[0].result) {
+      const expiredTime = cached[0].expired.getTime()
+      const lastUpdatedTime = lastUpdated
+        ? new Date(lastUpdated).getTime() + cacheDuration
+        : 0
+
+      // Check if the cache is still valid based on the last updated time difference with the cache expiration time
+      const refreshCache = lastUpdatedTime > expiredTime
+
+      if (!refreshCache) {
+        return new Response(JSON.stringify({ body: cached[0].result }), {
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Cache': 'HIT',
+          },
+        })
+      }
     }
 
     const notion = new Client({
       auth: import.meta.env.NOTION_ACCESS_TOKEN,
+      logLevel: LogLevel.ERROR,
     })
 
     const n2m = new NotionConverter(notion)
@@ -34,11 +55,15 @@ export async function GET({ request }: { request: Request }) {
 
     await sql`SELECT cache_set(${pageId}, ${mdString.content})`
 
-    return new Response(JSON.stringify({ body: mdString.content }), {
-      headers: {
-        'Content-Type': 'application/json',
+    return new Response(
+      JSON.stringify({ body: mdString.content, id: pageId }),
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Cache': 'MISS',
+        },
       },
-    })
+    )
   } catch (error) {
     if (error instanceof NotionAPIError) {
       return new Response(

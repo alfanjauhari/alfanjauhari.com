@@ -10,7 +10,8 @@
     "preview": "bunx --bun astro preview",
     "db:migrate": "bun ./db/migrate.ts",
     "db:seed": "bun ./db/seed.ts",
-    "prepare": "husky"
+    "prepare": "husky",
+    "n8n:backup": "docker exec -u node -it alfanjauhari_com_n8n n8n export:workflow --all --output=/files --separate --pretty"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -25,6 +26,7 @@
     "@types/react": "^18.3.7",
     "@types/react-dom": "^18.3.0",
     "@vercel/og": "^0.6.3",
+    "ajv": "^8.17.1",
     "astro": "5.10.1",
     "clsx": "^2.1.1",
     "framer-motion": "^11.5.4",
