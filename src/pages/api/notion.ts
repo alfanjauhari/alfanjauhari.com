@@ -36,12 +36,15 @@ export async function GET({ request }: { request: Request }) {
       const refreshCache = lastUpdatedTime > expiredTime
 
       if (!refreshCache) {
-        return new Response(JSON.stringify({ body: cached[0].result }), {
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Cache': 'HIT',
+        return new Response(
+          JSON.stringify({ id: pageId, body: cached[0].result }),
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Cache': 'HIT',
+            },
           },
-        })
+        )
       }
     }
 
