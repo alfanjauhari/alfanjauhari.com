@@ -29,3 +29,5 @@ pnpm-debug.log*
 local.db
 local.db-wal
 local.db-shm
+
+.notion-to-md
