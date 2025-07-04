@@ -1,14 +1,14 @@
 ---
 interface Props {
-  title: string;
-  description: string;
-  children?: any;
+  title: string
+  description: string
+  children?: any
 }
 
-const { title, description } = Astro.props;
+const { title, description } = Astro.props
 
-const type = Astro.url.pathname.includes("/blog/") ? "blog" : "page";
-const slug = Astro.url.pathname.replace(/\/$/, "").split("/").pop();
+const type = Astro.url.pathname.includes('/blog/') ? 'blog' : 'page'
+const slug = Astro.url.pathname.replace(/\/$/, '').split('/').pop()
 ---
 
 <head>

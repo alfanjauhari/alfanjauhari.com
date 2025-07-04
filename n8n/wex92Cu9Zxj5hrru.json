@@ -1,11 +1,47 @@
 {
   "createdAt": "2025-06-29T04:27:53.445Z",
-  "updatedAt": "2025-06-29T04:32:16.000Z",
+  "updatedAt": "2025-07-04T05:42:39.000Z",
   "id": "wex92Cu9Zxj5hrru",
   "name": "Notion Sync",
-  "active": false,
+  "active": true,
   "isArchived": false,
   "nodes": [
+    {
+      "parameters": {
+        "url": "http://host.docker.internal:4321/api/notion",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "=pageId",
+              "value": "={{ $json.id }}"
+            },
+            {
+              "name": "lastUpdated",
+              "value": "={{ $json.property_last_edited_time }}"
+            }
+          ]
+        },
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [640, 420],
+      "id": "c1d71be2-847c-4635-b894-755e0b0781e8",
+      "name": "Convert Notion Page Content to Markdown through API"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.slug = item.json.name.toLowerCase()\n    .replace(/ /g, \"-\")\n    .replace(/[^\\w-]+/g, \"\");\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [640, 220],
+      "id": "73365661-c7e5-4bc1-bd07-07af0243082d",
+      "name": "Code"
+    },
     {
       "parameters": {
         "rule": {
@@ -14,32 +50,9 @@
       },
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
-      "position": [0, 0],
-      "id": "83d0a2b6-ff39-4242-8c22-5a6ecfba1b7b",
+      "position": [-20, 220],
+      "id": "1782c2f0-b09a-41c0-89ae-a1d2736fbf9a",
       "name": "Schedule Trigger"
-    },
-    {
-      "parameters": {
-        "resource": "database",
-        "databaseId": {
-          "__rl": true,
-          "value": "2148a490-2886-807a-a4ce-e195a6a9822b",
-          "mode": "list",
-          "cachedResultName": "Contents",
-          "cachedResultUrl": "https://www.notion.so/2148a4902886807aa4cee195a6a9822b"
-        }
-      },
-      "type": "n8n-nodes-base.notion",
-      "typeVersion": 2.2,
-      "position": [220, 0],
-      "id": "89ef166b-4a84-47f0-ab0b-179b5e27adbd",
-      "name": "Get a database",
-      "credentials": {
-        "notionApi": {
-          "id": "NRVFLGzgmHSnM5sW",
-          "name": "Notion account"
-        }
-      }
     },
     {
       "parameters": {
@@ -53,12 +66,22 @@
           "cachedResultUrl": "https://www.notion.so/2148a4902886807aa4cee195a6a9822b"
         },
         "returnAll": true,
+        "filterType": "manual",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "key": "Published At|date",
+              "condition": "is_not_empty"
+            }
+          ]
+        },
         "options": {}
       },
       "type": "n8n-nodes-base.notion",
       "typeVersion": 2.2,
-      "position": [440, 0],
-      "id": "884ed7fe-35d1-4a3c-8f06-6f4fdd49d27f",
+      "position": [200, 220],
+      "id": "61355f78-76f3-45e4-b891-495fa15636d2",
       "name": "Get many database pages",
       "credentials": {
         "notionApi": {
@@ -69,42 +92,409 @@
     },
     {
       "parameters": {
-        "resource": "block",
-        "operation": "getAll",
-        "blockId": {
+        "operation": "upsert",
+        "schema": {
           "__rl": true,
-          "value": "={{ $json.id }}",
-          "mode": "id"
+          "mode": "list",
+          "value": "public"
         },
-        "returnAll": true,
-        "fetchNestedBlocks": true
+        "table": {
+          "__rl": true,
+          "value": "contents",
+          "mode": "list",
+          "cachedResultName": "contents"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "notion_id": "={{ $json.id }}",
+            "title": "={{ $json.name }}",
+            "slug": "={{ $json.slug }}",
+            "body": "={{ $json.body }}",
+            "description": "={{ $json.property_description }}",
+            "published_at": "={{ $json.property_published_at.start }}"
+          },
+          "matchingColumns": ["slug"],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "notion_id",
+              "displayName": "notion_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "slug",
+              "displayName": "slug",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "body",
+              "displayName": "body",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "description",
+              "displayName": "description",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "published_at",
+              "displayName": "published_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
       },
-      "type": "n8n-nodes-base.notion",
-      "typeVersion": 2.2,
-      "position": [660, 0],
-      "id": "0c1c2d41-7621-4bef-bd60-6b198c9649a9",
-      "name": "Get many child blocks",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [1080, 220],
+      "id": "a32d6602-1b75-49f9-af3f-08f06b50778f",
+      "name": "Insert or update on contents table",
       "credentials": {
-        "notionApi": {
-          "id": "NRVFLGzgmHSnM5sW",
-          "name": "Notion account"
+        "postgres": {
+          "id": "229oyN12ucDOpyrx",
+          "name": "Postgres account"
         }
       }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "fieldsToMatchString": "id",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [860, 242.5],
+      "id": "06e98f00-e29c-49be-b469-a3e70f48d1f4",
+      "name": "Combine data with slug and body from markdown converter by id"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "property_tags",
+        "include": "selectedOtherFields",
+        "fieldsToInclude": "id",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [1080, 420],
+      "id": "ebc6f38a-9055-4203-9d72-0665da1ec20c",
+      "name": "Split tag for each content"
+    },
+    {
+      "parameters": {
+        "mode": "combineBySql",
+        "query": "SELECT input1.id, input2.property_tags FROM input1 INNER JOIN input2 ON input1.notion_id = input2.id",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [1300, 242.5],
+      "id": "f8f11c5a-f3fa-4a9b-b605-6eff6a480d17",
+      "name": "Combine property tags and content id"
+    },
+    {
+      "parameters": {
+        "mode": "combineBySql",
+        "query": "SELECT input1.id AS content_id, input2.id as tag_id FROM input1 INNER JOIN input2 ON input1.property_tags = input2.name",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [1740, 242.5],
+      "id": "3f6c4313-9737-4591-a6f4-6b77fd2b89ed",
+      "name": "Combine content id and tag id"
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tags",
+          "mode": "list",
+          "cachedResultName": "tags"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "created_at": "2025-07-04T10:42:42",
+            "name": "={{ $json.property_tags }}"
+          },
+          "matchingColumns": ["name"],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [1520, 370],
+      "id": "a1f96932-53a0-4426-84cc-c1a1acef8c19",
+      "name": "Insert or update rows in a table tags",
+      "credentials": {
+        "postgres": {
+          "id": "229oyN12ucDOpyrx",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "contents_tags",
+          "mode": "list",
+          "cachedResultName": "contents_tags"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "tag_id": "={{ $json.tag_id }}",
+            "content_id": "={{ $json.content_id }}",
+            "created_at": "2025-07-04T11:00:27"
+          },
+          "matchingColumns": ["content_id", "tag_id"],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "content_id",
+              "displayName": "content_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "tag_id",
+              "displayName": "tag_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": false
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [1960, 242.5],
+      "id": "004ea152-c951-430d-838b-80eb0448f908",
+      "name": "Insert or update rows in a table contents_tags",
+      "credentials": {
+        "postgres": {
+          "id": "229oyN12ucDOpyrx",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.resend.com/emails",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"from\": \"N8N Notification <n8n@mail.alfanjauhari.com>\",\n  \"to\": \"hi.alfanjauhari@gmail.com\",\n  \"subject\": \"N8N Success Notification\",\n  \"html\": \"N8N Notion Sync Executed Succesfully for content: <table width='600' style='border:1px solid #333'><tr><td align='center'>Name</td><td align='center'>Tags</td></tr><tr><td align='center'>{{ $json.name }}</td>{{ $json.property_tags.map(item => `<td>${item}</td>`).join('') }}</tr></table>\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [640, 20],
+      "id": "269380dd-3f4d-4ef2-9afb-1a2faf69a43a",
+      "name": "HTTP Request",
+      "executeOnce": false,
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "xvBvqWz690HHFO7W",
+          "name": "Bearer Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [420, 220],
+      "id": "2fb0783e-7d63-413e-8cbd-ebf811c64bbe",
+      "name": "Loop Over Items"
     }
   ],
   "connections": {
-    "Schedule Trigger": {
+    "Code": {
       "main": [
         [
           {
-            "node": "Get a database",
+            "node": "Combine data with slug and body from markdown converter by id",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Get a database": {
+    "Convert Notion Page Content to Markdown through API": {
+      "main": [
+        [
+          {
+            "node": "Combine data with slug and body from markdown converter by id",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
       "main": [
         [
           {
@@ -119,7 +509,114 @@
       "main": [
         [
           {
-            "node": "Get many child blocks",
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert or update on contents table": {
+      "main": [
+        [
+          {
+            "node": "Combine property tags and content id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Combine data with slug and body from markdown converter by id": {
+      "main": [
+        [
+          {
+            "node": "Insert or update on contents table",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Split tag for each content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split tag for each content": {
+      "main": [
+        [
+          {
+            "node": "Combine property tags and content id",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Combine property tags and content id": {
+      "main": [
+        [
+          {
+            "node": "Insert or update rows in a table tags",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Combine content id and tag id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Combine content id and tag id": {
+      "main": [
+        [
+          {
+            "node": "Insert or update rows in a table contents_tags",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert or update rows in a table tags": {
+      "main": [
+        [
+          {
+            "node": "Combine content id and tag id",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Insert or update rows in a table contents_tags": {
+      "main": [[]]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Convert Notion Page Content to Markdown through API",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Code",
             "type": "main",
             "index": 0
           }
@@ -130,12 +627,20 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "staticData": null,
+  "staticData": {
+    "node:Notion Trigger": {
+      "lastTimeChecked": "2025-06-30T04:00:00.000Z",
+      "possibleDuplicates": ["2148a490-2886-80ad-aa10-ed6f4d0553a9"]
+    },
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
   "meta": {
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "e92fcb60-1207-40d1-a6a2-ca955e46465c",
-  "triggerCount": 0,
+  "versionId": "84f2f579-8471-48c0-8233-c51e09145d36",
+  "triggerCount": 1,
   "tags": []
 }
