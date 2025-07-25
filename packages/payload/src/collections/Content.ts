@@ -1,10 +1,10 @@
+import { formatSlugHook } from '@alfanjauhari-com/payload/libs/formatter'
 import {
   convertLexicalToMarkdown,
   editorConfigFactory,
 } from '@payloadcms/richtext-lexical'
 import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
 import type { CollectionConfig, RichTextField } from 'payload'
-import { formatSlugHook } from '../libs/formatter'
 
 export const Content: CollectionConfig = {
   slug: 'contents',
@@ -27,6 +27,12 @@ export const Content: CollectionConfig = {
       hooks: {
         beforeValidate: [formatSlugHook('title')],
       },
+    },
+    {
+      name: 'description',
+      type: 'textarea',
+      label: 'Description',
+      required: true,
     },
     {
       name: 'content',

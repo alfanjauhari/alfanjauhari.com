@@ -1,5 +1,5 @@
+import { formatSlugHook } from '@alfanjauhari-com/payload/libs/formatter'
 import type { CollectionConfig } from 'payload'
-import { formatSlugHook } from '@/libs/formatter'
 
 export const Tag: CollectionConfig = {
   slug: 'tags',

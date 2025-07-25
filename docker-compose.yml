@@ -1,7 +1,7 @@
 services:
   alfanjauhari_com_db:
     container_name: alfanjauhari_com_db
-    build: ./db.Dockerfile
+    build: postgres:17
     environment:
       POSTGRES_DB: ${DB_NAME:-alfanjauhari-com}
       POSTGRES_USER: ${DB_USER:-alfanjauhari}
@@ -30,7 +30,6 @@ services:
       secrets:
         - BUILD_DATABASE_URL
     environment:
-      DATABASE_URL: $DATABASE_URL
       NOTION_ACCESS_TOKEN: $NOTION_ACCESS_TOKEN
       TRAEFIK_URL: ${TRAEFIK_URL:-alfanjauhari.localhost}
     depends_on:

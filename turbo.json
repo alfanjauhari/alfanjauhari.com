@@ -3,11 +3,17 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**", ".next/**"]
     },
     "dev": {
       "persistent": true,
       "cache": false
+    },
+    "clean": {
+      "cache": false
+    },
+    "generate-types": {
+      "outputs": ["payload-types.ts"]
     }
   }
 }
