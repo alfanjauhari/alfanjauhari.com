@@ -1,0 +1,27 @@
+---
+import type { SandpackProviderProps } from '@codesandbox/sandpack-react'
+import { fileReader } from '@/libs/file-reader'
+import { ClientSandpack } from './ClientSandpack'
+
+interface Props extends Omit<SandpackProviderProps, 'files'> {
+  files: string[]
+}
+
+const { files: filePaths, ...props } = Astro.props
+
+const files = await Promise.all(
+  filePaths.map(async (path) => {
+    const key = path.split('/').pop() || ''
+    const content = await fileReader(path)
+
+    return {
+      key,
+      content,
+    }
+  }),
+).then((files) =>
+  Object.fromEntries(files.map((file) => [file.key, file.content])),
+)
+---
+
+<ClientSandpack client:visible files={files} {...props} />

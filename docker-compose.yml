@@ -1,7 +1,7 @@
 services:
   alfanjauhari_com_db:
     container_name: alfanjauhari_com_db
-    build: ./db
+    build: ./db.Dockerfile
     environment:
       POSTGRES_DB: ${DB_NAME:-alfanjauhari-com}
       POSTGRES_USER: ${DB_USER:-alfanjauhari}
@@ -10,11 +10,15 @@ services:
       - pg_data:/var/lib/postgresql/data
     ports:
       - ${DB_PORT}:5432
-    shm_size: '512mb'
+    shm_size: "512mb"
     networks:
       - default
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-alfanjauhari} -d ${DB_NAME:-alfanjauhari-com}"]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${DB_USER:-alfanjauhari} -d ${DB_NAME:-alfanjauhari-com}",
+        ]
       interval: 30s
       timeout: 20s
       retries: 3
