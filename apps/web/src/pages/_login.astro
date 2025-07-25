@@ -4,7 +4,6 @@ export const prerender = false
 import type { ActionInputError } from 'astro:actions'
 import { actions, isInputError } from 'astro:actions'
 import SiteLayout from '@/layouts/SiteLayout.astro'
-import { sql } from '@/libs/db'
 
 const token = Astro.cookies.get('auth_token')?.value || ''
 

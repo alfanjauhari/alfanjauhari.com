@@ -1,10 +1,10 @@
+import { Content } from '@alfanjauhari-com/payload/collections/Content'
+import { Tag } from '@alfanjauhari-com/payload/collections/Tag'
+import { User } from '@alfanjauhari-com/payload/collections/User'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
-import { Tag } from '@/collections/Tag'
-import { User } from '@/collections/User'
-import { Content } from './src/collections/Content'
 
 export default buildConfig({
   editor: lexicalEditor(),

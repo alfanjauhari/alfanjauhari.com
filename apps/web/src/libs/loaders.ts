@@ -1,14 +1,16 @@
 import { z } from 'astro:schema'
+import config from '@alfanjauhari-com/payload/config'
 import type { Loader } from 'astro/loaders'
-import { sql } from '@/libs/db'
+import { getPayload } from 'payload'
+import type { Content } from 'payload-types'
 
 export const RestrictedContentResultSchema = z.object({
-  id: z.string(),
+  id: z.number(),
   slug: z.string(),
   title: z.string(),
   description: z.string(),
-  body: z.string(),
-  published_at: z.date().nullable(),
+  markdown: z.string(),
+  updatedAt: z.coerce.date().nullable(),
 })
 
 export type RestrictedContentResult = z.infer<
@@ -20,31 +22,22 @@ export function restrictedContentLoader(): Loader {
     name: 'restricted-content',
     load: async ({ store, parseData, renderMarkdown }) => {
       try {
-        const data = await sql<RestrictedContentResult[]>`
-          SELECT
-            contents.*,
-            ARRAY_AGG(tags.name) AS tags
-          FROM
-            contents
-            LEFT OUTER JOIN contents_tags ON contents_tags.content_id = contents.id
-            LEFT OUTER JOIN tags ON contents_tags.tag_id = tags.id
-          WHERE
-            contents.published_at <= NOW ()
-          GROUP BY
-            contents.id
-          ORDER BY
-            contents.published_at DESC;
-        `
+        const p = await getPayload({ config })
+
+        const contents = await p.find({
+          collection: 'contents',
+        })
 
         store.clear()
 
-        for (const item of data) {
-          const data = await parseData({
+        for (const item of contents.docs) {
+          const data = await parseData<Omit<Content, 'content'>>({
             id: item.slug,
             data: item,
           })
 
-          const rendered = await renderMarkdown(item.body)
+          const body = item.markdown || ''
+          const rendered = await renderMarkdown(body)
 
           store.set({
             id: item.slug,
