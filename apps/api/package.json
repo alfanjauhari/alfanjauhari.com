@@ -1,0 +1,21 @@
+{
+  "name": "@alfanjauhari-com/api",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "generate-types": "payload generate:types"
+  },
+  "dependencies": {
+    "@payloadcms/db-postgres": "^3.48.0",
+    "@payloadcms/next": "^3.48.0",
+    "@payloadcms/richtext-lexical": "^3.48.0",
+    "graphql": "^16.11.0",
+    "next": "^15.4.2",
+    "payload": "^3.48.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "sharp": "^0.34.3"
+  }
+}

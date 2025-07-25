@@ -1,7 +1,10 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-  "vcs": { "enabled": false, "clientKind": "git", "useIgnoreFile": false },
-  "files": { "ignoreUnknown": false, "ignore": [] },
+  "$schema": "https://biomejs.dev/schemas/2.1.2/schema.json",
+  "vcs": { "enabled": true, "clientKind": "git", "useIgnoreFile": true },
+  "files": {
+    "ignoreUnknown": false,
+    "includes": ["./**/*.{json,ts,tsx,astro,css,html,scss,js,jsx}"]
+  },
   "formatter": {
     "enabled": true,
     "useEditorconfig": true,
@@ -13,8 +16,7 @@
     "attributePosition": "auto",
     "bracketSpacing": true
   },
-  "organizeImports": { "enabled": true },
-  "linter": { "enabled": true, "rules": { "recommended": false } },
+  "linter": { "enabled": true, "rules": { "recommended": true } },
   "javascript": {
     "formatter": {
       "jsxQuoteStyle": "double",
@@ -26,6 +28,24 @@
       "quoteStyle": "single",
       "attributePosition": "auto",
       "bracketSpacing": true
+    },
+    "globals": ["Astro"]
+  },
+  "overrides": [
+    {
+      "includes": ["**/*.svelte", "**/*.astro", "**/*.vue"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useConst": "off",
+            "useImportType": "off"
+          },
+          "correctness": {
+            "noUnusedVariables": "off",
+            "noUnusedImports": "off"
+          }
+        }
+      }
     }
-  }
+  ]
 }
