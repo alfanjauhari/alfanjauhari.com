@@ -6,6 +6,7 @@
       "outputs": ["dist/**", ".next/**"]
     },
     "dev": {
+      "dependsOn": ["generate-types"],
       "persistent": true,
       "cache": false
     },

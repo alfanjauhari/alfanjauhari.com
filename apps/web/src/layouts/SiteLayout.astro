@@ -9,9 +9,10 @@ import { Header } from '@/components/ui/Header'
 interface Props {
   title: string
   description: string
+  blank?: boolean
 }
 
-const { title, description } = Astro.props
+const { title, description, blank } = Astro.props
 ---
 
 <html lang="en" class="m-0 p-0">
@@ -22,10 +23,10 @@ const { title, description } = Astro.props
     <Head title={`${title} — Alfan Jauhari`} description={description} />
   </head>
   <body class="bg-gray-100 m-0 p-0">
-    <Header pathname={Astro.url.pathname} client:load />
-    <main class="w-full px-6">
+    {!blank && <Header pathname={Astro.url.pathname} client:load />}
+    <main class:list={["w-full", { "px-6": !blank }]}>
       <slot />
     </main>
-    <Footer client:visible={{ rootMargin: "200px" }} />
+    {!blank && <Footer client:visible={{ rootMargin: "200px" }} />}
   </body>
 </html>

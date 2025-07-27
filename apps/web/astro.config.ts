@@ -4,6 +4,8 @@ import vercel from '@astrojs/vercel'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'astro/config'
 
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 4321
+
 export default defineConfig({
   integrations: [mdx(), react()],
 
@@ -27,6 +29,7 @@ export default defineConfig({
 
   server: {
     allowedHosts: process.env.NODE_ENV === 'development' ? true : undefined,
+    port: PORT,
   },
 
   vite: {

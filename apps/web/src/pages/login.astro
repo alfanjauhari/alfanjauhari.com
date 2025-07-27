@@ -1,0 +1,89 @@
+---
+export const prerender = false
+
+import type { ActionInputError } from 'astro:actions'
+import { actions, isInputError } from 'astro:actions'
+import Button from '@/components/base/Button.astro'
+import SiteLayout from '@/layouts/SiteLayout.astro'
+
+const isAuthenticated = await Astro.locals.payload
+  .auth({
+    headers: Astro.request.headers,
+    canSetHeaders: false,
+  })
+  .then((result) => result.user !== null)
+  .catch(() => false)
+
+if (isAuthenticated) {
+  return Astro.redirect('/')
+}
+
+const result = Astro.getActionResult(actions.login)
+
+let fieldErrors:
+  | ActionInputError<{
+      email: string
+      password: string
+    }>
+  | undefined
+
+if (isInputError(result?.error)) {
+  fieldErrors = result.error
+}
+
+if (result && !result.error) {
+  return Astro.redirect('/')
+}
+---
+
+<SiteLayout title="Login" description="Login to your account" blank>
+  <div class="flex items-center h-screen">
+    <div class="bg-white px-6 flex flex-col justify-center w-1/3 h-full">
+      <form method="POST" action={actions.login} class="space-y-4">
+        <div class="space-y-2">
+          <label for="email" class="block text-sm font-medium text-gray-700"
+            >Email</label
+          >
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            class="block w-full p-2 border border-stone-300 focus:ring-stone-700 focus:border-stone-700 focus:outline-none"
+            transition:persist
+          />
+          {
+            fieldErrors?.fields.email && (
+              <p class="text-red-600 text-sm">{fieldErrors.fields.email}</p>
+            )
+          }
+        </div>
+        <div class="space-y-2">
+          <label for="password" class="block text-sm font-medium text-gray-700"
+            >Password</label
+          >
+          <input
+            type="password"
+            id="password"
+            name="password"
+            required
+            class="block w-full p-2 border border-stone-300 focus:ring-stone-700 focus:border-stone-700 focus:outline-none"
+            transition:persist
+          />
+          {
+            fieldErrors?.fields.password && (
+              <p class="text-red-600 text-sm">{fieldErrors.fields.password}</p>
+            )
+          }
+        </div>
+        <Button type="submit" class="text-xl p-4">Login</Button>
+      </form>
+      <p class="mt-4 text-sm text-center text-gray-600">
+        Don't have an account? <a
+          href="/register"
+          class="text-stone-700 underline hover:no-underline">Register here</a
+        >
+      </p>
+    </div>
+  </div>
+</SiteLayout>

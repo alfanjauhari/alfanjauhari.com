@@ -13,8 +13,8 @@
         "typescript": "^5",
       },
     },
-    "apps/api": {
-      "name": "@alfanjauhari-com/api",
+    "apps/admin": {
+      "name": "@alfanjauhari-com/admin",
       "version": "1.0.0",
       "dependencies": {
         "@alfanjauhari-com/payload": "workspace:*",
@@ -33,7 +33,7 @@
       "name": "@alfanjauhari-com/web",
       "version": "1.0.0",
       "dependencies": {
-        "@alfanjauhari-com/api": "workspace:*",
+        "@alfanjauhari-com/payload": "workspace:*",
         "@astrojs/check": "^0.9.4",
         "@astrojs/mdx": "4.3.1",
         "@astrojs/react": "4.3.0",
@@ -44,6 +44,7 @@
         "@vercel/og": "^0.6.3",
         "astro": "5.12.3",
         "clsx": "^2.1.1",
+        "cookie": "^1.0.2",
         "framer-motion": "^11.5.4",
         "lenis": "^1.1.14",
         "lucide-react": "^0.441.0",
@@ -79,7 +80,7 @@
     },
   },
   "packages": {
-    "@alfanjauhari-com/api": ["@alfanjauhari-com/api@workspace:apps/api"],
+    "@alfanjauhari-com/admin": ["@alfanjauhari-com/admin@workspace:apps/admin"],
 
     "@alfanjauhari-com/payload": ["@alfanjauhari-com/payload@workspace:packages/payload"],
 
