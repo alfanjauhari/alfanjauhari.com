@@ -13,12 +13,7 @@ export const User: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
   },
-  auth: {
-    loginWithUsername: {
-      allowEmailLogin: true,
-      requireEmail: false,
-    },
-  },
+  auth: true,
   fields: [
     {
       name: 'name',
@@ -27,14 +22,8 @@ export const User: CollectionConfig = {
       required: true,
     },
     {
-      name: 'username',
-      type: 'text',
-      unique: true,
-    },
-    {
       name: 'role',
       type: 'select',
-      required: true,
       options: [
         {
           label: 'Admin',
@@ -45,6 +34,7 @@ export const User: CollectionConfig = {
           value: 'user',
         },
       ],
+      defaultValue: 'user',
       access: {
         create: canWriteRole,
         update: canWriteRole,

@@ -23,6 +23,7 @@
     "@vercel/og": "^0.6.3",
     "astro": "5.12.3",
     "clsx": "^2.1.1",
+    "cookie": "^1.0.2",
     "framer-motion": "^11.5.4",
     "lenis": "^1.1.14",
     "lucide-react": "^0.441.0",

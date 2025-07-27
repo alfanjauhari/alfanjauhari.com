@@ -16,4 +16,8 @@ export default buildConfig({
     },
   }),
   sharp,
+  auth: {
+    jwtOrder: ['cookie', 'Bearer', 'JWT'],
+  },
+  cookiePrefix: 'api',
 })
