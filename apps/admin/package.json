@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "generate-types": "payload generate:types",
+    "generate-types": "rm -rf payload-types.ts && payload generate:types",
     "clean": "rm -rf node_modules bun.lock .next .turbo payload-types.ts"
   },
   "dependencies": {

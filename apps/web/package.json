@@ -9,7 +9,7 @@
     "check": "bunx --bun astro check",
     "preview": "bunx --bun astro preview",
     "clean": "rm -rf node_modules bun.lock .astro .turbo payload-types.ts",
-    "generate-types": "payload generate:types"
+    "generate-types": "rm -rf payload-types.ts &&payload generate:types"
   },
   "dependencies": {
     "@alfanjauhari-com/payload": "workspace:*",

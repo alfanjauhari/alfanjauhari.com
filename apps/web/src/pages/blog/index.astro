@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content'
 import ArticleCard from '@/components/ui/ArticleCard.astro'
+import RestrictedArticles from '@/components/ui/RestrictedArticles.astro'
 import { RevealHeading } from '@/components/ui/RevealHeading'
 import SiteLayout from '@/layouts/SiteLayout.astro'
 
@@ -31,6 +32,7 @@ const posts = await getCollection('blog').then((posts) =>
           />
         ))
       }
+      <RestrictedArticles server:defer />
     </div>
   </div>
 </SiteLayout>

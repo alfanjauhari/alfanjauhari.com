@@ -77,10 +77,12 @@ export const Content: CollectionConfig = {
       },
     },
     {
-      name: 'tags',
+      name: 'tag',
       type: 'relationship',
+      label: 'Tag',
       relationTo: 'tags',
-      hasMany: true,
+      hasMany: false,
+      required: true,
     },
   ],
   access: {

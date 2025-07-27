@@ -45,7 +45,7 @@ if (result && !result.error) {
       <form method="POST" action={actions.register} class="space-y-4">
         {
           result && result.error && !isInputError(result.error) && (
-            <div class="p-4 bg-red-600 text-white" />
+            <p class="p-4 bg-red-600 text-white">{result.error.message}</p>
           )
         }
         <div class="space-y-2">

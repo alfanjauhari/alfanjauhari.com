@@ -3,8 +3,10 @@ export const prerender = false
 
 import type { ActionInputError } from 'astro:actions'
 import { actions, isInputError } from 'astro:actions'
+import { string } from 'astro:schema'
 import Button from '@/components/base/Button.astro'
 import SiteLayout from '@/layouts/SiteLayout.astro'
+import { safeParseJSON } from '@/libs/utils'
 
 const isAuthenticated = await Astro.locals.payload
   .auth({
@@ -18,7 +20,12 @@ if (isAuthenticated) {
   return Astro.redirect('/')
 }
 
+const redirectToMessage = Astro.url.searchParams.get('message')
+const redirectTo = Astro.url.searchParams.get('redirectTo')
+
 const result = Astro.getActionResult(actions.login)
+
+const isActionError = result?.error && !isInputError(result.error)
 
 let fieldErrors:
   | ActionInputError<{
@@ -32,7 +39,7 @@ if (isInputError(result?.error)) {
 }
 
 if (result && !result.error) {
-  return Astro.redirect('/')
+  return Astro.redirect(result.data.redirectTo)
 }
 ---
 
@@ -40,6 +47,15 @@ if (result && !result.error) {
   <div class="flex items-center h-screen">
     <div class="bg-white px-6 flex flex-col justify-center w-1/3 h-full">
       <form method="POST" action={actions.login} class="space-y-4">
+        {
+          isActionError ||
+            (redirectToMessage && (
+              <p class="p-4 bg-red-600 text-white">
+                {result?.error.message || redirectToMessage}
+              </p>
+            ))
+        }
+        <input type="hidden" name="redirectTo" value={redirectTo} />
         <div class="space-y-2">
           <label for="email" class="block text-sm font-medium text-gray-700"
             >Email</label
