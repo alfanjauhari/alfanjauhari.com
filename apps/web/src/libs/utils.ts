@@ -10,3 +10,14 @@ export function parseCookies(cookieString: string): [string, string] {
 
   return [name, decodeURIComponent(value)]
 }
+
+export function safeParseJSON<T>(
+  jsonString: string,
+  fallbackDefault?: boolean,
+): T | string | null {
+  try {
+    return JSON.parse(jsonString) as T
+  } catch (_error) {
+    return fallbackDefault ? jsonString : null
+  }
+}

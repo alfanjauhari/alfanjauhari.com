@@ -1,0 +1,40 @@
+---
+export const prerender = false
+
+import { getEntry, render } from 'astro:content'
+import SingleLayout from '@/layouts/SingleLayout.astro'
+
+type Params = {
+  slug: string
+}
+
+const { slug } = Astro.params as Params
+
+const entry = await getEntry('restricted', slug)
+
+if (!entry) {
+  return new Response(null, {
+    status: 404,
+  })
+}
+
+const isAuthenticated = await Astro.locals.payload
+  .auth({
+    headers: Astro.request.headers,
+    canSetHeaders: false,
+  })
+  .then((result) => result.user !== null)
+  .catch(() => false)
+
+if (!isAuthenticated) {
+  return Astro.redirect(
+    `/login?redirectTo=${encodeURIComponent(Astro.url.pathname)}&message=${encodeURIComponent(`You must be logged in to access "${entry.data.title}" content!`)}`,
+  )
+}
+
+const { Content } = await render(entry)
+---
+
+<SingleLayout {...entry.data}>
+  <Content />
+</SingleLayout>

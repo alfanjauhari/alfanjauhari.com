@@ -2,7 +2,6 @@ import { z } from 'astro:schema'
 import config from '@alfanjauhari-com/payload/config'
 import type { Loader } from 'astro/loaders'
 import { getPayload } from 'payload'
-import type { Content } from 'payload-types'
 
 export const RestrictedContentResultSchema = z.object({
   id: z.number(),
@@ -10,7 +9,8 @@ export const RestrictedContentResultSchema = z.object({
   title: z.string(),
   description: z.string(),
   markdown: z.string(),
-  updatedAt: z.coerce.date().nullable(),
+  tag: z.string(),
+  updatedAt: z.coerce.date(),
 })
 
 export type RestrictedContentResult = z.infer<
@@ -26,14 +26,25 @@ export function restrictedContentLoader(): Loader {
 
         const contents = await p.find({
           collection: 'contents',
+          populate: {
+            tags: {
+              title: true,
+            },
+          },
         })
 
         store.clear()
 
         for (const item of contents.docs) {
-          const data = await parseData<Omit<Content, 'content'>>({
+          const data = await parseData({
             id: item.slug,
-            data: item,
+            data: {
+              ...item,
+              tag:
+                typeof item.tag !== 'number' && 'title' in item.tag
+                  ? item.tag.title
+                  : '',
+            },
           })
 
           const body = item.markdown || ''

@@ -8,8 +8,13 @@ export const server = {
     input: z.object({
       email: z.string().email(),
       password: z.string().min(6),
+      redirectTo: z.string().optional(),
     }),
-    handler: async ({ email, password }, ctx) => {
+    handler: async ({ email, password, redirectTo: redirectToInput }, ctx) => {
+      const redirectTo = redirectToInput
+        ? new URL(redirectToInput, ctx.url).pathname
+        : '/'
+
       try {
         const response = await ctx.locals.payload.login({
           collection: 'users',
@@ -27,6 +32,7 @@ export const server = {
 
         return {
           success: true,
+          redirectTo,
         }
       } catch (error) {
         if (error instanceof ValidationError) {

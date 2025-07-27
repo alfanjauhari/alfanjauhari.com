@@ -1,0 +1,21 @@
+---
+import { getCollection } from 'astro:content'
+import ArticleCard from '@/components/ui/ArticleCard.astro'
+
+const restrictedArticles = await getCollection('restricted').then((posts) =>
+  posts.sort((a, b) => b.data.updatedAt.getTime() - a.data.updatedAt.getTime()),
+)
+---
+
+{
+  restrictedArticles.map((post) => (
+    <ArticleCard
+      title={post.data.title}
+      description={post.data.description}
+      tag={post.data.tag}
+      date={post.data.updatedAt}
+      slug={post.id}
+      type="restricted"
+    />
+  ))
+}
