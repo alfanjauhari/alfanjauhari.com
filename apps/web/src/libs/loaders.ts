@@ -1,10 +1,9 @@
 import { z } from 'astro:schema'
-import config from '@alfanjauhari-com/payload/config'
+import type { PaginatedDocs, payloadTypes } from '@alfanjauhari-com/api'
 import type { Loader } from 'astro/loaders'
-import { getPayload } from 'payload'
 
 export const RestrictedContentResultSchema = z.object({
-  id: z.number(),
+  id: z.string(),
   slug: z.string(),
   title: z.string(),
   description: z.string(),
@@ -22,16 +21,11 @@ export function restrictedContentLoader(): Loader {
     name: 'restricted-content',
     load: async ({ store, parseData, renderMarkdown }) => {
       try {
-        const p = await getPayload({ config })
-
-        const contents = await p.find({
-          collection: 'contents',
-          populate: {
-            tags: {
-              title: true,
-            },
-          },
-        })
+        const contents = await fetch(
+          `${process.env.PAYLOAD_API_URL}/api/contents?populate[tag][title]=true`,
+        ).then(
+          (res) => res.json() as Promise<PaginatedDocs<payloadTypes.Content>>,
+        )
 
         store.clear()
 
@@ -41,7 +35,7 @@ export function restrictedContentLoader(): Loader {
             data: {
               ...item,
               tag:
-                typeof item.tag !== 'number' && 'title' in item.tag
+                typeof item.tag !== 'string' && 'title' in item.tag
                   ? item.tag.title
                   : '',
             },

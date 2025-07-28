@@ -13,7 +13,7 @@
   "packageManager": "bun@1.2.19",
   "private": true,
   "scripts": {
-    "dev": "turbo run dev",
+    "dev": "turbo watch dev",
     "build": "turbo run build",
     "clean": "turbo run clean",
     "generate-types": "turbo run generate-types",

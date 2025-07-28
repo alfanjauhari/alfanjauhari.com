@@ -2,7 +2,9 @@
 export const prerender = false
 
 import { getEntry, render } from 'astro:content'
+import type { loginOperation } from 'payload'
 import SingleLayout from '@/layouts/SingleLayout.astro'
+import { fetchAPI } from '@/libs/api'
 
 type Params = {
   slug: string
@@ -18,11 +20,9 @@ if (!entry) {
   })
 }
 
-const isAuthenticated = await Astro.locals.payload
-  .auth({
-    headers: Astro.request.headers,
-    canSetHeaders: false,
-  })
+const isAuthenticated = await fetchAPI<
+  Awaited<ReturnType<typeof loginOperation>>
+>('/users/me')
   .then((result) => result.user !== null)
   .catch(() => false)
 

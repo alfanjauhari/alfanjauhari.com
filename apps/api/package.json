@@ -1,0 +1,32 @@
+{
+  "name": "@alfanjauhari-com/api",
+  "version": "1.0.0",
+  "dependencies": {
+    "@payloadcms/db-postgres": "^3.48.0",
+    "@payloadcms/next": "^3.48.0",
+    "@payloadcms/richtext-lexical": "^3.48.0",
+    "better-auth": "1.3.4",
+    "graphql": "^16.11.0",
+    "next": "^15.4.2",
+    "payload": "^3.48.0",
+    "pg": "^8.16.3",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "sharp": "^0.34.3"
+  },
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    },
+    "./auth": {
+      "import": "./src/libs/auth.ts"
+    }
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "generate-types": "rm -rf payload-types.ts && payload generate:db-schema",
+    "clean": "rm -rf node_modules bun.lock .next .turbo payload-types.ts"
+  },
+  "type": "module"
+}

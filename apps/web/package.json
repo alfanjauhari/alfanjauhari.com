@@ -3,16 +3,15 @@
   "type": "module",
   "version": "1.0.0",
   "scripts": {
-    "dev": "bunx --bun astro dev",
+    "dev": "bunx --bun astro dev --host",
     "start": "bunx --bun astro dev",
     "build": "bunx --bun astro build",
     "check": "bunx --bun astro check",
     "preview": "bunx --bun astro preview",
-    "clean": "rm -rf node_modules bun.lock .astro .turbo payload-types.ts",
-    "generate-types": "rm -rf payload-types.ts &&payload generate:types"
+    "clean": "rm -rf node_modules bun.lock .astro .turbo"
   },
   "dependencies": {
-    "@alfanjauhari-com/payload": "workspace:*",
+    "@alfanjauhari-com/api": "workspace:*",
     "@astrojs/check": "^0.9.4",
     "@astrojs/mdx": "4.3.1",
     "@astrojs/react": "4.3.0",
@@ -22,11 +21,11 @@
     "@codesandbox/sandpack-themes": "^2.0.21",
     "@vercel/og": "^0.6.3",
     "astro": "5.12.3",
+    "better-auth": "1.3.4",
     "clsx": "^2.1.1",
     "cookie": "^1.0.2",
     "framer-motion": "^11.5.4",
     "lenis": "^1.1.14",
-    "lucide-react": "^0.441.0",
     "payload": "^3.48.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

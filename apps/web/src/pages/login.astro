@@ -3,24 +3,25 @@ export const prerender = false
 
 import type { ActionInputError } from 'astro:actions'
 import { actions, isInputError } from 'astro:actions'
-import { string } from 'astro:schema'
-import Button from '@/components/base/Button.astro'
+import Button from '@/components/base/Button'
+import { ProvidersLogin } from '@/components/pages/login/ProvidersLogin'
 import SiteLayout from '@/layouts/SiteLayout.astro'
-import { safeParseJSON } from '@/libs/utils'
+import { auth } from '@/libs/auth'
 
-const isAuthenticated = await Astro.locals.payload
-  .auth({
+// #region Check auth
+const session = await auth.getSession({
+  fetchOptions: {
     headers: Astro.request.headers,
-    canSetHeaders: false,
-  })
-  .then((result) => result.user !== null)
-  .catch(() => false)
+  },
+})
 
-if (isAuthenticated) {
+if (session.data) {
   return Astro.redirect('/')
 }
+// #endregion
 
-const redirectToMessage = Astro.url.searchParams.get('message')
+// #region Email Login Action
+const message = Astro.url.searchParams.get('message')
 const redirectTo = Astro.url.searchParams.get('redirectTo')
 
 const result = Astro.getActionResult(actions.login)
@@ -41,6 +42,7 @@ if (isInputError(result?.error)) {
 if (result && !result.error) {
   return Astro.redirect(result.data.redirectTo)
 }
+// #endregion
 ---
 
 <SiteLayout title="Login" description="Login to your account" blank>
@@ -48,12 +50,11 @@ if (result && !result.error) {
     <div class="bg-white px-6 flex flex-col justify-center w-1/3 h-full">
       <form method="POST" action={actions.login} class="space-y-4">
         {
-          isActionError ||
-            (redirectToMessage && (
-              <p class="p-4 bg-red-600 text-white">
-                {result?.error.message || redirectToMessage}
-              </p>
-            ))
+          (isActionError || message) && (
+            <p class="p-4 bg-red-600 text-white">
+              {result?.error.message || message}
+            </p>
+          )
         }
         <input type="hidden" name="redirectTo" value={redirectTo} />
         <div class="space-y-2">
@@ -92,14 +93,16 @@ if (result && !result.error) {
             )
           }
         </div>
-        <Button type="submit" class="text-xl p-4">Login</Button>
+        <Button type="submit" className="text-xl p-4">Login</Button>
       </form>
-      <p class="mt-4 text-sm text-center text-gray-600">
+      <p class="text-sm text-center text-gray-600 mt-2">
         Don't have an account? <a
           href="/register"
           class="text-stone-700 underline hover:no-underline">Register here</a
         >
       </p>
+      <p class="text-sm text-center text-gray-600 mt-6 mb-2">Or login with</p>
+      <ProvidersLogin client:load />
     </div>
   </div>
 </SiteLayout>

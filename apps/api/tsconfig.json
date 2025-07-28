@@ -10,6 +10,8 @@
     ],
     "paths": {
       "@payload-config": ["./payload.config.ts"],
+      "@payload-types": ["./payload-types.ts"],
+      "@payload-schema": ["./src/payload-generated-schema.ts"],
       "@/*": ["./src/*"]
     }
   },
