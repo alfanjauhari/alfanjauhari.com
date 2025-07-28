@@ -24,9 +24,8 @@ export default defineConfig({
     ],
   }),
 
+  site: process.env.SITE_URL || 'http://localhost:4321',
   output: 'static',
-  site: process.env.BASE_URL || 'http://localhost:4321',
-
   server: {
     allowedHosts: process.env.NODE_ENV === 'development' ? true : undefined,
     port: PORT,
@@ -34,5 +33,19 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      proxy: {
+        '/payload/api': {
+          target: process.env.PAYLOAD_API_URL,
+          changeOrigin: true,
+          rewrite: (path) => path.replace('/payload', ''),
+        },
+        '/custom': {
+          target: process.env.PAYLOAD_API_URL,
+          changeOrigin: true,
+          rewrite: (path) => path.replace('/custom', ''),
+        },
+      },
+    },
   },
 })

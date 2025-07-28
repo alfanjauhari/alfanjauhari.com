@@ -3,14 +3,14 @@ export const prerender = false
 
 import type { ActionInputError } from 'astro:actions'
 import { actions, isInputError } from 'astro:actions'
-import Button from '@/components/base/Button.astro'
+import type { loginOperation } from 'payload'
+import Button from '@/components/base/Button'
 import SiteLayout from '@/layouts/SiteLayout.astro'
+import { fetchAPI } from '@/libs/api'
 
-const isAuthenticated = await Astro.locals.payload
-  .auth({
-    headers: Astro.request.headers,
-    canSetHeaders: false,
-  })
+const isAuthenticated = await fetchAPI<
+  Awaited<ReturnType<typeof loginOperation>>
+>('/users/me')
   .then((result) => result.user !== null)
   .catch(() => false)
 
@@ -124,7 +124,7 @@ if (result && !result.error) {
             )
           }
         </div>
-        <Button type="submit" class="text-xl p-4">Register</Button>
+        <Button type="submit" className="text-xl p-4">Register</Button>
       </form>
     </div>
   </div>

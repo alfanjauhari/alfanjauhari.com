@@ -1,6 +1,12 @@
-import { ActionError, ActionInputError, defineAction } from 'astro:actions'
+import {
+  ActionError,
+  type ActionErrorCode,
+  ActionInputError,
+  defineAction,
+} from 'astro:actions'
 import { z } from 'astro:schema'
 import { ValidationError } from 'payload'
+import { auth } from '@/libs/auth'
 
 export const server = {
   login: defineAction({
@@ -16,19 +22,19 @@ export const server = {
         : '/'
 
       try {
-        const response = await ctx.locals.payload.login({
-          collection: 'users',
-          data: {
-            email,
-            password,
-          },
+        const response = await auth.signIn.email({
+          email,
+          password,
+          callbackURL: redirectTo,
         })
 
-        ctx.cookies.set('api-token', response.token || '', {
-          httpOnly: true,
-          sameSite: 'lax',
-          path: '/',
-        })
+        if (response.error) {
+          throw new ActionError({
+            code: response.error.statusText as ActionErrorCode,
+            message: response.error.message,
+            stack: JSON.stringify(response.error, null, 2),
+          })
+        }
 
         return {
           success: true,
@@ -45,11 +51,7 @@ export const server = {
           )
         }
 
-        throw new ActionError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'Login failed',
-          stack: error instanceof Error ? error.stack : undefined,
-        })
+        throw error
       }
     },
   }),
@@ -71,16 +73,22 @@ export const server = {
         message: 'Passwords must match',
         path: ['confirm_password'],
       }),
-    handler: async ({ name, email, password }, ctx) => {
+    handler: async ({ name, email, password }) => {
       try {
-        const response = await ctx.locals.payload.create({
-          collection: 'users',
-          data: {
-            name,
-            email,
-            password,
-          },
+        const response = await auth.signUp.email({
+          name,
+          email,
+          password,
+          callbackURL: `${import.meta.env.SITE}/login`,
         })
+
+        if (response.error) {
+          throw new ActionError({
+            code: response.error.statusText as ActionErrorCode,
+            message: response.error.message,
+            stack: JSON.stringify(response.error, null, 2),
+          })
+        }
 
         return {
           success: true,
@@ -97,11 +105,7 @@ export const server = {
           )
         }
 
-        throw new ActionError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'Registration failed',
-          stack: error instanceof Error ? error.stack : undefined,
-        })
+        throw error
       }
     },
   }),
