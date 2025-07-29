@@ -36,12 +36,12 @@ export default defineConfig({
     server: {
       proxy: {
         '/payload/api': {
-          target: process.env.PUBLIC_PAYLOAD_API_URL,
+          target: process.env.VITE_PAYLOAD_API_URL,
           changeOrigin: true,
           rewrite: (path) => path.replace('/payload', ''),
         },
         '/custom': {
-          target: process.env.PUBLIC_PAYLOAD_API_URL,
+          target: process.env.VITE_PAYLOAD_API_URL,
           changeOrigin: true,
           rewrite: (path) => path.replace('/custom', ''),
         },
