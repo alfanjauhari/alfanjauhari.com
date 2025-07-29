@@ -30,7 +30,7 @@ export const auth = betterAuth({
     cookiePrefix: 'alfanjauhari.com',
     crossSubDomainCookies: {
       enabled: process.env.NODE_ENV === 'production',
-      domain: process.env.APP_URL,
+      domain: 'alfanjauhari.com',
     },
   },
   emailAndPassword: {
