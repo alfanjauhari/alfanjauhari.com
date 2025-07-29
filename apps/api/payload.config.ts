@@ -25,7 +25,7 @@ export default buildConfig({
   auth: {
     jwtOrder: ['cookie', 'Bearer', 'JWT'],
   },
-  serverURL: 'http://localhost:3000',
+  serverURL: process.env.API_URL || 'http://localhost:3000',
   cookiePrefix: 'api',
   email: resendAdapter({
     apiKey: process.env.RESEND_API_KEY || '',

@@ -6,10 +6,18 @@
       "outputs": ["dist/**", ".next/**"],
       "env": [
         "NODE_ENV",
-        "DATABASE_URL",
+        "API_URL",
         "PAYLOAD_SECRET",
-        "PUBLIC_PAYLOAD_API_URL"
-      ]
+        "DATABASE_URL",
+        "RESEND_API_KEY",
+        "PUBLIC_PAYLOAD_API_URL",
+        "BETTER_AUTH_SECRET",
+        "GITHUB_CLIENT_ID",
+        "GITHUB_CLIENT_SECRET",
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET"
+      ],
+      "inputs": ["$TURBO_DEFAULT$", ".env"]
     },
     "dev": {
       "dependsOn": ["generate-types"],
@@ -21,7 +29,17 @@
     },
     "generate-types": {
       "outputs": ["payload-types.ts"],
-      "env": ["NODE_ENV", "DATABASE_URL", "PAYLOAD_SECRET"]
+      "env": [
+        "NODE_ENV",
+        "DATABASE_URL",
+        "PAYLOAD_SECRET",
+        "BETTER_AUTH_SECRET",
+        "GITHUB_CLIENT_ID",
+        "GITHUB_CLIENT_SECRET",
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET"
+      ],
+      "inputs": ["$TURBO_DEFAULT$", ".env"]
     }
   }
 }
