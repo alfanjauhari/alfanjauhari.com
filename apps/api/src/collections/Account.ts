@@ -20,6 +20,8 @@ export const Account: CollectionConfig = {
         },
       }
     },
+    create: () => false,
+    update: () => false,
   },
   fields: [
     {
@@ -30,13 +32,13 @@ export const Account: CollectionConfig = {
     },
     { name: 'accountId', type: 'text', required: true },
     { name: 'providerId', type: 'text', required: true },
-    { name: 'accessToken', type: 'text' },
-    { name: 'refreshToken', type: 'text' },
-    { name: 'accessTokenExpiresAt', type: 'date' },
-    { name: 'refreshTokenExpiresAt', type: 'date' },
-    { name: 'scope', type: 'text' },
-    { name: 'idToken', type: 'text' },
-    { name: 'password', type: 'text' },
+    { name: 'accessToken', type: 'text', hidden: true },
+    { name: 'refreshToken', type: 'text', hidden: true },
+    { name: 'accessTokenExpiresAt', type: 'date', hidden: true },
+    { name: 'refreshTokenExpiresAt', type: 'date', hidden: true },
+    { name: 'scope', type: 'text', hidden: true },
+    { name: 'idToken', type: 'text', hidden: true },
+    { name: 'password', type: 'text', hidden: true },
   ],
   admin: {
     hidden: true,

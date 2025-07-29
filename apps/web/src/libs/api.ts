@@ -1,4 +1,4 @@
-import { APIError } from 'payload'
+import { APIError } from './errors'
 
 export async function fetchAPI<T>(
   url: URL | string,
@@ -16,7 +16,10 @@ export async function fetchAPI<T>(
 
   if (!response.ok) {
     const errorData = await response.json()
-    throw new APIError('API request failed', response.status, errorData)
+    throw new APIError('API request failed', {
+      status: response.status,
+      details: errorData,
+    })
   }
 
   return response.json() as Promise<T>

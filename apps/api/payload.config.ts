@@ -19,6 +19,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL,
     },
+    generateSchemaOutputFile: './src/generated/payload-schema.ts',
   }),
   sharp,
   auth: {
@@ -31,4 +32,7 @@ export default buildConfig({
     defaultFromName: 'Alfan Jauhari',
     defaultFromAddress: 'hi@alfanjauhari.com',
   }),
+  typescript: {
+    outputFile: './src/generated/payload-types.ts',
+  },
 })
