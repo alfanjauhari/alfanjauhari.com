@@ -20,7 +20,8 @@
       "cache": false
     },
     "generate-types": {
-      "outputs": ["payload-types.ts"]
+      "outputs": ["payload-types.ts"],
+      "env": ["NODE_ENV", "DATABASE_URL", "PAYLOAD_SECRET"]
     }
   }
 }
