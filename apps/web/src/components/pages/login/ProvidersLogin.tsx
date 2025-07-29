@@ -5,12 +5,9 @@ export function ProvidersLogin() {
   return (
     <div className="flex items-center gap-4">
       <Button
-        onClick={() =>
-          auth.signIn.social({
-            provider: 'github',
-            callbackURL: import.meta.env.PUBLIC_SITE_URL,
-          })
-        }
+        onClick={() => {
+          throw new Error('GitHub login is not supported yet')
+        }}
         className="text-xl p-4"
       >
         Github

@@ -36,6 +36,7 @@ export const server = {
           redirectTo,
         }
       } catch (error) {
+        console.log('Login error:', error)
         if (!(error instanceof ActionError)) {
           captureException(error)
         }
