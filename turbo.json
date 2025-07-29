@@ -16,7 +16,9 @@
         "GOOGLE_CLIENT_ID",
         "GOOGLE_CLIENT_SECRET",
         "APP_URL",
-        "BETTER_AUTH_URL"
+        "BETTER_AUTH_URL",
+        "SENTRY_DSN",
+        "SENTRY_AUTH_TOKEN"
       ],
       "inputs": ["$TURBO_DEFAULT$", ".env"],
       "outputs": [".next/**", "!.next/cache/**"]
@@ -47,7 +49,9 @@
         "GOOGLE_CLIENT_ID",
         "GOOGLE_CLIENT_SECRET",
         "APP_URL",
-        "BETTER_AUTH_URL"
+        "BETTER_AUTH_URL",
+        "SENTRY_DSN",
+        "SENTRY_AUTH_TOKEN"
       ],
       "inputs": ["$TURBO_DEFAULT$", ".env"]
     }
