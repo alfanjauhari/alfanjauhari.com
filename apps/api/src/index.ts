@@ -1,1 +1,2 @@
-export * from '@payload-types'
+export * as payloadTypes from '@payload-types'
+export * from 'payload'

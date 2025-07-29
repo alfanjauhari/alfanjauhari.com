@@ -1,5 +1,4 @@
 import { z } from 'astro:schema'
-import type { PaginatedDocs, payloadTypes } from '@alfanjauhari-com/api'
 import type { Loader } from 'astro/loaders'
 
 export const RestrictedContentResultSchema = z.object({
@@ -16,6 +15,10 @@ export type RestrictedContentResult = z.infer<
   typeof RestrictedContentResultSchema
 >
 
+type PayloadContent = Omit<RestrictedContentResult, 'tag'> & {
+  tag: { title: string } | string
+}
+
 export function restrictedContentLoader(): Loader {
   return {
     name: 'restricted-content',
@@ -23,9 +26,7 @@ export function restrictedContentLoader(): Loader {
       try {
         const contents = await fetch(
           `${process.env.PUBLIC_PAYLOAD_API_URL}/api/contents?populate[tag][title]=true`,
-        ).then(
-          (res) => res.json() as Promise<PaginatedDocs<payloadTypes.Content>>,
-        )
+        ).then((res) => res.json() as Promise<{ docs: PayloadContent[] }>)
 
         store.clear()
 
