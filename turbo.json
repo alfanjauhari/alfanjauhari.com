@@ -3,7 +3,6 @@
   "tasks": {
     "build": {
       "dependsOn": ["generate-types", "^build"],
-      "outputs": ["dist/**", ".next/**"],
       "env": [
         "NODE_ENV",
         "API_URL",
@@ -17,7 +16,11 @@
         "GOOGLE_CLIENT_ID",
         "GOOGLE_CLIENT_SECRET"
       ],
-      "inputs": ["$TURBO_DEFAULT$", ".env"]
+      "inputs": ["$TURBO_DEFAULT$", ".env"],
+      "outputs": [".next/**", "!.next/cache/**"]
+    },
+    "@alfanjauhari-com/web#build": {
+      "outputs": ["dist/**", ".vercel/output/**"]
     },
     "dev": {
       "dependsOn": ["generate-types"],
