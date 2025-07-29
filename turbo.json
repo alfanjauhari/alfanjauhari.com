@@ -3,7 +3,13 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**"]
+      "outputs": ["dist/**", ".next/**"],
+      "env": [
+        "NODE_ENV",
+        "DATABASE_URL",
+        "PAYLOAD_SECRET",
+        "PUBLIC_PAYLOAD_API_URL"
+      ]
     },
     "dev": {
       "dependsOn": ["generate-types"],
