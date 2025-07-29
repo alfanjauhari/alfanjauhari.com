@@ -4,6 +4,7 @@ import vercel from '@astrojs/vercel'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'astro/config'
 
+console.log('ENV', import.meta.env.PUBLIC_PAYLOAD_API_URL, process.env.SITE_URL)
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 4321
 
 export default defineConfig({

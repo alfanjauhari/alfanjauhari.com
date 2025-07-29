@@ -9,7 +9,7 @@ export function ProvidersLogin() {
         onClick={() =>
           auth.signIn.social({
             provider: 'github',
-            callbackURL: import.meta.env.SITE,
+            callbackURL: import.meta.env.SITE_URL,
           })
         }
         className="text-xl p-4"
@@ -20,7 +20,7 @@ export function ProvidersLogin() {
         onClick={() =>
           auth.signIn.social({
             provider: 'google',
-            callbackURL: import.meta.env.SITE,
+            callbackURL: import.meta.env.SITE_URL,
           })
         }
         className="text-xl p-4"

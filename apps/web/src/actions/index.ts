@@ -58,7 +58,7 @@ export const server = {
         name,
         email,
         password,
-        callbackURL: `${import.meta.env.SITE}/login`,
+        callbackURL: `${import.meta.env.SITE_URL}/login`,
       })
 
       if (response.error) {
