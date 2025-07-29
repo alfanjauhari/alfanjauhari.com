@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "dependencies": {
     "@payloadcms/db-postgres": "^3.48.0",
+    "@payloadcms/email-resend": "^3.49.0",
     "@payloadcms/next": "^3.48.0",
     "@payloadcms/richtext-lexical": "^3.48.0",
     "better-auth": "1.3.4",

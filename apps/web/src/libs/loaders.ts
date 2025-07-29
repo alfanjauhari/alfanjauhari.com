@@ -22,7 +22,7 @@ export function restrictedContentLoader(): Loader {
     load: async ({ store, parseData, renderMarkdown }) => {
       try {
         const contents = await fetch(
-          `${process.env.PAYLOAD_API_URL}/api/contents?populate[tag][title]=true`,
+          `${process.env.PUBLIC_PAYLOAD_API_URL}/api/contents?populate[tag][title]=true`,
         ).then(
           (res) => res.json() as Promise<PaginatedDocs<payloadTypes.Content>>,
         )
