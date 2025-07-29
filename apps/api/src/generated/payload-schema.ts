@@ -6,159 +6,159 @@
  * and re-run `payload generate:db-schema` to regenerate this file.
  */
 
-import type {} from '@payloadcms/db-postgres'
-import { relations, sql } from '@payloadcms/db-postgres/drizzle'
+import type {} from "@payloadcms/db-postgres";
 import {
-  boolean,
-  foreignKey,
-  index,
-  integer,
-  jsonb,
-  numeric,
-  pgEnum,
   pgTable,
-  serial,
-  timestamp,
+  index,
   uniqueIndex,
+  foreignKey,
   uuid,
   varchar,
-} from '@payloadcms/db-postgres/drizzle/pg-core'
-export const enum_contents_status = pgEnum('enum_contents_status', [
-  'draft',
-  'published',
-])
+  jsonb,
+  timestamp,
+  boolean,
+  serial,
+  integer,
+  numeric,
+  pgEnum,
+} from "@payloadcms/db-postgres/drizzle/pg-core";
+import { sql, relations } from "@payloadcms/db-postgres/drizzle";
+export const enum_contents_status = pgEnum("enum_contents_status", [
+  "draft",
+  "published",
+]);
 export const enum__contents_v_version_status = pgEnum(
-  'enum__contents_v_version_status',
-  ['draft', 'published'],
-)
-export const enum_users_role = pgEnum('enum_users_role', ['admin', 'user'])
+  "enum__contents_v_version_status",
+  ["draft", "published"],
+);
+export const enum_users_role = pgEnum("enum_users_role", ["admin", "user"]);
 
 export const contents = pgTable(
-  'contents',
+  "contents",
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    title: varchar('title'),
-    slug: varchar('slug'),
-    description: varchar('description'),
-    content: jsonb('content'),
-    markdown: varchar('markdown'),
-    tag: uuid('tag_id').references(() => tags.id, {
-      onDelete: 'set null',
+    id: uuid("id").defaultRandom().primaryKey(),
+    title: varchar("title"),
+    slug: varchar("slug"),
+    description: varchar("description"),
+    content: jsonb("content"),
+    markdown: varchar("markdown"),
+    tag: uuid("tag_id").references(() => tags.id, {
+      onDelete: "set null",
     }),
-    updatedAt: timestamp('updated_at', {
-      mode: 'string',
+    updatedAt: timestamp("updated_at", {
+      mode: "string",
       withTimezone: true,
       precision: 3,
     })
       .defaultNow()
       .notNull(),
-    createdAt: timestamp('created_at', {
-      mode: 'string',
+    createdAt: timestamp("created_at", {
+      mode: "string",
       withTimezone: true,
       precision: 3,
     })
       .defaultNow()
       .notNull(),
-    _status: enum_contents_status('_status').default('draft'),
+    _status: enum_contents_status("_status").default("draft"),
   },
   (columns) => ({
-    contents_slug_idx: index('contents_slug_idx').on(columns.slug),
-    contents_tag_idx: index('contents_tag_idx').on(columns.tag),
-    contents_updated_at_idx: index('contents_updated_at_idx').on(
+    contents_slug_idx: index("contents_slug_idx").on(columns.slug),
+    contents_tag_idx: index("contents_tag_idx").on(columns.tag),
+    contents_updated_at_idx: index("contents_updated_at_idx").on(
       columns.updatedAt,
     ),
-    contents_created_at_idx: index('contents_created_at_idx').on(
+    contents_created_at_idx: index("contents_created_at_idx").on(
       columns.createdAt,
     ),
-    contents__status_idx: index('contents__status_idx').on(columns._status),
+    contents__status_idx: index("contents__status_idx").on(columns._status),
   }),
-)
+);
 
 export const _contents_v = pgTable(
-  '_contents_v',
+  "_contents_v",
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    parent: uuid('parent_id').references(() => contents.id, {
-      onDelete: 'set null',
+    id: uuid("id").defaultRandom().primaryKey(),
+    parent: uuid("parent_id").references(() => contents.id, {
+      onDelete: "set null",
     }),
-    version_title: varchar('version_title'),
-    version_slug: varchar('version_slug'),
-    version_description: varchar('version_description'),
-    version_content: jsonb('version_content'),
-    version_markdown: varchar('version_markdown'),
-    version_tag: uuid('version_tag_id').references(() => tags.id, {
-      onDelete: 'set null',
+    version_title: varchar("version_title"),
+    version_slug: varchar("version_slug"),
+    version_description: varchar("version_description"),
+    version_content: jsonb("version_content"),
+    version_markdown: varchar("version_markdown"),
+    version_tag: uuid("version_tag_id").references(() => tags.id, {
+      onDelete: "set null",
     }),
-    version_updatedAt: timestamp('version_updated_at', {
-      mode: 'string',
+    version_updatedAt: timestamp("version_updated_at", {
+      mode: "string",
       withTimezone: true,
       precision: 3,
     }),
-    version_createdAt: timestamp('version_created_at', {
-      mode: 'string',
+    version_createdAt: timestamp("version_created_at", {
+      mode: "string",
       withTimezone: true,
       precision: 3,
     }),
     version__status:
-      enum__contents_v_version_status('version__status').default('draft'),
-    createdAt: timestamp('created_at', {
-      mode: 'string',
+      enum__contents_v_version_status("version__status").default("draft"),
+    createdAt: timestamp("created_at", {
+      mode: "string",
       withTimezone: true,
       precision: 3,
     })
       .defaultNow()
       .notNull(),
-    updatedAt: timestamp('updated_at', {
-      mode: 'string',
+    updatedAt: timestamp("updated_at", {
+      mode: "string",
       withTimezone: true,
       precision: 3,
     })
       .defaultNow()
       .notNull(),
-    latest: boolean('latest'),
+    latest: boolean("latest"),
   },
   (columns) => ({
-    _contents_v_parent_idx: index('_contents_v_parent_idx').on(columns.parent),
+    _contents_v_parent_idx: index("_contents_v_parent_idx").on(columns.parent),
     _contents_v_version_version_slug_idx: index(
-      '_contents_v_version_version_slug_idx',
+      "_contents_v_version_version_slug_idx",
     ).on(columns.version_slug),
     _contents_v_version_version_tag_idx: index(
-      '_contents_v_version_version_tag_idx',
+      "_contents_v_version_version_tag_idx",
     ).on(columns.version_tag),
     _contents_v_version_version_updated_at_idx: index(
-      '_contents_v_version_version_updated_at_idx',
+      "_contents_v_version_version_updated_at_idx",
     ).on(columns.version_updatedAt),
     _contents_v_version_version_created_at_idx: index(
-      '_contents_v_version_version_created_at_idx',
+      "_contents_v_version_version_created_at_idx",
     ).on(columns.version_createdAt),
     _contents_v_version_version__status_idx: index(
-      '_contents_v_version_version__status_idx',
+      "_contents_v_version_version__status_idx",
     ).on(columns.version__status),
-    _contents_v_created_at_idx: index('_contents_v_created_at_idx').on(
+    _contents_v_created_at_idx: index("_contents_v_created_at_idx").on(
       columns.createdAt,
     ),
-    _contents_v_updated_at_idx: index('_contents_v_updated_at_idx').on(
+    _contents_v_updated_at_idx: index("_contents_v_updated_at_idx").on(
       columns.updatedAt,
     ),
-    _contents_v_latest_idx: index('_contents_v_latest_idx').on(columns.latest),
+    _contents_v_latest_idx: index("_contents_v_latest_idx").on(columns.latest),
   }),
-)
+);
 
 export const tags = pgTable(
-  'tags',
+  "tags",
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    title: varchar('title').notNull(),
-    slug: varchar('slug').notNull(),
-    updatedAt: timestamp('updated_at', {
-      mode: 'string',
+    id: uuid("id").defaultRandom().primaryKey(),
+    title: varchar("title").notNull(),
+    slug: varchar("slug").notNull(),
+    updatedAt: timestamp("updated_at", {
+      mode: "string",
       withTimezone: true,
       precision: 3,
     })
       .defaultNow()
       .notNull(),
-    createdAt: timestamp('created_at', {
-      mode: 'string',
+    createdAt: timestamp("created_at", {
+      mode: "string",
       withTimezone: true,
       precision: 3,
     })
@@ -166,30 +166,30 @@ export const tags = pgTable(
       .notNull(),
   },
   (columns) => ({
-    tags_slug_idx: index('tags_slug_idx').on(columns.slug),
-    tags_updated_at_idx: index('tags_updated_at_idx').on(columns.updatedAt),
-    tags_created_at_idx: index('tags_created_at_idx').on(columns.createdAt),
+    tags_slug_idx: index("tags_slug_idx").on(columns.slug),
+    tags_updated_at_idx: index("tags_updated_at_idx").on(columns.updatedAt),
+    tags_created_at_idx: index("tags_created_at_idx").on(columns.createdAt),
   }),
-)
+);
 
 export const users = pgTable(
-  'users',
+  "users",
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    name: varchar('name').notNull(),
-    email: varchar('email').notNull(),
-    emailVerified: boolean('email_verified'),
-    image: varchar('image'),
-    role: enum_users_role('role').default('user'),
-    updatedAt: timestamp('updated_at', {
-      mode: 'string',
+    id: uuid("id").defaultRandom().primaryKey(),
+    name: varchar("name").notNull(),
+    email: varchar("email").notNull(),
+    emailVerified: boolean("email_verified"),
+    image: varchar("image"),
+    role: enum_users_role("role").default("user"),
+    updatedAt: timestamp("updated_at", {
+      mode: "string",
       withTimezone: true,
       precision: 3,
     })
       .defaultNow()
       .notNull(),
-    createdAt: timestamp('created_at', {
-      mode: 'string',
+    createdAt: timestamp("created_at", {
+      mode: "string",
       withTimezone: true,
       precision: 3,
     })
@@ -197,47 +197,47 @@ export const users = pgTable(
       .notNull(),
   },
   (columns) => ({
-    users_email_idx: uniqueIndex('users_email_idx').on(columns.email),
-    users_updated_at_idx: index('users_updated_at_idx').on(columns.updatedAt),
-    users_created_at_idx: index('users_created_at_idx').on(columns.createdAt),
+    users_email_idx: uniqueIndex("users_email_idx").on(columns.email),
+    users_updated_at_idx: index("users_updated_at_idx").on(columns.updatedAt),
+    users_created_at_idx: index("users_created_at_idx").on(columns.createdAt),
   }),
-)
+);
 
 export const accounts = pgTable(
-  'accounts',
+  "accounts",
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    user: uuid('user_id')
+    id: uuid("id").defaultRandom().primaryKey(),
+    user: uuid("user_id")
       .notNull()
       .references(() => users.id, {
-        onDelete: 'set null',
+        onDelete: "set null",
       }),
-    accountId: varchar('account_id').notNull(),
-    providerId: varchar('provider_id').notNull(),
-    accessToken: varchar('access_token'),
-    refreshToken: varchar('refresh_token'),
-    accessTokenExpiresAt: timestamp('access_token_expires_at', {
-      mode: 'string',
+    accountId: varchar("account_id").notNull(),
+    providerId: varchar("provider_id").notNull(),
+    accessToken: varchar("access_token"),
+    refreshToken: varchar("refresh_token"),
+    accessTokenExpiresAt: timestamp("access_token_expires_at", {
+      mode: "string",
       withTimezone: true,
       precision: 3,
     }),
-    refreshTokenExpiresAt: timestamp('refresh_token_expires_at', {
-      mode: 'string',
+    refreshTokenExpiresAt: timestamp("refresh_token_expires_at", {
+      mode: "string",
       withTimezone: true,
       precision: 3,
     }),
-    scope: varchar('scope'),
-    idToken: varchar('id_token'),
-    password: varchar('password'),
-    updatedAt: timestamp('updated_at', {
-      mode: 'string',
+    scope: varchar("scope"),
+    idToken: varchar("id_token"),
+    password: varchar("password"),
+    updatedAt: timestamp("updated_at", {
+      mode: "string",
       withTimezone: true,
       precision: 3,
     })
       .defaultNow()
       .notNull(),
-    createdAt: timestamp('created_at', {
-      mode: 'string',
+    createdAt: timestamp("created_at", {
+      mode: "string",
       withTimezone: true,
       precision: 3,
     })
@@ -245,46 +245,46 @@ export const accounts = pgTable(
       .notNull(),
   },
   (columns) => ({
-    accounts_user_idx: index('accounts_user_idx').on(columns.user),
-    accounts_updated_at_idx: index('accounts_updated_at_idx').on(
+    accounts_user_idx: index("accounts_user_idx").on(columns.user),
+    accounts_updated_at_idx: index("accounts_updated_at_idx").on(
       columns.updatedAt,
     ),
-    accounts_created_at_idx: index('accounts_created_at_idx').on(
+    accounts_created_at_idx: index("accounts_created_at_idx").on(
       columns.createdAt,
     ),
-    providerId_accountId_idx: uniqueIndex('providerId_accountId_idx').on(
+    providerId_accountId_idx: uniqueIndex("providerId_accountId_idx").on(
       columns.providerId,
       columns.accountId,
     ),
   }),
-)
+);
 
 export const sessions = pgTable(
-  'sessions',
+  "sessions",
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    user: uuid('user_id')
+    id: uuid("id").defaultRandom().primaryKey(),
+    user: uuid("user_id")
       .notNull()
       .references(() => users.id, {
-        onDelete: 'set null',
+        onDelete: "set null",
       }),
-    token: varchar('token').notNull(),
-    expiresAt: timestamp('expires_at', {
-      mode: 'string',
+    token: varchar("token").notNull(),
+    expiresAt: timestamp("expires_at", {
+      mode: "string",
       withTimezone: true,
       precision: 3,
     }).notNull(),
-    ipAddress: varchar('ip_address').notNull(),
-    userAgent: varchar('user_agent').notNull(),
-    updatedAt: timestamp('updated_at', {
-      mode: 'string',
+    ipAddress: varchar("ip_address").notNull(),
+    userAgent: varchar("user_agent").notNull(),
+    updatedAt: timestamp("updated_at", {
+      mode: "string",
       withTimezone: true,
       precision: 3,
     })
       .defaultNow()
       .notNull(),
-    createdAt: timestamp('created_at', {
-      mode: 'string',
+    createdAt: timestamp("created_at", {
+      mode: "string",
       withTimezone: true,
       precision: 3,
     })
@@ -292,36 +292,36 @@ export const sessions = pgTable(
       .notNull(),
   },
   (columns) => ({
-    sessions_user_idx: index('sessions_user_idx').on(columns.user),
-    sessions_updated_at_idx: index('sessions_updated_at_idx').on(
+    sessions_user_idx: index("sessions_user_idx").on(columns.user),
+    sessions_updated_at_idx: index("sessions_updated_at_idx").on(
       columns.updatedAt,
     ),
-    sessions_created_at_idx: index('sessions_created_at_idx').on(
+    sessions_created_at_idx: index("sessions_created_at_idx").on(
       columns.createdAt,
     ),
   }),
-)
+);
 
 export const verifications = pgTable(
-  'verifications',
+  "verifications",
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    identifier: varchar('identifier').notNull(),
-    value: varchar('value').notNull(),
-    expiresAt: timestamp('expires_at', {
-      mode: 'string',
+    id: uuid("id").defaultRandom().primaryKey(),
+    identifier: varchar("identifier").notNull(),
+    value: varchar("value").notNull(),
+    expiresAt: timestamp("expires_at", {
+      mode: "string",
       withTimezone: true,
       precision: 3,
     }).notNull(),
-    updatedAt: timestamp('updated_at', {
-      mode: 'string',
+    updatedAt: timestamp("updated_at", {
+      mode: "string",
       withTimezone: true,
       precision: 3,
     })
       .defaultNow()
       .notNull(),
-    createdAt: timestamp('created_at', {
-      mode: 'string',
+    createdAt: timestamp("created_at", {
+      mode: "string",
       withTimezone: true,
       precision: 3,
     })
@@ -329,29 +329,29 @@ export const verifications = pgTable(
       .notNull(),
   },
   (columns) => ({
-    verifications_updated_at_idx: index('verifications_updated_at_idx').on(
+    verifications_updated_at_idx: index("verifications_updated_at_idx").on(
       columns.updatedAt,
     ),
-    verifications_created_at_idx: index('verifications_created_at_idx').on(
+    verifications_created_at_idx: index("verifications_created_at_idx").on(
       columns.createdAt,
     ),
   }),
-)
+);
 
 export const payload_locked_documents = pgTable(
-  'payload_locked_documents',
+  "payload_locked_documents",
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    globalSlug: varchar('global_slug'),
-    updatedAt: timestamp('updated_at', {
-      mode: 'string',
+    id: uuid("id").defaultRandom().primaryKey(),
+    globalSlug: varchar("global_slug"),
+    updatedAt: timestamp("updated_at", {
+      mode: "string",
       withTimezone: true,
       precision: 3,
     })
       .defaultNow()
       .notNull(),
-    createdAt: timestamp('created_at', {
-      mode: 'string',
+    createdAt: timestamp("created_at", {
+      mode: "string",
       withTimezone: true,
       precision: 3,
     })
@@ -360,108 +360,108 @@ export const payload_locked_documents = pgTable(
   },
   (columns) => ({
     payload_locked_documents_global_slug_idx: index(
-      'payload_locked_documents_global_slug_idx',
+      "payload_locked_documents_global_slug_idx",
     ).on(columns.globalSlug),
     payload_locked_documents_updated_at_idx: index(
-      'payload_locked_documents_updated_at_idx',
+      "payload_locked_documents_updated_at_idx",
     ).on(columns.updatedAt),
     payload_locked_documents_created_at_idx: index(
-      'payload_locked_documents_created_at_idx',
+      "payload_locked_documents_created_at_idx",
     ).on(columns.createdAt),
   }),
-)
+);
 
 export const payload_locked_documents_rels = pgTable(
-  'payload_locked_documents_rels',
+  "payload_locked_documents_rels",
   {
-    id: serial('id').primaryKey(),
-    order: integer('order'),
-    parent: uuid('parent_id').notNull(),
-    path: varchar('path').notNull(),
-    contentsID: uuid('contents_id'),
-    tagsID: uuid('tags_id'),
-    usersID: uuid('users_id'),
-    accountsID: uuid('accounts_id'),
-    sessionsID: uuid('sessions_id'),
-    verificationsID: uuid('verifications_id'),
+    id: serial("id").primaryKey(),
+    order: integer("order"),
+    parent: uuid("parent_id").notNull(),
+    path: varchar("path").notNull(),
+    contentsID: uuid("contents_id"),
+    tagsID: uuid("tags_id"),
+    usersID: uuid("users_id"),
+    accountsID: uuid("accounts_id"),
+    sessionsID: uuid("sessions_id"),
+    verificationsID: uuid("verifications_id"),
   },
   (columns) => ({
-    order: index('payload_locked_documents_rels_order_idx').on(columns.order),
-    parentIdx: index('payload_locked_documents_rels_parent_idx').on(
+    order: index("payload_locked_documents_rels_order_idx").on(columns.order),
+    parentIdx: index("payload_locked_documents_rels_parent_idx").on(
       columns.parent,
     ),
-    pathIdx: index('payload_locked_documents_rels_path_idx').on(columns.path),
+    pathIdx: index("payload_locked_documents_rels_path_idx").on(columns.path),
     payload_locked_documents_rels_contents_id_idx: index(
-      'payload_locked_documents_rels_contents_id_idx',
+      "payload_locked_documents_rels_contents_id_idx",
     ).on(columns.contentsID),
     payload_locked_documents_rels_tags_id_idx: index(
-      'payload_locked_documents_rels_tags_id_idx',
+      "payload_locked_documents_rels_tags_id_idx",
     ).on(columns.tagsID),
     payload_locked_documents_rels_users_id_idx: index(
-      'payload_locked_documents_rels_users_id_idx',
+      "payload_locked_documents_rels_users_id_idx",
     ).on(columns.usersID),
     payload_locked_documents_rels_accounts_id_idx: index(
-      'payload_locked_documents_rels_accounts_id_idx',
+      "payload_locked_documents_rels_accounts_id_idx",
     ).on(columns.accountsID),
     payload_locked_documents_rels_sessions_id_idx: index(
-      'payload_locked_documents_rels_sessions_id_idx',
+      "payload_locked_documents_rels_sessions_id_idx",
     ).on(columns.sessionsID),
     payload_locked_documents_rels_verifications_id_idx: index(
-      'payload_locked_documents_rels_verifications_id_idx',
+      "payload_locked_documents_rels_verifications_id_idx",
     ).on(columns.verificationsID),
     parentFk: foreignKey({
-      columns: [columns['parent']],
+      columns: [columns["parent"]],
       foreignColumns: [payload_locked_documents.id],
-      name: 'payload_locked_documents_rels_parent_fk',
-    }).onDelete('cascade'),
+      name: "payload_locked_documents_rels_parent_fk",
+    }).onDelete("cascade"),
     contentsIdFk: foreignKey({
-      columns: [columns['contentsID']],
+      columns: [columns["contentsID"]],
       foreignColumns: [contents.id],
-      name: 'payload_locked_documents_rels_contents_fk',
-    }).onDelete('cascade'),
+      name: "payload_locked_documents_rels_contents_fk",
+    }).onDelete("cascade"),
     tagsIdFk: foreignKey({
-      columns: [columns['tagsID']],
+      columns: [columns["tagsID"]],
       foreignColumns: [tags.id],
-      name: 'payload_locked_documents_rels_tags_fk',
-    }).onDelete('cascade'),
+      name: "payload_locked_documents_rels_tags_fk",
+    }).onDelete("cascade"),
     usersIdFk: foreignKey({
-      columns: [columns['usersID']],
+      columns: [columns["usersID"]],
       foreignColumns: [users.id],
-      name: 'payload_locked_documents_rels_users_fk',
-    }).onDelete('cascade'),
+      name: "payload_locked_documents_rels_users_fk",
+    }).onDelete("cascade"),
     accountsIdFk: foreignKey({
-      columns: [columns['accountsID']],
+      columns: [columns["accountsID"]],
       foreignColumns: [accounts.id],
-      name: 'payload_locked_documents_rels_accounts_fk',
-    }).onDelete('cascade'),
+      name: "payload_locked_documents_rels_accounts_fk",
+    }).onDelete("cascade"),
     sessionsIdFk: foreignKey({
-      columns: [columns['sessionsID']],
+      columns: [columns["sessionsID"]],
       foreignColumns: [sessions.id],
-      name: 'payload_locked_documents_rels_sessions_fk',
-    }).onDelete('cascade'),
+      name: "payload_locked_documents_rels_sessions_fk",
+    }).onDelete("cascade"),
     verificationsIdFk: foreignKey({
-      columns: [columns['verificationsID']],
+      columns: [columns["verificationsID"]],
       foreignColumns: [verifications.id],
-      name: 'payload_locked_documents_rels_verifications_fk',
-    }).onDelete('cascade'),
+      name: "payload_locked_documents_rels_verifications_fk",
+    }).onDelete("cascade"),
   }),
-)
+);
 
 export const payload_preferences = pgTable(
-  'payload_preferences',
+  "payload_preferences",
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    key: varchar('key'),
-    value: jsonb('value'),
-    updatedAt: timestamp('updated_at', {
-      mode: 'string',
+    id: uuid("id").defaultRandom().primaryKey(),
+    key: varchar("key"),
+    value: jsonb("value"),
+    updatedAt: timestamp("updated_at", {
+      mode: "string",
       withTimezone: true,
       precision: 3,
     })
       .defaultNow()
       .notNull(),
-    createdAt: timestamp('created_at', {
-      mode: 'string',
+    createdAt: timestamp("created_at", {
+      mode: "string",
       withTimezone: true,
       precision: 3,
     })
@@ -469,62 +469,62 @@ export const payload_preferences = pgTable(
       .notNull(),
   },
   (columns) => ({
-    payload_preferences_key_idx: index('payload_preferences_key_idx').on(
+    payload_preferences_key_idx: index("payload_preferences_key_idx").on(
       columns.key,
     ),
     payload_preferences_updated_at_idx: index(
-      'payload_preferences_updated_at_idx',
+      "payload_preferences_updated_at_idx",
     ).on(columns.updatedAt),
     payload_preferences_created_at_idx: index(
-      'payload_preferences_created_at_idx',
+      "payload_preferences_created_at_idx",
     ).on(columns.createdAt),
   }),
-)
+);
 
 export const payload_preferences_rels = pgTable(
-  'payload_preferences_rels',
+  "payload_preferences_rels",
   {
-    id: serial('id').primaryKey(),
-    order: integer('order'),
-    parent: uuid('parent_id').notNull(),
-    path: varchar('path').notNull(),
-    usersID: uuid('users_id'),
+    id: serial("id").primaryKey(),
+    order: integer("order"),
+    parent: uuid("parent_id").notNull(),
+    path: varchar("path").notNull(),
+    usersID: uuid("users_id"),
   },
   (columns) => ({
-    order: index('payload_preferences_rels_order_idx').on(columns.order),
-    parentIdx: index('payload_preferences_rels_parent_idx').on(columns.parent),
-    pathIdx: index('payload_preferences_rels_path_idx').on(columns.path),
+    order: index("payload_preferences_rels_order_idx").on(columns.order),
+    parentIdx: index("payload_preferences_rels_parent_idx").on(columns.parent),
+    pathIdx: index("payload_preferences_rels_path_idx").on(columns.path),
     payload_preferences_rels_users_id_idx: index(
-      'payload_preferences_rels_users_id_idx',
+      "payload_preferences_rels_users_id_idx",
     ).on(columns.usersID),
     parentFk: foreignKey({
-      columns: [columns['parent']],
+      columns: [columns["parent"]],
       foreignColumns: [payload_preferences.id],
-      name: 'payload_preferences_rels_parent_fk',
-    }).onDelete('cascade'),
+      name: "payload_preferences_rels_parent_fk",
+    }).onDelete("cascade"),
     usersIdFk: foreignKey({
-      columns: [columns['usersID']],
+      columns: [columns["usersID"]],
       foreignColumns: [users.id],
-      name: 'payload_preferences_rels_users_fk',
-    }).onDelete('cascade'),
+      name: "payload_preferences_rels_users_fk",
+    }).onDelete("cascade"),
   }),
-)
+);
 
 export const payload_migrations = pgTable(
-  'payload_migrations',
+  "payload_migrations",
   {
-    id: uuid('id').defaultRandom().primaryKey(),
-    name: varchar('name'),
-    batch: numeric('batch'),
-    updatedAt: timestamp('updated_at', {
-      mode: 'string',
+    id: uuid("id").defaultRandom().primaryKey(),
+    name: varchar("name"),
+    batch: numeric("batch"),
+    updatedAt: timestamp("updated_at", {
+      mode: "string",
       withTimezone: true,
       precision: 3,
     })
       .defaultNow()
       .notNull(),
-    createdAt: timestamp('created_at', {
-      mode: 'string',
+    createdAt: timestamp("created_at", {
+      mode: "string",
       withTimezone: true,
       precision: 3,
     })
@@ -533,158 +533,158 @@ export const payload_migrations = pgTable(
   },
   (columns) => ({
     payload_migrations_updated_at_idx: index(
-      'payload_migrations_updated_at_idx',
+      "payload_migrations_updated_at_idx",
     ).on(columns.updatedAt),
     payload_migrations_created_at_idx: index(
-      'payload_migrations_created_at_idx',
+      "payload_migrations_created_at_idx",
     ).on(columns.createdAt),
   }),
-)
+);
 
 export const relations_contents = relations(contents, ({ one }) => ({
   tag: one(tags, {
     fields: [contents.tag],
     references: [tags.id],
-    relationName: 'tag',
+    relationName: "tag",
   }),
-}))
+}));
 export const relations__contents_v = relations(_contents_v, ({ one }) => ({
   parent: one(contents, {
     fields: [_contents_v.parent],
     references: [contents.id],
-    relationName: 'parent',
+    relationName: "parent",
   }),
   version_tag: one(tags, {
     fields: [_contents_v.version_tag],
     references: [tags.id],
-    relationName: 'version_tag',
+    relationName: "version_tag",
   }),
-}))
-export const relations_tags = relations(tags, () => ({}))
-export const relations_users = relations(users, () => ({}))
+}));
+export const relations_tags = relations(tags, () => ({}));
+export const relations_users = relations(users, () => ({}));
 export const relations_accounts = relations(accounts, ({ one }) => ({
   user: one(users, {
     fields: [accounts.user],
     references: [users.id],
-    relationName: 'user',
+    relationName: "user",
   }),
-}))
+}));
 export const relations_sessions = relations(sessions, ({ one }) => ({
   user: one(users, {
     fields: [sessions.user],
     references: [users.id],
-    relationName: 'user',
+    relationName: "user",
   }),
-}))
-export const relations_verifications = relations(verifications, () => ({}))
+}));
+export const relations_verifications = relations(verifications, () => ({}));
 export const relations_payload_locked_documents_rels = relations(
   payload_locked_documents_rels,
   ({ one }) => ({
     parent: one(payload_locked_documents, {
       fields: [payload_locked_documents_rels.parent],
       references: [payload_locked_documents.id],
-      relationName: '_rels',
+      relationName: "_rels",
     }),
     contentsID: one(contents, {
       fields: [payload_locked_documents_rels.contentsID],
       references: [contents.id],
-      relationName: 'contents',
+      relationName: "contents",
     }),
     tagsID: one(tags, {
       fields: [payload_locked_documents_rels.tagsID],
       references: [tags.id],
-      relationName: 'tags',
+      relationName: "tags",
     }),
     usersID: one(users, {
       fields: [payload_locked_documents_rels.usersID],
       references: [users.id],
-      relationName: 'users',
+      relationName: "users",
     }),
     accountsID: one(accounts, {
       fields: [payload_locked_documents_rels.accountsID],
       references: [accounts.id],
-      relationName: 'accounts',
+      relationName: "accounts",
     }),
     sessionsID: one(sessions, {
       fields: [payload_locked_documents_rels.sessionsID],
       references: [sessions.id],
-      relationName: 'sessions',
+      relationName: "sessions",
     }),
     verificationsID: one(verifications, {
       fields: [payload_locked_documents_rels.verificationsID],
       references: [verifications.id],
-      relationName: 'verifications',
+      relationName: "verifications",
     }),
   }),
-)
+);
 export const relations_payload_locked_documents = relations(
   payload_locked_documents,
   ({ many }) => ({
     _rels: many(payload_locked_documents_rels, {
-      relationName: '_rels',
+      relationName: "_rels",
     }),
   }),
-)
+);
 export const relations_payload_preferences_rels = relations(
   payload_preferences_rels,
   ({ one }) => ({
     parent: one(payload_preferences, {
       fields: [payload_preferences_rels.parent],
       references: [payload_preferences.id],
-      relationName: '_rels',
+      relationName: "_rels",
     }),
     usersID: one(users, {
       fields: [payload_preferences_rels.usersID],
       references: [users.id],
-      relationName: 'users',
+      relationName: "users",
     }),
   }),
-)
+);
 export const relations_payload_preferences = relations(
   payload_preferences,
   ({ many }) => ({
     _rels: many(payload_preferences_rels, {
-      relationName: '_rels',
+      relationName: "_rels",
     }),
   }),
-)
+);
 export const relations_payload_migrations = relations(
   payload_migrations,
   () => ({}),
-)
+);
 
 type DatabaseSchema = {
-  enum_contents_status: typeof enum_contents_status
-  enum__contents_v_version_status: typeof enum__contents_v_version_status
-  enum_users_role: typeof enum_users_role
-  contents: typeof contents
-  _contents_v: typeof _contents_v
-  tags: typeof tags
-  users: typeof users
-  accounts: typeof accounts
-  sessions: typeof sessions
-  verifications: typeof verifications
-  payload_locked_documents: typeof payload_locked_documents
-  payload_locked_documents_rels: typeof payload_locked_documents_rels
-  payload_preferences: typeof payload_preferences
-  payload_preferences_rels: typeof payload_preferences_rels
-  payload_migrations: typeof payload_migrations
-  relations_contents: typeof relations_contents
-  relations__contents_v: typeof relations__contents_v
-  relations_tags: typeof relations_tags
-  relations_users: typeof relations_users
-  relations_accounts: typeof relations_accounts
-  relations_sessions: typeof relations_sessions
-  relations_verifications: typeof relations_verifications
-  relations_payload_locked_documents_rels: typeof relations_payload_locked_documents_rels
-  relations_payload_locked_documents: typeof relations_payload_locked_documents
-  relations_payload_preferences_rels: typeof relations_payload_preferences_rels
-  relations_payload_preferences: typeof relations_payload_preferences
-  relations_payload_migrations: typeof relations_payload_migrations
-}
+  enum_contents_status: typeof enum_contents_status;
+  enum__contents_v_version_status: typeof enum__contents_v_version_status;
+  enum_users_role: typeof enum_users_role;
+  contents: typeof contents;
+  _contents_v: typeof _contents_v;
+  tags: typeof tags;
+  users: typeof users;
+  accounts: typeof accounts;
+  sessions: typeof sessions;
+  verifications: typeof verifications;
+  payload_locked_documents: typeof payload_locked_documents;
+  payload_locked_documents_rels: typeof payload_locked_documents_rels;
+  payload_preferences: typeof payload_preferences;
+  payload_preferences_rels: typeof payload_preferences_rels;
+  payload_migrations: typeof payload_migrations;
+  relations_contents: typeof relations_contents;
+  relations__contents_v: typeof relations__contents_v;
+  relations_tags: typeof relations_tags;
+  relations_users: typeof relations_users;
+  relations_accounts: typeof relations_accounts;
+  relations_sessions: typeof relations_sessions;
+  relations_verifications: typeof relations_verifications;
+  relations_payload_locked_documents_rels: typeof relations_payload_locked_documents_rels;
+  relations_payload_locked_documents: typeof relations_payload_locked_documents;
+  relations_payload_preferences_rels: typeof relations_payload_preferences_rels;
+  relations_payload_preferences: typeof relations_payload_preferences;
+  relations_payload_migrations: typeof relations_payload_migrations;
+};
 
-declare module '@payloadcms/db-postgres' {
+declare module "@payloadcms/db-postgres" {
   export interface GeneratedDatabaseSchema {
-    schema: DatabaseSchema
+    schema: DatabaseSchema;
   }
 }

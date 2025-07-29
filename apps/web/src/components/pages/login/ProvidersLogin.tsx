@@ -2,6 +2,7 @@ import Button from '@/components/base/Button'
 import { auth } from '@/libs/auth'
 
 export function ProvidersLogin() {
+  console.log('ENV', import.meta.env.PUBLIC_PAYLOAD_API_URL)
   return (
     <div className="flex items-center gap-4">
       <Button

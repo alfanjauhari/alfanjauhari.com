@@ -10,7 +10,7 @@ export async function fetchAPI<T>(
   }
 
   const response = await fetch(
-    `${process.env.VITE_PAYLOAD_API_URL}${url}`,
+    `${process.env.PUBLIC_PAYLOAD_API_URL}${url}`,
     props,
   )
 

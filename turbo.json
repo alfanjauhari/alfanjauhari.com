@@ -10,7 +10,7 @@
         "PAYLOAD_SECRET",
         "DATABASE_URL",
         "RESEND_API_KEY",
-        "VITE_PAYLOAD_API_URL",
+        "PUBLIC_PAYLOAD_API_URL",
         "BETTER_AUTH_SECRET",
         "GITHUB_CLIENT_ID",
         "GITHUB_CLIENT_SECRET",
