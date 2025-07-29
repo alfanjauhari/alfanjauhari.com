@@ -4,6 +4,7 @@ import { ClientRouter } from 'astro:transitions'
 interface Props {
   title: string
   description: string
+  // biome-ignore lint/suspicious/noExplicitAny: Astro props can be any type
   children?: any
 }
 

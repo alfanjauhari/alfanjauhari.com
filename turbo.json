@@ -28,7 +28,7 @@
       "cache": false
     },
     "generate-types": {
-      "outputs": ["payload-types.ts"],
+      "outputs": ["src/generated/payload-types.ts"],
       "env": [
         "NODE_ENV",
         "DATABASE_URL",
