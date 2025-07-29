@@ -63,5 +63,5 @@ export const auth = betterAuth({
     },
   },
   plugins: [openAPI(), nextCookies()],
-  trustedOrigins: ['http://localhost:4321'],
+  trustedOrigins: ['http://localhost:4321', 'https://alfanjauhari.com'],
 })

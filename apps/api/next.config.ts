@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
           { key: 'Access-Control-Allow-Credentials', value: 'true' },
           {
             key: 'Access-Control-Allow-Origin',
-            value: 'http://localhost:4321',
+            value: process.env.APP_URL || 'http://localhost:4321',
           },
           {
             key: 'Access-Control-Allow-Methods',
