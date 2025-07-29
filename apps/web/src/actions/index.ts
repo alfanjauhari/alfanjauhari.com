@@ -1,5 +1,6 @@
 import { ActionError, type ActionErrorCode, defineAction } from 'astro:actions'
 import { z } from 'astro:schema'
+import { captureException } from '@sentry/astro'
 import { auth } from '@/libs/auth'
 
 export const server = {
@@ -11,27 +12,35 @@ export const server = {
       redirectTo: z.string().optional(),
     }),
     handler: async ({ email, password, redirectTo: redirectToInput }, ctx) => {
-      const redirectTo = redirectToInput
-        ? new URL(redirectToInput, ctx.url).pathname
-        : '/'
+      try {
+        const redirectTo = redirectToInput
+          ? new URL(redirectToInput, ctx.url).pathname
+          : '/'
 
-      const response = await auth.signIn.email({
-        email,
-        password,
-        callbackURL: redirectTo,
-      })
-
-      if (response.error) {
-        throw new ActionError({
-          code: response.error.statusText as ActionErrorCode,
-          message: response.error.message,
-          stack: JSON.stringify(response.error, null, 2),
+        const response = await auth.signIn.email({
+          email,
+          password,
+          callbackURL: redirectTo,
         })
-      }
 
-      return {
-        success: true,
-        redirectTo,
+        if (response.error) {
+          throw new ActionError({
+            code: response.error.statusText as ActionErrorCode,
+            message: response.error.message,
+            stack: JSON.stringify(response.error, null, 2),
+          })
+        }
+
+        return {
+          success: true,
+          redirectTo,
+        }
+      } catch (error) {
+        if (!(error instanceof ActionError)) {
+          captureException(error)
+        }
+
+        throw error
       }
     },
   }),
@@ -54,24 +63,32 @@ export const server = {
         path: ['confirm_password'],
       }),
     handler: async ({ name, email, password }) => {
-      const response = await auth.signUp.email({
-        name,
-        email,
-        password,
-        callbackURL: `${import.meta.env.PUBLIC_SITE_URL}/login`,
-      })
-
-      if (response.error) {
-        throw new ActionError({
-          code: response.error.statusText as ActionErrorCode,
-          message: response.error.message,
-          stack: JSON.stringify(response.error, null, 2),
+      try {
+        const response = await auth.signUp.email({
+          name,
+          email,
+          password,
+          callbackURL: `${import.meta.env.PUBLIC_SITE_URL}/login`,
         })
-      }
 
-      return {
-        success: true,
-        user: response,
+        if (response.error) {
+          throw new ActionError({
+            code: response.error.statusText as ActionErrorCode,
+            message: response.error.message,
+            stack: JSON.stringify(response.error, null, 2),
+          })
+        }
+
+        return {
+          success: true,
+          user: response,
+        }
+      } catch (error) {
+        if (!(error instanceof ActionError)) {
+          captureException(error)
+        }
+
+        throw error
       }
     },
   }),

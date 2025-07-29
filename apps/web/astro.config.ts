@@ -1,13 +1,28 @@
 import mdx from '@astrojs/mdx'
 import react from '@astrojs/react'
 import vercel from '@astrojs/vercel'
+import sentry from '@sentry/astro'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'astro/config'
 
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 4321
 
 export default defineConfig({
-  integrations: [mdx(), react()],
+  integrations: [
+    mdx(),
+    react(),
+    sentry({
+      dsn: process.env.SENTRY_DSN,
+      tracesSampleRate: 0,
+      replaysSessionSampleRate: 0,
+      replaysOnErrorSampleRate: 0,
+      sendDefaultPii: true,
+      sourceMapsUploadOptions: {
+        project: 'alfanjauhari-com-web',
+        authToken: process.env.SENTRY_AUTH_TOKEN,
+      },
+    }),
+  ],
 
   markdown: {
     shikiConfig: {
