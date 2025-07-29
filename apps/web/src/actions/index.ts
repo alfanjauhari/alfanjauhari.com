@@ -1,11 +1,5 @@
-import {
-  ActionError,
-  type ActionErrorCode,
-  ActionInputError,
-  defineAction,
-} from 'astro:actions'
+import { ActionError, type ActionErrorCode, defineAction } from 'astro:actions'
 import { z } from 'astro:schema'
-import { ValidationError } from 'payload'
 import { auth } from '@/libs/auth'
 
 export const server = {
@@ -21,37 +15,23 @@ export const server = {
         ? new URL(redirectToInput, ctx.url).pathname
         : '/'
 
-      try {
-        const response = await auth.signIn.email({
-          email,
-          password,
-          callbackURL: redirectTo,
+      const response = await auth.signIn.email({
+        email,
+        password,
+        callbackURL: redirectTo,
+      })
+
+      if (response.error) {
+        throw new ActionError({
+          code: response.error.statusText as ActionErrorCode,
+          message: response.error.message,
+          stack: JSON.stringify(response.error, null, 2),
         })
+      }
 
-        if (response.error) {
-          throw new ActionError({
-            code: response.error.statusText as ActionErrorCode,
-            message: response.error.message,
-            stack: JSON.stringify(response.error, null, 2),
-          })
-        }
-
-        return {
-          success: true,
-          redirectTo,
-        }
-      } catch (error) {
-        if (error instanceof ValidationError) {
-          throw new ActionInputError(
-            error.data.errors.map((error) => ({
-              message: error.message,
-              code: 'custom',
-              path: [error.path],
-            })),
-          )
-        }
-
-        throw error
+      return {
+        success: true,
+        redirectTo,
       }
     },
   }),
@@ -74,38 +54,24 @@ export const server = {
         path: ['confirm_password'],
       }),
     handler: async ({ name, email, password }) => {
-      try {
-        const response = await auth.signUp.email({
-          name,
-          email,
-          password,
-          callbackURL: `${import.meta.env.SITE}/login`,
+      const response = await auth.signUp.email({
+        name,
+        email,
+        password,
+        callbackURL: `${import.meta.env.SITE}/login`,
+      })
+
+      if (response.error) {
+        throw new ActionError({
+          code: response.error.statusText as ActionErrorCode,
+          message: response.error.message,
+          stack: JSON.stringify(response.error, null, 2),
         })
+      }
 
-        if (response.error) {
-          throw new ActionError({
-            code: response.error.statusText as ActionErrorCode,
-            message: response.error.message,
-            stack: JSON.stringify(response.error, null, 2),
-          })
-        }
-
-        return {
-          success: true,
-          user: response,
-        }
-      } catch (error) {
-        if (error instanceof ValidationError) {
-          throw new ActionInputError(
-            error.data.errors.map((error) => ({
-              message: error.message,
-              code: 'custom',
-              path: [error.path],
-            })),
-          )
-        }
-
-        throw error
+      return {
+        success: true,
+        user: response,
       }
     },
   }),

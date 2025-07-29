@@ -64,6 +64,7 @@ export const User: CollectionConfig = {
     {
       name: 'emailVerified',
       type: 'checkbox',
+      hidden: true,
     },
     {
       name: 'image',
@@ -95,6 +96,7 @@ export const User: CollectionConfig = {
       on: 'user',
       admin: {
         defaultColumns: ['id', 'type', 'provider'],
+        allowCreate: false,
       },
     },
   ],

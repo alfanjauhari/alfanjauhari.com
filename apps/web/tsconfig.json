@@ -5,7 +5,6 @@
     "jsxImportSource": "react",
     "baseUrl": ".",
     "paths": {
-      "@payload-config": ["./payload-config.ts"],
       "@/*": ["src/*"]
     }
   },

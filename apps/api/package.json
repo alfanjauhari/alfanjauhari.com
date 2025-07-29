@@ -17,15 +17,12 @@
   "exports": {
     ".": {
       "import": "./src/index.ts"
-    },
-    "./auth": {
-      "import": "./src/libs/auth.ts"
     }
   },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "generate-types": "rm -rf payload-types.ts && payload generate:db-schema",
+    "generate-types": "rm -rf src/generated/payload-types.ts && payload generate:db-schema && payload generate:types",
     "clean": "rm -rf node_modules bun.lock .next .turbo payload-types.ts"
   },
   "type": "module"
