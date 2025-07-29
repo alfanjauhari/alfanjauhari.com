@@ -21,6 +21,9 @@ export default defineConfig({
         project: 'alfanjauhari-com-web',
         authToken: process.env.SENTRY_AUTH_TOKEN,
       },
+      autoInstrumentation: {
+        requestHandler: false,
+      },
     }),
   ],
 

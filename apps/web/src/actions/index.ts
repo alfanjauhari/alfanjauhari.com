@@ -12,36 +12,41 @@ export const server = {
       redirectTo: z.string().optional(),
     }),
     handler: async ({ email, password, redirectTo: redirectToInput }, ctx) => {
-      try {
-        const redirectTo = redirectToInput
-          ? new URL(redirectToInput, ctx.url).pathname
-          : '/'
+      // try {
+      //   const redirectTo = redirectToInput
+      //     ? new URL(redirectToInput, ctx.url).pathname
+      //     : '/'
 
-        const response = await auth.signIn.email({
-          email,
-          password,
-          callbackURL: redirectTo,
-        })
+      //   const response = await auth.signIn.email({
+      //     email,
+      //     password,
+      //     callbackURL: redirectTo,
+      //   })
 
-        if (response.error) {
-          throw new ActionError({
-            code: response.error.statusText as ActionErrorCode,
-            message: response.error.message,
-            stack: JSON.stringify(response.error, null, 2),
-          })
-        }
+      //   if (response.error) {
+      //     throw new ActionError({
+      //       code: response.error.statusText as ActionErrorCode,
+      //       message: response.error.message,
+      //       stack: JSON.stringify(response.error, null, 2),
+      //     })
+      //   }
 
-        return {
-          success: true,
-          redirectTo,
-        }
-      } catch (error) {
-        console.log('Login error:', error)
-        if (!(error instanceof ActionError)) {
-          captureException(error)
-        }
+      //   return {
+      //     success: true,
+      //     redirectTo,
+      //   }
+      // } catch (error) {
+      //   console.log('Login error:', error)
+      //   if (!(error instanceof ActionError)) {
+      //     captureException(error)
+      //   }
 
-        throw error
+      //   throw error
+      // }
+
+      return {
+        success: true,
+        redirectTo: '/',
       }
     },
   }),
