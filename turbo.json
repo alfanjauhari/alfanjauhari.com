@@ -1,8 +1,8 @@
 {
   "$schema": "https://turborepo.com/schema.json",
   "tasks": {
-    "build": {
-      "dependsOn": ["generate-types", "^build"],
+    "@alfanjauhari-com/api#build": {
+      "dependsOn": ["generate-types"],
       "env": [
         "NODE_ENV",
         "API_URL",
@@ -24,7 +24,15 @@
       "outputs": [".next/**", "!.next/cache/**"]
     },
     "@alfanjauhari-com/web#build": {
-      "outputs": ["dist/**", ".vercel/output/**"]
+      "outputs": ["dist/**", ".vercel/output/**"],
+      "inputs": ["$TURBO_DEFAULT$", ".env"],
+      "env": [
+        "NODE_ENV",
+        "PUBLIC_PAYLOAD_API_URL",
+        "PUBLIC_SITE_URL",
+        "SENTRY_AUTH_TOKEN",
+        "SENTRY_DSN"
+      ]
     },
     "dev": {
       "dependsOn": ["generate-types"],

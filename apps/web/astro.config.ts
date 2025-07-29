@@ -12,11 +12,6 @@ export default defineConfig({
     mdx(),
     react(),
     sentry({
-      dsn: process.env.SENTRY_DSN,
-      tracesSampleRate: 0,
-      replaysSessionSampleRate: 0,
-      replaysOnErrorSampleRate: 0,
-      sendDefaultPii: true,
       sourceMapsUploadOptions: {
         project: 'alfanjauhari-com-web',
         authToken: process.env.SENTRY_AUTH_TOKEN,
