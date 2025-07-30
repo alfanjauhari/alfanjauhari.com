@@ -1,11 +1,7 @@
 ---
 export const prerender = false
 
-import type { ActionInputError } from 'astro:actions'
-import { actions, isInputError } from 'astro:actions'
-import Button from '@/components/base/Button'
-import { ProvidersLogin } from '@/components/pages/login/ProvidersLogin'
-import { Checkbox } from '@/components/ui/Checkbox'
+import { LoginForm } from '@/components/pages/auth/LoginForm'
 import SiteLayout from '@/layouts/SiteLayout.astro'
 import { auth } from '@/libs/auth'
 
@@ -21,95 +17,10 @@ if (session.data) {
 }
 // #endregion
 
-// #region Email Login Action
 const message = Astro.url.searchParams.get('message')
 const redirectTo = Astro.url.searchParams.get('redirectTo')
-
-const result = Astro.getActionResult(actions.login)
-
-const isActionError = result?.error && !isInputError(result.error)
-
-let fieldErrors:
-  | ActionInputError<{
-      email: string
-      password: string
-    }>
-  | undefined
-
-if (isInputError(result?.error)) {
-  fieldErrors = result.error
-}
-
-if (result && !result.error) {
-  return Astro.redirect(result.data.redirectTo)
-}
-// #endregion
 ---
 
 <SiteLayout title="Login" description="Login to your account" blank>
-  <div class="flex items-center h-screen">
-    <div class="bg-white px-6 flex flex-col justify-center w-1/3 h-full">
-      <form method="POST" action={actions.login} class="space-y-4">
-        {
-          (isActionError || message) && (
-            <p class="p-4 bg-red-600 text-white">
-              {result?.error.message || message}
-            </p>
-          )
-        }
-        <input type="hidden" name="redirectTo" value={redirectTo} />
-        <div class="space-y-2">
-          <label for="email" class="block text-sm text-gray-700"
-            >Email</label
-          >
-          <input
-            type="email"
-            id="email"
-            name="email"
-            required
-            class="block w-full p-2 border border-stone-300 focus:ring-stone-700 focus:border-stone-700 focus:outline-none"
-            transition:persist
-          />
-          {
-            fieldErrors?.fields.email && (
-              <p class="text-red-600 text-sm">{fieldErrors.fields.email}</p>
-            )
-          }
-        </div>
-        <div class="space-y-2">
-          <label for="password" class="block text-sm text-gray-700"
-            >Password</label
-          >
-          <input
-            type="password"
-            id="password"
-            name="password"
-            required
-            class="block w-full p-2 border border-stone-300 focus:ring-stone-700 focus:border-stone-700 focus:outline-none"
-            transition:persist
-          />
-          {
-            fieldErrors?.fields.password && (
-              <p class="text-red-600 text-sm">{fieldErrors.fields.password}</p>
-            )
-          }
-        </div>
-        <div class="flex items-center gap-2">
-          <Checkbox id="rememberMe" client:load />
-          <label for="rememberMe" class="text-sm text-gray-700"
-            >Remember me</label
-          >
-        </div>
-        <Button type="submit" className="text-xl p-4">Login</Button>
-      </form>
-      <p class="text-sm text-center text-gray-600 mt-2">
-        Don't have an account? <a
-          href="/register"
-          class="text-stone-700 underline hover:no-underline">Register here</a
-        >
-      </p>
-      <p class="text-sm text-center text-gray-600 mt-6 mb-2">Or login with</p>
-      <ProvidersLogin client:load />
-    </div>
-  </div>
+  <LoginForm callbackURL={redirectTo} message={message} client:load />
 </SiteLayout>
