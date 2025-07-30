@@ -1,6 +1,4 @@
-import path from 'node:path'
 import { ImageResponse } from '@vercel/og'
-import { pathToFileURL } from 'bun'
 import { GlobalOGImage } from '@/components/ui/GlobalOGImage'
 
 const FONTS = [
@@ -10,11 +8,10 @@ const FONTS = [
 ]
 
 export async function GET() {
-  const basePath = path.join(process.cwd(), 'src', 'assets', 'fonts')
   const fonts = await Promise.all(
     FONTS.map((font) =>
-      fetch(pathToFileURL(path.join(basePath, font))).then((res) =>
-        res.arrayBuffer(),
+      fetch(new URL(`/fonts/${font}`, import.meta.env.PUBLIC_CDN_URL)).then(
+        (res) => res.arrayBuffer(),
       ),
     ),
   )

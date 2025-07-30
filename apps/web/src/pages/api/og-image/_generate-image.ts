@@ -1,4 +1,3 @@
-import path from 'node:path'
 import { ImageResponse } from '@vercel/og'
 import { OGImage, type OGImageProps } from '@/components/ui/OGImage'
 
@@ -9,11 +8,10 @@ const FONTS = [
 ]
 
 export async function generateImage(props: OGImageProps) {
-  const basePath = path.join(process.cwd(), 'src', 'assets', 'fonts')
   const fonts = await Promise.all(
     FONTS.map((font) =>
-      fetch(new URL(path.join(basePath, font), import.meta.url)).then((res) =>
-        res.arrayBuffer(),
+      fetch(new URL(`/fonts/${font}`, import.meta.env.PUBLIC_CDN_URL)).then(
+        (res) => res.arrayBuffer(),
       ),
     ),
   )

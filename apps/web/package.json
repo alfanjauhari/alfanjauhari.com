@@ -3,12 +3,12 @@
   "type": "module",
   "version": "1.0.0",
   "scripts": {
-    "dev": "bunx --bun astro dev --host",
-    "start": "bunx --bun astro dev",
-    "build": "bunx --bun astro build",
-    "check": "bunx --bun astro check",
-    "preview": "bunx --bun astro preview",
-    "clean": "rm -rf node_modules bun.lock .astro .turbo"
+    "dev": "astro dev --host",
+    "start": "astro dev",
+    "build": "astro build",
+    "check": "astro check",
+    "preview": "astro preview",
+    "clean": "rm -rf node_modules bun.lock .astro .turbo .vercel"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
