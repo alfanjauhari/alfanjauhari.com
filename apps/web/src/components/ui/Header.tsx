@@ -1,5 +1,3 @@
-'use client'
-
 import { type ComponentProps, forwardRef } from 'react'
 import { NAVIGATION_MENU } from '@/libs/config'
 import { cn } from '@/libs/utils'

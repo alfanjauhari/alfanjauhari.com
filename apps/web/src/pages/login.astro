@@ -5,6 +5,7 @@ import type { ActionInputError } from 'astro:actions'
 import { actions, isInputError } from 'astro:actions'
 import Button from '@/components/base/Button'
 import { ProvidersLogin } from '@/components/pages/login/ProvidersLogin'
+import { Checkbox } from '@/components/ui/Checkbox'
 import SiteLayout from '@/layouts/SiteLayout.astro'
 import { auth } from '@/libs/auth'
 
@@ -58,7 +59,7 @@ if (result && !result.error) {
         }
         <input type="hidden" name="redirectTo" value={redirectTo} />
         <div class="space-y-2">
-          <label for="email" class="block text-sm font-medium text-gray-700"
+          <label for="email" class="block text-sm text-gray-700"
             >Email</label
           >
           <input
@@ -76,7 +77,7 @@ if (result && !result.error) {
           }
         </div>
         <div class="space-y-2">
-          <label for="password" class="block text-sm font-medium text-gray-700"
+          <label for="password" class="block text-sm text-gray-700"
             >Password</label
           >
           <input
@@ -92,6 +93,12 @@ if (result && !result.error) {
               <p class="text-red-600 text-sm">{fieldErrors.fields.password}</p>
             )
           }
+        </div>
+        <div class="flex items-center gap-2">
+          <Checkbox id="rememberMe" client:load />
+          <label for="rememberMe" class="text-sm text-gray-700"
+            >Remember me</label
+          >
         </div>
         <Button type="submit" className="text-xl p-4">Login</Button>
       </form>

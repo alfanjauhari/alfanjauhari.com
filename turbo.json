@@ -1,8 +1,8 @@
 {
   "$schema": "https://turborepo.com/schema.json",
   "tasks": {
-    "@alfanjauhari-com/api#build": {
-      "dependsOn": ["generate-types"],
+    "build": {
+      "dependsOn": ["generate-types", "^build"],
       "env": [
         "NODE_ENV",
         "API_URL",

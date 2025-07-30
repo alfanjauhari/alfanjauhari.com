@@ -127,3 +127,4 @@ pids/
 
 # Sentry Config File
 .sentryclirc
+.vercel

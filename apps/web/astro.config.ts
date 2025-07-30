@@ -5,7 +5,7 @@ import sentry from '@sentry/astro'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'astro/config'
 
-const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 4321
+const PORT = import.meta.env.PORT ? parseInt(import.meta.env.PORT, 10) : 4321
 
 export default defineConfig({
   integrations: [
@@ -14,7 +14,8 @@ export default defineConfig({
     sentry({
       sourceMapsUploadOptions: {
         project: 'alfanjauhari-com-web',
-        authToken: process.env.SENTRY_AUTH_TOKEN,
+        authToken: import.meta.env.SENTRY_AUTH_TOKEN,
+        enabled: false,
       },
       autoInstrumentation: {
         requestHandler: false,
@@ -37,10 +38,10 @@ export default defineConfig({
     ],
   }),
 
-  site: process.env.PUBLIC_SITE_URL || 'http://localhost:4321',
+  site: import.meta.env.PUBLIC_SITE_URL || 'http://localhost:4321',
   output: 'static',
   server: {
-    allowedHosts: process.env.NODE_ENV === 'development' ? true : undefined,
+    allowedHosts: import.meta.env.NODE_ENV === 'development' ? true : undefined,
     port: PORT,
   },
 
@@ -49,16 +50,19 @@ export default defineConfig({
     server: {
       proxy: {
         '/payload/api': {
-          target: process.env.PUBLIC_PAYLOAD_API_URL,
+          target: import.meta.env.PUBLIC_PAYLOAD_API_URL,
           changeOrigin: true,
           rewrite: (path) => path.replace('/payload', ''),
         },
         '/custom': {
-          target: process.env.PUBLIC_PAYLOAD_API_URL,
+          target: import.meta.env.PUBLIC_PAYLOAD_API_URL,
           changeOrigin: true,
           rewrite: (path) => path.replace('/custom', ''),
         },
       },
+    },
+    ssr: {
+      noExternal: ['zod'],
     },
   },
 })
