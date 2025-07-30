@@ -12,7 +12,7 @@ export default async function CreateFirstUser() {
     .then((res) => res.totalDocs)
 
   if (usersCount > 0) {
-    return redirect('/login')
+    return redirect('/admin/login')
   }
 
   const authenticated = await auth.api.getSession({
@@ -32,11 +32,18 @@ export default async function CreateFirstUser() {
         action={async (formData: FormData) => {
           'use server'
 
-          await auth.api.signUpEmail({
+          const { user } = await auth.api.signUpEmail({
             body: {
               name: formData.get('name') as string,
               email: formData.get('email') as string,
               password: formData.get('password') as string,
+            },
+          })
+          await payload.update({
+            collection: 'users',
+            id: user.id,
+            data: {
+              role: 'admin',
             },
           })
         }}
