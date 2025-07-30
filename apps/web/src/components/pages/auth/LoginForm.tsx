@@ -50,6 +50,8 @@ export function LoginForm({ callbackURL, message }: LoginFormProps) {
         form.setError('email', {
           message: response.error.message,
         })
+
+        return
       }
 
       throw new Error(response.error.message || 'Login failed')

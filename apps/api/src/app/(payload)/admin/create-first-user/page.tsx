@@ -1,6 +1,28 @@
+import { headers } from 'next/headers'
+import { redirect } from 'next/navigation'
 import { auth } from '@/libs/auth'
+import { getPayload } from '@/libs/payload'
 
-export default function CreateFirstUser() {
+export default async function CreateFirstUser() {
+  const payload = await getPayload()
+  const usersCount = await payload
+    .count({
+      collection: 'users',
+    })
+    .then((res) => res.totalDocs)
+
+  if (usersCount > 0) {
+    return redirect('/login')
+  }
+
+  const authenticated = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  if (authenticated) {
+    return redirect(authenticated.user.role === 'user' ? '/' : '/admin')
+  }
+
   return (
     <div>
       <h1>Create First User</h1>

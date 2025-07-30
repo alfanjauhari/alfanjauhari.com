@@ -1,5 +1,5 @@
 ---
-import LockIcon from '../icons/LockIcon.astro'
+import { LockIcon } from 'lucide-react'
 
 interface Props {
   slug: string
@@ -31,7 +31,7 @@ const { type = 'blog', ...post } = Astro.props
       </p>
       {
         type === "restricted" && (
-          <LockIcon class:list="size-4 text-white group-hover/article:text-stone-700 duration-300" />
+          <LockIcon className="size-4 text-white group-hover/article:text-stone-700 duration-300" />
         )
       }
     </div>

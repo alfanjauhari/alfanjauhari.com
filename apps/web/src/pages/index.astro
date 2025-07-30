@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets'
 import { getCollection } from 'astro:content'
-import ExternalLinkIcon from '@/components/icons/ExternalLinkIcon.astro'
+import { ExternalLinkIcon } from 'lucide-react'
 import { SelectedWorksHeading } from '@/components/pages/home/SelectedWorksHeading'
 import { Tagline } from '@/components/pages/home/Tagline'
 import ArticleCard from '@/components/ui/ArticleCard.astro'
@@ -132,7 +132,7 @@ const posts = await getCollection('blog').then((posts) =>
         <div
           class="absolute bg-white inset-0 -translate-y-full group-hover/collection-button:translate-y-0 duration-300 flex flex-col justify-center items-center"
         >
-          <ExternalLinkIcon class="text-stone-700 size-8" />
+          <ExternalLinkIcon className="text-stone-700 size-8" />
         </div>
       </a>
     </div>

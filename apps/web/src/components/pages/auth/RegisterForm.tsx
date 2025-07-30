@@ -56,6 +56,8 @@ export function RegisterForm() {
         form.setError('email', {
           message: 'Email already exists. Please login instead.',
         })
+
+        return
       }
 
       throw new Error(response.error.message || 'Registration failed')
