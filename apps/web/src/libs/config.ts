@@ -2,6 +2,7 @@ import BAKTIDNAImage from '@/assets/projects/BAKTI-DNA.png'
 import GCBCImage from '@/assets/projects/GCBC.png'
 import MichelleOhImage from '@/assets/projects/Michelle-Oh.png'
 import TempeaImage from '@/assets/projects/Tempea.png'
+import ZOGWebsiteImage from '@/assets/projects/ZOG-Website.png'
 
 export const NAVIGATION_MENU = [
   {
@@ -41,11 +42,26 @@ export const FOOTER_MENU = [
 
 export const PROJECTS = [
   {
+    name: 'Zero One Group Website',
+    year: '2024',
+    role: 'Product Engineer',
+    stacks: [
+      'Next JS',
+      'TypeScript',
+      'Tailwind CSS',
+      'Three.js',
+      'Framer Motion',
+    ],
+    image: ZOGWebsiteImage,
+    link: 'https://zero-one-group.com',
+  },
+  {
     name: 'Global Capacity Building Coalition',
     year: '2024',
     role: 'Product Engineer',
     stacks: ['Full Stack Next JS', 'TypeScript', 'Tailwind CSS'],
     image: GCBCImage,
+    link: 'https://capacity-building.org',
   },
   {
     name: 'Tempea',
@@ -60,6 +76,7 @@ export const PROJECTS = [
     role: 'Product Engineer',
     stacks: ['Shopify'],
     image: MichelleOhImage,
+    link: 'https://michelle-oh.com/',
   },
   {
     name: 'BAKTI DNA',
@@ -73,22 +90,22 @@ export const PROJECTS = [
 export const SOCIAL_MEDIA = [
   {
     name: 'GitHub',
-    href: 'https://github.com/alfanjauhari',
+    href: '/github',
   },
   {
     name: 'LinkedIn',
-    href: 'https://linkedin.com/in/m-alfanjauhari',
+    href: '/linkedin',
   },
   {
     name: 'Twitter/X',
-    href: 'https://x.com/alfanjauhari_',
+    href: '/x',
   },
   {
     name: 'Instagram',
-    href: 'https://instagram.com/alfanjauhari_',
+    href: '/instagram',
   },
   {
     name: 'Facebook',
-    href: 'https://facebook.com/m.alfanjauhari',
+    href: '/fb',
   },
 ]

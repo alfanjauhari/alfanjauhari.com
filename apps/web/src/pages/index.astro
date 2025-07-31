@@ -37,7 +37,13 @@ const posts = await getCollection('blog').then((posts) =>
                 }
               )}
             >
-              <h1 class="text-2xl lg:text-3xl">{project.name}</h1>
+              {project.link ? (
+                <a class="text-2xl lg:text-3xl w-fit" href={project.link} target="_blank" rel="noopener noreferrer">
+                  {project.name}
+                </a>
+              ) : (
+                <h1 class="text-2xl lg:text-3xl">{project.name}</h1>
+              )}
               <p class="text-xl lg:text-2xl">{project.year}</p>
               <p class="text-xl lg:text-2xl">{project.role}</p>
               <p class="text-xl lg:text-2xl">{project.stacks.join(", ")}</p>

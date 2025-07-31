@@ -4,6 +4,14 @@ import { auth } from '@/libs/auth'
 import { getPayload } from '@/libs/payload'
 
 export default async function CreateFirstUser() {
+  const authenticated = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  if (authenticated) {
+    return redirect(authenticated.user.role === 'user' ? '/' : '/admin')
+  }
+
   const payload = await getPayload()
   const usersCount = await payload
     .count({
@@ -13,14 +21,6 @@ export default async function CreateFirstUser() {
 
   if (usersCount > 0) {
     return redirect('/admin/login')
-  }
-
-  const authenticated = await auth.api.getSession({
-    headers: await headers(),
-  })
-
-  if (authenticated) {
-    return redirect(authenticated.user.role === 'user' ? '/' : '/admin')
   }
 
   return (
@@ -39,6 +39,7 @@ export default async function CreateFirstUser() {
               password: formData.get('password') as string,
             },
           })
+
           await payload.update({
             collection: 'users',
             id: user.id,

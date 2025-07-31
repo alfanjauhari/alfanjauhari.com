@@ -8,6 +8,13 @@ import { defineConfig } from 'astro/config'
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 4321
 
 export default defineConfig({
+  redirects: {
+    '/x': 'https://x.com/alfanjauhari_',
+    '/github': 'https://github.com/alfanjauhari',
+    '/linkedin': 'https://linkedin.com/in/m-alfanjauhari',
+    '/instagram': 'https://instagram.com/alfanjauhari_',
+    '/fb': 'https://facebook.com/m.alfanjauhari',
+  },
   integrations: [
     mdx(),
     react(),
