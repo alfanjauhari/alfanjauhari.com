@@ -1,0 +1,13 @@
+---
+import SnippetLayout from '@/layouts/SnippetLayout.astro'
+---
+
+<SnippetLayout>
+  <div class="prose prose-stone max-w-none">
+    <h1 class="text-4xl font-heading tracking-wider text-stone-700">NOTHING TO SEE HERE</h1>
+    <p>Use the snippet list on the left to explore the content.</p>
+  </div>
+  <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <slot />
+  </div>
+</SnippetLayout>

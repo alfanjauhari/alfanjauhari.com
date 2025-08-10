@@ -24,8 +24,6 @@ A modern personal website and blog built with Astro (frontend) and PayloadCMS (h
 
 ### Infrastructure
 
-- **Docker** - Containerization
-- **Traefik** - Reverse proxy and SSL termination
 - **Turbo** - Monorepo build system
 - **Bun** - JavaScript runtime and package manager
 - **Biome** - Linting and formatting
@@ -158,11 +156,11 @@ alfanjauhari.com/
 
 ## Features
 
-- 📝 Blog with markdown/MDX support
-- 🔐 Authentication system (login/register)
-- 📊 Admin panel for content management
-- 🎨 Responsive design with TailwindCSS
-- ⚡ Fast static site generation with Astro
-- 🔍 SEO optimized with meta tags and OG images
-- 📧 Email notifications via Resend
-- 🐛 Error monitoring with Sentry
+- Blog with markdown/MDX support
+- Authentication system (login/register)
+- Admin panel for content management
+- Responsive design with TailwindCSS
+- Fast static site generation with Astro
+- SEO optimized with meta tags and OG images
+- Email notifications via Resend
+- Error monitoring with Sentry

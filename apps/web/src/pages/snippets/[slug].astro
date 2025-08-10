@@ -1,0 +1,39 @@
+---
+import { getCollection, render } from 'astro:content'
+import SnippetLayout from '@/layouts/SnippetLayout.astro'
+
+export async function getStaticPaths() {
+  const entries = await getCollection('snippets')
+
+  return entries
+    .sort((a, b) => a.data.createdAt.getTime() - b.data.createdAt.getTime())
+    .map((entry) => ({
+      params: { slug: entry.id },
+      props: { entry },
+    }))
+}
+
+const { entry } = Astro.props
+const { Content } = await render(entry)
+---
+
+<SnippetLayout title={entry.data.title} description={entry.data.description}>
+  <div class="flex flex-col md:flex-row justify-between md:items-center mb-4 gap-4">
+    <h1 class="text-4xl font-heading tracking-wider text-stone-700 uppercase">
+      {entry.data.title}
+    </h1>
+    <p class="text-sm text-stone-500">
+      {
+        Intl.DateTimeFormat("en-ID", {
+          dateStyle: "medium",
+        }).format(entry.data.createdAt)
+      }
+    </p>
+  </div>
+  <p class="italic">{entry.data.description}</p>
+  <hr class="border-stone-300 border-2 border-dashed my-6" />
+  <div class="prose prose-stone max-w-none">
+    <Content />
+  </div>
+  <slot />
+</SnippetLayout>

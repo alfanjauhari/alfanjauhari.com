@@ -10,9 +10,10 @@ interface Props {
   title: string
   description: string
   blank?: boolean
+  className?: string
 }
 
-const { title, description, blank } = Astro.props
+const { title, description, blank, className } = Astro.props
 ---
 
 <html lang="en" class="m-0 p-0">
@@ -24,7 +25,7 @@ const { title, description, blank } = Astro.props
   </head>
   <body class="bg-gray-100 m-0 p-0">
     {!blank && <Header pathname={Astro.url.pathname} client:load />}
-    <main class:list={["w-full", { "px-6": !blank }]}>
+    <main class:list={["w-full", { "px-6": !blank }, className]}>
       <slot />
     </main>
     {!blank && <Footer client:visible={{ rootMargin: "200px" }} />}

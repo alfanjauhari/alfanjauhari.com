@@ -20,6 +20,18 @@ const pageCollection = defineCollection({
   }),
 })
 
+const snippetCollection = defineCollection({
+  loader: glob({
+    pattern: '**/[^_]*.{md,mdx}',
+    base: './src/content/snippets',
+  }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    createdAt: z.date({ coerce: true }),
+  }),
+})
+
 const restrictedCollection = defineCollection({
   loader: restrictedContentLoader(),
 })
@@ -27,5 +39,6 @@ const restrictedCollection = defineCollection({
 export const collections = {
   blog: blogCollection,
   pages: pageCollection,
+  snippets: snippetCollection,
   restricted: restrictedCollection,
 }

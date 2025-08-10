@@ -4,6 +4,7 @@ import vercel from '@astrojs/vercel'
 import sentry from '@sentry/astro'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'astro/config'
+import { copyButtonTransformer } from './shiki-transformers'
 
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 4321
 
@@ -34,6 +35,7 @@ export default defineConfig({
     shikiConfig: {
       theme: 'github-light',
       wrap: true,
+      transformers: [copyButtonTransformer()],
     },
   },
 
