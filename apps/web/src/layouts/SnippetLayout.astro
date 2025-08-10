@@ -22,7 +22,7 @@ const { title, description } = Astro.props as Props
   className="group/snippet-layout"
 >
   <div class="snippet-wrapper grid grid-cols-[0_100%] md:grid-cols-[190px_1fr] lg:grid-cols-[320px_1fr] py-20 md:gap-8">
-    <SnippetSidebar snippets={snippets} currentPath={currentPath} client:only />
+    <SnippetSidebar snippets={snippets} currentPath={currentPath} client:load />
 
     <SnippetButtonToggle client:only />
     

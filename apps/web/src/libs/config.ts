@@ -17,6 +17,10 @@ export const NAVIGATION_MENU = [
     name: 'Blog',
     href: '/blog',
   },
+  {
+    name: 'Snippets',
+    href: '/snippets',
+  },
 ]
 
 export const FOOTER_MENU = [
