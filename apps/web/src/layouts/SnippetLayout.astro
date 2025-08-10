@@ -11,7 +11,7 @@ interface Props {
 
 const snippets = await getCollection('snippets')
 
-const currentPath = Astro.url.pathname
+const slug = Astro.url.pathname.replace(/\/$/, '').split('/').pop() || ''
 
 const { title, description } = Astro.props as Props
 ---
@@ -22,7 +22,7 @@ const { title, description } = Astro.props as Props
   className="group/snippet-layout"
 >
   <div class="snippet-wrapper grid grid-cols-[0_100%] md:grid-cols-[190px_1fr] lg:grid-cols-[320px_1fr] py-20 md:gap-8">
-    <SnippetSidebar snippets={snippets} currentPath={currentPath} client:load />
+    <SnippetSidebar snippets={snippets} currentPath={`/snippets/${slug}`} client:load />
 
     <SnippetButtonToggle client:only />
     

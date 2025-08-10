@@ -3,7 +3,6 @@ import { memo, useCallback, useDeferredValue, useState } from 'react'
 import { cn } from '@/libs/utils'
 import { buttonClassName, buttonClassNameInverted } from '../base/Button'
 import { Input } from '../base/Input'
-import { SnippetButtonToggle } from './SnippetButtonToggle'
 
 interface Props {
   snippets: CollectionEntry<'snippets'>[]
@@ -12,6 +11,8 @@ interface Props {
 
 const SnippetSidebarList = memo(
   function SnippetSidebarList({ snippets: snippetsProp, currentPath }: Props) {
+    console.log('Current path:', currentPath)
+
     const [snippets, setSnippets] = useState<CollectionEntry<'snippets'>[]>(
       snippetsProp.slice(0, 20),
     )
