@@ -1,6 +1,36 @@
 import { CodeIcon } from 'lucide-react'
 import { useCallback, useRef } from 'react'
 
+export function MobileSnippetButtonToggle() {
+  const onClick = () => {
+    const snippetLayout = document.querySelector(
+      '.group\\/snippet-layout',
+    ) as HTMLElement | null
+    if (!snippetLayout) return
+
+    const isOpen = snippetLayout.dataset.sidebarOpen === 'true'
+    snippetLayout.dataset.sidebarOpen = isOpen ? 'false' : 'true'
+
+    document.body.classList.toggle('overflow-hidden')
+
+    if (document.body.dataset.lenisPrevent !== undefined) {
+      delete document.body.dataset.lenisPrevent
+    } else {
+      document.body.dataset.lenisPrevent = ''
+    }
+  }
+
+  return (
+    <button
+      className="underline cursor-pointer"
+      type="button"
+      onClick={onClick}
+    >
+      Click here
+    </button>
+  )
+}
+
 export function SnippetButtonToggle() {
   const lastScrollY = useRef(window.scrollY)
   const scrollTimeout = useRef<NodeJS.Timeout | null>(null)
