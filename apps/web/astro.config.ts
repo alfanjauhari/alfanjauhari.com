@@ -1,4 +1,5 @@
 import mdx from '@astrojs/mdx'
+import partytown from '@astrojs/partytown'
 import react from '@astrojs/react'
 import vercel from '@astrojs/vercel'
 import sentry from '@sentry/astro'
@@ -29,6 +30,7 @@ export default defineConfig({
         requestHandler: false,
       },
     }),
+    partytown(),
   ],
 
   markdown: {
