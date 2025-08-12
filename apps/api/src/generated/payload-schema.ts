@@ -17,9 +17,9 @@ import {
   jsonb,
   timestamp,
   boolean,
+  numeric,
   serial,
   integer,
-  numeric,
   pgEnum,
 } from "@payloadcms/db-postgres/drizzle/pg-core";
 import { sql, relations } from "@payloadcms/db-postgres/drizzle";
@@ -338,6 +338,70 @@ export const verifications = pgTable(
   }),
 );
 
+export const media = pgTable(
+  "media",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    alt: varchar("alt"),
+    prefix: varchar("prefix").default("media"),
+    updatedAt: timestamp("updated_at", {
+      mode: "string",
+      withTimezone: true,
+      precision: 3,
+    })
+      .defaultNow()
+      .notNull(),
+    createdAt: timestamp("created_at", {
+      mode: "string",
+      withTimezone: true,
+      precision: 3,
+    })
+      .defaultNow()
+      .notNull(),
+    url: varchar("url"),
+    thumbnailURL: varchar("thumbnail_u_r_l"),
+    filename: varchar("filename"),
+    mimeType: varchar("mime_type"),
+    filesize: numeric("filesize"),
+    width: numeric("width"),
+    height: numeric("height"),
+    focalX: numeric("focal_x"),
+    focalY: numeric("focal_y"),
+    sizes_thumbnail_url: varchar("sizes_thumbnail_url"),
+    sizes_thumbnail_width: numeric("sizes_thumbnail_width"),
+    sizes_thumbnail_height: numeric("sizes_thumbnail_height"),
+    sizes_thumbnail_mimeType: varchar("sizes_thumbnail_mime_type"),
+    sizes_thumbnail_filesize: numeric("sizes_thumbnail_filesize"),
+    sizes_thumbnail_filename: varchar("sizes_thumbnail_filename"),
+    sizes_card_url: varchar("sizes_card_url"),
+    sizes_card_width: numeric("sizes_card_width"),
+    sizes_card_height: numeric("sizes_card_height"),
+    sizes_card_mimeType: varchar("sizes_card_mime_type"),
+    sizes_card_filesize: numeric("sizes_card_filesize"),
+    sizes_card_filename: varchar("sizes_card_filename"),
+    sizes_tablet_url: varchar("sizes_tablet_url"),
+    sizes_tablet_width: numeric("sizes_tablet_width"),
+    sizes_tablet_height: numeric("sizes_tablet_height"),
+    sizes_tablet_mimeType: varchar("sizes_tablet_mime_type"),
+    sizes_tablet_filesize: numeric("sizes_tablet_filesize"),
+    sizes_tablet_filename: varchar("sizes_tablet_filename"),
+  },
+  (columns) => ({
+    media_updated_at_idx: index("media_updated_at_idx").on(columns.updatedAt),
+    media_created_at_idx: index("media_created_at_idx").on(columns.createdAt),
+    media_filename_idx: uniqueIndex("media_filename_idx").on(columns.filename),
+    media_sizes_thumbnail_sizes_thumbnail_filename_idx: index(
+      "media_sizes_thumbnail_sizes_thumbnail_filename_idx",
+    ).on(columns.sizes_thumbnail_filename),
+    media_sizes_card_sizes_card_filename_idx: index(
+      "media_sizes_card_sizes_card_filename_idx",
+    ).on(columns.sizes_card_filename),
+    media_sizes_tablet_sizes_tablet_filename_idx: index(
+      "media_sizes_tablet_sizes_tablet_filename_idx",
+    ).on(columns.sizes_tablet_filename),
+  }),
+);
+
 export const payload_locked_documents = pgTable(
   "payload_locked_documents",
   {
@@ -384,6 +448,7 @@ export const payload_locked_documents_rels = pgTable(
     accountsID: uuid("accounts_id"),
     sessionsID: uuid("sessions_id"),
     verificationsID: uuid("verifications_id"),
+    mediaID: uuid("media_id"),
   },
   (columns) => ({
     order: index("payload_locked_documents_rels_order_idx").on(columns.order),
@@ -409,6 +474,9 @@ export const payload_locked_documents_rels = pgTable(
     payload_locked_documents_rels_verifications_id_idx: index(
       "payload_locked_documents_rels_verifications_id_idx",
     ).on(columns.verificationsID),
+    payload_locked_documents_rels_media_id_idx: index(
+      "payload_locked_documents_rels_media_id_idx",
+    ).on(columns.mediaID),
     parentFk: foreignKey({
       columns: [columns["parent"]],
       foreignColumns: [payload_locked_documents.id],
@@ -443,6 +511,11 @@ export const payload_locked_documents_rels = pgTable(
       columns: [columns["verificationsID"]],
       foreignColumns: [verifications.id],
       name: "payload_locked_documents_rels_verifications_fk",
+    }).onDelete("cascade"),
+    mediaIdFk: foreignKey({
+      columns: [columns["mediaID"]],
+      foreignColumns: [media.id],
+      name: "payload_locked_documents_rels_media_fk",
     }).onDelete("cascade"),
   }),
 );
@@ -577,6 +650,7 @@ export const relations_sessions = relations(sessions, ({ one }) => ({
   }),
 }));
 export const relations_verifications = relations(verifications, () => ({}));
+export const relations_media = relations(media, () => ({}));
 export const relations_payload_locked_documents_rels = relations(
   payload_locked_documents_rels,
   ({ one }) => ({
@@ -614,6 +688,11 @@ export const relations_payload_locked_documents_rels = relations(
       fields: [payload_locked_documents_rels.verificationsID],
       references: [verifications.id],
       relationName: "verifications",
+    }),
+    mediaID: one(media, {
+      fields: [payload_locked_documents_rels.mediaID],
+      references: [media.id],
+      relationName: "media",
     }),
   }),
 );
@@ -664,6 +743,7 @@ type DatabaseSchema = {
   accounts: typeof accounts;
   sessions: typeof sessions;
   verifications: typeof verifications;
+  media: typeof media;
   payload_locked_documents: typeof payload_locked_documents;
   payload_locked_documents_rels: typeof payload_locked_documents_rels;
   payload_preferences: typeof payload_preferences;
@@ -676,6 +756,7 @@ type DatabaseSchema = {
   relations_accounts: typeof relations_accounts;
   relations_sessions: typeof relations_sessions;
   relations_verifications: typeof relations_verifications;
+  relations_media: typeof relations_media;
   relations_payload_locked_documents_rels: typeof relations_payload_locked_documents_rels;
   relations_payload_locked_documents: typeof relations_payload_locked_documents;
   relations_payload_preferences_rels: typeof relations_payload_preferences_rels;
