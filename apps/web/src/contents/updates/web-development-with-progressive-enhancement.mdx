@@ -6,6 +6,8 @@ date: 2024-11-01
 ---
 
 import {FormSandpack} from '../../components/contents/updates/web-development-with-progressive-enhancement/FormSandpack'
+import Image from 'next/image'
+import ProgressiveEnhancementLayerImage from '../../assets/blog/web-development-with-progressive-enhancement/progressive-enhancement-layers.png';
 
 Have you ever opened some website, but it doesn&lsquo;t work on your ancient devices? It&lsquo;s kinda stressful isn&lsquo;t it when you try surfing on the internet you need to spend your money to buy a new device first. Well, if you feel that way, when building a website you need to pay attention to backward compatibility, so more users can use your websites smoothly without a problem. And that's where you need progressive enhancement when building websites for more accessibility and backward compatibility.
 
@@ -42,7 +44,7 @@ So, by that explanation before, progressive enhancement is a bottom-up approach 
 
 ## Progressive Enhancement Layers
 
-![Progressive Enhancement Layers](../../assets/blog/web-development-with-progressive-enhancement/progressive-enhancement-layers.png)
+<Image src={ProgressiveEnhancementLayerImage} alt="Progressive Enhancement Layers" />
 
 In that image, we can see we have 3 layers of progressive enhancement which is HTML, CSS and JavaScript. Those layers play important part for progressive enhancement and have different specification on each layer.
 

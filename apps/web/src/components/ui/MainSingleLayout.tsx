@@ -1,19 +1,26 @@
-import { type ComponentProps, forwardRef } from 'react'
+import { type ComponentProps, forwardRef, type ReactNode } from 'react'
+import { cn } from '@/libs/utils'
 
 export interface MainSingleLayoutProps extends ComponentProps<'div'> {
   title: string
   description: string
   tag?: string
   date?: Date
+  toc?: ReactNode
 }
 
 export const MainSingleLayout = forwardRef<
   HTMLDivElement,
   MainSingleLayoutProps
->(({ title, description, tag, date, children, ...props }, ref) => {
+>(({ title, description, tag, date, children, toc, ...props }, ref) => {
   return (
     <div
-      className="py-20 flex flex-col items-center max-w-(--breakpoint-lg) mx-auto has-[.toc]:max-w-(--breakpoint-xl)"
+      className={cn(
+        'py-20 flex flex-col items-center max-w-(--breakpoint-lg) mx-auto',
+        {
+          'min-lg:max-w-(--breakpoint-xl)': toc,
+        },
+      )}
       ref={ref}
       {...props}
     >
@@ -40,13 +47,19 @@ export const MainSingleLayout = forwardRef<
         <p className="text-center italic">{description}</p>
       </div>
 
-      <div className="has-[.toc]:grid has-[.toc]:grid-cols-[3fr_1fr] has-[.toc]:gap-6 mt-12 group/single-layout">
+      <div
+        id="single-content-wrapper"
+        className={cn('mt-12', {
+          'min-lg:grid min-lg:grid-cols-[3fr_1fr] min-lg:gap-6': toc,
+        })}
+      >
         <article
-          id="article-content"
-          className="mx-auto w-full max-w-(--breakpoint-lg) prose prose-stone prose-pre:[tab-size:2] prose-a:decoration-dotted"
+          id="single-content"
+          className="mx-auto w-full max-w-full prose prose-stone prose-pre:[tab-size:2] prose-a:decoration-dotted"
         >
           {children}
         </article>
+        {toc}
       </div>
     </div>
   )

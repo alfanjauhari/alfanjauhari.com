@@ -2,6 +2,7 @@ import { allUpdates } from 'content-collections'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { MainSingleLayout } from '@/components/ui/MainSingleLayout'
+import { TableOfContents } from '@/components/ui/TableOfContents'
 import { buildMetadata } from '@/libs/metadata'
 
 export interface SingleUpdatesPageProps {
@@ -49,6 +50,9 @@ export default async function SingleUpdatesPage({
       description={update.description}
       tag={update.tag}
       date={update.date}
+      toc={
+        <TableOfContents containerSelector="#single-content-wrapper article" />
+      }
     >
       <Content />
     </MainSingleLayout>
