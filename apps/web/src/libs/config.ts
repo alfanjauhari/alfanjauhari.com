@@ -1,3 +1,5 @@
+import { createEnv } from '@t3-oss/env-nextjs'
+import z from 'zod'
 import BAKTIDNAImage from '@/assets/projects/BAKTI-DNA.png'
 import GCBCImage from '@/assets/projects/GCBC.png'
 import MichelleOhImage from '@/assets/projects/Michelle-Oh.png'
@@ -14,8 +16,8 @@ export const NAVIGATION_MENU = [
     href: '/about',
   },
   {
-    name: 'Blog',
-    href: '/blog',
+    name: 'Updates',
+    href: '/updates',
   },
   {
     name: 'Snippets',
@@ -33,8 +35,8 @@ export const FOOTER_MENU = [
         href: '/about',
       },
       {
-        name: 'Blog',
-        href: '/blog',
+        name: 'Updates',
+        href: '/updates',
       },
       {
         name: 'Uses',
@@ -113,3 +115,21 @@ export const SOCIAL_MEDIA = [
     href: '/fb',
   },
 ]
+
+export const env = createEnv({
+  server: {
+    SENTRY_AUTH_TOKEN: z.string().min(1, 'SENTRY_AUTH_TOKEN is required'),
+    SENTRY_DSN: z.string().min(1, 'SENTRY_DSN is required'),
+  },
+  client: {
+    NEXT_PUBLIC_SITE_URL: z.string().min(1, 'NEXT_PUBLIC_SITE_URL is required'),
+    NEXT_PUBLIC_CDN_URL: z.string().min(1, 'NEXT_PUBLIC_CDN_URL is required'),
+  },
+  runtimeEnv: {
+    SENTRY_AUTH_TOKEN: process.env.SENTRY_AUTH_TOKEN,
+    SENTRY_DSN: process.env.SENTRY_DSN,
+
+    NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
+    NEXT_PUBLIC_CDN_URL: process.env.NEXT_PUBLIC_CDN_URL,
+  },
+})

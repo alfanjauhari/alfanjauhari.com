@@ -1,3 +1,5 @@
+'use client'
+
 import { CodeIcon } from 'lucide-react'
 import { useCallback, useRef } from 'react'
 
@@ -32,7 +34,7 @@ export function MobileSnippetButtonToggle() {
 }
 
 export function SnippetButtonToggle() {
-  const lastScrollY = useRef(window.scrollY)
+  const lastScrollY = useRef(0)
   const scrollTimeout = useRef<NodeJS.Timeout | null>(null)
 
   const buttonRefCallback = useCallback((node: HTMLButtonElement | null) => {

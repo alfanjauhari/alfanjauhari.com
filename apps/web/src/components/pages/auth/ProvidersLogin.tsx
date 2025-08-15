@@ -1,11 +1,17 @@
+'use client'
+
 import { captureException } from '@sentry/astro'
+import { useRouter } from 'next/navigation'
 import { memo, useState } from 'react'
 import Button from '@/components/base/Button'
 import { GithubIcon } from '@/components/icons/GithubIcon'
 import { GoogleIcon } from '@/components/icons/GoogleIcon'
 import { auth } from '@/libs/auth'
+import { env } from '@/libs/config'
 
 export const ProvidersLogin = memo(function ProvidersLogin() {
+  const router = useRouter()
+
   const [state, setState] = useState<'loading' | 'idle' | `Error: ${string}`>(
     'idle',
   )
@@ -16,7 +22,7 @@ export const ProvidersLogin = memo(function ProvidersLogin() {
     try {
       const response = await auth.signIn.social({
         provider: provider,
-        callbackURL: import.meta.env.PUBLIC_SITE_URL,
+        callbackURL: env.NEXT_PUBLIC_SITE_URL,
         disableRedirect: true,
       })
 
@@ -25,8 +31,7 @@ export const ProvidersLogin = memo(function ProvidersLogin() {
         return
       }
 
-      window.location.href =
-        response.data.url || import.meta.env.PUBLIC_SITE_URL
+      router.push(response.data.url || env.NEXT_PUBLIC_SITE_URL)
     } catch (error) {
       captureException(error)
 

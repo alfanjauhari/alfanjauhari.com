@@ -1,19 +1,21 @@
-import type { CollectionEntry } from 'astro:content'
+'use client'
+
+import type { Snippet } from 'content-collections'
+import { usePathname } from 'next/navigation'
 import { memo, useCallback, useDeferredValue, useState } from 'react'
 import { cn } from '@/libs/utils'
 import { buttonClassName, buttonClassNameInverted } from '../base/Button'
 import { Input } from '../base/Input'
 
-interface Props {
-  snippets: CollectionEntry<'snippets'>[]
-  currentPath: string
+export interface SnippetSidebarProps {
+  snippets: Snippet[]
 }
 
 const SnippetSidebarList = memo(
-  function SnippetSidebarList({ snippets: snippetsProp, currentPath }: Props) {
-    console.log('Current path:', currentPath)
+  function SnippetSidebarList({ snippets: snippetsProp }: SnippetSidebarProps) {
+    const currentPath = usePathname()
 
-    const [snippets, setSnippets] = useState<CollectionEntry<'snippets'>[]>(
+    const [snippets, setSnippets] = useState<Snippet[]>(
       snippetsProp.slice(0, 20),
     )
 
@@ -53,9 +55,9 @@ const SnippetSidebarList = memo(
     return (
       <ul className="space-y-2" ref={listRefCallback}>
         {snippets.map((snippet) => (
-          <li key={snippet.id}>
+          <li key={snippet._meta.path}>
             <a
-              href={`/snippets/${snippet.id}`}
+              href={`/snippets/${snippet._meta.path}`}
               className={cn(
                 buttonClassName,
                 'relative w-full flex justify-center p-4',
@@ -63,10 +65,12 @@ const SnippetSidebarList = memo(
                 'aria-[current=page]:bg-stone-700 aria-[current=page]:text-white',
               )}
               aria-current={
-                currentPath === `/snippets/${snippet.id}` ? 'page' : undefined
+                currentPath === `/snippets/${snippet._meta.path}`
+                  ? 'page'
+                  : undefined
               }
             >
-              <span className="z-10">{snippet.data.title}</span>
+              <span className="z-10">{snippet.title}</span>
             </a>
           </li>
         ))}
@@ -79,23 +83,18 @@ const SnippetSidebarList = memo(
     )
   },
   (prevProps, nextProps) => {
-    return (
-      prevProps.currentPath === nextProps.currentPath &&
-      prevProps.snippets.length === nextProps.snippets.length
-    )
+    return prevProps.snippets.length === nextProps.snippets.length
   },
 )
 
-export function SnippetSidebar({ snippets, currentPath }: Props) {
+export function SnippetSidebar({ snippets }: SnippetSidebarProps) {
   const [query, setQuery] = useState('')
   const deferredQuery = useDeferredValue(query)
 
   const filteredSnippets = snippets.filter((snippet) => {
     return (
-      snippet.data.title.toLowerCase().includes(deferredQuery.toLowerCase()) ||
-      snippet.data.description
-        .toLowerCase()
-        .includes(deferredQuery.toLowerCase())
+      snippet.title.toLowerCase().includes(deferredQuery.toLowerCase()) ||
+      snippet.description.toLowerCase().includes(deferredQuery.toLowerCase())
     )
   })
 
@@ -113,7 +112,6 @@ export function SnippetSidebar({ snippets, currentPath }: Props) {
       />
       <SnippetSidebarList
         snippets={filteredSnippets}
-        currentPath={currentPath}
         key={filteredSnippets.length}
       />
     </aside>

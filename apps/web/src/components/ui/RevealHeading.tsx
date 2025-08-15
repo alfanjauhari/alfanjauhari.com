@@ -1,3 +1,5 @@
+'use client'
+
 import { type HTMLMotionProps, motion } from 'framer-motion'
 import { forwardRef } from 'react'
 import { cn } from '@/libs/utils'

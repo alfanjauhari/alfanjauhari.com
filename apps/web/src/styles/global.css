@@ -13,6 +13,7 @@
 
 pre:has(code) {
   position: relative;
+  white-space: pre-wrap;
 }
 
 pre button.copy {
@@ -48,4 +49,18 @@ pre button.copy {
   &.copied > .success {
     display: block;
   }
+}
+
+code[data-line-numbers] {
+  counter-reset: line;
+}
+
+code[data-line-numbers] > [data-line]::before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: 0.75rem;
+  margin-right: 1.5rem;
+  text-align: right;
+  color: var(--color-gray-300);
 }

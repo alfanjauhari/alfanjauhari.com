@@ -1,13 +1,16 @@
+'use client'
+
+import { usePathname } from 'next/navigation'
 import { type ComponentProps, forwardRef } from 'react'
 import { NAVIGATION_MENU } from '@/libs/config'
 import { cn } from '@/libs/utils'
 
-export interface HeaderProps extends ComponentProps<'header'> {
-  pathname: string
-}
+export type HeaderProps = ComponentProps<'header'>
 
 export const Header = forwardRef<HTMLElement, HeaderProps>(
-  ({ className, pathname, ...props }, ref) => {
+  ({ className, ...props }, ref) => {
+    const pathname = usePathname()
+
     return (
       <header
         className={cn(
