@@ -55,7 +55,7 @@ export const MainSingleLayout = forwardRef<
       >
         <article
           id="single-content"
-          className="mx-auto w-full max-w-full prose prose-stone prose-pre:[tab-size:2] prose-a:decoration-dotted"
+          className="mx-auto w-full max-w-full prose prose-stone prose-pre:[tab-size:2] prose-a:decoration-dotted prose-headings:scroll-mt-8"
         >
           {children}
         </article>

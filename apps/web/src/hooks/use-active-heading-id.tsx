@@ -22,7 +22,7 @@ export function useActiveHeadingId(headings: MarkdownHeading[]) {
           (heading): heading is { id: string; rect: DOMRect } => !!heading,
         )
 
-      const OFFSET = 120
+      const OFFSET = 32
       let firstHeading = headingElements.find(
         (heading) =>
           heading.rect.bottom > OFFSET && heading.rect.top < window.innerHeight,
