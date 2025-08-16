@@ -34,15 +34,17 @@ export async function RestrictedUpdates({ data }: RestrictedUpdatesProps) {
             })),
           )
 
-  return updates.map((post) => (
-    <ArticleCard
-      title={post.title}
-      description={post.description}
-      tag={post.tag}
-      date={post.date}
-      slug={post._meta.path}
-      type="restricted"
-      key={post._meta.path}
-    />
-  ))
+  return updates.length > 0
+    ? updates.map((post) => (
+        <ArticleCard
+          title={post.title}
+          description={post.description}
+          tag={post.tag}
+          date={post.date}
+          slug={post._meta.path}
+          type="restricted"
+          key={post._meta.path}
+        />
+      ))
+    : null
 }
