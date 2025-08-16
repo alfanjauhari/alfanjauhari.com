@@ -30,7 +30,7 @@
     "framer-motion": "^11.5.4",
     "lenis": "^1.1.14",
     "lucide-react": "0.534.0",
-    "payload": "^3.48.0",
+    "payload": "3.49.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-hook-form": "7.61.1",
