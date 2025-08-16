@@ -11,8 +11,6 @@ interface Props {
 
 const SnippetSidebarList = memo(
   function SnippetSidebarList({ snippets: snippetsProp, currentPath }: Props) {
-    console.log('Current path:', currentPath)
-
     const [snippets, setSnippets] = useState<CollectionEntry<'snippets'>[]>(
       snippetsProp.slice(0, 20),
     )

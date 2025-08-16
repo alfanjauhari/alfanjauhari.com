@@ -4,7 +4,7 @@ import { TableOfContents } from '@/components/ui/TableOfContents'
 import SingleLayout from '@/layouts/SingleLayout.astro'
 
 export async function getStaticPaths() {
-  const entries = await getCollection('blog')
+  const entries = await getCollection('updates')
 
   return entries.map((entry) => ({
     params: { slug: entry.id },

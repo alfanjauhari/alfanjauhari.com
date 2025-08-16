@@ -1,11 +1,11 @@
 ---
 import { getCollection } from 'astro:content'
-import ArticleCard from '@/components/ui/ArticleCard.astro'
 import { RevealHeading } from '@/components/ui/RevealHeading'
+import UpdateCard from '@/components/ui/UpdateCard.astro'
 import SiteLayout from '@/layouts/SiteLayout.astro'
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog')
+  const posts = await getCollection('updates')
   const tags = new Set(posts.map((post) => post.data.tag))
 
   return Array.from(tags).map((tag) => ({
@@ -16,7 +16,7 @@ export async function getStaticPaths() {
 
 const { tag } = Astro.params
 
-const posts = await getCollection('blog').then((posts) =>
+const posts = await getCollection('updates').then((posts) =>
   posts
     .filter((post) => post.data.tag === tag)
     .sort((a, b) => b.data.date.getTime() - a.data.date.getTime()),
@@ -24,19 +24,19 @@ const posts = await getCollection('blog').then((posts) =>
 ---
 
 <SiteLayout
-  title="Blog"
-  description="Latest articles, thought and random stuffs mixed in one place"
+  title="Updates"
+  description="Latest updates, thought and random stuffs mixed in one place"
 >
   <div class="flex flex-col gap-12 py-20">
     <RevealHeading
       client:visible
       className="text-6xl lg:text-10xl text-stone-700"
-      >Latest Articles</RevealHeading
+      >Latest Updates</RevealHeading
     >
     <div class="grid grid-cols-1 lg:grid-cols-2">
       {
         posts.map((post) => (
-          <ArticleCard
+          <UpdateCard
             title={post.data.title}
             description={post.data.description}
             tag={post.data.tag}

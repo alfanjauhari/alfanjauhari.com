@@ -1,0 +1,49 @@
+---
+import { LockIcon } from 'lucide-react'
+
+interface Props {
+  slug: string
+  tag: string
+  title: string
+  date: Date
+  description: string
+  type?: 'updates' | 'restricted'
+}
+
+const { type = 'updates', ...post } = Astro.props
+---
+
+<a
+  href={type === "updates" ? `/updates/${post.slug}` : `/r/${post.slug}`}
+  class="p-6 border border-stone-300 relative after:bg-white after:absolute after:inset-0 after:-translate-y-full after:duration-300 hover:after:translate-y-0 overflow-y-hidden group/update-card bg-stone-700"
+>
+  <div class="space-y-2 relative z-10">
+    <div class="flex items-center justify-between">
+      <p
+        class="text-white text-sm group-hover/update-card:text-stone-700 duration-300"
+      >
+        {post.tag} &mdash;{" "}
+        {
+          Intl.DateTimeFormat("en-ID", {
+            dateStyle: "medium",
+          }).format(post.date)
+        }
+      </p>
+      {
+        type === "restricted" && (
+          <LockIcon className="size-4 text-white group-hover/update-card:text-stone-700 duration-300" />
+        )
+      }
+    </div>
+    <h1
+      class="text-white text-4xl font-heading uppercase my-2 group-hover/update-card:text-stone-700 duration-300"
+    >
+      {post.title}
+    </h1>
+    <p
+      class="text-white text-balance group-hover/update-card:text-stone-700 duration-300"
+    >
+      {post.description}
+    </p>
+  </div>
+</a>

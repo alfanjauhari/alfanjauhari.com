@@ -14,8 +14,8 @@ export const NAVIGATION_MENU = [
     href: '/about',
   },
   {
-    name: 'Blog',
-    href: '/blog',
+    name: 'Updates',
+    href: '/updates',
   },
   {
     name: 'Snippets',
@@ -33,8 +33,8 @@ export const FOOTER_MENU = [
         href: '/about',
       },
       {
-        name: 'Blog',
-        href: '/blog',
+        name: 'Updates',
+        href: '/updates',
       },
       {
         name: 'Uses',

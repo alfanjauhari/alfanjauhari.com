@@ -4,14 +4,14 @@ import { getCollection } from 'astro:content'
 import { ExternalLinkIcon } from 'lucide-react'
 import { SelectedWorksHeading } from '@/components/pages/home/SelectedWorksHeading'
 import { Tagline } from '@/components/pages/home/Tagline'
-import ArticleCard from '@/components/ui/ArticleCard.astro'
-import RestrictedArticles from '@/components/ui/RestrictedArticles.astro'
+import RestrictedUpdates from '@/components/ui/RestrictedUpdates.astro'
 import { RevealHeading } from '@/components/ui/RevealHeading'
+import UpdateCard from '@/components/ui/UpdateCard.astro'
 import SiteLayout from '@/layouts/SiteLayout.astro'
 import { PROJECTS } from '@/libs/config'
 import { cn } from '@/libs/utils'
 
-const posts = await getCollection('blog').then((posts) =>
+const posts = await getCollection('updates').then((posts) =>
   posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime()),
 )
 ---
@@ -148,12 +148,12 @@ const posts = await getCollection('blog').then((posts) =>
     class="bg-stone-700 px-6 -mx-6 py-20 gap-12 flex flex-col"
   >
     <RevealHeading client:visible className="text-6xl lg:text-10xl text-white"
-      >Latest Articles</RevealHeading
+      >Latest Updates</RevealHeading
     >
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
       {
         posts.map((post) => (
-          <ArticleCard
+          <UpdateCard
             title={post.data.title}
             description={post.data.description}
             tag={post.data.tag}
@@ -162,7 +162,7 @@ const posts = await getCollection('blog').then((posts) =>
           />
         ))
       }
-      <RestrictedArticles server:defer />
+      <RestrictedUpdates server:defer />
     </div>
   </section>
 </SiteLayout>

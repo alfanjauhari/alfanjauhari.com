@@ -1,0 +1,112 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# Local env files
+.env
+.env.*
+!.env.example
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Next.js
+.next/
+out/
+.swc/
+
+# Payload CMS specific
+.payload/
+payload-types.ts
+.temp/
+src/generated/payload-types.ts
+src/generated/payload-schema.ts
+
+# Database files
+*.db
+*.db-*
+local.db
+local.db-wal
+local.db-shm
+*.sqlite
+*.sqlite3
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.log
+
+# Testing
+coverage/
+.nyc_output
+*.lcov
+
+# Build outputs
+build/
+dist/
+
+# Cache directories
+.cache/
+.turbo/
+
+# Vercel
+.vercel/
+
+# TypeScript
+*.tsbuildinfo
+.tsc-incremental/
+
+# Sentry
+.sentryclirc
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+.temp/
+.tmp/
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Optional npm cache
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# Sharp cache
+.sharp/
+
+# Certificates
+*.pem

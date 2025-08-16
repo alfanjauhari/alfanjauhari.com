@@ -43,9 +43,9 @@ export default defineConfig({
 
   adapter: vercel({
     includeFiles: [
-      './src/content/blog/_components/web-development-with-progressive-enhancement/sandpack-files/App.tsx',
+      './src/content/updates/_components/web-development-with-progressive-enhancement/sandpack-files/App.tsx',
 
-      './src/content/blog/_components/web-development-with-progressive-enhancement/sandpack-files/App.module.css',
+      './src/content/updates/_components/web-development-with-progressive-enhancement/sandpack-files/App.module.css',
     ],
   }),
 

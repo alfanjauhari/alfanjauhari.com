@@ -3,7 +3,7 @@ import type { APIContext } from 'astro'
 import { generateImage } from '../_generate-image'
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog')
+  const posts = await getCollection('updates')
 
   return posts.map((post) => ({
     params: { slug: post.id },
@@ -16,7 +16,7 @@ export async function GET({
 }: APIContext<Record<string, string>, { slug: string }>) {
   const slug = params.slug
 
-  const post = await getEntry('blog', slug)
+  const post = await getEntry('updates', slug)
 
   if (!post) {
     return new Response('Not Found', { status: 404 })
