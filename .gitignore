@@ -1,130 +1,45 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# Dependencies
-node_modules/
-.pnp
-.pnp.js
-.yarn/cache
-.yarn/unplugged
-.yarn/build-state.yml
-.yarn/install-state.gz
+# dependencies
+/node_modules
+/.pnp
 .pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
 
-# Local env files
-.env
-.env.*
-!.env.example
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# testing
+/coverage
 
-# Testing
-coverage/
-.nyc_output
-*.lcov
+# next.js
+/.next/
+/out/
 
-# Logs
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+.pnpm-debug.log*
 
-# Build Outputs
-.next/
-out/
-build/
-dist/
-.output/
-.nuxt/
-.nitro/
-.cache/
+# env files (can opt-in for committing if needed)
+.env*
 
-# Astro
-.astro/
-
-# Payload CMS
-.payload/
-payload-types.ts
-.temp/
-
-# Database files
-*.db
-*.db-*
-local.db
-local.db-wal
-local.db-shm
-*.sqlite
-*.sqlite3
-
-# Turbo
-.turbo/
-
-# Vercel
-.vercel/
-
-# Vite
-vite.config.js.timestamp-*
-vite.config.ts.timestamp-*
-
-# IDE and Editor files
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-
-# Temporary files
-*.tmp
-*.temp
-.temp/
-.tmp/
-
-# Runtime data
-pids/
-*.pid
-*.seed
-*.pid.lock
-
-# Optional npm cache directory
-.npm
-
-# Optional eslint cache
-.eslintcache
-
-# Optional stylelint cache
-.stylelintcache
-
-# Microbundle cache
-.rpt2_cache/
-.rts2_cache_cjs/
-.rts2_cache_es/
-.rts2_cache_umd/
-
-# Optional REPL history
-.node_repl_history
-
-# Output of 'npm pack'
-*.tgz
-
-# Yarn Integrity file
-.yarn-integrity
-
-# TypeScript cache
-*.tsbuildinfo
-
-# Certificates
-*.pem
-
-# Sentry Config File
-.sentryclirc
+# vercel
 .vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+.content-collections
+# Sentry Config File
+.env.sentry-build-plugin
