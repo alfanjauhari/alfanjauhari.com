@@ -6,7 +6,6 @@ export const RestrictedContentResultSchema = z.object({
   slug: z.string(),
   title: z.string(),
   description: z.string(),
-  markdown: z.string(),
   tag: z.string(),
   updatedAt: z.coerce.date(),
 })
@@ -22,10 +21,10 @@ type PayloadContent = Omit<RestrictedContentResult, 'tag'> & {
 export function restrictedContentLoader(): Loader {
   return {
     name: 'restricted-content',
-    load: async ({ store, parseData, renderMarkdown }) => {
+    load: async ({ store, parseData }) => {
       try {
         const contents = await fetch(
-          `${import.meta.env.PUBLIC_PAYLOAD_API_URL}/api/contents?populate[tag][title]=true`,
+          `${import.meta.env.PUBLIC_PAYLOAD_API_URL}/api/public/contents`,
         ).then((res) => res.json() as Promise<{ docs: PayloadContent[] }>)
 
         store.clear()
@@ -38,17 +37,13 @@ export function restrictedContentLoader(): Loader {
               tag:
                 typeof item.tag !== 'string' && 'title' in item.tag
                   ? item.tag.title
-                  : '',
+                  : item.tag,
             },
           })
-
-          const body = item.markdown || ''
-          const rendered = await renderMarkdown(body)
 
           store.set({
             id: item.slug,
             data,
-            rendered,
           })
         }
       } catch (error) {

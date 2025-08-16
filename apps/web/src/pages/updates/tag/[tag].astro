@@ -1,12 +1,18 @@
 ---
 import { getCollection } from 'astro:content'
+import RestrictedUpdates from '@/components/ui/RestrictedUpdates.astro'
 import { RevealHeading } from '@/components/ui/RevealHeading'
 import UpdateCard from '@/components/ui/UpdateCard.astro'
 import SiteLayout from '@/layouts/SiteLayout.astro'
 
 export async function getStaticPaths() {
-  const posts = await getCollection('updates')
-  const tags = new Set(posts.map((post) => post.data.tag))
+  const restrictedUpdates = getCollection('restricted')
+  const generalUpdates = getCollection('updates')
+  const updates = await Promise.all([restrictedUpdates, generalUpdates]).then(
+    (res) => res.flat(),
+  )
+
+  const tags = new Set(updates.map((update) => update.data.tag))
 
   return Array.from(tags).map((tag) => ({
     params: { tag },
@@ -16,10 +22,11 @@ export async function getStaticPaths() {
 
 const { tag } = Astro.params
 
-const posts = await getCollection('updates').then((posts) =>
-  posts
-    .filter((post) => post.data.tag === tag)
-    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime()),
+const restrictedUpdates = await getCollection('restricted').then((res) =>
+  res.filter((update) => update.data.tag === tag),
+)
+const updates = await getCollection('updates').then((res) =>
+  res.filter((update) => update.data.tag === tag),
 )
 ---
 
@@ -35,16 +42,17 @@ const posts = await getCollection('updates').then((posts) =>
     >
     <div class="grid grid-cols-1 lg:grid-cols-2">
       {
-        posts.map((post) => (
+        updates.map((update) => (
           <UpdateCard
-            title={post.data.title}
-            description={post.data.description}
-            tag={post.data.tag}
-            date={post.data.date}
-            slug={post.id}
+            title={update.data.title}
+            description={update.data.description}
+            tag={update.data.tag}
+            date={update.data.date}
+            slug={update.id}
           />
         ))
       }
+      <RestrictedUpdates data={restrictedUpdates} server:defer />
     </div>
   </div>
 </SiteLayout>

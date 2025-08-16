@@ -28,3 +28,11 @@ export class APIError<TDetail> extends Error {
     }
   }
 }
+
+export function isAPIError<TError>(error: unknown): error is APIError<TError> {
+  return (
+    error instanceof Error &&
+    'status' in error &&
+    typeof (error as APIError<TError>).status === 'number'
+  )
+}

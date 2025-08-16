@@ -1,10 +1,22 @@
 ---
+import type { CollectionEntry } from 'astro:content'
 import { getCollection } from 'astro:content'
 import UpdateCard from '@/components/ui/UpdateCard.astro'
 
-const restrictedUpdates = await getCollection('restricted').then((posts) =>
-  posts.sort((a, b) => b.data.updatedAt.getTime() - a.data.updatedAt.getTime()),
-)
+interface Props {
+  data?: CollectionEntry<'restricted'>[]
+}
+
+const { data } = Astro.props
+
+const restrictedUpdates =
+  data !== undefined
+    ? data
+    : await getCollection('restricted').then((posts) =>
+        posts.sort(
+          (a, b) => b.data.updatedAt.getTime() - a.data.updatedAt.getTime(),
+        ),
+      )
 ---
 
 {

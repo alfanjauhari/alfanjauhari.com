@@ -1,9 +1,5 @@
-import {
-  convertLexicalToMarkdown,
-  editorConfigFactory,
-} from '@payloadcms/richtext-lexical'
-import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
-import type { CollectionConfig, RichTextField } from 'payload'
+import { lexicalHTMLField } from '@payloadcms/richtext-lexical'
+import type { CollectionConfig } from 'payload'
 import { formatSlugHook } from '@/libs/formatter'
 
 export const Content: CollectionConfig = {
@@ -40,42 +36,12 @@ export const Content: CollectionConfig = {
       label: 'Content',
       required: true,
     },
-    {
-      name: 'markdown',
-      type: 'textarea',
-      admin: {
-        hidden: true,
-      },
-      hooks: {
-        afterRead: [
-          ({ siblingData, siblingFields }) => {
-            const data: SerializedEditorState = siblingData.content
-
-            if (!data) {
-              return ''
-            }
-
-            const markdown = convertLexicalToMarkdown({
-              data,
-              editorConfig: editorConfigFactory.fromField({
-                field: siblingFields.find(
-                  (field) => 'name' in field && field.name === 'content',
-                ) as RichTextField,
-              }),
-            })
-
-            return markdown
-          },
-        ],
-        beforeChange: [
-          ({ siblingData }) => {
-            // Ensure that the markdown field is not saved in the database
-            delete siblingData.markdown
-            return null
-          },
-        ],
-      },
-    },
+    lexicalHTMLField({
+      htmlFieldName: 'html',
+      lexicalFieldName: 'content',
+      hidden: true,
+      storeInDB: false,
+    }),
     {
       name: 'tag',
       type: 'relationship',
@@ -87,7 +53,9 @@ export const Content: CollectionConfig = {
   ],
   access: {
     read: ({ req }) => {
-      if (!req.user) {
+      if (!req.user) return false
+
+      if (req.user.role !== 'admin') {
         return {
           _status: {
             equals: 'published',

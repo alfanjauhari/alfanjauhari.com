@@ -41,7 +41,7 @@ export const contents = pgTable(
     slug: varchar("slug"),
     description: varchar("description"),
     content: jsonb("content"),
-    markdown: varchar("markdown"),
+    html: varchar("html"),
     tag: uuid("tag_id").references(() => tags.id, {
       onDelete: "set null",
     }),
@@ -85,7 +85,7 @@ export const _contents_v = pgTable(
     version_slug: varchar("version_slug"),
     version_description: varchar("version_description"),
     version_content: jsonb("version_content"),
-    version_markdown: varchar("version_markdown"),
+    version_html: varchar("version_html"),
     version_tag: uuid("version_tag_id").references(() => tags.id, {
       onDelete: "set null",
     }),

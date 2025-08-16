@@ -2,9 +2,12 @@
 export const prerender = false
 
 import { getEntry, render } from 'astro:content'
-import type { loginOperation } from 'payload'
 import SingleLayout from '@/layouts/SingleLayout.astro'
 import { fetchAPI } from '@/libs/api'
+import { auth } from '@/libs/auth'
+import { isAPIError } from '@/libs/errors'
+
+// #region Check auth
 
 type Params = {
   slug: string
@@ -20,21 +23,24 @@ if (!entry) {
   })
 }
 
-const isAuthenticated = await fetchAPI<
-  Awaited<ReturnType<typeof loginOperation>>
->('/users/me')
-  .then((result) => result.user !== null)
-  .catch(() => false)
+const session = await auth.getSession({
+  fetchOptions: {
+    headers: Astro.request.headers,
+  },
+})
 
-if (!isAuthenticated) {
+if (!session.data) {
   return Astro.redirect(
     `/login?redirectTo=${encodeURIComponent(Astro.url.pathname)}&message=${encodeURIComponent(`You must be logged in to access "${entry.data.title}" content!`)}`,
   )
 }
 
-const { Content } = await render(entry)
+const data = await fetchAPI<{
+  id: string
+  html: string
+}>(`/api/contents/${entry.data.id}?select[html]=true&select[content]=true`, {
+  headers: Astro.request.headers,
+})
 ---
 
-<SingleLayout {...entry.data}>
-  <Content />
-</SingleLayout>
+<SingleLayout {...entry.data} set:html={data.html} />
