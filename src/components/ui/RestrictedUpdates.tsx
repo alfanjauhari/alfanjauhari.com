@@ -26,7 +26,10 @@ export async function RestrictedUpdates({ data }: RestrictedUpdatesProps) {
             res.docs.map((doc) => ({
               title: doc.title,
               description: doc.description,
-              tag: typeof doc.tag === 'string' ? doc.tag : doc.tag.title,
+              tag:
+                doc.tag && typeof doc.tag === 'object' && 'title' in doc.tag
+                  ? doc.tag.title
+                  : doc.tag,
               date: new Date(doc.updatedAt),
               _meta: {
                 path: doc.slug,
