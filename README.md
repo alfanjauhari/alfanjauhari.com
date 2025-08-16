@@ -24,7 +24,6 @@ A modern personal website and blog built with Astro (frontend) and PayloadCMS (h
 
 ### Infrastructure
 
-- **Turbo** - Monorepo build system
 - **Bun** - JavaScript runtime and package manager
 - **Biome** - Linting and formatting
 - **Sentry** - Error monitoring
@@ -150,7 +149,6 @@ alfanjauhari.com/
 │       │   └── app/         # Next.js app directory
 │       └── payload.config.ts
 ├── docker-compose.yml       # Docker configuration
-├── turbo.json              # Turbo configuration
 └── package.json            # Root package.json
 ```
 
