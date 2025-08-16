@@ -1,9 +1,6 @@
 {
   "explorer.confirmDragAndDrop": false,
   "typescript.updateImportsOnFileMove.enabled": "always",
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  },
   "editor.defaultFormatter": "biomejs.biome",
   "editor.formatOnSave": true,
   "explorer.confirmDelete": false

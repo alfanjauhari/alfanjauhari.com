@@ -1,17 +1,14 @@
-import {
-  createContentCollectionPlugin,
-  withContentCollections,
-} from '@content-collections/next'
+import { withContentCollections } from '@content-collections/next'
 import createMDX from '@next/mdx'
 import { withPayload } from '@payloadcms/next/withPayload'
 import { withSentryConfig } from '@sentry/nextjs'
-import type { NextConfig } from 'next'
 import rehypePrettyCode from 'rehype-pretty-code'
 import rehypeSlug from 'rehype-slug'
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkMdxFrontmatter from 'remark-mdx-frontmatter'
 
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   pageExtensions: ['tsx', 'mdx', 'ts'],
   output: 'standalone',
   experimental: {

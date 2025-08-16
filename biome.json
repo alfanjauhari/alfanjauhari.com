@@ -8,7 +8,7 @@
   "files": {
     "ignoreUnknown": false,
     "includes": [
-      "./**/*.{json,ts,tsx,astro,css,html,scss,js,jsx}",
+      "./**/*.{json,ts,tsx,astro,css,html,scss,js,jsx,mjs}",
       "!**/generated/**/*",
       "!**/migrations/**/*"
     ]
