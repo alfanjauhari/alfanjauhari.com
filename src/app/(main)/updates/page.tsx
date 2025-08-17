@@ -5,13 +5,14 @@ import { RestrictedUpdates } from '@/components/ui/RestrictedUpdates'
 import { RevealHeading } from '@/components/ui/RevealHeading'
 import { buildMetadata } from '@/libs/metadata'
 
+// Revalidate every 7 days
+export const revalidate = 604800
+
 export const metadata: Metadata = buildMetadata({
   title: 'Updates',
   description: 'Latest updates and news',
   url: '/updates',
 })
-
-export const experimental_ppr = true
 
 export default function UpdatesPage() {
   return (

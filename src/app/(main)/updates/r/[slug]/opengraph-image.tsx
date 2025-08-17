@@ -11,6 +11,11 @@ export async function generateStaticParams() {
     select: {
       slug: true,
     },
+    where: {
+      _status: {
+        equals: 'published',
+      },
+    },
   })
 
   return contents.docs.map((content) => ({
@@ -35,6 +40,9 @@ export default async function RestrictedUpdateOGImage({
     where: {
       slug: {
         equals: slug,
+      },
+      _status: {
+        equals: 'published',
       },
     },
     limit: 1,

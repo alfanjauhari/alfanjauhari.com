@@ -11,9 +11,6 @@ import remarkMdxFrontmatter from 'remark-mdx-frontmatter'
 const nextConfig = {
   pageExtensions: ['tsx', 'mdx', 'ts'],
   output: 'standalone',
-  experimental: {
-    ppr: 'incremental',
-  },
   redirects: async () => [
     {
       source: '/x',

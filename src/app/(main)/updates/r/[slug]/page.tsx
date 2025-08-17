@@ -24,6 +24,9 @@ export default async function RestrictedUpdatePage({
         slug: {
           equals: slug,
         },
+        _status: {
+          equals: 'published',
+        },
       },
       limit: 1,
     })

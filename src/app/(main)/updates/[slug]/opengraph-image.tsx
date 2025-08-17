@@ -4,11 +4,7 @@ import { OGImage } from '@/components/ui/OGImage'
 import { generateOGImage } from '@/libs/metadata'
 import type { SingleUpdatesPageProps } from './page'
 
-export async function generateStaticParams() {
-  return allUpdates.map((update) => ({
-    slug: update._meta.path,
-  }))
-}
+export { generateStaticParams } from './page'
 
 export default async function SingleUpdatesOGImage({
   params,

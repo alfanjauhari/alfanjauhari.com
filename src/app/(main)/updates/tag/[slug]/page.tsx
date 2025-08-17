@@ -5,11 +5,12 @@ import { RevealHeading } from '@/components/ui/RevealHeading'
 import { buildMetadata } from '@/libs/metadata'
 import { getPayload } from '@/libs/payload'
 
+// Revalidate every 7 days
+export const revalidate = 604800
+
 export interface UpdatesTagPageProps {
   params: Promise<{ slug: string }>
 }
-
-export const experimental_ppr = true
 
 export async function generateStaticParams() {
   const payload = await getPayload()
@@ -19,6 +20,9 @@ export async function generateStaticParams() {
       where: {
         'tag.title': {
           not_equals: null,
+        },
+        _status: {
+          equals: 'published',
         },
       },
       select: {
@@ -46,8 +50,8 @@ export async function generateMetadata({ params }: UpdatesTagPageProps) {
   const { slug } = await params
 
   return buildMetadata({
-    title: `Updates Tagged ${slug}`,
-    description: `Latest updates and news ${slug}`,
+    title: `Updates Tagged by ${slug}`,
+    description: `Latest updates and news tagged by ${slug}`,
     url: `/updates/tag/${slug}`,
   })
 }

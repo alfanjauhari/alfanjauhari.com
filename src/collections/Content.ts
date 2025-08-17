@@ -1,6 +1,13 @@
 import { lexicalHTMLField } from '@payloadcms/richtext-lexical'
+import { revalidatePath } from 'next/cache'
 import type { CollectionConfig } from 'payload'
 import { formatSlugHook } from '@/libs/utils'
+
+const revalidateContentPaths = () => {
+  revalidatePath('/')
+  revalidatePath('/updates')
+  revalidatePath('/updates/tag/[slug]', 'page')
+}
 
 export const Content: CollectionConfig = {
   slug: 'contents',
@@ -68,5 +75,9 @@ export const Content: CollectionConfig = {
   },
   versions: {
     drafts: true,
+  },
+  hooks: {
+    afterChange: [revalidateContentPaths],
+    afterDelete: [revalidateContentPaths],
   },
 }
