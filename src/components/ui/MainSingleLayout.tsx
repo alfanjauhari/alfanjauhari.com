@@ -27,7 +27,7 @@ export const MainSingleLayout = forwardRef<
       {(tag || date) && (
         <div className="flex items-center gap-2">
           <a
-            href={`/blog/tag/${tag}`}
+            href={`/updates/tag/${tag}`}
             className="bg-stone-700 text-white font-semibold p-2 w-fit text-sm"
           >
             {tag}

@@ -5,9 +5,8 @@ tag: Web Technologies
 date: 2024-11-01
 ---
 
-import {FormSandpack} from '../../components/contents/updates/web-development-with-progressive-enhancement/FormSandpack'
-import Image from 'next/image'
-import ProgressiveEnhancementLayerImage from '../../assets/blog/web-development-with-progressive-enhancement/progressive-enhancement-layers.png';
+import { FormSandpack } from "@/components/contents/updates/web-development-with-progressive-enhancement/FormSandpack";
+import ProgressiveEnhancementLayerImage from "@/assets/updates/web-development-with-progressive-enhancement/progressive-enhancement-layers.png";
 
 Have you ever opened some website, but it doesn&lsquo;t work on your ancient devices? It&lsquo;s kinda stressful isn&lsquo;t it when you try surfing on the internet you need to spend your money to buy a new device first. Well, if you feel that way, when building a website you need to pay attention to backward compatibility, so more users can use your websites smoothly without a problem. And that's where you need progressive enhancement when building websites for more accessibility and backward compatibility.
 
@@ -16,7 +15,6 @@ Have you ever opened some website, but it doesn&lsquo;t work on your ancient dev
 Quoted from [MDN](https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement) :
 
 > Progressive enhancement is a design philosophy that provides a baseline of essential content and functionality to as many users as possible, while delivering the best possible experience only to users of the most modern browsers that can run all the required code.
-> 
 
 This means that with progressive enhancement, we can improve user experience regardless of their user agent. So, although the user opens it from IE 1, it can still work fine, with some features probably reduced (but what kind of psycho is using IE in this economy?).
 
@@ -28,7 +26,7 @@ Progressive enhancement is important when you are targeting a wider user base fo
 
 With that in mind, your websites can visited by any users from any background and maybe can increase your sales from specific customers. Customers with old browsers, customers with old devices, etc. Because, sometimes we never know where our customers come from, what are their economic condition, what are their internet speed and what are their special conditions they had.
 
-***But, isn't it like we're making bad assumptions about the user's browser?***
+**_But, isn't it like we're making bad assumptions about the user's browser?_**
 
 Although the progressive enhancement objective is to improve backward compatibility and accessibility, we don&lsquo;t make assumptions or presume anything about our users. We just make sure our website still works fine in old browsers and has all the features available in modern browsers without sacrificing users' experience with old browsers.
 
@@ -38,13 +36,16 @@ Well, progressive enhancement is not a technology it&lsquo;s more about the deve
 
 ## Difference with Graceful Degradation
 
-When you were learning progressive enhancement, you will likely introduce to graceful degradation also. It has almost same philosophy with progressive enhancement, the differences are while with progressive enhancement we as a developer starting from basic and functional version of website first and then add more advanced features for modern web browsers and devices that support them, the graceful degradation *dictates* us to start from most advanced features for modern browsers and devices and add supports for less capable browsers or devices version by “degrading” certain features as needed.
+When you were learning progressive enhancement, you will likely introduce to graceful degradation also. It has almost same philosophy with progressive enhancement, the differences are while with progressive enhancement we as a developer starting from basic and functional version of website first and then add more advanced features for modern web browsers and devices that support them, the graceful degradation _dictates_ us to start from most advanced features for modern browsers and devices and add supports for less capable browsers or devices version by “degrading” certain features as needed.
 
 So, by that explanation before, progressive enhancement is a bottom-up approach to web development while the graceful degradation is a top-down approach. You can be using progressive enhancement and graceful degradation at the same time to complement each other while building websites.
 
 ## Progressive Enhancement Layers
 
-<Image src={ProgressiveEnhancementLayerImage} alt="Progressive Enhancement Layers" />
+<Image
+  src={ProgressiveEnhancementLayerImage}
+  alt="Progressive Enhancement Layers"
+/>
 
 In that image, we can see we have 3 layers of progressive enhancement which is HTML, CSS and JavaScript. Those layers play important part for progressive enhancement and have different specification on each layer.
 
@@ -66,9 +67,9 @@ For example, you can check the support of grid with this code:
 
 ```css
 @supports (display: grid) {
-	.container {
-		display: grid;
-	}
+  .container {
+    display: grid;
+  }
 }
 ```
 
@@ -76,9 +77,9 @@ Or, you want to check if the grid property doesn’t exist and the flex property
 
 ```css
 @supports (display: flex) and (not (display: grid)) {
-	.container {
-		display: flex;
-	}
+  .container {
+    display: flex;
+  }
 }
 ```
 
@@ -92,7 +93,7 @@ Some people think when we implement progressive enhancement we cannot be using J
 
 Okay, but how we can make sure our users have the same experience even though they are using an old browser or device?
 
-The answer to that question is ***fallback.*** Fallback is a substitute or alternative solution that ensures a feature or content is still available to users if the preferred or advanced version cannot be used.
+The answer to that question is **_fallback._** Fallback is a substitute or alternative solution that ensures a feature or content is still available to users if the preferred or advanced version cannot be used.
 
 This snippet showing how we maintain form compatibility when implementing progressive enhancement :
 

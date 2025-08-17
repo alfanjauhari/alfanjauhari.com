@@ -164,7 +164,6 @@ export interface Content {
 export interface Tag {
   id: string;
   title: string;
-  slug: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -376,7 +375,6 @@ export interface ContentsSelect<T extends boolean = true> {
  */
 export interface TagsSelect<T extends boolean = true> {
   title?: T;
-  slug?: T;
   updatedAt?: T;
   createdAt?: T;
 }

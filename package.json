@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate-types": "payload generate:types"
+    "generate-types": "payload generate:types",
+    "check-fix": "biome check . --fix"
   },
   "dependencies": {
     "@codesandbox/sandpack-react": "^2.20.0",

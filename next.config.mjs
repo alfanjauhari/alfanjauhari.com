@@ -12,8 +12,45 @@ const nextConfig = {
   pageExtensions: ['tsx', 'mdx', 'ts'],
   output: 'standalone',
   experimental: {
-    ppr: true,
+    ppr: 'incremental',
   },
+  redirects: async () => [
+    {
+      source: '/x',
+      destination: 'https://x.com/alfanjauhari_',
+      permanent: true,
+    },
+    {
+      source: '/gh',
+      destination: 'https://github.com/alfanjauhari',
+      permanent: true,
+    },
+    {
+      source: '/li',
+      destination: 'https://linkedin.com/in/m-alfanjauhari',
+      permanent: true,
+    },
+    {
+      source: '/ig',
+      destination: 'https://instagram.com/alfanjauhari_',
+      permanent: true,
+    },
+    {
+      source: '/fb',
+      destination: 'https://facebook.com/m.alfanjauhari',
+      permanent: true,
+    },
+    {
+      source: '/admin/login',
+      destination: '/login',
+      permanent: true,
+    },
+    {
+      source: '/admin/create-first-user',
+      destination: '/register',
+      permanent: true,
+    },
+  ],
 }
 
 const withMDX = createMDX({
