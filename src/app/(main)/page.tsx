@@ -9,7 +9,8 @@ import { RevealHeading } from '@/components/ui/RevealHeading'
 import { PROJECTS } from '@/libs/config'
 import { cn } from '@/libs/utils'
 
-export const experimental_ppr = true
+// Revalidate every 7 days
+export const revalidate = 604800
 
 export default async function HomePage() {
   return (

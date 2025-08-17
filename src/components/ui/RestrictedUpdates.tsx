@@ -11,7 +11,12 @@ export async function RestrictedUpdates({ filter }: RestrictedUpdatesProps) {
   const updates = await payload
     .find({
       collection: 'contents',
-      where: filter,
+      where: {
+        _status: {
+          equals: 'published',
+        },
+        ...(filter ? { ...filter } : {}),
+      },
       select: {
         title: true,
         description: true,

@@ -9,6 +9,12 @@ export interface SingleUpdatesPageProps {
   params: Promise<{ slug: string }>
 }
 
+export async function generateStaticParams() {
+  return allUpdates.map((update) => ({
+    slug: update._meta.path,
+  }))
+}
+
 export async function generateMetadata({
   params,
 }: SingleUpdatesPageProps): Promise<Metadata> {
@@ -24,12 +30,6 @@ export async function generateMetadata({
     description: update.description,
     url: `/updates/${slug}`,
   })
-}
-
-export async function generateStaticParams() {
-  return allUpdates.map((update) => ({
-    slug: update._meta.path,
-  }))
 }
 
 export default async function SingleUpdatesPage({
