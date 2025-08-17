@@ -2,7 +2,7 @@ import type { PropsWithChildren } from 'react'
 import '@/styles/fonts.css'
 import '@/styles/global.css'
 import type { Metadata } from 'next'
-import { env } from '@/libs/config'
+import { env } from '@/libs/env'
 
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_SITE_URL),

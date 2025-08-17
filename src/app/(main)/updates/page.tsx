@@ -1,6 +1,7 @@
 import { allUpdates } from 'content-collections'
 import type { Metadata } from 'next'
 import { ArticleCard } from '@/components/ui/ArticleCard'
+import { RestrictedUpdates } from '@/components/ui/RestrictedUpdates'
 import { RevealHeading } from '@/components/ui/RevealHeading'
 import { buildMetadata } from '@/libs/metadata'
 
@@ -9,6 +10,8 @@ export const metadata: Metadata = buildMetadata({
   description: 'Latest updates and news',
   url: '/updates',
 })
+
+export const experimental_ppr = true
 
 export default function UpdatesPage() {
   return (
@@ -27,6 +30,8 @@ export default function UpdatesPage() {
             key={update._meta.path}
           />
         ))}
+
+        <RestrictedUpdates />
       </div>
     </div>
   )

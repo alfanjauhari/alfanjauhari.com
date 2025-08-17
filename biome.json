@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.1.2/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -8,7 +8,7 @@
   "files": {
     "ignoreUnknown": false,
     "includes": [
-      "./**/*.{json,ts,tsx,astro,css,html,scss,js,jsx,mjs}",
+      "./**/*.{json,ts,tsx,astro,css,html,scss,js,jsx,mjs,mdx,md}",
       "!**/generated/**/*",
       "!**/migrations/**/*"
     ]

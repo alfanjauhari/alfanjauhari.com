@@ -11,7 +11,7 @@ import { Session } from '@/collections/Session'
 import { Tag } from '@/collections/Tag'
 import { User } from '@/collections/User'
 import { Verification } from '@/collections/Verification'
-import { env } from '@/libs/config'
+import { env } from '@/libs/env'
 
 export default buildConfig({
   editor: lexicalEditor({

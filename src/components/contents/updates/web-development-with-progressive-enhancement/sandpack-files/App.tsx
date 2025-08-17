@@ -3,10 +3,10 @@ import styles from './App.module.css'
 export default function App() {
   const ACTION_URL =
     document.referrer +
-    'api/blog/web-development-with-progressive-enhancement/form.html'
+    'api/updates/web-development-with-progressive-enhancement/form.html'
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    // @ts-ignore
+    // @ts-expect-error
     // You can comment this line out if you want to see the form submission with fetch
     delete window.fetch
 

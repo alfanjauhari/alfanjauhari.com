@@ -12,8 +12,6 @@ import { cn } from '@/libs/utils'
 export const experimental_ppr = true
 
 export default async function HomePage() {
-  console.log('ALL UPDATES', allUpdates)
-
   return (
     <>
       <section id="hero" className="flex flex-col justify-center pb-32 py-12">

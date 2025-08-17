@@ -5,7 +5,7 @@ import { memo, useState } from 'react'
 import Button from '@/components/base/Button'
 import { GithubIcon } from '@/components/icons/GithubIcon'
 import { GoogleIcon } from '@/components/icons/GoogleIcon'
-import { env } from '@/libs/config'
+import { env } from '@/libs/env'
 import { authClient } from '@/libs/utils'
 
 export const ProvidersLogin = memo(function ProvidersLogin() {

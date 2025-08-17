@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { ImageResponse } from 'next/og'
 import type { ReactElement } from 'react'
-import { env } from './config'
+import { env } from './env'
 
 export async function generateOGImage<
   TFont extends { name: string; url: string; style: 'normal' | 'italic' },

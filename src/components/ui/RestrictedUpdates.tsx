@@ -1,41 +1,39 @@
-import type { Update } from 'content-collections'
+import type { Where } from 'payload'
 import { ArticleCard } from '@/components/ui/ArticleCard'
 import { getPayload } from '@/libs/payload'
 
 export interface RestrictedUpdatesProps {
-  data?: Update[]
+  filter?: Where
 }
 
-export async function RestrictedUpdates({ data }: RestrictedUpdatesProps) {
+export async function RestrictedUpdates({ filter }: RestrictedUpdatesProps) {
   const payload = await getPayload()
-  const updates =
-    data !== undefined
-      ? data
-      : await payload
-          .find({
-            collection: 'contents',
-            select: {
-              title: true,
-              description: true,
-              tag: true,
-              updatedAt: true,
-              slug: true,
-            },
-          })
-          .then((res) =>
-            res.docs.map((doc) => ({
-              title: doc.title,
-              description: doc.description,
-              tag:
-                doc.tag && typeof doc.tag === 'object' && 'title' in doc.tag
-                  ? doc.tag.title
-                  : doc.tag,
-              date: new Date(doc.updatedAt),
-              _meta: {
-                path: doc.slug,
-              },
-            })),
-          )
+  const updates = await payload
+    .find({
+      collection: 'contents',
+      where: filter,
+      select: {
+        title: true,
+        description: true,
+        tag: true,
+        updatedAt: true,
+        slug: true,
+      },
+    })
+    .then((res) =>
+      res.docs.map((doc) => ({
+        title: doc.title,
+        description: doc.description,
+        tag:
+          doc.tag && typeof doc.tag === 'object' && 'title' in doc.tag
+            ? doc.tag.title
+            : doc.tag,
+        date: new Date(doc.updatedAt),
+        _meta: {
+          path: doc.slug,
+        },
+      })),
+    )
 
   return updates.length > 0
     ? updates.map((post) => (
