@@ -5,12 +5,6 @@ export function cn(...classes: ClassValue[]) {
   return twMerge(clsx(...classes))
 }
 
-export function parseCookies(cookieString: string): [string, string] {
-  const [name, value] = cookieString.split('=')
-
-  return [name, decodeURIComponent(value)]
-}
-
 export function safeParseJSON<T>(
   jsonString: string,
   fallbackDefault?: boolean,

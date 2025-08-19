@@ -26,7 +26,6 @@ out/
 payload-types.ts
 .temp/
 src/generated/payload-types.ts
-src/generated/payload-schema.ts
 
 # Database files
 *.db

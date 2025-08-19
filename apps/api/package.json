@@ -27,5 +27,6 @@
   "type": "module",
   "devDependencies": {
     "@octokit/webhooks-types": "^7.6.1"
-  }
+  },
+  "packageManager": "bun@1.2.19"
 }

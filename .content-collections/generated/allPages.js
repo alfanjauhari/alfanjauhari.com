@@ -1,0 +1,27 @@
+
+export default [
+  {
+    "title": "About",
+    "description": "More about me, how I work as a Product Engineer, or maybe how many times I eating meatball everyday.",
+    "content": "import PP from '@/assets/pages/about/profile-picture.jpg';\n\n<Image src={PP} alt=\"Alfan Jauhari profile picture\" className=\"rounded-full mx-auto\" height={160} width={160} quality={80} />\n\nHi! I'm Alfan Jauhari, you can just call me Alfan. I'm currently working as a Product Engineer at [Zero One Group](https://zero-one-group.com), where I build and improve web applications that solve real-world problems.\n\nI've been in the web development for over 4 years now, with a strong focus on frontend engineering using React.js and TypeScript as my main language, and I enjoy diving deep into the ecosystem not just to build things, but to understand how things work under the hood. (_You can learn more about my tech stack on [this page](/uses)_)\n\nI'm especially interested in improving developer experience, so I love tinkering with tooling, setting up design systems, and creating reusable components that make life easier for me and my teams.\n\nWhen I have time, I like reading through open-source repositories, especially large React + TypeScript codebases. You'd be surprised how many interesting patterns and tricks you can find that aren't even documented! Lately, I've been taking small steps to contribute back to the tools I rely on every day, one of them is Better Auth, a project I really enjoy learning from.\n\nOutside of coding, I sometimes write blog posts about programming, tech, or just random thoughts, it helps me reflect and learn even more.",
+    "_meta": {
+      "filePath": "about.mdx",
+      "fileName": "about.mdx",
+      "directory": ".",
+      "extension": "mdx",
+      "path": "about"
+    }
+  },
+  {
+    "title": "Uses",
+    "description": "Hardware, software and tech stack that I used in everyday basis to help boost my productivity.",
+    "content": "## Desk Setup\n\n- I use a PC with Windows 11 and Ubuntu as my main operating system. Usually I use Windows for gaming/college stuff and Ubuntu for my works. My PC specs are listed below:\n  - **CPU: AMD Ryzen 5 5500**\n  - **GPU: AMD Radeon RX 6600**\n  - **RAM: Corsair Vengeance 32GB**\n  - **Storage: Klevv SSD Cras C710 NVMe 500GB (Windows)** + **Teamgroup SSD SATA CX2 512GB (Ubuntu)** + **Samsung EVO 870 1TB (Storage)**\n  - **PSU: NZXT C550 Bronze 550W**\n  - **Case: Cube Gaming Lich Black**\n  - **CPU Cooler: ID-COOLING SE-214-XT**\n  - **Motherboard: ASUS TUF Gaming B450M-Pro II** (kinda regret buying this one)\n\n- I have **MacBook Air M1 2020** as my secondary laptop. I use it if I need to work outside.\n- I have **Keychron K3** as my main keyboard and **Logitech Superlight** as my main mouse (so good for competitive gaming).\n\n## Software\n\n- **Visual Studio Code** is my main code editor. I use it mostly for web development and sometimes write markdown articles.\n  - In VSCode, I use **SF Mono** as my font and **Catppuccin** as my theme.\n  - I don't have many extensions, so far I just use essentials extensions for web development, like formatter, linter, etc.\n- I use **Firefox** for browsing and web development because it's more feature-rich than Chrome (i guess).\n- Currently I love using **Alacritty** as my terminal emulator. It's fast and customizable.\n  - Inside Alacritty, I use **Zsh** as my shell and **Oh My Zsh** as my Zsh framework.\n  - Sometimes for light task, I use **NeoVim** as my text editor.\n- In my MacBook Air M1, I have same software setup as my PC, with some additional software like **Raycast** for easily access my tools.\n\n## Tech Stack\n\n- I use **React** as my main frontend library. I love how it's easy to use and have a lot of community support.\n  - **NextJS** is my go-to framework for building React apps. It's easy to use and have a lot of features (even it can be suck sometimes).\n  - For state management, query fetching or table component, I use library from **TanStack**.\n- For styling, most of the time I use **TailwindCSS**, but I know how CSS works xD.\n- All of my JavaScript projects always using **TypeScript**. To keep my code clean and easy to read.\n- For backend, sometimes I use **Fastify** or fullstack **NextJS** but at my office we heavily use **Golang** for our backend.\n- All of my projects that need database alway use **PostgreSQL**. I love how it's easy to use and have a lot of features.\n- For deployment, I use different approach based on my project requirements but for my personal projects, I use **Vercel** for frontend and **Fly.io** for backend.\n  - Most of my projects are using **Docker** for containerization.\n  - For CI/CD, I use **GitHub Actions** for my personal projects and **GitLab CI/CD** for my office projects.\n  - I use **Sentry** as my go-to error tracking tool. Sometimes in my office we use **Glitchtip** for our projects.\n  - I use **Cloudflare** for my DNS management and sometimes **Cloudflare Workers** for my serverless functions.\n  - For monitoring, I use **Grafana** and sometimes **Prometheus** for my office projects.\n  - *For disclaimer, I'm not an expert in DevOps, I just know how to use it.*\n- In the free time, I learn mobile development with **Kotlin Multiplatform**",
+    "_meta": {
+      "filePath": "uses.mdx",
+      "fileName": "uses.mdx",
+      "directory": ".",
+      "extension": "mdx",
+      "path": "uses"
+    }
+  }
+]

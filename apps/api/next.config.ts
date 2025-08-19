@@ -26,6 +26,7 @@ const nextConfig: NextConfig = {
       },
     ]
   },
+  output: 'standalone',
 }
 
 export default withSentryConfig(withPayload(nextConfig), {

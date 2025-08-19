@@ -2,7 +2,9 @@
   "name": "alfanjauhari.com",
   "module": "index.ts",
   "devDependencies": {
-    "@biomejs/biome": "^2.1.2",
+    "@biomejs/biome": "2.2.0",
+    "@emnapi/core": "^1.4.5",
+    "@tybys/wasm-util": "^0.10.0",
     "@types/bun": "latest",
     "husky": "^9.1.7",
     "turbo": "^2.5.5"
@@ -24,8 +26,5 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ],
-  "dependencies": {
-    "@astrojs/partytown": "^2.1.4"
-  }
+  ]
 }

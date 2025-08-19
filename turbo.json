@@ -40,6 +40,19 @@
         "SENTRY_DSN"
       ]
     },
+    "@alfanjauhari-com/web#start": {
+      "dependsOn": ["@alfanjauhari-com/web#build"],
+      "persistent": true,
+      "cache": false,
+      "inputs": ["$TURBO_DEFAULT$", ".env"],
+      "env": [
+        "NODE_ENV",
+        "PUBLIC_PAYLOAD_API_URL",
+        "PUBLIC_SITE_URL",
+        "SENTRY_AUTH_TOKEN",
+        "SENTRY_DSN"
+      ]
+    },
     "dev": {
       "dependsOn": ["generate-types"],
       "persistent": true,
