@@ -13,10 +13,11 @@ FROM base AS builder
 WORKDIR /app
 
 COPY --from=installer /app/out/json/ .
-RUN bun install --frozen-lockfile
+RUN bun install
 
 COPY --from=installer /app/out/full/ .
-RUN bun turbo run build
+RUN --mount=type=secret,id=PAYLOAD_SECRET,env=PAYLOAD_SECRET \
+  bun turbo run build
 
 FROM base AS runner
 WORKDIR /app

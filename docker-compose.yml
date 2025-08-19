@@ -23,17 +23,51 @@ services:
       timeout: 20s
       retries: 3
 
-  alfanjauhari_com_app:
-    container_name: alfanjauhari_com_app
+  alfanjauhari_com_api:
+    container_name: alfanjauhari_com_api
     build:
       context: .
+      dockerfile: ./apps/api/Dockerfile
       secrets:
-        - BUILD_DATABASE_URL
-    environment:
-      NOTION_ACCESS_TOKEN: $NOTION_ACCESS_TOKEN
-      TRAEFIK_URL: ${TRAEFIK_URL:-alfanjauhari.localhost}
+        - PAYLOAD_SECRET
+    env_file:
+      - ./apps/api/.env.production
     depends_on:
-      - alfanjauhari_com_db
+      alfanjauhari_com_db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000 || exit 1"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    ports:
+      - :3000
+    volumes:
+      - app_data:/usr/src/app
+    networks:
+      - default
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`${TRAEFIK_URL:-api.alfanjauhari.localhost}`) || Host(`${TRAEFIK_URL:-api.alfanjauhari.localhost}`)"
+      - "traefik.http.routers.api.entrypoints=app,appsecure"
+      - "traefik.http.routers.api.tls.certresolver=letsencrypt"
+
+  alfanjauhari_com_web:
+    container_name: alfanjauhari_com_web
+    build:
+      context: .
+      dockerfile: ./apps/web/Dockerfile
+      args:
+        NODE_ENV: production
+        PUBLIC_PAYLOAD_API_URL: $PUBLIC_PAYLOAD_API_URL
+        PUBLIC_SITE_URL: $PUBLIC_SITE_URL
+        PUBLIC_CDN_URL: $PUBLIC_CDN_URL
+      network: host
+    env_file:
+      - ./apps/web/.env.production
+    depends_on:
+      alfanjauhari_com_api:
+        condition: service_healthy
     ports:
       - :4321
     volumes:
@@ -42,9 +76,9 @@ services:
       - default
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.app.rule=Host(`${TRAEFIK_URL:-alfanjauhari.localhost}`) || Host(`www.${TRAEFIK_URL:-alfanjauhari.localhost}`)"
-      - "traefik.http.routers.app.entrypoints=app,appsecure"
-      - "traefik.http.routers.app.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.web.rule=Host(`${TRAEFIK_URL:-alfanjauhari.localhost}`) || Host(`www.${TRAEFIK_URL:-alfanjauhari.localhost}`)"
+      - "traefik.http.routers.web.entrypoints=app,appsecure"
+      - "traefik.http.routers.web.tls.certresolver=letsencrypt"
 
   alfanjauhari_com_traefik:
     image: traefik:v3.4
@@ -85,5 +119,5 @@ networks:
     driver: bridge
 
 secrets:
-  BUILD_DATABASE_URL:
-    environment: BUILD_DATABASE_URL
+  PAYLOAD_SECRET:
+   environment: PAYLOAD_SECRET

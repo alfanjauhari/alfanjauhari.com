@@ -13,7 +13,11 @@ FROM base AS builder
 WORKDIR /app
 
 COPY --from=installer /app/out/json/ .
-RUN bun install --frozen-lockfile
+RUN bun install
+
+ARG PUBLIC_PAYLOAD_API_URL PUBLIC_CDN_URL
+ENV PUBLIC_PAYLOAD_API_URL=$PUBLIC_PAYLOAD_API_URL \
+  PUBLIC_CDN_URL=$PUBLIC_CDN_URL
 
 COPY --from=installer /app/out/full/ .
 RUN bun turbo run build

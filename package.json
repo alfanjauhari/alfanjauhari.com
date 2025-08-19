@@ -3,8 +3,6 @@
   "module": "index.ts",
   "devDependencies": {
     "@biomejs/biome": "2.2.0",
-    "@emnapi/core": "^1.4.5",
-    "@tybys/wasm-util": "^0.10.0",
     "@types/bun": "latest",
     "husky": "^9.1.7",
     "turbo": "^2.5.5"

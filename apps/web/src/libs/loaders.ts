@@ -19,6 +19,7 @@ type PayloadContent = Omit<RestrictedContentResult, 'tag'> & {
 }
 
 export function restrictedContentLoader(): Loader {
+  console.log('API URL:', import.meta.env.PUBLIC_PAYLOAD_API_URL)
   return {
     name: 'restricted-content',
     load: async ({ store, parseData }) => {

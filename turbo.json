@@ -7,7 +7,7 @@
       "cache": false,
       "inputs": ["$TURBO_DEFAULT$", ".env"]
     },
-    "build": {
+    "@alfanjauhari-com/api#build": {
       "dependsOn": ["generate-types", "^build"],
       "env": [
         "NODE_ENV",
@@ -30,7 +30,8 @@
       "outputs": [".next/**", "!.next/cache/**"]
     },
     "@alfanjauhari-com/web#build": {
-      "outputs": ["dist/**", ".vercel/output/**"],
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"],
       "inputs": ["$TURBO_DEFAULT$", ".env"],
       "env": [
         "NODE_ENV",
