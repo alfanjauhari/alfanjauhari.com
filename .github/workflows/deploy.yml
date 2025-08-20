@@ -1,12 +1,17 @@
-name: Deploy
+name: Build Image
 
 on:
   push:
     branches:
       - main
+    tags:
+      - "v*"
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     env:
       DOCKER_BUILDKIT: 1
@@ -18,7 +23,8 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: alfanjauhari/alfanjauhari-com
-          tags: type=sha
+          tags: |
+            type=semver,pattern={{version}}
 
       - name: Login to Docker Hub
         if: github.event_name != 'pull_request'
@@ -43,3 +49,4 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          platforms: linux/amd64,linux/arm64
