@@ -1,5 +1,7 @@
 services:
   alfanjauhari_com_db:
+    profiles:
+      - db
     container_name: alfanjauhari_com_db
     build: postgres:17
     environment:
@@ -28,14 +30,14 @@ services:
     build:
       context: .
       secrets:
-        - BUILD_DATABASE_URL
-    environment:
-      NOTION_ACCESS_TOKEN: $NOTION_ACCESS_TOKEN
-      TRAEFIK_URL: ${TRAEFIK_URL:-alfanjauhari.localhost}
-    depends_on:
-      - alfanjauhari_com_db
+        - PAYLOAD_SECRET
+        - DATABASE_URL
+      args:
+        NEXT_PUBLIC_SITE_URL: $NEXT_PUBLIC_SITE_URL
+        NEXT_PUBLIC_CDN_URL: $NEXT_PUBLIC_CDN_URL
+    env_file: $RUNTIME_ENV_FILE
     ports:
-      - :4321
+      - :3000
     volumes:
       - app_data:/usr/src/app
     networks:
@@ -85,5 +87,7 @@ networks:
     driver: bridge
 
 secrets:
-  BUILD_DATABASE_URL:
-    environment: BUILD_DATABASE_URL
+  PAYLOAD_SECRET:
+    environment: PAYLOAD_SECRET
+  DATABASE_URL:
+    environment: DATABASE_URL

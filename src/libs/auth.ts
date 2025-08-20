@@ -5,13 +5,14 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { nextCookies } from 'better-auth/next-js'
 import { openAPI } from 'better-auth/plugins'
 import { Pool } from 'pg'
+import { env } from './env'
 import { getPayload } from './payload'
 
 export const auth = betterAuth({
   database: drizzleAdapter(
     drizzle(
       new Pool({
-        connectionString: process.env.DATABASE_URL,
+        connectionString: env.DATABASE_URL,
       }),
     ),
     {
@@ -29,10 +30,6 @@ export const auth = betterAuth({
       generateId: false,
     },
     cookiePrefix: 'alfanjauhari.com',
-    crossSubDomainCookies: {
-      enabled: process.env.NODE_ENV === 'production',
-      domain: 'alfanjauhari.com',
-    },
   },
   emailAndPassword: {
     enabled: true,
@@ -73,12 +70,12 @@ export const auth = betterAuth({
   },
   socialProviders: {
     github: {
-      clientId: process.env.GITHUB_CLIENT_ID || '',
-      clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
+      clientId: env.GITHUB_CLIENT_ID,
+      clientSecret: env.GITHUB_CLIENT_SECRET,
     },
     google: {
-      clientId: process.env.GOOGLE_CLIENT_ID || '',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
     },
   },
   plugins: [openAPI(), nextCookies()],
