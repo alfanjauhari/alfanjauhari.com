@@ -1,59 +1,5 @@
 services:
-  alfanjauhari_com_db:
-    profiles:
-      - db
-      - dev
-    container_name: alfanjauhari_com_db
-    build: postgres:17
-    environment:
-      POSTGRES_DB: ${DB_NAME:-alfanjauhari-com}
-      POSTGRES_USER: ${DB_USER:-alfanjauhari}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-alfanjauhari}
-    volumes:
-      - pg_data:/var/lib/postgresql/data
-    ports:
-      - ${DB_PORT}:5432
-    shm_size: "512mb"
-    networks:
-      - default
-    healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "pg_isready -U ${DB_USER:-alfanjauhari} -d ${DB_NAME:-alfanjauhari-com}",
-        ]
-      interval: 30s
-      timeout: 20s
-      retries: 3
-
-  alfanjauhari_com_app_dev:
-    profiles:
-      - dev
-    container_name: alfanjauhari_com_app_dev
-    build:
-      context: .
-      secrets:
-        - PAYLOAD_SECRET
-        - DATABASE_URL
-      args:
-        NEXT_PUBLIC_SITE_URL: $NEXT_PUBLIC_SITE_URL
-        NEXT_PUBLIC_CDN_URL: $NEXT_PUBLIC_CDN_URL
-    env_file: ${RUNTIME_ENV_FILE:-.env}
-    ports:
-      - :3000
-    volumes:
-      - app_data:/usr/src/app
-    networks:
-      - default
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.app.rule=Host(`${TRAEFIK_URL:-alfanjauhari.localhost}`) || Host(`www.${TRAEFIK_URL:-alfanjauhari.localhost}`)"
-      - "traefik.http.routers.app.entrypoints=app,appsecure"
-      - "traefik.http.routers.app.tls.certresolver=letsencrypt"
-
   alfanjauhari_com_app:
-    profiles:
-      - prod
     image: alfanjauhari/alfanjauhari-com
     env_file: $RUNTIME_ENV_FILE
     ports:
@@ -82,7 +28,8 @@ services:
       - "--entryPoints.app.http.redirections.entryPoint.scheme=https"
       - "--certificatesresolvers.letsencrypt.acme.email=${TRAEFIK_SSL_EMAIL:-hi@alfanjauhari.com}"
       - "--certificatesresolvers.letsencrypt.acme.storage=/certs/acme.json"
-      - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare"
+      - "--certificatesresolvers.letsencrypt.acme.dnschallenge.delaybeforecheck=0"
     ports:
       - "80:80"
       - "443:443"
@@ -94,8 +41,6 @@ services:
       - traefik-certs:/certs
 
 volumes:
-  pg_data:
-    driver: local
   app_data:
     driver: local
   traefik-certs:
@@ -104,9 +49,3 @@ volumes:
 networks:
   default:
     driver: bridge
-
-secrets:
-  PAYLOAD_SECRET:
-    environment: PAYLOAD_SECRET
-  DATABASE_URL:
-    environment: DATABASE_URL
