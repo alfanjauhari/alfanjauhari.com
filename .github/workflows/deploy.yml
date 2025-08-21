@@ -6,9 +6,6 @@ on:
       - main
     tags:
       - "v*"
-  pull_request:
-    branches:
-      - main
 
 jobs:
   build:
@@ -26,6 +23,7 @@ jobs:
           images: alfanjauhari/alfanjauhari-com
           tags: |
             type=semver,pattern={{version}}
+            type=ref,event=branch
 
       - name: Login to Docker Hub
         if: github.event_name != 'pull_request'
