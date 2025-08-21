@@ -2,7 +2,6 @@ services:
   alfanjauhari_com_app:
     image: alfanjauhari/alfanjauhari-com:main
     container_name: alfanjauhari_com_app
-    env_file: $RUNTIME_ENV_FILE
     ports:
       - :3000
     volumes:

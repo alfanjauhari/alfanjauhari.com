@@ -83,6 +83,7 @@ jobs:
 
             docker compose \
               -p "${PROJECT_NAME}" \
+              --env-file $RUNTIME_ENV_FILE \
               up -d --remove-orphans
 
             docker image prune -f
