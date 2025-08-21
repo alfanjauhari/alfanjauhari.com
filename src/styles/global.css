@@ -65,3 +65,12 @@ code[data-line-numbers] > [data-line]::before {
   text-align: right;
   color: var(--color-gray-300);
 }
+
+/* Code Fonts */
+html .astro-code {
+  font-size: 14px !important;
+}
+
+.sp-code-editor .cm-lineNumbers {
+  font-size: 0.8rem !important;
+}
