@@ -29,6 +29,7 @@ ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL \
   GOOGLE_CLIENT_SECRET=XXX
 
 RUN --mount=type=secret,id=PAYLOAD_SECRET,env=PAYLOAD_SECRET \
+  --mount=type=secret,id=BETTER_AUTH_SECRET,env=BETTER_AUTH_SECRET \
   --mount=type=secret,id=DATABASE_URL,env=DATABASE_URL \
   bun run build
 

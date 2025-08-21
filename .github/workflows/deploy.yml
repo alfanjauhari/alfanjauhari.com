@@ -1,4 +1,4 @@
-name: Build Image
+name: Build & Deploy
 
 on:
   push:
@@ -12,6 +12,7 @@ on:
 
 jobs:
   build:
+    name: Build app image
     runs-on: ubuntu-latest
     env:
       DOCKER_BUILDKIT: 1
@@ -45,8 +46,46 @@ jobs:
           secrets: |
             DATABASE_URL=${{ secrets.DATABASE_URL }}
             PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }}
+            BETTER_AUTH_SECRET=${{ secrets.BETTER_AUTH_SECRET }}
           context: .
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64
+
+  deploy:
+    name: Deploy app
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      PROJECT_NAME: alfanjauhari_com
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          RUNTIME_ENV_FILE: ${{ vars.RUNTIME_ENV_FILE }}
+          DIRECTORY: ${{ vars.DIRECTORY }}
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT || 22 }}
+          envs: RUNTIME_ENV_FILE, DIRECTORY
+          script: |
+            cd $DIRECTORY
+
+            docker compose \
+              -p "${PROJECT_NAME}" \
+              pull
+
+            docker compose \
+              -p "${PROJECT_NAME}" \
+              --env-file $RUNTIME_ENV_FILE \
+              up -d --remove-orphans
+
+            docker image prune -f
+
+            curl -fsS https://alfanjauhari.com/ -o /dev/null || true

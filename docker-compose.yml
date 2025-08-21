@@ -1,6 +1,7 @@
 services:
   alfanjauhari_com_app:
     image: alfanjauhari/alfanjauhari-com
+    container_name: alfanjauhari_com_app
     env_file: $RUNTIME_ENV_FILE
     ports:
       - :3000
@@ -17,7 +18,9 @@ services:
   alfanjauhari_com_traefik:
     image: traefik:v3.4
     container_name: alfanjauhari_com_traefik
-    env_file: $RUNTIME_ENV_FILE
+    environment:
+      CF_DNS_API_TOKEN: $CF_DNS_API_TOKEN
+      TRAEFIK_SSL_EMAIL: $TRAEFIK_SSL_EMAIL
     command:
       - "--log.level=DEBUG"
       - "--providers.docker=true"
@@ -33,7 +36,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
-      - "8080:8080"
+      - :8080
     networks:
       - default
     volumes:
