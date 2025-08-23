@@ -10,6 +10,8 @@ export function MobileSnippetButtonToggle() {
     ) as HTMLElement | null
     if (!snippetLayout) return
 
+    console.log(snippetLayout, 'LAYOUT')
+
     const isOpen = snippetLayout.dataset.sidebarOpen === 'true'
     snippetLayout.dataset.sidebarOpen = isOpen ? 'false' : 'true'
 

@@ -31,7 +31,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/libs/content-schema.ts"
+    "src/libs/content-schema.ts",
+    "src/types/**/*.ts"
   ],
   "exclude": ["node_modules"]
 }

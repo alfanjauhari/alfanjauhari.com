@@ -61,6 +61,10 @@ export function RegisterForm() {
       })
 
       if (!response.error) {
+        window.umami.track('user_signed_up', {
+          email: data.email,
+        })
+
         return router.push('/login')
       }
 
