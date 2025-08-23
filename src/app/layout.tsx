@@ -3,6 +3,7 @@ import '@/styles/global.css'
 import type { Metadata } from 'next'
 import { Anton, Fira_Code } from 'next/font/google'
 import localFont from 'next/font/local'
+import { Scripts } from '@/components/ui/Scripts'
 import { env } from '@/libs/env'
 import { cn } from '@/libs/utils'
 
@@ -88,6 +89,8 @@ export default function RootLayout({ children }: PropsWithChildren) {
       )}
     >
       <body className="bg-gray-100">{children}</body>
+
+      <Scripts />
     </html>
   )
 }

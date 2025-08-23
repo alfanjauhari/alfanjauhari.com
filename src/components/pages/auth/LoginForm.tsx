@@ -43,6 +43,12 @@ export function LoginForm() {
       const response = await authClient.signIn.email(data)
 
       if (!response.error) {
+        window.umami.track('user_logged_in', {
+          email: data.email,
+        })
+
+        window.umami.identify(data.email)
+
         return router.push(data.callbackURL || '/')
       }
 
