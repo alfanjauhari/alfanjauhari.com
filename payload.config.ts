@@ -15,7 +15,9 @@ import { env } from '@/libs/env'
 
 export default buildConfig({
   editor: lexicalEditor({
-    features: [
+    features: ({ defaultFeatures, rootFeatures }) => [
+      ...defaultFeatures,
+      ...rootFeatures,
       UploadFeature({
         collections: {
           uploads: {

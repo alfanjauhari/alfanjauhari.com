@@ -1,7 +1,9 @@
+import { inferAdditionalFields } from 'better-auth/client/plugins'
 import { createAuthClient } from 'better-auth/react'
 import clsx, { type ClassValue } from 'clsx'
 import type { FieldHook } from 'payload'
 import { twMerge } from 'tailwind-merge'
+import type { auth } from '@/libs/auth'
 
 export function cn(...classes: ClassValue[]) {
   return twMerge(clsx(...classes))
@@ -81,4 +83,6 @@ export const formatSlugHook =
     return value
   }
 
-export const authClient = createAuthClient()
+export const authClient = createAuthClient({
+  plugins: [inferAdditionalFields<typeof auth>()],
+})
