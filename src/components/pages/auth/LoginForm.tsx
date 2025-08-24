@@ -47,7 +47,9 @@ export function LoginForm() {
           email: data.email,
         })
 
-        window.umami.identify(data.email)
+        window.umami.identify(data.email, {
+          name: response.data.user.name,
+        })
 
         return router.push(data.callbackURL || '/')
       }
