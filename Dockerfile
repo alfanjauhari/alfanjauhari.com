@@ -4,7 +4,10 @@ FROM base AS deps
 WORKDIR /app
 
 COPY package.json bun.lock ./
-RUN bun install --frozen-lockfile
+ENV BUN_INSTALL_CACHE_DIR=/root/.bun/install/cache
+COPY package.json bun.lock ./
+RUN --mount=type=cache,target=/root/.bun/install/cache \
+  bun install --frozen-lockfile
 
 FROM base AS builder
 WORKDIR /app
@@ -31,6 +34,8 @@ ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL \
 RUN --mount=type=secret,id=PAYLOAD_SECRET,env=PAYLOAD_SECRET \
   --mount=type=secret,id=BETTER_AUTH_SECRET,env=BETTER_AUTH_SECRET \
   --mount=type=secret,id=DATABASE_URL,env=DATABASE_URL \
+  --mount=type=cache,target=/root/.bun/install/cache \
+  --mount=type=cache,target=/app/.next/cache \
   bun run build
 
 FROM base AS runner
