@@ -3,6 +3,11 @@ import { revalidatePath } from 'next/cache'
 import type { CollectionConfig } from 'payload'
 import { formatSlugHook } from '@/libs/utils'
 
+const HOSTS = ['alfanjauhari.com', 'www.alfanjauhari.com']
+const PREFIXES = ['', '/updates', '/updates/tag']
+
+// This function used to revalidate the paths that contains a updates contents. Also, while revalidating
+// we need to purging the cloudflare cache so the user doesn't see a stale cache
 const revalidateContentPaths = async () => {
   revalidatePath('/')
   revalidatePath('/updates')
@@ -18,7 +23,9 @@ const revalidateContentPaths = async () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          hosts: ['alfanjauhari.com', 'www.alfanjauhari.com'],
+          prefixes: HOSTS.flatMap((host) =>
+            PREFIXES.map((prefix) => host + prefix),
+          ),
         }),
       },
     )
