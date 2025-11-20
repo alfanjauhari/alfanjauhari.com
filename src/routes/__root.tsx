@@ -3,6 +3,7 @@ import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { AnimatePresence } from "motion/react";
 import { useCallback, useState } from "react";
+import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { Loader } from "@/components/loader";
 import { ThemeProvider } from "@/context/theme-context";
@@ -61,9 +62,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             {loading && <Loader onComplete={onCompleteLoading} key="loader" />}
           </AnimatePresence>
           <Header />
-          <main className="grow px-6 md:px-12 max-w-7xl mx-auto relative w-full">
+          <main className="grow px-6 md:px-12 mx-auto relative w-full z-10 bg-background mb-[500px] md:mb-[600px] origin-top rounded-b-4xl">
             {children}
           </main>
+          <Footer />
           <TanStackDevtools
             plugins={[
               {
