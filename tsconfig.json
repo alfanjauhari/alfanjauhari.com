@@ -1,38 +1,28 @@
 {
+  "include": ["**/*.ts", "**/*.tsx"],
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "ES2022",
+    "jsx": "react-jsx",
+    "module": "ESNext",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": ["vite/client"],
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": false,
+    "noEmit": true,
+
+    /* Linting */
+    "skipLibCheck": true,
     "strict": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "content-collections": ["./.content-collections/generated"],
-      "@payload-config": ["./payload.config.ts"],
-      "@payload-types": ["./src/generated/payload-types.ts"],
-      "@payload-schema": ["./src/generated/payload-schema.ts"]
-    },
-    "target": "ES2017",
-    "allowJs": true,
-    "skipLibCheck": true,
-    "noEmit": true,
-    "module": "esnext",
-    "esModuleInterop": true,
-    "moduleResolution": "bundler"
-  },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    "src/libs/content-schema.ts",
-    "src/types/**/*.ts"
-  ],
-  "exclude": ["node_modules"]
+    }
+  }
 }
