@@ -62,7 +62,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             {loading && <Loader onComplete={onCompleteLoading} key="loader" />}
           </AnimatePresence>
           <Header />
-          <main className="grow px-6 md:px-12 mx-auto relative w-full z-10 bg-background mb-[500px] md:mb-[600px] origin-top rounded-b-4xl">
+          <main className="grow px-6 md:px-12 mx-auto relative w-full z-10 bg-background mb-[500px] md:mb-[600px] origin-top rounded-b-[3rem]">
             {children}
           </main>
           <Footer />
