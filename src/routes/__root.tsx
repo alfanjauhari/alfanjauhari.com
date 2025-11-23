@@ -1,6 +1,7 @@
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import { ReactLenis } from "lenis/react";
 import { AnimatePresence } from "motion/react";
 import { useCallback, useState } from "react";
 import { Footer } from "@/components/footer";
@@ -52,31 +53,35 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <ThemeProvider theme={theme}>
-      <html className={theme} lang="en">
-        <head>
-          <HeadContent />
-        </head>
-        <body className="relative min-h-screen flex flex-col">
-          <AnimatePresence mode="wait">
-            {loading && <Loader onComplete={onCompleteLoading} key="loader" />}
-          </AnimatePresence>
-          <Header />
-          <main className="grow px-6 md:px-12 mx-auto relative w-full z-10 bg-background mb-[500px] md:mb-[600px] origin-top rounded-b-[3rem]">
-            {children}
-          </main>
-          <Footer />
-          <TanStackDevtools
-            plugins={[
-              {
-                name: "Tanstack Router",
-                render: <TanStackRouterDevtoolsPanel />,
-              },
-            ]}
-          />
-          <Scripts />
-        </body>
-      </html>
-    </ThemeProvider>
+    <ReactLenis root>
+      <ThemeProvider theme={theme}>
+        <html className={theme} lang="en">
+          <head>
+            <HeadContent />
+          </head>
+          <body className="relative min-h-screen flex flex-col">
+            <AnimatePresence mode="wait">
+              {loading && (
+                <Loader onComplete={onCompleteLoading} key="loader" />
+              )}
+            </AnimatePresence>
+            <Header />
+            <main className="grow px-6 md:px-12 mx-auto relative w-full z-10 bg-background origin-top rounded-b-[3rem] mb-[500px] md:mb-[600px]">
+              {children}
+            </main>
+            <Footer />
+            <TanStackDevtools
+              plugins={[
+                {
+                  name: "Tanstack Router",
+                  render: <TanStackRouterDevtoolsPanel />,
+                },
+              ]}
+            />
+            <Scripts />
+          </body>
+        </html>
+      </ThemeProvider>
+    </ReactLenis>
   );
 }

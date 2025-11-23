@@ -5,7 +5,7 @@ import { forwardRef, type HTMLAttributes } from "react";
 export const Footer = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
   function Footer() {
     return (
-      <footer className="fixed bottom-0 left-0 right-0 z-0 h-[500px] md:h-[600px]">
+      <footer className="fixed bottom-0 inset-x-0 z-0 h-[500px] md:h-[600px]">
         <div className="bg-[#0a0a0a] h-full flex flex-col justify-between px-6 md:px-12 pt-24 pb-6 overflow-hidden relative">
           <div className="flex flex-col md:flex-row justify-between items-start relative z-10">
             <div className="max-w-xl mb-12 md:mb-0">

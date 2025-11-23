@@ -1,7 +1,6 @@
 import { BanIcon, MousePointer2 } from "lucide-react";
 import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import { useEffect, useState } from "react";
-import { useToggle } from "@/hooks/use-toggle";
 
 export function InteractiveTitle() {
   const [isEnabled, setIsEnabled] = useState(true);
@@ -15,6 +14,7 @@ export function InteractiveTitle() {
   const rotateX = useTransform(mouseY, [-0.5, 0.5], [20, -20]);
   const rotateY = useTransform(mouseX, [-0.5, 0.5], [-20, 20]);
 
+  // #region BEHOLD, USEEFFECTS!
   useEffect(() => {
     if (!isEnabled) return;
 
@@ -40,6 +40,7 @@ export function InteractiveTitle() {
       setIsEnabled(false);
     }
   }, []);
+  // #endregion
 
   return (
     <div className="relative block w-full">
@@ -56,7 +57,7 @@ export function InteractiveTitle() {
         {isEnabled ? "Motion On" : "Motion Off"}
       </button>
 
-      <div className="relative perspective-distant ppy-4">
+      <div className="relative perspective-distant py-4 flex justify-center">
         <motion.div
           style={{
             rotateX: isEnabled ? rotateX : 0,
