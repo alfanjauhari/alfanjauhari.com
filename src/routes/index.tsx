@@ -147,7 +147,7 @@ function Home() {
       }}
     >
       {/* Section: HERO */}
-      <section className="flex flex-col justify-center relative z-10 min-h-[calc(100vh-6rem)] mb-40 overflow-hidden">
+      <section className="flex flex-col justify-center relative z-10 min-h-[calc(100vh-6rem)] mb-40">
         <div className="my-16 xl:mb-24">
           <motion.div
             initial={{
