@@ -16,12 +16,12 @@ const postThemeValidator = z.union([
   z.literal("system"),
 ]);
 
-export type T = z.infer<typeof postThemeValidator>;
+export type Theme = z.infer<typeof postThemeValidator>;
 
 const storageKey = "_preferred-theme";
 
 export const getThemeServerFn = createServerFn().handler(
-  async () => (getCookie(storageKey) || "light") as T,
+  async () => (getCookie(storageKey) || "light") as Theme,
 );
 
 export const setThemeServerFn = createServerFn({ method: "POST" })

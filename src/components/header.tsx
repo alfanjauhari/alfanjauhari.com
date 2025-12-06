@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { Laptop2Icon, MenuIcon, MoonIcon, SunIcon, XIcon } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { forwardRef, type HTMLAttributes } from "react";
@@ -39,7 +39,9 @@ export const Header = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
   function Header({ className, ...props }, ref) {
     const [isMobileMenuOpen, toggleMobileMenu] = useToggle(false);
 
-    const pathname = Route.useMatch().pathname;
+    const pathname = useLocation({
+      select: (location) => location.pathname,
+    });
 
     const getIsActive = (path: string) => {
       return pathname === path;
