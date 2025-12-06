@@ -13,7 +13,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { FEATURED_WORKS } from "@/constants";
+import { FEATURED_WORKS, PAGE_TRANSITIONS } from "@/constants";
 
 export const Route = createFileRoute("/")({ component: Home });
 
@@ -30,12 +30,12 @@ export const updates = [
     content: `
       <p class="mb-6 text-xl font-serif leading-relaxed text-gray-800 dark:text-gray-200">In a world cluttered with information, clarity is power. Minimalist interfaces are not about removing features; they are about removing distractions. When we strip away the non-essential, we allow the user to focus on what truly matters.</p>
 
-      <h3 class="text-2xl font-bold mt-12 mb-6 text-ink">The Power of Negative Space</h3>
+      <h3 class="text-2xl font-bold mt-12 mb-6">The Power of Negative Space</h3>
       <p class="mb-6 text-lg leading-relaxed text-gray-600 dark:text-gray-400">The concept of negative space—often referred to as whitespace—is fundamental to this approach. It is not merely empty space; it is an active design element that guides the eye and creates structure without the need for borders or dividers. By increasing the margins and padding between elements, we create a rhythm that makes the content easier to digest.</p>
 
       <p class="mb-6 text-lg leading-relaxed text-gray-600 dark:text-gray-400">Consider the evolution of typography on the web. We have moved from dense, text-heavy pages to layouts that breathe. Large, bold headings paired with generous line heights improve readability and reduce cognitive load. This is not just an aesthetic choice; it is a functional one.</p>
 
-      <h3 class="text-2xl font-bold mt-12 mb-6 text-ink">Function Over Decoration</h3>
+      <h3 class="text-2xl font-bold mt-12 mb-6">Function Over Decoration</h3>
       <p class="mb-6 text-lg leading-relaxed text-gray-600 dark:text-gray-400">As frontend engineers, we must advocate for simplicity. Every element we add to a page increases complexity, maintenance cost, and cognitive burden on the user. Before adding a button, a modal, or a tooltip, ask yourself: "Is this absolutely necessary?"</p>
 
       <p class="mb-6 text-lg leading-relaxed text-gray-600 dark:text-gray-400">True minimalism is the result of rigorous editing. It is the art of saying more with less. It requires a deep understanding of the user's goals and the discipline to prioritize them above all else.</p>
@@ -53,7 +53,7 @@ export const updates = [
     content: `
       <p class="mb-6 text-xl font-serif leading-relaxed text-gray-800 dark:text-gray-200">React has always been about the UI being a function of state. With React 19, that function is becoming more powerful, more concurrent, and surprisingly, simpler.</p>
 
-      <h3 class="text-2xl font-bold mt-12 mb-6 text-ink">The Death of useEffect?</h3>
+      <h3 class="text-2xl font-bold mt-12 mb-6">The Death of useEffect?</h3>
       <p class="mb-6 text-lg leading-relaxed text-gray-600 dark:text-gray-400">For years, <code>useEffect</code> has been the swiss-army knife of React development. Fetching data? useEffect. Subscribing to events? useEffect. Synchronizing state? useEffect. But it was also a footgun. React 19 introduces new primitives that handle these side effects more gracefully, moving us towards a model where valid state transitions are handled directly in event handlers or through the new <code>use</code> API.</p>
 
       <p class="mb-6 text-lg leading-relaxed text-gray-600 dark:text-gray-400">The introduction of the compiler also means we spend less time worrying about memoization. <code>useMemo</code> and <code>useCallback</code> might soon become relics of a manual optimization era, allowing us to focus purely on business logic.</p>
@@ -128,24 +128,7 @@ const process = [
 
 function Home() {
   return (
-    <motion.div
-      initial={{
-        opacity: 0,
-        y: 20,
-      }}
-      animate={{
-        opacity: 1,
-        y: 0,
-      }}
-      exit={{
-        opacity: 0,
-        y: -20,
-      }}
-      transition={{
-        duration: 0.6,
-        ease: [0.22, 1, 0.36, 1],
-      }}
-    >
+    <motion.div {...PAGE_TRANSITIONS}>
       {/* Section: HERO */}
       <section className="flex flex-col justify-center relative z-10 min-h-[calc(100vh-6rem)] mb-40">
         <div className="my-16 xl:mb-24">
@@ -183,7 +166,7 @@ function Home() {
           className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-12"
         >
           <div className="space-y-6">
-            <p className="text-xl md:text-2xl leading-tight text-ink font-normal max-w-2xl">
+            <p className="text-xl md:text-2xl leading-tight font-normal max-w-2xl">
               Digital craftsman and Senior Frontend Engineer. I build{" "}
               <span className="font-serif italic">pixel-perfect</span>{" "}
               interfaces and scalable systems for the web.
@@ -199,7 +182,7 @@ function Home() {
           </div>
           <div className="flex flex-col justify-between items-start md:items-end text-left md:text-right">
             <div className="space-y-1">
-              <div className="flex items-center md:justify-end gap-2 text-ink">
+              <div className="flex items-center md:justify-end gap-2">
                 <MapPinIcon className="size-4" />
                 <span className="text-sm font-bold">Jakarta, ID</span>
               </div>
@@ -233,7 +216,7 @@ function Home() {
                 {step.id}
               </span>
               <div>
-                <h3 className="text-3xl font-serif text-ink mb-4 group-hover:translate-x-2 transition-transform duration-300">
+                <h3 className="text-3xl font-serif mb-4 group-hover:translate-x-2 transition-transform duration-300">
                   {step.title}
                 </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed font-normal">
@@ -296,7 +279,7 @@ function Home() {
                       <span className="text-xs font-mono">{work.year}</span>
                       <ArrowUpRightIcon className="size-5" />
                     </div>
-                    <h3 className="font-serif text-4xl text-ink mb-6 leading-tight">
+                    <h3 className="font-serif text-4xl mb-6 leading-tight">
                       {work.title}
                     </h3>
                     <p className="leading-relaxed mb-8 text-5050">

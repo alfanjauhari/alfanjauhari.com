@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as UpdatesIndexRouteImport } from './routes/updates/index'
+import { Route as UpdatesUpdateIdRouteImport } from './routes/updates/$updateId'
 
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
@@ -22,31 +24,49 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UpdatesIndexRoute = UpdatesIndexRouteImport.update({
+  id: '/updates/',
+  path: '/updates/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UpdatesUpdateIdRoute = UpdatesUpdateIdRouteImport.update({
+  id: '/updates/$updateId',
+  path: '/updates/$updateId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/updates/$updateId': typeof UpdatesUpdateIdRoute
+  '/updates': typeof UpdatesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/updates/$updateId': typeof UpdatesUpdateIdRoute
+  '/updates': typeof UpdatesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/updates/$updateId': typeof UpdatesUpdateIdRoute
+  '/updates/': typeof UpdatesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about'
+  fullPaths: '/' | '/about' | '/updates/$updateId' | '/updates'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about'
-  id: '__root__' | '/' | '/about'
+  to: '/' | '/about' | '/updates/$updateId' | '/updates'
+  id: '__root__' | '/' | '/about' | '/updates/$updateId' | '/updates/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  UpdatesUpdateIdRoute: typeof UpdatesUpdateIdRoute
+  UpdatesIndexRoute: typeof UpdatesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +85,28 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/updates/': {
+      id: '/updates/'
+      path: '/updates'
+      fullPath: '/updates'
+      preLoaderRoute: typeof UpdatesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/updates/$updateId': {
+      id: '/updates/$updateId'
+      path: '/updates/$updateId'
+      fullPath: '/updates/$updateId'
+      preLoaderRoute: typeof UpdatesUpdateIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  UpdatesUpdateIdRoute: UpdatesUpdateIdRoute,
+  UpdatesIndexRoute: UpdatesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

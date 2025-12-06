@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { ArrowUpRightIcon } from "lucide-react";
 import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
+import { PAGE_TRANSITIONS } from "@/constants";
 
 export const Route = createFileRoute("/about")({
   component: About,
@@ -57,18 +58,7 @@ function TechItem({ category, items }: { category: string; items: string[] }) {
 
 function About() {
   return (
-    <motion.div
-      initial={{
-        opacity: 0,
-        y: 20,
-      }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{
-        duration: 0.6,
-        ease: [0.22, 1, 0.36, 1],
-      }}
-    >
+    <motion.div {...PAGE_TRANSITIONS}>
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-32">
         <div className="lg:col-span-8">
           <h1 className="font-serif text-7xl md:text-9xl mb-12 tracking-tight">
@@ -140,7 +130,7 @@ function About() {
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-32 border-t border-border pt-32">
         <div className="lg:col-span-4">
           <div className="sticky top-32">
-            <h2 className="text-xs font-bold uppercase tracking-widest text-ink mb-4 flex items-center gap-2">
+            <h2 className="text-xs font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-foreground"></span>
               Tech Stack
             </h2>
@@ -180,7 +170,7 @@ function About() {
           <span className="font-mono text-xs uppercase tracking-widest text-foreground/50 mb-6 block">
             Ready to start?
           </span>
-          <h2 className="font-serif text-6xl md:text-8xl text-ink mb-8 leading-none tracking-tight">
+          <h2 className="font-serif text-6xl md:text-8xl mb-8 leading-none tracking-tight">
             Let's work <br />{" "}
             <span className="italic text-foreground/50">together.</span>
           </h2>
