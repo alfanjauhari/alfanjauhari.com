@@ -4,9 +4,6 @@ export const NAVIGATIONS = [
   { path: "/", label: "Work" },
   { path: "/about", label: "About" },
   { path: "/updates", label: "Updates" },
-  { path: "/uses", label: "Uses" },
-  { path: "/snippets", label: "Snippets" },
-  { path: "/dashboard", label: "Status" },
 ];
 
 export const FEATURED_WORKS = [

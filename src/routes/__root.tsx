@@ -10,7 +10,7 @@ import { Loader } from "@/components/loader";
 import { ThemeProvider } from "@/context/theme-context";
 import { setHasVisitedClient } from "@/fns/client/common";
 import { getHasVisitedServer, getThemeServerFn } from "@/fns/server/common";
-import appCss from "../styles.css?url";
+import appCss from "../assets/styles.css?url";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -67,7 +67,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             </AnimatePresence>
             <Header />
             <div className="grow px-6 md:px-12 mx-auto relative w-full z-10 bg-background origin-top rounded-b-[3rem] mb-[500px] md:mb-[600px]">
-              <main className="max-w-7xl mx-auto">{children}</main>
+              <main className="max-w-7xl mx-auto mb-32">{children}</main>
             </div>
             <Footer />
             <TanStackDevtools

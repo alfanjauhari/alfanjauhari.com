@@ -6,7 +6,6 @@ import { NAVIGATIONS } from "@/constants";
 import { useThemeContext } from "@/context/theme-context";
 import { useToggle } from "@/hooks/use-toggle";
 import { cn } from "@/lib/utils";
-import { Route } from "@/routes/__root";
 import { Button } from "./ui/button";
 
 function ThemeToggleButton() {

@@ -308,7 +308,7 @@ function Home() {
       </section>
 
       {/* Section: LATEST UPDATES */}
-      <section className="mb-40">
+      <section>
         <div className="flex items-end justify-between mb-16">
           <h2 className="font-serif text-5xl md:text-6xl">Latest Updates</h2>
           <Link

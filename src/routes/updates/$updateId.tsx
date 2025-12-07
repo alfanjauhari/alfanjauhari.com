@@ -1,28 +1,29 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { allUpdates } from "content-collections";
 import { LockIcon } from "lucide-react";
 import { motion, useScroll, useSpring } from "motion/react";
+import { MDXContent } from "@/components/mdx-content";
 import { Button } from "@/components/ui/button";
 import { PAGE_TRANSITIONS } from "@/constants";
 
 export const Route = createFileRoute("/updates/$updateId")({
   component: UpdateId,
+  loader: ({ params }) => {
+    const post = allUpdates.find(
+      (update) => update._meta.path === params.updateId,
+    );
+
+    if (!post) {
+      throw notFound();
+    }
+
+    return post;
+  },
 });
 
-const article = {
-  date: "25/10/2025",
-  category: "Engineering",
-  readTime: "1 Minute",
-  isPremium: true,
-  title: "Typography in the Age of AI",
-  summary:
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce efficitur at risus ac tincidunt. Morbi viverra nisi eu libero pulvinar tincidunt.",
-  content: `
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce efficitur at risus ac tincidunt. Morbi viverra nisi eu libero pulvinar tincidunt. Nam diam arcu, consectetur vitae nulla eu, ultrices porta nunc. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur fringilla risus condimentum luctus condimentum.</p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce efficitur at risus ac tincidunt. Morbi viverra nisi eu libero pulvinar tincidunt. Nam diam arcu, consectetur vitae nulla eu, ultrices porta nunc. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur fringilla risus condimentum luctus condimentum.</p>
-  `,
-};
-
 function UpdateId() {
+  const article = Route.useLoaderData();
+
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -33,21 +34,21 @@ function UpdateId() {
   const isLocked = false;
 
   return (
-    <motion.div {...PAGE_TRANSITIONS} className="min-h-screen">
+    <motion.section {...PAGE_TRANSITIONS} className="min-h-screen mt-12">
       <motion.div
         className="fixed top-0 inset-x-0 h-2 bg-foreground origin-left z-50"
         style={{ scaleX }}
       />
-      <section className="max-w-3xl mx-auto">
+      <div className="max-w-3xl mx-auto">
         <header className="text-center mb-20">
           <div className="flex flex-wrap justify-center gap-4 text-xxs font-mono uppercase tracking-[0.2em] text-foreground/40 mb-8">
-            <span>{article.date}</span>
+            <span>{article.date.toISOString()}</span>
             <span className="text-foreground/30">•</span>
-            <span>{article.category}</span>
+            <span>{article.tag}</span>
             <span className="text-foreground/30">•</span>
-            <span>{article.readTime} Read</span>
+            <span>1 Minute Reading Time</span>
             <span className="text-foreground/30">•</span>
-            {article.isPremium && (
+            {article.isMemberOnly && (
               <span className="text-yellow-600 font-bold flex items-center gap-1">
                 <LockIcon className="size-2.5" /> Member Only
               </span>
@@ -76,16 +77,15 @@ function UpdateId() {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="prose prose-lg md:prose-xl"
+            className="prose prose-primary prose-lg md:prose-xl prose-headings:leading-tight"
           >
-            <p className="lead text-xl md:text-2xl font-serif italic/60 mb-12">
+            <p className="text-xl md:text-2xl font-serif italic mb-12">
               {article.summary}
             </p>
-            {/** biome-ignore lint/security/noDangerouslySetInnerHtml: It needed to render html content */}
-            <div dangerouslySetInnerHTML={{ __html: article.content || "" }} />
+            <MDXContent code={article.mdx} />
           </motion.article>
         )}
-      </section>
-    </motion.div>
+      </div>
+    </motion.section>
   );
 }
