@@ -8,7 +8,7 @@ import { PAGE_TRANSITIONS } from "@/constants";
 
 export const Route = createFileRoute("/updates/$updateId")({
   component: UpdateId,
-  loader: ({ params }) => {
+  loader: async ({ params }) => {
     const post = allUpdates.find(
       (update) => update._meta.path === params.updateId,
     );

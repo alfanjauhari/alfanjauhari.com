@@ -5,9 +5,6 @@ date: 2024-11-01
 summary: Implementing progressive enhancement in web development to improve backward compatibility and accessibility for your beloved website.
 ---
 
-import { FormSandpack } from "@/components/contents/updates/web-development-with-progressive-enhancement/FormSandpack";
-import ProgressiveEnhancementLayerImage from "@/assets/updates/web-development-with-progressive-enhancement/progressive-enhancement-layers.png";
-
 Have you ever opened some website, but it doesn&lsquo;t work on your ancient devices? It&lsquo;s kinda stressful isn&lsquo;t it when you try surfing on the internet you need to spend your money to buy a new device first. Well, if you feel that way, when building a website you need to pay attention to backward compatibility, so more users can use your websites smoothly without a problem. And that's where you need progressive enhancement when building websites for more accessibility and backward compatibility.
 
 ## Progressive Enhancement
@@ -41,11 +38,6 @@ When you were learning progressive enhancement, you will likely introduce to gra
 So, by that explanation before, progressive enhancement is a bottom-up approach to web development while the graceful degradation is a top-down approach. You can be using progressive enhancement and graceful degradation at the same time to complement each other while building websites.
 
 ## Progressive Enhancement Layers
-
-<Image
-  src={ProgressiveEnhancementLayerImage}
-  alt="Progressive Enhancement Layers"
-/>
 
 In that image, we can see we have 3 layers of progressive enhancement which is HTML, CSS and JavaScript. Those layers play important part for progressive enhancement and have different specification on each layer.
 
@@ -96,8 +88,6 @@ Okay, but how we can make sure our users have the same experience even though th
 The answer to that question is **_fallback._** Fallback is a substitute or alternative solution that ensures a feature or content is still available to users if the preferred or advanced version cannot be used.
 
 This snippet showing how we maintain form compatibility when implementing progressive enhancement :
-
-<FormSandpack />
 
 As you can see in that playground we have two files that create basic forms with React.JS. Nothing special, just a basic form with styling but I added some conditions to support more backward compatibility :
 
