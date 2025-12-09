@@ -12,7 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UpdatesIndexRouteImport } from './routes/updates/index'
+import { Route as WorksWorkIdRouteImport } from './routes/works/$workId'
 import { Route as UpdatesUpdateIdRouteImport } from './routes/updates/$updateId'
+import { Route as OgSplatRouteImport } from './routes/og/$'
 
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
@@ -29,43 +31,80 @@ const UpdatesIndexRoute = UpdatesIndexRouteImport.update({
   path: '/updates/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WorksWorkIdRoute = WorksWorkIdRouteImport.update({
+  id: '/works/$workId',
+  path: '/works/$workId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UpdatesUpdateIdRoute = UpdatesUpdateIdRouteImport.update({
   id: '/updates/$updateId',
   path: '/updates/$updateId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OgSplatRoute = OgSplatRouteImport.update({
+  id: '/og/$',
+  path: '/og/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/og/$': typeof OgSplatRoute
   '/updates/$updateId': typeof UpdatesUpdateIdRoute
+  '/works/$workId': typeof WorksWorkIdRoute
   '/updates': typeof UpdatesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/og/$': typeof OgSplatRoute
   '/updates/$updateId': typeof UpdatesUpdateIdRoute
+  '/works/$workId': typeof WorksWorkIdRoute
   '/updates': typeof UpdatesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/og/$': typeof OgSplatRoute
   '/updates/$updateId': typeof UpdatesUpdateIdRoute
+  '/works/$workId': typeof WorksWorkIdRoute
   '/updates/': typeof UpdatesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/updates/$updateId' | '/updates'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/og/$'
+    | '/updates/$updateId'
+    | '/works/$workId'
+    | '/updates'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/updates/$updateId' | '/updates'
-  id: '__root__' | '/' | '/about' | '/updates/$updateId' | '/updates/'
+  to:
+    | '/'
+    | '/about'
+    | '/og/$'
+    | '/updates/$updateId'
+    | '/works/$workId'
+    | '/updates'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/og/$'
+    | '/updates/$updateId'
+    | '/works/$workId'
+    | '/updates/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  OgSplatRoute: typeof OgSplatRoute
   UpdatesUpdateIdRoute: typeof UpdatesUpdateIdRoute
+  WorksWorkIdRoute: typeof WorksWorkIdRoute
   UpdatesIndexRoute: typeof UpdatesIndexRoute
 }
 
@@ -92,11 +131,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UpdatesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/works/$workId': {
+      id: '/works/$workId'
+      path: '/works/$workId'
+      fullPath: '/works/$workId'
+      preLoaderRoute: typeof WorksWorkIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/updates/$updateId': {
       id: '/updates/$updateId'
       path: '/updates/$updateId'
       fullPath: '/updates/$updateId'
       preLoaderRoute: typeof UpdatesUpdateIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/og/$': {
+      id: '/og/$'
+      path: '/og/$'
+      fullPath: '/og/$'
+      preLoaderRoute: typeof OgSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -105,7 +158,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  OgSplatRoute: OgSplatRoute,
   UpdatesUpdateIdRoute: UpdatesUpdateIdRoute,
+  WorksWorkIdRoute: WorksWorkIdRoute,
   UpdatesIndexRoute: UpdatesIndexRoute,
 }
 export const routeTree = rootRouteImport

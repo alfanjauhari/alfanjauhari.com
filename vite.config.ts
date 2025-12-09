@@ -1,17 +1,52 @@
 import contentCollections from "@content-collections/vite";
-import { defineConfig } from 'vite'
-import { devtools } from '@tanstack/devtools-vite'
-import { tanstackStart } from '@tanstack/react-start/plugin/vite'
-import viteReact from '@vitejs/plugin-react'
-import viteTsConfigPaths from 'vite-tsconfig-paths'
-import tailwindcss from '@tailwindcss/vite'
-import { nitro } from 'nitro/vite'
+import tailwindcss from "@tailwindcss/vite";
+import takumiPackageJson from "@takumi-rs/core/package.json" with {
+  type: "json",
+};
+import { devtools } from "@tanstack/devtools-vite";
+import { tanstackStart } from "@tanstack/react-start/plugin/vite";
+import viteReact from "@vitejs/plugin-react";
+import { nitro } from "nitro/vite";
+import { defineConfig } from "vite";
+import viteTsConfigPaths from "vite-tsconfig-paths";
+
+const nonPrerenderedRoutes = ["/resume.pdf", "/login"];
 
 const config = defineConfig({
-  plugins: [devtools(), nitro(), // this is the plugin that enables path aliases
-  viteTsConfigPaths({
-    projects: ['./tsconfig.json'],
-  }), tailwindcss(), tanstackStart(), viteReact(), contentCollections()],
-})
+  plugins: [
+    devtools(),
+    nitro(), // this is the plugin that enables path aliases
+    viteTsConfigPaths({
+      projects: ["./tsconfig.json"],
+    }),
+    tailwindcss(),
+    tanstackStart({
+      prerender: {
+        enabled: true,
+        filter: ({ path }) => {
+          if (!nonPrerenderedRoutes.includes(path)) {
+            return true;
+          }
 
-export default config
+          return false;
+        },
+      },
+      sitemap: {
+        host: "http://localhost:3000",
+      },
+    }),
+    viteReact(),
+    contentCollections(),
+  ],
+  optimizeDeps: {
+    exclude: ["@takumi-rs/core"],
+  },
+  nitro: {
+    externals: {
+      external: ["@takumi-rs/core"],
+      traceInclude: Object.keys(takumiPackageJson.optionalDependencies),
+    },
+  },
+});
+
+export default config;

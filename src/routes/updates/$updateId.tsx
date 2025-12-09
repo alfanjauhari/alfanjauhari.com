@@ -1,28 +1,36 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, notFound } from "@tanstack/react-router";
 import { allUpdates } from "content-collections";
 import { LockIcon } from "lucide-react";
 import { motion, useScroll, useSpring } from "motion/react";
 import { MDXContent } from "@/components/mdx-content";
-import { Button } from "@/components/ui/button";
 import { PAGE_TRANSITIONS } from "@/constants";
+import { calculateReadingTime } from "@/lib/content";
+import { seoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/updates/$updateId")({
   component: UpdateId,
   loader: async ({ params }) => {
-    const post = allUpdates.find(
+    const update = allUpdates.find(
       (update) => update._meta.path === params.updateId,
     );
 
-    if (!post) {
+    if (!update) {
       throw notFound();
     }
 
-    return post;
+    return update;
   },
+  head: ({ loaderData, match, params }) =>
+    seoHead({
+      title: loaderData?.title,
+      description: loaderData?.summary || "",
+      canonical: match.pathname,
+      image: `/og/updates/${params.updateId}.webp`,
+    }),
 });
 
 function UpdateId() {
-  const article = Route.useLoaderData();
+  const update = Route.useLoaderData();
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
@@ -42,21 +50,25 @@ function UpdateId() {
       <div className="max-w-3xl mx-auto">
         <header className="text-center mb-20">
           <div className="flex flex-wrap justify-center gap-4 text-xxs font-mono uppercase tracking-[0.2em] text-foreground/40 mb-8">
-            <span>{article.date.toISOString()}</span>
+            <span>{new Intl.DateTimeFormat("id-ID").format(update.date)}</span>
             <span className="text-foreground/30">•</span>
-            <span>{article.tag}</span>
+            <span>{update.tag}</span>
             <span className="text-foreground/30">•</span>
-            <span>1 Minute Reading Time</span>
-            <span className="text-foreground/30">•</span>
-            {article.isMemberOnly && (
-              <span className="text-yellow-600 font-bold flex items-center gap-1">
-                <LockIcon className="size-2.5" /> Member Only
-              </span>
+            <span>
+              {calculateReadingTime(update.content)} Minute Reading Time
+            </span>
+            {update.isMemberOnly && (
+              <>
+                <span className="text-foreground/30">•</span>
+                <span className="text-yellow-600 font-bold flex items-center gap-1">
+                  <LockIcon className="size-2.5" /> Member Only
+                </span>
+              </>
             )}
           </div>
 
           <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl leading-none mb-8 tracking-tight">
-            {article.title}
+            {update.title}
           </h1>
         </header>
 
@@ -68,21 +80,22 @@ function UpdateId() {
               This piece is available exclusively to community members. Join to
               access premium content, leave comments, and save your favorites.
             </p>
-            <Button size="xl" asChild>
+            {/*<Button size="xl" asChild>
               <Link to="/login">Login or Join</Link>
-            </Button>
+            </Button>*/}
           </div>
         ) : (
           <motion.article
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.8 }}
-            className="prose prose-primary prose-lg md:prose-xl prose-headings:leading-tight"
+            className="prose prose-primary prose-lg md:prose-xl prose-headings:leading-tight prose-headings:font-serif"
           >
             <p className="text-xl md:text-2xl font-serif italic mb-12">
-              {article.summary}
+              {update.summary}
             </p>
-            <MDXContent code={article.mdx} />
+            <hr />
+            <MDXContent code={update.mdx} />
           </motion.article>
         )}
       </div>

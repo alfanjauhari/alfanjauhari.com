@@ -1,15 +1,25 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { Laptop2Icon, MenuIcon, MoonIcon, SunIcon, XIcon } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { forwardRef, type HTMLAttributes } from "react";
+import { forwardRef, type HTMLAttributes, useEffect, useState } from "react";
 import { NAVIGATIONS } from "@/constants";
-import { useThemeContext } from "@/context/theme-context";
+import { useTheme } from "@/context/theme-context";
 import { useToggle } from "@/hooks/use-toggle";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 
 function ThemeToggleButton() {
-  const { setTheme, theme } = useThemeContext();
+  const [isMounted, setIsMounted] = useState(false);
+
+  const { setTheme, theme } = useTheme();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return <div className="size-10" />;
+  }
 
   return (
     <Button

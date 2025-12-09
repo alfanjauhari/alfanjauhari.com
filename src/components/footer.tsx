@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRightIcon } from "lucide-react";
 import { forwardRef, type HTMLAttributes } from "react";
+import { NAVIGATIONS } from "@/constants";
 
 export const Footer = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
   function Footer() {
@@ -29,22 +30,28 @@ export const Footer = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
                 </p>
                 <div className="flex flex-col gap-2">
                   <a
-                    href="#"
+                    href="https://github.com/alfanjauhari"
                     className="text-lg text-white/50 hover:text-white duration-300"
+                    target="_blank"
+                    rel="noreferrer noopener"
                   >
-                    Twitter
+                    Github
                   </a>
                   <a
-                    href="#"
+                    href="https://linkedin.com/in/m-alfanjauhari"
                     className="text-lg text-white/50 hover:text-white duration-300"
+                    target="_blank"
+                    rel="noreferrer noopener"
                   >
                     LinkedIn
                   </a>
                   <a
-                    href="#"
+                    href="https://x.com/alfanjauhari_"
                     className="text-lg text-white/50 hover:text-white duration-300"
+                    target="_blank"
+                    rel="noreferrer noopener"
                   >
-                    GitHub
+                    X / Twitter
                   </a>
                 </div>
               </div>
@@ -53,24 +60,15 @@ export const Footer = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
                   Explore
                 </p>
                 <div className="flex flex-col gap-2">
-                  <Link
-                    to="/"
-                    className="text-lg text-white/50 hover:text-white duration-300"
-                  >
-                    Home
-                  </Link>
-                  <Link
-                    to="/about"
-                    className="text-lg text-white/50 hover:text-white duration-300"
-                  >
-                    About
-                  </Link>
-                  <Link
-                    to="/writing"
-                    className="text-lg text-white/50 hover:text-white duration-300"
-                  >
-                    Writing
-                  </Link>
+                  {NAVIGATIONS.map((nav) => (
+                    <Link
+                      to={nav.path}
+                      className="text-lg text-white/50 hover:text-white duration-300"
+                      key={nav.path}
+                    >
+                      {nav.label}
+                    </Link>
+                  ))}
                 </div>
               </div>
             </div>

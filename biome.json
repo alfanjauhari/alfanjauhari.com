@@ -11,7 +11,7 @@
       "**/src/**/*",
       "**/.vscode/**/*",
       "**/index.html",
-      "**/vite.config.js",
+      "**/vite.config.ts",
       "!**/src/routeTree.gen.ts",
       "!**/src/styles.css"
     ]
@@ -32,6 +32,19 @@
           "options": {
             "ignoreNonDom": true
           }
+        }
+      },
+      "correctness": {
+        "useUniqueElementIds": {
+          "level": "warn",
+          "options": {
+            "excludedComponents": ["section"]
+          }
+        }
+      },
+      "suspicious": {
+        "noUnknownAtRules": {
+          "level": "off"
         }
       }
     }

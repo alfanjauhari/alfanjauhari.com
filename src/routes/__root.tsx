@@ -1,69 +1,78 @@
+import { getSandpackCssText } from "@codesandbox/sandpack-react";
 import { TanStackDevtools } from "@tanstack/react-devtools";
-import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
+import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
+import {
+  createRootRouteWithContext,
+  HeadContent,
+  Scripts,
+} from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { ReactLenis } from "lenis/react";
 import { AnimatePresence } from "motion/react";
-import { useCallback, useState } from "react";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { Loader } from "@/components/loader";
 import { ThemeProvider } from "@/context/theme-context";
-import { setHasVisitedClient } from "@/fns/client/common";
-import { getHasVisitedServer, getThemeServerFn } from "@/fns/server/common";
+import type { RouterContext } from "@/router-context";
 import appCss from "../assets/styles.css?url";
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<RouterContext>()({
   head: () => ({
-    meta: [
-      {
-        charSet: "utf-8",
-      },
-      {
-        name: "viewport",
-        content: "width=device-width, initial-scale=1",
-      },
-      {
-        title: "Alfan Jauhari",
-      },
-    ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
       },
+      {
+        rel: "apple-touch-icon",
+        sizes: "180x180",
+        href: "/images/favicons/apple-touch-icon.png",
+      },
+      {
+        rel: "icon",
+        type: "image/png",
+        sizes: "32x32",
+        href: "/images/favicons/favicon-32x32.png",
+      },
+      {
+        rel: "icon",
+        type: "image/png",
+        sizes: "16x16",
+        href: "/images/favicons/favicon-16x16.png",
+      },
+      { rel: "manifest", href: "/site.webmanifest", color: "#fffff" },
+      { rel: "icon", href: "/images/favicons/favicon.ico" },
+    ],
+    styles: [
+      {
+        dangerouslySetInnerHTML: {
+          __html: getSandpackCssText(),
+        },
+        id: "sandpack",
+      },
     ],
   }),
   shellComponent: RootDocument,
-  loader: async () => {
-    return {
-      hasVisited: await getHasVisitedServer(),
-      theme: await getThemeServerFn(),
-    };
-  },
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
-  const { theme, hasVisited } = Route.useLoaderData();
-
-  const [loading, setLoading] = useState(!hasVisited);
-
-  const onCompleteLoading = useCallback(async () => {
-    setLoading(false);
-    setHasVisitedClient(true);
-  }, []);
+  const queryClient = useQueryClient();
 
   return (
     <ReactLenis root>
-      <ThemeProvider theme={theme}>
-        <html className={theme} lang="en">
-          <head>
-            <HeadContent />
-          </head>
-          <body className="relative min-h-screen flex flex-col">
+      <html
+        className="scroll-smooth group/root"
+        lang="en"
+        suppressHydrationWarning
+      >
+        <head>
+          <HeadContent />
+        </head>
+        <body className="relative min-h-screen flex flex-col">
+          <ThemeProvider enableSystem defaultTheme="system">
             <AnimatePresence mode="wait">
-              {loading && (
-                <Loader onComplete={onCompleteLoading} key="loader" />
-              )}
+              <Loader key="loader" />
             </AnimatePresence>
             <Header />
             <div className="grow px-6 md:px-12 mx-auto relative w-full z-10 bg-background origin-top rounded-b-[3rem] mb-[500px] md:mb-[600px]">
@@ -76,12 +85,16 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                   name: "Tanstack Router",
                   render: <TanStackRouterDevtoolsPanel />,
                 },
+                {
+                  name: "Tanstack Query",
+                  render: <ReactQueryDevtoolsPanel client={queryClient} />,
+                },
               ]}
             />
-            <Scripts />
-          </body>
-        </html>
-      </ThemeProvider>
+          </ThemeProvider>
+          <Scripts />
+        </body>
+      </html>
     </ReactLenis>
   );
 }

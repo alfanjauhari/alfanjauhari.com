@@ -4,21 +4,14 @@ import {
   stagger,
   type Variants,
 } from "motion/react";
-import { forwardRef, useEffect } from "react";
+import { useEffect } from "react";
+import { setHasVisited } from "@/fns/client/common";
 import { cn } from "@/lib/utils";
 
 export const loaderContainerVariants: Variants = {
   show: {
     transition: {
       delayChildren: stagger(0.15),
-    },
-  },
-  exit: {
-    y: "-100%",
-    transition: {
-      ease: [0.76, 0, 0.24, 1],
-      duration: 0.8,
-      delay: 0.2,
     },
   },
 };
@@ -50,26 +43,21 @@ const lineVariants: Variants = {
   },
 };
 
-export const Loader = forwardRef<
-  HTMLDivElement,
-  HTMLMotionProps<"div"> & { onComplete: () => void }
->(function Loader({ className, onComplete, ...props }, ref) {
+export function Loader({ className, ...props }: HTMLMotionProps<"div">) {
   useEffect(() => {
-    const timer = setTimeout(() => onComplete(), 3000);
+    const timer = setTimeout(() => setHasVisited(true), 3000);
 
     return () => clearTimeout(timer);
-  }, [onComplete]);
+  }, []);
 
   return (
     <motion.div
       key="loader"
-      ref={ref}
       variants={loaderContainerVariants}
       initial="show"
       animate="show"
-      exit="exit"
       className={cn(
-        "fixed inset-0 z-100 flex flex-col justify-between p-6 md:p-12 overflow-hidden cursor-wait bg-background text-foreground",
+        "fixed inset-0 z-100 flex flex-col justify-between p-6 md:p-12 overflow-hidden cursor-wait bg-background text-foreground group-data-[has-visited=true]/root:-translate-y-full group-data-[has-visited=true]/root:ease-[cubic-bezier(0.76,0,0.24,1)] group-data-[has-visited=true]/root:duration-800",
         className,
       )}
       {...props}
@@ -150,4 +138,4 @@ export const Loader = forwardRef<
       </div>
     </motion.div>
   );
-});
+}

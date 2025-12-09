@@ -1,40 +1,89 @@
 import {
+  type CodeEditorProps,
+  type PreviewProps,
   SandpackCodeEditor,
   SandpackLayout,
   SandpackPreview,
   SandpackProvider,
   type SandpackProviderProps,
 } from "@codesandbox/sandpack-react";
-import { githubLight } from "@codesandbox/sandpack-themes";
-import type { CSSProperties } from "react";
+import {
+  Children,
+  type CSSProperties,
+  isValidElement,
+  type PropsWithChildren,
+} from "react";
+import { useTheme } from "@/context/theme-context";
+import {
+  catppuccinLatteSandpack,
+  catppuccinMochaSandpack,
+} from "@/lib/sandpack-themes";
+import { cn } from "@/lib/utils";
 
-export function Sandpack({ files, ...props }: SandpackProviderProps) {
+export interface SandpackProps extends SandpackProviderProps {
+  editorProps?: CodeEditorProps;
+  previewProps?: PreviewProps;
+}
+
+export function SandpackFile({
+  children,
+}: PropsWithChildren<{ name: string }>) {
+  return children;
+}
+
+export function Sandpack({
+  editorProps,
+  previewProps,
+  children,
+  files: _files,
+  ...props
+}: PropsWithChildren<SandpackProps>) {
+  const { theme } = useTheme();
+
+  const fileEntries = Children.toArray(children)
+    .map((child) => {
+      if (!isValidElement<{ name: string; children: string }>(child)) {
+        return null;
+      }
+
+      return [child.props.name, child.props.children];
+    })
+    .filter((child): child is [string, string] => {
+      return child !== null;
+    });
+
+  const files = Object.fromEntries(fileEntries);
+
   return (
     <SandpackProvider
-      theme={{
-        ...githubLight,
-        font: {
-          size: "14px",
-          body: "JetBrains Mono",
-          mono: "JetBrains Mono",
-        },
-      }}
       style={
         {
           "--sp-layout-height": "420px",
         } as CSSProperties
       }
+      template="react-ts"
+      theme={
+        theme === "light" ? catppuccinLatteSandpack : catppuccinMochaSandpack
+      }
+      options={{
+        classes: {
+          "sp-tab-container": "outline-none!",
+          "sp-code-editor": cn("[&_.cm-gutterElement]:text-xs"),
+        },
+      }}
+      files={files}
       {...props}
     >
-      <SandpackLayout className="border-none!">
+      <SandpackLayout className="border-none! rounded-none!">
         <SandpackCodeEditor
           showLineNumbers
           showInlineErrors
-          showTabs
           wrapContent
-          className="prevent-lenis"
+          data-lenis-prevent
+          initMode="immediate"
+          {...editorProps}
         />
-        <SandpackPreview showNavigator />
+        <SandpackPreview {...previewProps} />
       </SandpackLayout>
     </SandpackProvider>
   );

@@ -3,9 +3,18 @@ import { ArrowUpRightIcon } from "lucide-react";
 import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { PAGE_TRANSITIONS } from "@/constants";
+import { seoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/about")({
   component: About,
+  head: () =>
+    seoHead({
+      title: "About",
+      description:
+        "Aboute me, a passionate Product Engineer building pixel-perfect interfaces and scalable systems for everyone",
+      canonical: "/about",
+      image: "/og/about.webp",
+    }),
 });
 
 function ExperienceItem({
@@ -178,7 +187,7 @@ function About() {
             I'm currently open to any interesting opportunity. If you have a
             project in mind, feel free to reach out.
           </p>
-          <Button asChild className="rounded-full" size="xl">
+          <Button asChild size="xl">
             <a href="mailto:hi@alfanjauhari.com">Get in Touch</a>
           </Button>
         </div>
