@@ -100,7 +100,7 @@ function Home() {
                 <a href="#works">View Works</a>
               </Button>
               <Button variant="outline" size="xl" asChild>
-                <a href="mailto:hello@alfan.dev">Contact Me</a>
+                <a href="mailto:hi@alfanjauhari.com">Contact Me</a>
               </Button>
             </div>
           </div>
