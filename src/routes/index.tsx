@@ -20,7 +20,7 @@ export const Route = createFileRoute("/")({
       description:
         "A passionate Product Engineer. I build pixel-perfect interfaces and scalable systems for the web.",
       canonical: "/",
-      image: "/og/home.webp",
+      image: "/images/og/home.webp",
     }),
 });
 
@@ -178,7 +178,7 @@ function Home() {
                   }}
                   className="absolute inset-0 z-40"
                 />
-                <div className="w-full md:w-7/12 relative overflow-hidden cursor-pointer">
+                <div className="w-full md:w-7/12 relative overflow-hidden cursor-pointer aspect-video">
                   <motion.div
                     className="absolute inset-0 bg-linear-30 from-accent to-accent/80"
                     whileHover={{ scale: 1.05 }}
@@ -188,7 +188,7 @@ function Home() {
                     }}
                   />
                   <div className="relative z-10 h-full flex items-center justify-center pointer-events-none">
-                    <motion.div className="text-foreground font-serif text-9xl select-none">
+                    <motion.div className="text-foreground font-serif text-center text-5xl lg:text-9xl select-none">
                       {work.title}
                     </motion.div>
                   </div>
@@ -207,7 +207,7 @@ function Home() {
                     <h3 className="font-serif text-4xl mb-6 leading-tight">
                       {work.title}
                     </h3>
-                    <p className="leading-relaxed mb-8 text-5050">
+                    <p className="leading-relaxed mb-8 line-clamp-4">
                       {work.summary}
                     </p>
                   </div>

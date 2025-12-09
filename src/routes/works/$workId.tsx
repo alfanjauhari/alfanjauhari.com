@@ -36,7 +36,7 @@ export const Route = createFileRoute("/works/$workId")({
       title: loaderData?.title,
       description: loaderData?.summary || "",
       canonical: match.pathname,
-      image: `/og/works/${params.workId}.webp`,
+      image: `/images/og/works/${params.workId}.webp`,
     }),
 });
 

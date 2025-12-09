@@ -14,7 +14,7 @@ export const Route = createFileRoute("/updates/")({
       description:
         "A collection of my thoughts on software engineering, design systems, and the intersection of humanity and technology.",
       canonical: "/updates",
-      image: "/og/updates.webp",
+      image: "/images/og/updates.webp",
     }),
 });
 

@@ -1,0 +1,54 @@
+services:
+  alfanjauhari_com_app:
+    image: alfanjauhari/alfanjauhari-com:main
+    container_name: alfanjauhari_com_app
+    env_file: $RUNTIME_ENV_FILE
+    ports:
+      - :3000
+    volumes:
+      - app_data:/usr/src/app
+    networks:
+      - default
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app.rule=Host(`$TRAEFIK_URL`) || Host(`www.$TRAEFIK_URL`)"
+      - "traefik.http.routers.app.entrypoints=app,appsecure"
+      - "traefik.http.routers.app.tls.certresolver=letsencrypt"
+
+  alfanjauhari_com_traefik:
+    image: traefik:v3.4
+    container_name: alfanjauhari_com_traefik
+    environment:
+      CF_DNS_API_TOKEN: $CF_DNS_API_TOKEN
+      TRAEFIK_SSL_EMAIL: $TRAEFIK_SSL_EMAIL
+    command:
+      - "--log.level=DEBUG"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entryPoints.app.address=:80"
+      - "--entryPoints.appsecure.address=:443"
+      - "--entryPoints.app.http.redirections.entryPoint.to=appsecure"
+      - "--entryPoints.app.http.redirections.entryPoint.scheme=https"
+      - "--certificatesresolvers.letsencrypt.acme.email=${TRAEFIK_SSL_EMAIL:-hi@alfanjauhari.com}"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/certs/acme.json"
+      - "--certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare"
+      - "--certificatesresolvers.letsencrypt.acme.dnschallenge.delaybeforecheck=0"
+    ports:
+      - "80:80"
+      - "443:443"
+      - :8080
+    networks:
+      - default
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - traefik-certs:/certs
+
+volumes:
+  app_data:
+    driver: local
+  traefik-certs:
+    driver: local
+
+networks:
+  default:
+    driver: bridge

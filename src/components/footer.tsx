@@ -2,9 +2,12 @@ import { Link } from "@tanstack/react-router";
 import { ArrowUpRightIcon } from "lucide-react";
 import { forwardRef, type HTMLAttributes } from "react";
 import { NAVIGATIONS } from "@/constants";
+import { Route } from "@/routes/__root";
 
 export const Footer = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
   function Footer() {
+    const { timeNow } = Route.useLoaderData();
+
     return (
       <footer className="fixed bottom-0 inset-x-0 z-0 h-[500px] md:h-[600px]">
         <div className="bg-[#0a0a0a] h-full flex flex-col justify-between px-6 md:px-12 pt-24 pb-6 overflow-hidden relative">
@@ -74,7 +77,7 @@ export const Footer = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
             </div>
           </div>
           <div className="relative w-full mt-12 md:mt-0">
-            <h1 className="text-[22vw] leading-[0.8] font-serif font-bold text-center tracking-tighter text-transparent bg-clip-text bg-linear-to-b from-white/10 to-transparent select-none pointer-events-none w-full">
+            <h1 className="text-[22vw] leading-[0.8] font-serif font-bold text-center tracking-tighter text-transparent bg-clip-text bg-linear-to-b from-white/10 to-transparent select-none pointer-events-none w-full absolute bottom-0">
               ALFAN
             </h1>
 
@@ -85,14 +88,7 @@ export const Footer = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
               </div>
               <div className="flex gap-4">
                 <span>Jakarta, ID</span>
-                <span>
-                  Local time:{" "}
-                  {new Date().toLocaleTimeString("en-US", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: false,
-                  })}
-                </span>
+                <span>Local time: {timeNow}</span>
               </div>
             </div>
           </div>

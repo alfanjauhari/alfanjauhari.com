@@ -52,8 +52,22 @@ export const Route = createRootRouteWithContext<RouterContext>()({
         id: "sandpack",
       },
     ],
+    meta: [
+      {
+        name: "viewport",
+        content: "width=device-width, initial-scale=1.0",
+      },
+    ],
   }),
   shellComponent: RootDocument,
+  loader: () => {
+    return {
+      timeNow: Intl.DateTimeFormat("id-ID", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }).format(new Date()),
+    };
+  },
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
@@ -70,7 +84,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           <HeadContent />
         </head>
         <body className="relative min-h-screen flex flex-col">
-          <ThemeProvider enableSystem defaultTheme="system">
+          <ThemeProvider>
             <AnimatePresence mode="wait">
               <Loader key="loader" />
             </AnimatePresence>

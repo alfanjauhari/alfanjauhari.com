@@ -25,7 +25,7 @@ export const Route = createFileRoute("/updates/$updateId")({
       title: loaderData?.title,
       description: loaderData?.summary || "",
       canonical: match.pathname,
-      image: `/og/updates/${params.updateId}.webp`,
+      image: `/images/og/updates/${params.updateId}.webp`,
     }),
 });
 

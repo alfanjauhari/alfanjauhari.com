@@ -13,7 +13,7 @@ export const Route = createFileRoute("/about")({
       description:
         "Aboute me, a passionate Product Engineer building pixel-perfect interfaces and scalable systems for everyone",
       canonical: "/about",
-      image: "/og/about.webp",
+      image: "/images/og/about.webp",
     }),
 });
 
