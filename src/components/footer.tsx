@@ -15,7 +15,9 @@ export const Footer = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
             <div className="max-w-xl mb-12 md:mb-0">
               <h2 className="font-serif text-5xl md:text-7xl mb-8 leading-none text-white">
                 Have an idea? <br />
-                <span className="text-gray-500 italic">Let's build it.</span>
+                <span className="text-foreground/50 italic">
+                  Let's build it.
+                </span>
               </h2>
               <a
                 href="mailto:hi@alfanjauhari.com"
@@ -28,7 +30,7 @@ export const Footer = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
 
             <div className="flex gap-12 md:gap-24">
               <div className="space-y-4">
-                <p className="text-xs font-mono text-gray-500 uppercase tracking-widest">
+                <p className="text-xs font-mono text-foreground/50 uppercase tracking-widest">
                   Connect
                 </p>
                 <div className="flex flex-col gap-2">
@@ -59,7 +61,7 @@ export const Footer = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
                 </div>
               </div>
               <div className="space-y-4">
-                <p className="text-xs font-mono text-gray-500 uppercase tracking-widest">
+                <p className="text-xs font-mono text-foreground/50 uppercase tracking-widest">
                   Explore
                 </p>
                 <div className="flex flex-col gap-2">
@@ -81,7 +83,7 @@ export const Footer = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
               ALFAN
             </h1>
 
-            <div className="absolute bottom-2 w-full flex justify-between text-xxs font-mono uppercase tracking-widest text-gray-600 px-2">
+            <div className="absolute bottom-2 w-full flex justify-between text-xxs font-mono uppercase tracking-widest text-foreground/60 px-2">
               <div className="flex gap-4">
                 <span>&copy; {new Date().getFullYear()}</span>
                 <span className="hidden md:inline">All Rights Reserved</span>

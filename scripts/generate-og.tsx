@@ -19,6 +19,12 @@ const ALLOWED_OG_ROUTES = [
     title: "About",
   },
   {
+    path: "uses",
+    type: "page" as const,
+    title: "Uses",
+    meta: "A living collection of the hardware, software, and office gear I use on a daily basis to build a software.",
+  },
+  {
     path: "updates",
     type: "page" as const,
     title: "Updates",

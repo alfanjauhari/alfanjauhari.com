@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ArrowUpRightIcon } from "lucide-react";
 import { motion } from "motion/react";
+import { DotTitle } from "@/components/dot-title";
 import { Button } from "@/components/ui/button";
 import { PAGE_TRANSITIONS } from "@/constants";
 import { seoHead } from "@/lib/seo";
@@ -94,7 +95,7 @@ function About() {
           </div>
         </div>
 
-        <div className="lg:col-span-4 relative h-[400px] lg:h-auto bg-surface rounded-lg overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
+        <div className="lg:col-span-4 relative h-[400px] lg:h-auto rounded-lg overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
           <div className="absolute inset-0 bg-[url(/images/about/profile.avif)] bg-cover bg-center opacity-80 hover:scale-105 transition-transform duration-1000"></div>
         </div>
       </section>
@@ -102,10 +103,7 @@ function About() {
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 py-32">
         <div className="lg:col-span-4">
           <div className="sticky top-32">
-            <h2 className="text-xs font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-foreground"></span>
-              Experience
-            </h2>
+            <DotTitle>Experience</DotTitle>
             <p className="text-foreground/50 font-mono text-xs leading-relaxed max-w-xs">
               A timeline of my professional career, highlighting key roles and
               contributions in the tech industry.
@@ -139,13 +137,9 @@ function About() {
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-32 border-t border-border pt-32">
         <div className="lg:col-span-4">
           <div className="sticky top-32">
-            <h2 className="text-xs font-bold uppercase tracking-widest mb-4 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-foreground"></span>
-              Tech Stack
-            </h2>
+            <DotTitle>Tech Stack</DotTitle>
             <p className="text-foreground/50 font-mono text-xs leading-relaxed max-w-xs">
-              The tools and technologies I use to bring ideas to life, always
-              prioritizing performance and scalability.
+              The tools and technologies I use to bring ideas to life.
             </p>
           </div>
         </div>

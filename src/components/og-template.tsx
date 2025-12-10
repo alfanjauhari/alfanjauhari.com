@@ -1,5 +1,5 @@
 interface OGProps {
-  type: "home" | "update" | "project" | "snippet" | "page" | 'work';
+  type: "home" | "update" | "project" | "snippet" | "page" | "work";
   title?: string;
   category?: string | string[];
   date?: string;
@@ -69,7 +69,7 @@ const OGTemplate: React.FC<OGProps> = ({
                   ))
                 )
               ) : null}
-              <span tw="text-sm font-[JetBrains_Mono] uppercase tracking-widest text-gray-600">
+              <span tw="text-sm font-[JetBrains_Mono] uppercase tracking-widest text-foreground/60">
                 {date}
               </span>
             </div>

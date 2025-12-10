@@ -9,12 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UsesRouteImport } from './routes/uses'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UpdatesIndexRouteImport } from './routes/updates/index'
 import { Route as WorksWorkIdRouteImport } from './routes/works/$workId'
 import { Route as UpdatesUpdateIdRouteImport } from './routes/updates/$updateId'
 
+const UsesRoute = UsesRouteImport.update({
+  id: '/uses',
+  path: '/uses',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -44,6 +50,7 @@ const UpdatesUpdateIdRoute = UpdatesUpdateIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/uses': typeof UsesRoute
   '/updates/$updateId': typeof UpdatesUpdateIdRoute
   '/works/$workId': typeof WorksWorkIdRoute
   '/updates': typeof UpdatesIndexRoute
@@ -51,6 +58,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/uses': typeof UsesRoute
   '/updates/$updateId': typeof UpdatesUpdateIdRoute
   '/works/$workId': typeof WorksWorkIdRoute
   '/updates': typeof UpdatesIndexRoute
@@ -59,6 +67,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/uses': typeof UsesRoute
   '/updates/$updateId': typeof UpdatesUpdateIdRoute
   '/works/$workId': typeof WorksWorkIdRoute
   '/updates/': typeof UpdatesIndexRoute
@@ -68,15 +77,23 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/uses'
     | '/updates/$updateId'
     | '/works/$workId'
     | '/updates'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/updates/$updateId' | '/works/$workId' | '/updates'
+  to:
+    | '/'
+    | '/about'
+    | '/uses'
+    | '/updates/$updateId'
+    | '/works/$workId'
+    | '/updates'
   id:
     | '__root__'
     | '/'
     | '/about'
+    | '/uses'
     | '/updates/$updateId'
     | '/works/$workId'
     | '/updates/'
@@ -85,6 +102,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  UsesRoute: typeof UsesRoute
   UpdatesUpdateIdRoute: typeof UpdatesUpdateIdRoute
   WorksWorkIdRoute: typeof WorksWorkIdRoute
   UpdatesIndexRoute: typeof UpdatesIndexRoute
@@ -92,6 +110,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/uses': {
+      id: '/uses'
+      path: '/uses'
+      fullPath: '/uses'
+      preLoaderRoute: typeof UsesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -133,6 +158,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  UsesRoute: UsesRoute,
   UpdatesUpdateIdRoute: UpdatesUpdateIdRoute,
   WorksWorkIdRoute: WorksWorkIdRoute,
   UpdatesIndexRoute: UpdatesIndexRoute,

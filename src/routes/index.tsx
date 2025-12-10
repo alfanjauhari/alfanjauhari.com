@@ -110,13 +110,13 @@ function Home() {
                 <MapPinIcon className="size-4" />
                 <span className="text-sm font-bold">Tulungagung, ID</span>
               </div>
-              <span className="font-mono text-xs text-gray-400 block">
+              <span className="font-mono text-xs text-foreground/40 block">
                 06° 12' S, 106° 49' E
               </span>
             </div>
 
             <div className="hidden md:block animate-bounce mt-12">
-              <ArrowDownIcon className="size-5 text-gray-400" />
+              <ArrowDownIcon className="size-5 text-foreground/40" />
             </div>
           </div>
         </motion.div>
@@ -135,14 +135,14 @@ function Home() {
               transition={{ delay: i * 0.1 }}
               className="relative flex flex-col group"
             >
-              <span className="font-mono text-sm text-gray-400 mb-6 block">
+              <span className="font-mono text-sm text-foreground/40 mb-6 block">
                 {step.id}
               </span>
               <div>
                 <h3 className="text-3xl font-serif mb-4 group-hover:translate-x-2 transition-transform duration-300">
                   {step.title}
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed font-normal">
+                <p className="text-sm text-foreground/60 leading-relaxed font-normal">
                   {step.desc}
                 </p>
               </div>

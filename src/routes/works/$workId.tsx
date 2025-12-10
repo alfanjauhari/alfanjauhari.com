@@ -124,7 +124,7 @@ function WorkDetail() {
                   {work.techstack.map((tech) => (
                     <div
                       key={tech}
-                      className="flex items-center gap-3 p-3 border border-border rounded-sm bg-surface/30 hover:border-foreground transition-colors group"
+                      className="flex items-center gap-3 p-3 border border-border rounded-sm hover:border-foreground transition-colors group"
                     >
                       <span className="text-foreground/40 group-hover transition-colors">
                         {getTechIcon(tech)}
@@ -155,7 +155,7 @@ function WorkDetail() {
               className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-24"
             >
               {/* Challenge Column */}
-              <div className="bg-surface/30 border border-border p-8 rounded-sm">
+              <div className="border border-border p-8 rounded-sm">
                 <div className="flex items-center gap-3 mb-6">
                   <AlertCircleIcon className="size-6 text-red-600" />
                   <h2 className="font-serif text-3xl">The Challenge</h2>
