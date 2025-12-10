@@ -74,7 +74,7 @@ function BuildItem({
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="group md:col-span-2 bg-surface/30 border border-border p-8 rounded-sm"
+      className="group md:col-span-2 border border-border p-8 rounded-sm"
     >
       <div className="mb-8">
         <h3 className="font-serif text-3xl text-ink mb-4">{title}</h3>

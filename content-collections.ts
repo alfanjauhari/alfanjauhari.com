@@ -65,6 +65,34 @@ const works = defineCollection({
   },
 })
 
+const snippets = defineCollection({
+  name: 'snippets',
+  directory: 'content/snippets',
+  include: '*.mdx',
+  schema: z.object({
+    title: z.string(),
+    summary: z.string(),
+    language: z.string(),
+    tags: z.array(z.string()),
+    content: z.string()
+  }),
+  transform: async (document, context) => {
+    const mdx = await compileMDX(context, document, {
+      rehypePlugins: [[rehypeShiki, {
+        themes: {
+          light: 'catppuccin-latte',
+          dark: 'catppuccin-mocha'
+        },
+        inline: 'tailing-curly-colon',
+      }]]
+    });
+    return {
+      ...document,
+      mdx,
+    };
+  },
+})
+
 export default defineConfig({
-  collections: [updates, works],
+  collections: [updates, works, snippets],
 });

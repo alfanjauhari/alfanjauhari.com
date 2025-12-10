@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { Renderer } from "@takumi-rs/core";
 import { fromJsx } from "@takumi-rs/helpers/jsx";
-import { allUpdates, allWorks } from "content-collections";
+import { allSnippets, allUpdates, allWorks } from "content-collections";
 import z from "zod";
 import OGTemplate from "@/components/og-template";
 
@@ -41,6 +41,12 @@ const ALLOWED_OG_ROUTES = [
     type: "work" as const,
     title: work.title,
     meta: work.summary,
+  })),
+  ...allSnippets.map((snippet) => ({
+    path: `snippets/${snippet._meta.path}`,
+    type: "snippet" as const,
+    title: snippet.title,
+    meta: snippet.summary,
   })),
 ].map((data) => ({
   ...data,

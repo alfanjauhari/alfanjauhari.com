@@ -29,7 +29,7 @@ const OGTemplate: React.FC<OGProps> = ({
           <div tw="flex items-center gap-3 border border-white/20 rounded-full px-4 py-2 bg-white/5 backdrop-blur-sm">
             <div tw="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
             <span tw="text-xs font-[JetBrains_Mono] uppercase tracking-widest text-gray-300">
-              {type === "home" ? "Portfolio v4.0" : type}
+              {type === "home" ? "Portfolio v5.0" : type}
             </span>
           </div>
         )}
