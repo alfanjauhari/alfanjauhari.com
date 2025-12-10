@@ -7,7 +7,7 @@
     "start": "node .output/server/index.mjs",
     "build": "pnpm build:content && pnpm build:og && vite build",
     "build:content": "content-collections build",
-    "build:og": "tsx ./generate-og.tsx",
+    "build:og": "tsx ./scripts/generate-og.tsx",
     "serve": "vite preview",
     "test": "vitest run",
     "format": "biome format",

@@ -1,12 +1,12 @@
-import OGTemplate from "@/components/og-template";
+import fs from "node:fs/promises";
+import path from "node:path";
+import { Renderer } from "@takumi-rs/core";
+import { fromJsx } from "@takumi-rs/helpers/jsx";
 import { allUpdates, allWorks } from "content-collections";
 import z from "zod";
-import fs from 'node:fs/promises'
-import { Renderer } from "@takumi-rs/core";
-import { fromJsx } from '@takumi-rs/helpers/jsx';
-import path from "node:path";
+import OGTemplate from "@/components/og-template";
 
-console.info('GENERATING OG IMAGES')
+console.info("GENERATING OG IMAGES");
 
 const ALLOWED_OG_ROUTES = [
   {
@@ -42,16 +42,18 @@ const ALLOWED_OG_ROUTES = [
 }));
 
 async function writeFile(pathProp: string, data: Buffer) {
-  const dirPath = pathProp.split('/').filter(p => !p.includes('.webp'));
+  const dirPath = pathProp.split("/").filter((p) => !p.includes(".webp"));
 
-  if(dirPath.length > 0) {
+  if (dirPath.length > 0) {
     await fs.mkdir(path.join(...dirPath), { recursive: true });
   }
 
   await fs.writeFile(pathProp, data);
 }
 
-for(const data of ALLOWED_OG_ROUTES) {
+let count: number = 0;
+
+for (const data of ALLOWED_OG_ROUTES) {
   const schema = z.object({
     title: z
       .string()
@@ -65,8 +67,8 @@ for(const data of ALLOWED_OG_ROUTES) {
   });
   const validatedData = schema.safeParse(data);
 
-  if(validatedData.error) {
-    throw new Error('Error')
+  if (validatedData.error) {
+    throw new Error("Error");
   }
 
   const fonts = await Promise.all(
@@ -79,23 +81,29 @@ for(const data of ALLOWED_OG_ROUTES) {
   );
 
   const renderer = new Renderer({
-    fonts
+    fonts,
   });
 
-  const node = await fromJsx(<OGTemplate
-    title={validatedData.data.title}
-    type={data.type}
-    category={validatedData.data.category}
-    date={validatedData.data.date}
-    meta={validatedData.data.meta}
-  />)
+  const node = await fromJsx(
+    <OGTemplate
+      title={validatedData.data.title}
+      type={data.type}
+      category={validatedData.data.category}
+      date={validatedData.data.date}
+      meta={validatedData.data.meta}
+    />,
+  );
 
   const png = await renderer.render(node, {
     width: 1300,
-    format: 'webp'
-  })
+    format: "webp",
+  });
 
-  await writeFile(path.join('public/images/og', data.path), png)
+  await writeFile(path.join("public/images/og", data.path), png);
+
+  count++;
 }
 
-console.log('SUCCESSFULY GENERATED OG IMAGES')
+console.log(
+  `SUCCESSFULLY GENERATED ${count} OG IMAGES FROM TOTAL ${ALLOWED_OG_ROUTES.length} ENTRIES`,
+);

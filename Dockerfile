@@ -32,7 +32,7 @@ COPY . .
 RUN pnpm run build
 
 # ------------------------------------------------
-FROM node:lts-alpine AS runner
+FROM gcr.io/distroless/nodejs24-debian12 AS runner
 
 WORKDIR /app
 
@@ -40,4 +40,4 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/.output ./.output
 
 EXPOSE 3000
-CMD ["pnpm", "start"]
+CMD [".output/server/index.mjs"]

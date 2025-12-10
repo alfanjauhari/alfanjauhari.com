@@ -46,6 +46,14 @@ const config = defineConfig({
       external: ["@takumi-rs/core"],
       traceInclude: Object.keys(takumiPackageJson.optionalDependencies),
     },
+    publicAssets: [
+      {
+        baseURL: "images",
+        dir: "public/images",
+        maxAge: 60 * 60 * 24 * 365, // 1 year,
+      },
+    ],
+    compressPublicAssets: true,
   },
 });
 
