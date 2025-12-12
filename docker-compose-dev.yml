@@ -1,0 +1,43 @@
+services:
+  alfanjauhari_com_app_dev:
+    container_name: alfanjauhari_com_app_dev
+    env_file: ${RUNTIME_ENV_FILE:-.env.local}
+    build:
+      context: .
+      args:
+        VITE_SITE_URL: $VITE_SITE_URL
+    ports:
+      - 3000:3000
+    volumes:
+      - app_data:/usr/src/app
+    networks:
+      - default
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app.rule=Host(`alfanjauhari.localhost`) || Host(`www.alfanjauhari.localhost`)"
+      - "traefik.http.routers.app.entrypoints=app"
+    user: "1000"
+
+  alfanjauhari_com_dev_traefik:
+    image: traefik:v3.4
+    container_name: alfanjauhari_com_dev_traefik
+    command:
+      - "--log.level=DEBUG"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entryPoints.app.address=:80"
+    ports:
+      - "80:80"
+      - :8080
+    networks:
+      - default
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+volumes:
+  app_data:
+    driver: local
+
+networks:
+  default:
+    driver: bridge
