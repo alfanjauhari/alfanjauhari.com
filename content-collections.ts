@@ -46,6 +46,7 @@ const works = defineCollection({
     link: z.url().optional(),
     challenge: z.string(),
     solution: z.string(),
+    thumbnail: z.string(),
     content: z.string()
   }),
   transform: async (document, context) => {

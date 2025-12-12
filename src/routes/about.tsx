@@ -69,15 +69,15 @@ function TechItem({ category, items }: { category: string; items: string[] }) {
 function About() {
   return (
     <motion.div {...PAGE_TRANSITIONS}>
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-32">
-        <div className="lg:col-span-8">
-          <h1 className="font-serif text-7xl md:text-9xl mb-12 tracking-tight">
+      <section className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12 mb-32">
+        <div>
+          <h1 className="font-serif text-7xl lg:text-9xl mb-12 tracking-tight">
             Who <br />
             <span className="italic text-foreground/50">am I?</span>
           </h1>
 
           <div className="max-w-2xl">
-            <p className="text-xl md:text-2xl font-normal leading-normal">
+            <p className="text-xl lg:text-2xl font-normal leading-normal">
               <span className="float-left text-7xl font-serif pr-4">I</span>
               am a Product Engineer based in Indonesia. I sit at the
               intersection of design and engineering, believing that the best
@@ -95,8 +95,14 @@ function About() {
           </div>
         </div>
 
-        <div className="lg:col-span-4 relative h-[400px] lg:h-auto rounded-lg overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
-          <div className="absolute inset-0 bg-[url(/images/about/profile.avif)] bg-cover bg-center opacity-80 hover:scale-105 transition-transform duration-1000"></div>
+        <div className="relative h-[400px] lg:h-auto rounded-lg overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
+          <div
+            className="absolute inset-0 bg-[url(/_images/w_768,q_60/about/profile.avif)] lg:bg-[url(/_images/w_480,q_60/about/profile.avif)] bg-cover opacity-80 hover:scale-105 transition-transform duration-1000"
+            style={{
+              backgroundPositionY: "20%",
+              backgroundPositionX: "center",
+            }}
+          ></div>
         </div>
       </section>
 

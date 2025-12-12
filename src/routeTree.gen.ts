@@ -17,6 +17,7 @@ import { Route as SnippetsIndexRouteImport } from './routes/snippets/index'
 import { Route as WorksWorkIdRouteImport } from './routes/works/$workId'
 import { Route as UpdatesUpdateIdRouteImport } from './routes/updates/$updateId'
 import { Route as SnippetsSnippetIdRouteImport } from './routes/snippets/$snippetId'
+import { Route as ImagesSplatRouteImport } from './routes/_images/$'
 
 const UsesRoute = UsesRouteImport.update({
   id: '/uses',
@@ -58,11 +59,17 @@ const SnippetsSnippetIdRoute = SnippetsSnippetIdRouteImport.update({
   path: '/snippets/$snippetId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ImagesSplatRoute = ImagesSplatRouteImport.update({
+  id: '/_images/$',
+  path: '/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/uses': typeof UsesRoute
+  '/$': typeof ImagesSplatRoute
   '/snippets/$snippetId': typeof SnippetsSnippetIdRoute
   '/updates/$updateId': typeof UpdatesUpdateIdRoute
   '/works/$workId': typeof WorksWorkIdRoute
@@ -73,6 +80,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/uses': typeof UsesRoute
+  '/$': typeof ImagesSplatRoute
   '/snippets/$snippetId': typeof SnippetsSnippetIdRoute
   '/updates/$updateId': typeof UpdatesUpdateIdRoute
   '/works/$workId': typeof WorksWorkIdRoute
@@ -84,6 +92,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/uses': typeof UsesRoute
+  '/_images/$': typeof ImagesSplatRoute
   '/snippets/$snippetId': typeof SnippetsSnippetIdRoute
   '/updates/$updateId': typeof UpdatesUpdateIdRoute
   '/works/$workId': typeof WorksWorkIdRoute
@@ -96,6 +105,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/uses'
+    | '/$'
     | '/snippets/$snippetId'
     | '/updates/$updateId'
     | '/works/$workId'
@@ -106,6 +116,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/uses'
+    | '/$'
     | '/snippets/$snippetId'
     | '/updates/$updateId'
     | '/works/$workId'
@@ -116,6 +127,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/uses'
+    | '/_images/$'
     | '/snippets/$snippetId'
     | '/updates/$updateId'
     | '/works/$workId'
@@ -127,6 +139,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   UsesRoute: typeof UsesRoute
+  ImagesSplatRoute: typeof ImagesSplatRoute
   SnippetsSnippetIdRoute: typeof SnippetsSnippetIdRoute
   UpdatesUpdateIdRoute: typeof UpdatesUpdateIdRoute
   WorksWorkIdRoute: typeof WorksWorkIdRoute
@@ -192,6 +205,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SnippetsSnippetIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_images/$': {
+      id: '/_images/$'
+      path: '/$'
+      fullPath: '/$'
+      preLoaderRoute: typeof ImagesSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -199,6 +219,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   UsesRoute: UsesRoute,
+  ImagesSplatRoute: ImagesSplatRoute,
   SnippetsSnippetIdRoute: SnippetsSnippetIdRoute,
   UpdatesUpdateIdRoute: UpdatesUpdateIdRoute,
   WorksWorkIdRoute: WorksWorkIdRoute,

@@ -169,7 +169,7 @@ function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-10%" }}
                 transition={{ duration: 0.5 }}
-                className="bg-background border border-border rounded-lg overflow-hidden flex flex-col md:flex-row h-auto md:h-[500px] group relative"
+                className="bg-background border border-border rounded-lg overflow-hidden flex flex-col lg:flex-row h-auto lg:h-[500px] group relative"
               >
                 <Link
                   to="/works/$workId"
@@ -178,27 +178,25 @@ function Home() {
                   }}
                   className="absolute inset-0 z-40"
                 />
-                <div className="w-full md:w-7/12 relative overflow-hidden cursor-pointer aspect-video">
+                <div className="w-full lg:w-7/12 relative overflow-hidden cursor-pointer aspect-video">
                   <motion.div
-                    className="absolute inset-0 bg-linear-30 from-accent to-accent/80"
+                    className="absolute inset-0 grayscale"
                     whileHover={{ scale: 1.05 }}
                     transition={{
                       duration: 0.6,
                       ease: [0.33, 1, 0.68, 1],
                     }}
+                    style={{
+                      backgroundImage: `url(/_images/f_avif,w_620${work.thumbnail})`,
+                    }}
                   />
-                  <div className="relative z-10 h-full flex items-center justify-center pointer-events-none">
-                    <motion.div className="text-foreground font-serif text-center text-5xl lg:text-9xl select-none">
-                      {work.title}
-                    </motion.div>
-                  </div>
                   <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
                     <div className="bg-background text-foreground px-6 py-3 rounded-full opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 font-mono text-xs uppercase tracking-widest border border-border">
                       Explore Case Study
                     </div>
                   </div>
                 </div>
-                <div className="w-full md:w-5/12 p-8 md:p-12 flex flex-col justify-between relative z-30">
+                <div className="w-full lg:w-5/12 p-8 lg:p-12 flex flex-col justify-between relative z-30">
                   <div>
                     <div className="flex justify-between items-start mb-6">
                       <span className="text-xs font-mono">{work.year}</span>
