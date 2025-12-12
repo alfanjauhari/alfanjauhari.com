@@ -86,21 +86,21 @@ export function Loader({ className, ...props }: HTMLMotionProps<"div">) {
       <div className="flex flex-col justify-center flex-1 relative z-10">
         <div className="flex flex-col">
           <div className="overflow-hidden">
-            <motion.h1
+            <motion.p
               variants={textVariants}
               className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter uppercase"
             >
               Architecting
-            </motion.h1>
+            </motion.p>
           </div>
 
           <div className="overflow-hidden">
-            <motion.h1
+            <motion.p
               variants={textVariants}
               className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter uppercase text-foreground/50"
             >
               Tomorrow's
-            </motion.h1>
+            </motion.p>
           </div>
 
           <motion.div
@@ -109,21 +109,21 @@ export function Loader({ className, ...props }: HTMLMotionProps<"div">) {
           />
 
           <div className="overflow-hidden flex justify-end">
-            <motion.h1
+            <motion.p
               variants={textVariants}
               className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter uppercase text-right italic"
             >
               Digital
-            </motion.h1>
+            </motion.p>
           </div>
 
           <div className="overflow-hidden flex justify-end">
-            <motion.h1
+            <motion.p
               variants={textVariants}
               className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter uppercase text-right text-foreground/50 italic"
             >
               Landscape
-            </motion.h1>
+            </motion.p>
           </div>
         </div>
 

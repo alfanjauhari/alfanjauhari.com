@@ -69,7 +69,7 @@ function TechItem({ category, items }: { category: string; items: string[] }) {
 function About() {
   return (
     <motion.div {...PAGE_TRANSITIONS}>
-      <section className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-12 mb-32">
+      <section className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-12 mb-32">
         <div>
           <h1 className="font-serif text-7xl lg:text-9xl mb-12 tracking-tight">
             Who <br />

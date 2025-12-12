@@ -66,20 +66,28 @@ export function InteractiveTitle() {
           }}
           className="relative"
         >
-          <h1 className="font-serif text-[24vw] lg:text-[18vw] leading-[0.8] tracking-tighter text-foreground select-none">
-            Alfan <br />
-            <span className="italic font-light ml-[4vw] md:ml-[8vw]">
-              Jauhari
-            </span>
-          </h1>
-
-          {isEnabled && (
-            <motion.h1 className="font-serif text-[24vw] lg:text-[18vw] leading-[0.8] tracking-tighter text-foreground select-none absolute top-0 left-0 -z-10">
+          {isEnabled ? (
+            <>
+              <p className="font-serif text-[24vw] lg:text-[18vw] leading-[0.8] tracking-tighter text-foreground select-none invisible">
+                Alfan <br />
+                <span className="italic font-light ml-[4vw] md:ml-[8vw]">
+                  Jauhari
+                </span>
+              </p>
+              <motion.h1 className="font-serif text-[24vw] lg:text-[18vw] leading-[0.8] tracking-tighter text-foreground select-none absolute top-0 left-0 -z-10">
+                Alfan <br />
+                <span className="italic font-light ml-[4vw] md:ml-[8vw]">
+                  Jauhari
+                </span>
+              </motion.h1>
+            </>
+          ) : (
+            <h1 className="font-serif text-[24vw] lg:text-[18vw] leading-[0.8] tracking-tighter text-foreground select-none">
               Alfan <br />
               <span className="italic font-light ml-[4vw] md:ml-[8vw]">
                 Jauhari
               </span>
-            </motion.h1>
+            </h1>
           )}
         </motion.div>
       </div>

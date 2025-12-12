@@ -77,7 +77,7 @@ export const Header = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium tracking-widest uppercase text-foreground">
             <ul className="flex items-center gap-6 lg:gap-8">
-              {NAVIGATIONS.map((nav) => (
+              {NAVIGATIONS.filter((nav) => !nav.hideOnNav).map((nav) => (
                 <li key={nav.path}>
                   <Link
                     to={nav.path}
@@ -135,7 +135,7 @@ export const Header = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
               className="fixed inset-0 z-40 bg-background flex flex-col items-center justify-center md:hidden"
             >
               <ul className="flex flex-col items-center gap-8">
-                {NAVIGATIONS.map((nav, i) => (
+                {NAVIGATIONS.filter((nav) => !nav.hideOnNav).map((nav, i) => (
                   <motion.li
                     key={nav.path}
                     initial={{ opacity: 0, y: 20 }}

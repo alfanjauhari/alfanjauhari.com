@@ -79,9 +79,9 @@ export const Footer = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
             </div>
           </div>
           <div className="relative w-full mt-12 md:mt-0">
-            <h1 className="text-[22vw] leading-[0.8] font-serif font-bold text-center tracking-tighter text-transparent bg-clip-text bg-linear-to-b from-white/10 to-transparent select-none pointer-events-none w-full absolute bottom-0">
+            <p className="text-[22vw] leading-[0.8] font-serif font-bold text-center tracking-tighter text-transparent bg-clip-text bg-linear-to-b from-white/10 to-transparent select-none pointer-events-none w-full absolute bottom-0">
               ALFAN
-            </h1>
+            </p>
 
             <div className="absolute bottom-2 w-full flex justify-between text-xxs font-mono uppercase tracking-widest text-foreground/60 px-2">
               <div className="flex gap-4">

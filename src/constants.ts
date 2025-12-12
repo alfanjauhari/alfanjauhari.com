@@ -8,6 +8,11 @@ export const NAVIGATIONS = [
     path: "/snippets",
     label: "Snippets",
   },
+  {
+    path: "/uses",
+    label: "Uses",
+    hideOnNav: true,
+  },
 ];
 
 export const PAGE_TRANSITIONS: HTMLMotionProps<"div"> = {
