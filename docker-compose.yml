@@ -14,6 +14,7 @@ services:
       - "traefik.http.routers.app.rule=Host(`$TRAEFIK_URL`) || Host(`www.$TRAEFIK_URL`)"
       - "traefik.http.routers.app.entrypoints=app,appsecure"
       - "traefik.http.routers.app.tls.certresolver=letsencrypt"
+    user: "1000
 
   alfanjauhari_com_traefik:
     image: traefik:v3.4
