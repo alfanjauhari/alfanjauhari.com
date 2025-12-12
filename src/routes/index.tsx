@@ -156,74 +156,76 @@ function Home() {
           Featured Works
         </h2>
         <div className="flex flex-col gap-12 pb-24">
-          {allWorks.map((work, index) => (
-            <div
-              className="sticky"
-              key={work._meta.path}
-              style={{
-                top: `calc(7.5rem + ${index * 40}px)`,
-              }}
-            >
-              <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-10%" }}
-                transition={{ duration: 0.5 }}
-                className="bg-background border border-border rounded-lg overflow-hidden flex flex-col lg:flex-row h-auto lg:h-[500px] group relative"
+          {allWorks
+            .sort((a, b) => b.year - a.year)
+            .map((work, index) => (
+              <div
+                className="sticky"
+                key={work._meta.path}
+                style={{
+                  top: `calc(7.5rem + ${index * 40}px)`,
+                }}
               >
-                <Link
-                  to="/works/$workId"
-                  params={{
-                    workId: work._meta.path,
-                  }}
-                  className="absolute inset-0 z-40"
-                />
-                <div className="w-full lg:w-7/12 relative overflow-hidden cursor-pointer aspect-video">
-                  <motion.div
-                    className="absolute inset-0 grayscale"
-                    whileHover={{ scale: 1.05 }}
-                    transition={{
-                      duration: 0.6,
-                      ease: [0.33, 1, 0.68, 1],
+                <motion.div
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-10%" }}
+                  transition={{ duration: 0.5 }}
+                  className="bg-background border border-border rounded-lg overflow-hidden flex flex-col lg:flex-row h-auto lg:h-[500px] group relative"
+                >
+                  <Link
+                    to="/works/$workId"
+                    params={{
+                      workId: work._meta.path,
                     }}
-                    style={{
-                      backgroundImage: `url(/_images/f_avif,w_620${work.thumbnail})`,
-                    }}
+                    className="absolute inset-0 z-40"
                   />
-                  <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
-                    <div className="bg-background text-foreground px-6 py-3 rounded-full opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 font-mono text-xs uppercase tracking-widest border border-border">
-                      Explore Case Study
-                    </div>
-                  </div>
-                </div>
-                <div className="w-full lg:w-5/12 p-8 lg:p-12 flex flex-col justify-between relative z-30">
-                  <div>
-                    <div className="flex justify-between items-start mb-6">
-                      <span className="text-xs font-mono">{work.year}</span>
-                      <ArrowUpRightIcon className="size-5" />
-                    </div>
-                    <h3 className="font-serif text-4xl mb-6 leading-tight">
-                      {work.title}
-                    </h3>
-                    <p className="leading-relaxed mb-8 line-clamp-4">
-                      {work.summary}
-                    </p>
-                  </div>
-
-                  <div className="flex flex-wrap gap-2">
-                    {work.techstack.map((tech) => (
-                      <div
-                        key={tech}
-                        className="border border-border text-foreground/50 text-xxs px-4 py-2 tracking-widest uppercase"
-                      >
-                        {tech}
+                  <div className="w-full lg:w-7/12 relative overflow-hidden cursor-pointer aspect-video">
+                    <motion.div
+                      className="absolute inset-0 grayscale group-hover:grayscale-0 bg-no-repeat bg-cover bg-center"
+                      whileHover={{ scale: 1.05 }}
+                      transition={{
+                        duration: 0.6,
+                        ease: [0.33, 1, 0.68, 1],
+                      }}
+                      style={{
+                        backgroundImage: `url(/_images/f_avif,w_620${work.thumbnail})`,
+                      }}
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+                      <div className="bg-background text-foreground px-6 py-3 rounded-full opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 font-mono text-xs uppercase tracking-widest border border-border">
+                        Explore Case Study
                       </div>
-                    ))}
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-            </div>
-          ))}
+                  <div className="w-full lg:w-5/12 p-8 lg:p-12 flex flex-col justify-between relative z-30">
+                    <div>
+                      <div className="flex justify-between items-start mb-6">
+                        <span className="text-xs font-mono">{work.year}</span>
+                        <ArrowUpRightIcon className="size-5" />
+                      </div>
+                      <h3 className="font-serif text-4xl mb-6 leading-tight">
+                        {work.title}
+                      </h3>
+                      <p className="leading-relaxed mb-8 line-clamp-4">
+                        {work.summary}
+                      </p>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2">
+                      {work.techstack.map((tech) => (
+                        <div
+                          key={tech}
+                          className="border border-border text-foreground/50 text-xxs px-4 py-2 tracking-widest uppercase"
+                        >
+                          {tech}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+            ))}
         </div>
       </section>
 
