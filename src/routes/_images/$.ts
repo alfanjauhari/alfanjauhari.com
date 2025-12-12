@@ -15,10 +15,12 @@ function parseIpxSegments(params: string) {
   const parts = params.split("/");
 
   const ipxIndex = parts.indexOf("_images");
-  if (ipxIndex === -1) undefined;
+  if (ipxIndex === -1) return undefined;
 
   const segment = parts[ipxIndex + 1] || "";
-  if (!segment) undefined;
+  if (!segment) return undefined;
+
+  if (!segment.includes("_")) return undefined;
 
   const raw = segment.split(",").filter(Boolean);
 

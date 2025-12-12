@@ -32,12 +32,14 @@ COPY . .
 RUN pnpm run build
 
 # ------------------------------------------------
-FROM gcr.io/distroless/nodejs24-debian12 AS runner
+FROM base AS runner
 
-WORKDIR /app
+COPY --from=deps --chown=nonroot:nonroot /app/node_modules ./node_modules
+COPY --from=builder --chown=nonroot:nonroot /app/.output ./.output
 
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=builder /app/.output ./.output
+WORKDIR /app/.output
+
+USER nonroot:nonroot
 
 EXPOSE 3000
-CMD [".output/server/index.mjs"]
+CMD ["server/index.mjs"]

@@ -15,6 +15,20 @@ export const Route = createFileRoute("/about")({
         "Aboute me, a passionate Product Engineer building pixel-perfect interfaces and scalable systems for everyone",
       canonical: "/about",
       image: "/images/og/about.webp",
+      links: [
+        {
+          rel: "preload",
+          href: "/_images/w_480,q_60/about/profile.avif",
+          as: "image",
+          media: "(width >= 64rem)",
+        },
+        {
+          rel: "preload",
+          href: "/_images/w_768,q_60/about/profile.avif",
+          as: "image",
+          media: "(width < 64rem)",
+        },
+      ],
     }),
 });
 
