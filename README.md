@@ -28,12 +28,6 @@ My personal portfolio built as a Full-Stack React application to showcase my pro
 - Content Collections
 - Shiki
 
-### Image Processing
-
-- IPX
-- Sharp
-- Unpic
-
 ### Deployment
 
 - Docker
