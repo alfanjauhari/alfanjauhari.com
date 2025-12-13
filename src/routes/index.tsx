@@ -159,20 +159,14 @@ function Home() {
         <div className="flex flex-col gap-12 pb-24">
           {allWorks
             .sort((a, b) => b.year - a.year)
-            .map((work, index) => (
-              <div
-                className="sticky"
-                key={work._meta.path}
-                style={{
-                  top: `calc(7.5rem + ${index * 40}px)`,
-                }}
-              >
+            .map((work) => (
+              <div className="sticky top-30" key={work._meta.path}>
                 <motion.div
                   initial={{ opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-10%" }}
                   transition={{ duration: 0.5 }}
-                  className="bg-background border border-border rounded-lg overflow-hidden flex flex-col lg:flex-row h-auto lg:h-[500px] group relative"
+                  className="bg-background border border-border rounded-lg overflow-hidden flex flex-col md:flex-row h-[500px] group relative"
                 >
                   <Link
                     to="/works/$workId"
@@ -181,7 +175,7 @@ function Home() {
                     }}
                     className="absolute inset-0 z-40"
                   />
-                  <div className="w-full lg:w-7/12 relative overflow-hidden cursor-pointer aspect-video">
+                  <div className="w-full md:w-1/2 lg:w-7/12 relative overflow-hidden cursor-pointer">
                     <motion.div
                       className="absolute inset-0 grayscale group-hover:grayscale-0 bg-no-repeat bg-cover bg-center"
                       whileHover={{ scale: 1.05 }}
@@ -199,7 +193,7 @@ function Home() {
                       </div>
                     </div>
                   </div>
-                  <div className="w-full lg:w-5/12 p-8 lg:p-12 flex flex-col justify-between relative z-30">
+                  <div className="w-full md:w-1/2 lg:w-5/12 p-8 lg:p-12 flex flex-col justify-between relative z-30">
                     <div>
                       <div className="flex justify-between items-start mb-6">
                         <span className="text-xs font-mono">{work.year}</span>
