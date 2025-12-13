@@ -54,7 +54,6 @@ const config = defineConfig({
       },
     ],
     compressPublicAssets: true,
-    serveStatic: true,
   },
 });
 
