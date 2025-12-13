@@ -14,7 +14,7 @@ export const Route = createFileRoute("/about")({
     seoHead({
       title: "About",
       description:
-        "Aboute me, a passionate Product Engineer building pixel-perfect interfaces and scalable systems for everyone",
+        "About me, a passionate Product Engineer building pixel-perfect interfaces and scalable systems for everyone",
       canonical: "/about",
       image: `${clientEnv.VITE_CLOUDINARY_URL}/og/about.webp`,
       links: [
