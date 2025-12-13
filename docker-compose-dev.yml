@@ -1,11 +1,16 @@
 services:
   alfanjauhari_com_app_dev:
     container_name: alfanjauhari_com_app_dev
-    env_file: ${RUNTIME_ENV_FILE:-.env.local}
+    env_file: ${RUNTIME_ENV_FILE:-.env}
     build:
       context: .
       args:
         VITE_SITE_URL: $VITE_SITE_URL
+        CD_CLOUD_NAME: $CD_CLOUD_NAME
+        VITE_CLOUDINARY_URL: $VITE_CLOUDINARY_URL
+      secrets:
+        - CD_API_KEY
+        - CD_API_SECRET
     ports:
       - 3000:3000
     volumes:
@@ -41,3 +46,9 @@ volumes:
 networks:
   default:
     driver: bridge
+
+secrets:
+  CD_API_KEY:
+    environment: CD_API_KEY
+  CD_API_SECRET:
+    environment: CD_API_SECRET

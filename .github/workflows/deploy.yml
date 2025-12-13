@@ -40,6 +40,11 @@ jobs:
         with:
           build-args: |
             VITE_SITE_URL=${{ vars.VITE_SITE_URL }}
+            CD_CLOUD_NAME=${{ vars.CD_CLOUD_NAME }}
+            VITE_CLOUDINARY_URL=${{ vars.VITE_CLOUDINARY_URL }}
+          secrets: |
+            CD_API_KEY=${{ secrets.CD_API_KEY }}
+            CD_API_SECRET=${{ secrets.CD_API_SECRET }}
           context: .
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
