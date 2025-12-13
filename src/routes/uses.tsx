@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import type { PropsWithChildren } from "react";
 import { DotTitle } from "@/components/dot-title";
 import { PAGE_TRANSITIONS } from "@/constants";
+import { clientEnv } from "@/env/client";
 import { seoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/uses")({
@@ -13,7 +14,7 @@ export const Route = createFileRoute("/uses")({
       description:
         "A living collection of the hardware, software, and office gear I use on a daily basis to build a software.",
       canonical: "/uses",
-      image: "/images/og/uses.webp",
+      image: `${clientEnv.VITE_CLOUDINARY_URL}/og/uses.webp`,
     }),
 });
 

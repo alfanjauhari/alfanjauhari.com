@@ -15,7 +15,7 @@ const nonPrerenderedRoutes = ["/resume.pdf", "/login"];
 const config = defineConfig({
   plugins: [
     devtools(),
-    nitro(), // this is the plugin that enables path aliases
+    nitro(),
     viteTsConfigPaths({
       projects: ["./tsconfig.json"],
     }),
@@ -54,6 +54,7 @@ const config = defineConfig({
       },
     ],
     compressPublicAssets: true,
+    serveStatic: true,
   },
 });
 

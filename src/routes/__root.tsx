@@ -14,6 +14,7 @@ import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { Loader } from "@/components/loader";
 import { ThemeProvider } from "@/context/theme-context";
+import { clientEnv } from "@/env/client";
 import type { RouterContext } from "@/router-context";
 import appCss from "../assets/styles.css?url";
 
@@ -27,22 +28,25 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       {
         rel: "apple-touch-icon",
         sizes: "180x180",
-        href: "/images/favicons/apple-touch-icon.png",
+        href: `${clientEnv.VITE_CLOUDINARY_URL}/favicons/apple-touch-icon.png`,
       },
       {
         rel: "icon",
         type: "image/png",
         sizes: "32x32",
-        href: "/images/favicons/favicon-32x32.png",
+        href: `${clientEnv.VITE_CLOUDINARY_URL}/favicons/favicon-32x32.png`,
       },
       {
         rel: "icon",
         type: "image/png",
         sizes: "16x16",
-        href: "/images/favicons/favicon-16x16.png",
+        href: `${clientEnv.VITE_CLOUDINARY_URL}/favicons/favicon-16x16.png`,
       },
       { rel: "manifest", href: "/site.webmanifest", color: "#fffff" },
-      { rel: "icon", href: "/images/favicons/favicon.ico" },
+      {
+        rel: "icon",
+        href: `${clientEnv.VITE_CLOUDINARY_URL}/favicons/favicon.ico`,
+      },
     ],
     styles: [
       {

@@ -20,7 +20,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: alfanjauhari/alfanjauhari-com
+          q1`: alfanjauhari/alfanjauhari-com
           tags: |
             type=semver,pattern={{version}}
             type=ref,event=branch

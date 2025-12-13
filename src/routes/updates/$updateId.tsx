@@ -4,6 +4,7 @@ import { LockIcon } from "lucide-react";
 import { motion, useScroll, useSpring } from "motion/react";
 import { MDXContent } from "@/components/mdx-content";
 import { PAGE_TRANSITIONS } from "@/constants";
+import { clientEnv } from "@/env/client";
 import { calculateReadingTime } from "@/lib/content";
 import { seoHead } from "@/lib/seo";
 
@@ -25,7 +26,7 @@ export const Route = createFileRoute("/updates/$updateId")({
       title: loaderData?.title,
       description: loaderData?.summary || "",
       canonical: match.pathname,
-      image: `/images/og/updates/${params.updateId}.webp`,
+      image: `${clientEnv.VITE_CLOUDINARY_URL}/og/updates/${params.updateId}.webp`,
     }),
 });
 

@@ -3,6 +3,7 @@ import { allUpdates } from "content-collections";
 import { ArrowUpRightIcon } from "lucide-react";
 import { motion } from "motion/react";
 import { PAGE_TRANSITIONS } from "@/constants";
+import { clientEnv } from "@/env/client";
 import { calculateReadingTime } from "@/lib/content";
 import { seoHead } from "@/lib/seo";
 
@@ -14,7 +15,7 @@ export const Route = createFileRoute("/updates/")({
       description:
         "A collection of my thoughts on software engineering, design systems, and the intersection of humanity and technology.",
       canonical: "/updates",
-      image: "/images/og/updates.webp",
+      image: `${clientEnv.VITE_CLOUDINARY_URL}/og/updates.webp`,
     }),
 });
 

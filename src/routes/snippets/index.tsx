@@ -3,6 +3,7 @@ import { allSnippets } from "content-collections";
 import { ChevronRightIcon, CodeIcon, HashIcon } from "lucide-react";
 import { motion } from "motion/react";
 import { PAGE_TRANSITIONS } from "@/constants";
+import { clientEnv } from "@/env/client";
 import { seoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/snippets/")({
@@ -13,7 +14,7 @@ export const Route = createFileRoute("/snippets/")({
       description:
         "A collection of copy-pasteable code blocks, utility functions, and hooks I use across my projects.",
       canonical: "/snippets",
-      image: "/images/og/snippets.webp",
+      image: `${clientEnv.VITE_CLOUDINARY_URL}/og/snippets.webp`,
     }),
 });
 
