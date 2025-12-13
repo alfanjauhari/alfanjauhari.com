@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ArrowUpRightIcon } from "lucide-react";
 import { motion } from "motion/react";
+import type { CSSProperties } from "react";
 import { DotTitle } from "@/components/dot-title";
 import { Button } from "@/components/ui/button";
 import { PAGE_TRANSITIONS } from "@/constants";
+import { clientEnv } from "@/env/client";
 import { seoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/about")({
@@ -14,17 +16,17 @@ export const Route = createFileRoute("/about")({
       description:
         "Aboute me, a passionate Product Engineer building pixel-perfect interfaces and scalable systems for everyone",
       canonical: "/about",
-      image: "/images/og/about.webp",
+      image: `${clientEnv.VITE_CLOUDINARY_URL}/og/about.webp`,
       links: [
         {
           rel: "preload",
-          href: "/_images/w_480,q_60/about/profile.avif",
+          href: `${clientEnv.VITE_CLOUDINARY_URL}/w_480,q_60/about/profile.avif`,
           as: "image",
           media: "(width >= 64rem)",
         },
         {
           rel: "preload",
-          href: "/_images/w_768,q_60/about/profile.avif",
+          href: `${clientEnv.VITE_CLOUDINARY_URL}/w_768,q_60/about/profile.avif`,
           as: "image",
           media: "(width < 64rem)",
         },
@@ -111,11 +113,15 @@ function About() {
 
         <div className="relative h-[400px] lg:h-auto rounded-lg overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
           <div
-            className="absolute inset-0 bg-[url(/_images/w_768,q_60/about/profile.avif)] lg:bg-[url(/_images/w_480,q_60/about/profile.avif)] bg-cover opacity-80 hover:scale-105 transition-transform duration-1000"
-            style={{
-              backgroundPositionY: "20%",
-              backgroundPositionX: "center",
-            }}
+            className="absolute inset-0 bg-(image:--bg-url) lg:bg-(image:--lg-bg-url) bg-cover opacity-80 hover:scale-105 transition-transform duration-1000"
+            style={
+              {
+                backgroundPositionY: "20%",
+                backgroundPositionX: "center",
+                "--bg-url": `url(${clientEnv.VITE_CLOUDINARY_URL}/w_768,q_60/about/profile.avif)`,
+                "--lg-bg-url": `url(${clientEnv.VITE_CLOUDINARY_URL}/w_480,q_60/about/profile.avif)`,
+              } as CSSProperties
+            }
           ></div>
         </div>
       </section>

@@ -1,6 +1,6 @@
 import { MDXContent as Content } from "@content-collections/mdx/react";
+import { Image } from "@unpic/react";
 import type { ComponentProps } from "react";
-import { Image } from "./image";
 import { Sandpack, SandpackFile } from "./sandpack";
 import Pre from "./ui/pre";
 

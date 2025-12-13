@@ -4,6 +4,7 @@ import { TerminalIcon } from "lucide-react";
 import { motion } from "motion/react";
 import { MDXContent } from "@/components/mdx-content";
 import { PAGE_TRANSITIONS } from "@/constants";
+import { clientEnv } from "@/env/client";
 import { seoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/snippets/$snippetId")({
@@ -24,7 +25,7 @@ export const Route = createFileRoute("/snippets/$snippetId")({
       title: loaderData?.title,
       description: loaderData?.summary || "",
       canonical: match.pathname,
-      image: `/images/og/snippets/${params.snippetId}.webp`,
+      image: `${clientEnv.VITE_CLOUDINARY_URL}/og/snippets/${params.snippetId}.webp`,
     }),
 });
 

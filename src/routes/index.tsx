@@ -10,6 +10,7 @@ import { motion } from "motion/react";
 import { InteractiveTitle } from "@/components/interactive-title";
 import { Button } from "@/components/ui/button";
 import { PAGE_TRANSITIONS } from "@/constants";
+import { clientEnv } from "@/env/client";
 import { calculateReadingTime } from "@/lib/content";
 import { seoHead } from "@/lib/seo";
 
@@ -20,7 +21,7 @@ export const Route = createFileRoute("/")({
       description:
         "A passionate Product Engineer. I build pixel-perfect interfaces and scalable systems for the web.",
       canonical: "/",
-      image: "/images/og/home.webp",
+      image: `${clientEnv.VITE_CLOUDINARY_URL}/og/home.webp`,
     }),
 });
 
@@ -189,7 +190,7 @@ function Home() {
                         ease: [0.33, 1, 0.68, 1],
                       }}
                       style={{
-                        backgroundImage: `url(/_images/f_avif,w_620${work.thumbnail})`,
+                        backgroundImage: `url(${work.thumbnail})`,
                       }}
                     />
                     <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">

@@ -18,6 +18,7 @@ import { motion } from "motion/react";
 import { MDXContent } from "@/components/mdx-content";
 import { Button } from "@/components/ui/button";
 import { PAGE_TRANSITIONS } from "@/constants";
+import { clientEnv } from "@/env/client";
 import { seoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/works/$workId")({
@@ -36,7 +37,7 @@ export const Route = createFileRoute("/works/$workId")({
       title: loaderData?.title,
       description: loaderData?.summary || "",
       canonical: match.pathname,
-      image: `/images/og/works/${params.workId}.webp`,
+      image: `${clientEnv.VITE_CLOUDINARY_URL}/og/works/${params.workId}.webp`,
     }),
 });
 
