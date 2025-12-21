@@ -17,7 +17,7 @@ services:
     user: "1000"
 
   alfanjauhari_com_traefik:
-    image: traefik:v3.4
+    image: traefik:latest
     container_name: alfanjauhari_com_traefik
     environment:
       CF_DNS_API_TOKEN: $CF_DNS_API_TOKEN
