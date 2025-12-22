@@ -18,7 +18,6 @@ services:
     platform: linux/amd64
     depends_on:
       - alfanjauhari_com_app
-      - alfanjauhari_com_certbot
     environment:
       APP_URL: ${APP_URL:-alfanjauhari.com}
       APP_UPSTREAM: alfanjauhari_com_app:3000
