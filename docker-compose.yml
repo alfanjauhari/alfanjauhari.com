@@ -11,6 +11,11 @@ services:
     networks:
       - web
     user: "1000"
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+        loki-batch-size: "400"
 
   alfanjauhari_com_nginx:
     image: nginx:1.27-alpine
@@ -25,14 +30,19 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/templates:/etc/nginx/templates:ro
-      - ./nginx/snippets:/etc/nginx/snippets:ro
+      - ./deploy/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./deploy/nginx/templates:/etc/nginx/templates:ro
+      - ./deploy/nginx/snippets:/etc/nginx/snippets:ro
       - letsencrypt:/etc/letsencrypt:ro
       - nginx_cache:/var/cache/nginx
     networks:
       - web
     restart: unless-stopped
+    logging:
+      driver: loki
+      options:
+        loki-url: "http://localhost:3100/loki/api/v1/push"
+        loki-batch-size: "400"
 
   alfanjauhari_com_certbot:
     image: certbot/dns-cloudflare:latest
@@ -40,7 +50,7 @@ services:
       - certbot
     volumes:
       - letsencrypt:/etc/letsencrypt
-      - ./nginx/cloudflare.ini:/etc/letsencrypt/cloudflare.ini:ro
+      - ./deploy/nginx/cloudflare.ini:/etc/letsencrypt/cloudflare.ini:ro
     command: >
       certonly
       --non-interactive
@@ -50,12 +60,42 @@ services:
       --agree-tos -m "${APP_SSL_EMAIL:-hi@alfanjauhari.com}"
       -d "${APP_URL:-alfanjauhari.com}" -d "www.${APP_URL:-alfanjauhari.com}"
 
+  alfanjauhari_com_grafana:
+    image: grafana/grafana
+    container_name: alfanjauhari_com_grafana
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GF_SECURITY_ADMIN_PASSWORD:-admin}
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - alfanjauhari_com_loki
+
+  alfanjauhari_com_loki:
+    image: grafana/loki:latest
+    container_name: alfanjauhari_com_loki
+    platform: linux/amd64
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./deploy/loki/loki-config.yml:/etc/loki/local-config.yaml:ro
+      - loki_data:/loki
+    networks:
+      - web
+    restart: unless-stopped
+    command: -config.file=/etc/loki/local-config.yaml
+
 volumes:
   app_data:
     driver: local
   letsencrypt:
     driver: local
   nginx_cache:
+    driver: local
+  grafana_data:
+    driver: local
+  loki_data:
     driver: local
 
 networks:
