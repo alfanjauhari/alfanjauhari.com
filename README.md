@@ -31,7 +31,7 @@ My personal portfolio built as a Full-Stack React application to showcase my pro
 ### Deployment
 
 - Docker
-- Traefik
+- Nginx
 
 ## Requirements
 
@@ -102,7 +102,7 @@ VITE_SITE_URL=http://localhost:3000
 docker compose -f docker-compose-dev.yml up --build
 ```
 
-This starts the application with Traefik reverse proxy. Access the site at:
+This starts the application with Nginx reverse proxy. Access the site at:
 
 - `http://alfanjauhari.localhost`
 - `http://www.alfanjauhari.localhost`
@@ -127,7 +127,7 @@ The project includes automated CI/CD via GitHub Actions:
 
 The production setup includes:
 
-- Traefik reverse proxy with automatic Let's Encrypt SSL certificates
+- Nginx reverse proxy with automatic Let's Encrypt SSL certificates
 - Cloudflare DNS challenge for certificate validation
 - HTTP to HTTPS redirection
 

@@ -16,35 +16,37 @@ services:
     volumes:
       - app_data:/usr/src/app
     networks:
-      - default
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.app.rule=Host(`alfanjauhari.localhost`) || Host(`www.alfanjauhari.localhost`)"
-      - "traefik.http.routers.app.entrypoints=app"
+      - web
     user: "1000"
 
-  alfanjauhari_com_dev_traefik:
-    image: traefik:v3.4
-    container_name: alfanjauhari_com_dev_traefik
-    command:
-      - "--log.level=DEBUG"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entryPoints.app.address=:80"
+  alfanjauhari_com_nginx_dev:
+    image: nginx:1.27-alpine
+    container_name: alfanjauhari_com_nginx_dev
+    depends_on:
+      - alfanjauhari_com_app_dev
+    environment:
+      APP_URL: alfanjauhari.localhost
+      APP_UPSTREAM: alfanjauhari_com_app_dev:3000
     ports:
       - "80:80"
-      - :8080
-    networks:
-      - default
+      - "443:443"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/templates/default.conf.template:/etc/nginx/templates/default.conf.template:ro
+      - ./nginx/snippets:/etc/nginx/snippets:ro
+      - nginx_cache:/var/cache/nginx
+    networks:
+      - web
+    restart: unless-stopped
 
 volumes:
   app_data:
     driver: local
+  nginx_cache:
+    driver: local
 
 networks:
-  default:
+  web:
     driver: bridge
 
 secrets:

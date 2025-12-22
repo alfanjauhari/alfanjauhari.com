@@ -1,0 +1,3 @@
+# Copy to nginx/cloudflare.ini and chmod 600.
+# Token needs Zone.DNS Edit for the target zone.
+dns_cloudflare_api_token = <your CF_DNS_API_TOKEN>
