@@ -21,6 +21,4 @@ server {
 
     include /etc/nginx/snippets/headers.conf;
   }
-
-  add_header X-Cache-Status $upstream_cache_status;
 }

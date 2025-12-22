@@ -18,6 +18,7 @@ services:
     platform: linux/amd64
     depends_on:
       - alfanjauhari_com_app
+      - alfanjauhari_com_certbot
     environment:
       APP_URL: ${APP_URL:?Set APP_URL to your apex domain}
       APP_UPSTREAM: alfanjauhari_com_app:3000
@@ -36,8 +37,6 @@ services:
 
   alfanjauhari_com_certbot:
     image: certbot/dns-cloudflare:latest
-    profiles:
-      - certbot
     environment:
       CF_DNS_API_TOKEN: ${CF_DNS_API_TOKEN:?Cloudflare DNS API token required}
       APP_SSL_EMAIL: ${APP_SSL_EMAIL:-hi@alfanjauhari.com}
