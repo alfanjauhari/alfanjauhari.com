@@ -39,9 +39,9 @@ services:
     profiles:
       - certbot
     environment:
-      CF_DNS_API_TOKEN: ${CF_DNS_API_TOKEN:?Cloudflare DNS API token required}
+      CF_DNS_API_TOKEN: ${CF_DNS_API_TOKEN}
       APP_SSL_EMAIL: ${APP_SSL_EMAIL:-hi@alfanjauhari.com}
-      APP_URL: ${APP_URL:?Set APP_URL to your apex domain}
+      APP_URL: ${APP_URL}
     volumes:
       - letsencrypt:/etc/letsencrypt
       - ./nginx/cloudflare.ini:/etc/letsencrypt/cloudflare.ini:ro
