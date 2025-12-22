@@ -68,6 +68,7 @@ jobs:
         env:
           RUNTIME_ENV_FILE: ${{ vars.RUNTIME_ENV_FILE }}
           DIRECTORY: ${{ vars.DIRECTORY }}
+          APP_URL: ${{ vars.APP_URL }}
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
