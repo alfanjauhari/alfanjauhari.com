@@ -38,10 +38,6 @@ services:
     image: certbot/dns-cloudflare:latest
     profiles:
       - certbot
-    environment:
-      CF_DNS_API_TOKEN: ${CF_DNS_API_TOKEN}
-      APP_SSL_EMAIL: ${APP_SSL_EMAIL:-hi@alfanjauhari.com}
-      APP_URL: ${APP_URL}
     volumes:
       - letsencrypt:/etc/letsencrypt
       - ./nginx/cloudflare.ini:/etc/letsencrypt/cloudflare.ini:ro
@@ -51,8 +47,8 @@ services:
       --dns-cloudflare
       --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.ini
       --dns-cloudflare-propagation-seconds 60
-      --agree-tos -m "$APP_SSL_EMAIL"
-      -d "$APP_URL" -d "www.$APP_URL"
+      --agree-tos -m "${APP_SSL_EMAIL:-hi@alfanjauhari.com}"
+      -d "${APP_URL:-alfanjauhari.com}" -d "www.${APP_URL:-alfanjauhari.com}"
 
 volumes:
   app_data:
