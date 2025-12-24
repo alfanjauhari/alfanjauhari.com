@@ -72,6 +72,13 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       }).format(new Date()),
     };
   },
+  scripts: () => [
+    {
+      src: "https://analytics.alfanjauhari.com/script.js",
+      defer: true,
+      "data-website": "105608de-4851-470d-8cf4-f844b4d8a295",
+    },
+  ],
 });
 
 function RootDocument({ children }: { children: React.ReactNode }) {
