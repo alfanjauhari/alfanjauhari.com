@@ -22,3 +22,18 @@ server {
     include /etc/nginx/snippets/headers.conf;
   }
 }
+
+server {
+  listen 80;
+  listen [::]:80;
+  server_name  analytics.${APP_URL};
+
+  access_log /var/log/nginx/access.log;
+  error_log /var/log/nginx/error.log warn;
+
+  location / {
+    proxy_pass http://${ANALYTICS_UPSTREAM};
+
+    include /etc/nginx/snippets/headers.conf;
+  }
+}

@@ -30,7 +30,8 @@ services:
       - "443:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/templates:/etc/nginx/templates:ro
+      - ./nginx/templates/analytics.conf.template:/etc/nginx/templates/analytics.conf.template:ro
+      - ./nginx/templates/ssl.conf.template:/etc/nginx/templates/ssl.conf.template:ro
       - ./nginx/snippets:/etc/nginx/snippets:ro
       - letsencrypt:/etc/letsencrypt:ro
       - nginx_cache:/var/cache/nginx
