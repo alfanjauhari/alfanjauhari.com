@@ -73,7 +73,7 @@ services:
     image: ghcr.io/umami-software/umami:latest
     container_name: alfanjauhari_com_analytics
     depends_on:
-      alfanjauhari_com_db_dev:
+      alfanjauhari_com_db:
         condition: service_healthy
     env_file: $RUNTIME_ENV_FILE
     networks:
