@@ -17,10 +17,14 @@ services:
     container_name: alfanjauhari_com_nginx
     platform: linux/amd64
     depends_on:
-      - alfanjauhari_com_app
+      alfanjauhari_com_app:
+        condition: service_started
+      alfanjauhari_com_analytics:
+        condition: service_healthy
     environment:
       APP_URL: ${APP_URL:-alfanjauhari.com}
       APP_UPSTREAM: alfanjauhari_com_app:3000
+      ANALYTICS_UPSTREAM: alfanjauhari_com_analytics:3000
     ports:
       - "80:80"
       - "443:443"
@@ -48,7 +52,39 @@ services:
       --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.ini
       --dns-cloudflare-propagation-seconds 60
       --agree-tos -m "${APP_SSL_EMAIL:-hi@alfanjauhari.com}"
-      -d "${APP_URL:-alfanjauhari.com}" -d "www.${APP_URL:-alfanjauhari.com}"
+      -d "${APP_URL:-alfanjauhari.com}" -d "www.${APP_URL:-alfanjauhari.com}" -d "analytics.${APP_URL:-alfanjauhari.com}"
+
+  alfanjauhari_com_db:
+    image: postgres:alpine
+    container_name: alfanjauhari_com_db
+    env_file: $RUNTIME_ENV_FILE
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: always
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - web
+
+  alfanjauhari_com_analytics:
+    image: ghcr.io/umami-software/umami:latest
+    container_name: alfanjauhari_com_analytics
+    depends_on:
+      alfanjauhari_com_db_dev:
+        condition: service_healthy
+    env_file: $RUNTIME_ENV_FILE
+    networks:
+      - web
+    healthcheck:
+      test: ["CMD-SHELL", "curl http://localhost:3000/api/heartbeat"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    init: true
+    restart: always
 
 volumes:
   app_data:
@@ -56,6 +92,8 @@ volumes:
   letsencrypt:
     driver: local
   nginx_cache:
+    driver: local
+  db_data:
     driver: local
 
 networks:
