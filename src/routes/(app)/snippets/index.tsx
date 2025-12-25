@@ -6,7 +6,7 @@ import { PAGE_TRANSITIONS } from "@/constants";
 import { clientEnv } from "@/env/client";
 import { seoHead } from "@/lib/seo";
 
-export const Route = createFileRoute("/snippets/")({
+export const Route = createFileRoute("/(app)/snippets/")({
   component: Snippets,
   head: () =>
     seoHead({

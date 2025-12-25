@@ -8,202 +8,302 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as UsesRouteImport } from './routes/uses'
-import { Route as AboutRouteImport } from './routes/about'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as UpdatesIndexRouteImport } from './routes/updates/index'
-import { Route as SnippetsIndexRouteImport } from './routes/snippets/index'
-import { Route as WorksWorkIdRouteImport } from './routes/works/$workId'
-import { Route as UpdatesUpdateIdRouteImport } from './routes/updates/$updateId'
-import { Route as SnippetsSnippetIdRouteImport } from './routes/snippets/$snippetId'
+import { createFileRoute } from '@tanstack/react-router'
 
-const UsesRoute = UsesRouteImport.update({
-  id: '/uses',
-  path: '/uses',
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as appIndexRouteImport } from './routes/(app)/index'
+import { Route as appUsesRouteImport } from './routes/(app)/uses'
+import { Route as appAboutRouteImport } from './routes/(app)/about'
+import { Route as appUpdatesIndexRouteImport } from './routes/(app)/updates/index'
+import { Route as appSnippetsIndexRouteImport } from './routes/(app)/snippets/index'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as appWorksWorkIdRouteImport } from './routes/(app)/works/$workId'
+import { Route as appUpdatesUpdateIdRouteImport } from './routes/(app)/updates/$updateId'
+import { Route as appSnippetsSnippetIdRouteImport } from './routes/(app)/snippets/$snippetId'
+import { Route as appAuthAuthRouteRouteImport } from './routes/(app)/auth/_auth/route'
+import { Route as appAuthAuthLoginRouteImport } from './routes/(app)/auth/_auth/login'
+
+const appAuthRouteImport = createFileRoute('/(app)/auth')()
+
+const appAuthRoute = appAuthRouteImport.update({
+  id: '/(app)/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
+const appIndexRoute = appIndexRouteImport.update({
+  id: '/(app)/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const UpdatesIndexRoute = UpdatesIndexRouteImport.update({
-  id: '/updates/',
+const appUsesRoute = appUsesRouteImport.update({
+  id: '/(app)/uses',
+  path: '/uses',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const appAboutRoute = appAboutRouteImport.update({
+  id: '/(app)/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const appUpdatesIndexRoute = appUpdatesIndexRouteImport.update({
+  id: '/(app)/updates/',
   path: '/updates/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SnippetsIndexRoute = SnippetsIndexRouteImport.update({
-  id: '/snippets/',
+const appSnippetsIndexRoute = appSnippetsIndexRouteImport.update({
+  id: '/(app)/snippets/',
   path: '/snippets/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const WorksWorkIdRoute = WorksWorkIdRouteImport.update({
-  id: '/works/$workId',
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const appWorksWorkIdRoute = appWorksWorkIdRouteImport.update({
+  id: '/(app)/works/$workId',
   path: '/works/$workId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const UpdatesUpdateIdRoute = UpdatesUpdateIdRouteImport.update({
-  id: '/updates/$updateId',
+const appUpdatesUpdateIdRoute = appUpdatesUpdateIdRouteImport.update({
+  id: '/(app)/updates/$updateId',
   path: '/updates/$updateId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SnippetsSnippetIdRoute = SnippetsSnippetIdRouteImport.update({
-  id: '/snippets/$snippetId',
+const appSnippetsSnippetIdRoute = appSnippetsSnippetIdRouteImport.update({
+  id: '/(app)/snippets/$snippetId',
   path: '/snippets/$snippetId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const appAuthAuthRouteRoute = appAuthAuthRouteRouteImport.update({
+  id: '/_auth',
+  getParentRoute: () => appAuthRoute,
+} as any)
+const appAuthAuthLoginRoute = appAuthAuthLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => appAuthAuthRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/uses': typeof UsesRoute
-  '/snippets/$snippetId': typeof SnippetsSnippetIdRoute
-  '/updates/$updateId': typeof UpdatesUpdateIdRoute
-  '/works/$workId': typeof WorksWorkIdRoute
-  '/snippets': typeof SnippetsIndexRoute
-  '/updates': typeof UpdatesIndexRoute
+  '/about': typeof appAboutRoute
+  '/uses': typeof appUsesRoute
+  '/': typeof appIndexRoute
+  '/auth': typeof appAuthAuthRouteRouteWithChildren
+  '/snippets/$snippetId': typeof appSnippetsSnippetIdRoute
+  '/updates/$updateId': typeof appUpdatesUpdateIdRoute
+  '/works/$workId': typeof appWorksWorkIdRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/snippets': typeof appSnippetsIndexRoute
+  '/updates': typeof appUpdatesIndexRoute
+  '/auth/login': typeof appAuthAuthLoginRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/uses': typeof UsesRoute
-  '/snippets/$snippetId': typeof SnippetsSnippetIdRoute
-  '/updates/$updateId': typeof UpdatesUpdateIdRoute
-  '/works/$workId': typeof WorksWorkIdRoute
-  '/snippets': typeof SnippetsIndexRoute
-  '/updates': typeof UpdatesIndexRoute
+  '/about': typeof appAboutRoute
+  '/uses': typeof appUsesRoute
+  '/': typeof appIndexRoute
+  '/auth': typeof appAuthAuthRouteRouteWithChildren
+  '/snippets/$snippetId': typeof appSnippetsSnippetIdRoute
+  '/updates/$updateId': typeof appUpdatesUpdateIdRoute
+  '/works/$workId': typeof appWorksWorkIdRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/snippets': typeof appSnippetsIndexRoute
+  '/updates': typeof appUpdatesIndexRoute
+  '/auth/login': typeof appAuthAuthLoginRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/about': typeof AboutRoute
-  '/uses': typeof UsesRoute
-  '/snippets/$snippetId': typeof SnippetsSnippetIdRoute
-  '/updates/$updateId': typeof UpdatesUpdateIdRoute
-  '/works/$workId': typeof WorksWorkIdRoute
-  '/snippets/': typeof SnippetsIndexRoute
-  '/updates/': typeof UpdatesIndexRoute
+  '/(app)/about': typeof appAboutRoute
+  '/(app)/uses': typeof appUsesRoute
+  '/(app)/': typeof appIndexRoute
+  '/(app)/auth': typeof appAuthRouteWithChildren
+  '/(app)/auth/_auth': typeof appAuthAuthRouteRouteWithChildren
+  '/(app)/snippets/$snippetId': typeof appSnippetsSnippetIdRoute
+  '/(app)/updates/$updateId': typeof appUpdatesUpdateIdRoute
+  '/(app)/works/$workId': typeof appWorksWorkIdRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/(app)/snippets/': typeof appSnippetsIndexRoute
+  '/(app)/updates/': typeof appUpdatesIndexRoute
+  '/(app)/auth/_auth/login': typeof appAuthAuthLoginRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
     | '/about'
     | '/uses'
+    | '/'
+    | '/auth'
     | '/snippets/$snippetId'
     | '/updates/$updateId'
     | '/works/$workId'
+    | '/api/auth/$'
     | '/snippets'
     | '/updates'
+    | '/auth/login'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
     | '/about'
     | '/uses'
+    | '/'
+    | '/auth'
     | '/snippets/$snippetId'
     | '/updates/$updateId'
     | '/works/$workId'
+    | '/api/auth/$'
     | '/snippets'
     | '/updates'
+    | '/auth/login'
   id:
     | '__root__'
-    | '/'
-    | '/about'
-    | '/uses'
-    | '/snippets/$snippetId'
-    | '/updates/$updateId'
-    | '/works/$workId'
-    | '/snippets/'
-    | '/updates/'
+    | '/(app)/about'
+    | '/(app)/uses'
+    | '/(app)/'
+    | '/(app)/auth'
+    | '/(app)/auth/_auth'
+    | '/(app)/snippets/$snippetId'
+    | '/(app)/updates/$updateId'
+    | '/(app)/works/$workId'
+    | '/api/auth/$'
+    | '/(app)/snippets/'
+    | '/(app)/updates/'
+    | '/(app)/auth/_auth/login'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AboutRoute: typeof AboutRoute
-  UsesRoute: typeof UsesRoute
-  SnippetsSnippetIdRoute: typeof SnippetsSnippetIdRoute
-  UpdatesUpdateIdRoute: typeof UpdatesUpdateIdRoute
-  WorksWorkIdRoute: typeof WorksWorkIdRoute
-  SnippetsIndexRoute: typeof SnippetsIndexRoute
-  UpdatesIndexRoute: typeof UpdatesIndexRoute
+  appAboutRoute: typeof appAboutRoute
+  appUsesRoute: typeof appUsesRoute
+  appIndexRoute: typeof appIndexRoute
+  appAuthRoute: typeof appAuthRouteWithChildren
+  appSnippetsSnippetIdRoute: typeof appSnippetsSnippetIdRoute
+  appUpdatesUpdateIdRoute: typeof appUpdatesUpdateIdRoute
+  appWorksWorkIdRoute: typeof appWorksWorkIdRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  appSnippetsIndexRoute: typeof appSnippetsIndexRoute
+  appUpdatesIndexRoute: typeof appUpdatesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/uses': {
-      id: '/uses'
-      path: '/uses'
-      fullPath: '/uses'
-      preLoaderRoute: typeof UsesRouteImport
+    '/(app)/auth': {
+      id: '/(app)/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof appAuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/': {
-      id: '/'
+    '/(app)/': {
+      id: '/(app)/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof appIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/updates/': {
-      id: '/updates/'
+    '/(app)/uses': {
+      id: '/(app)/uses'
+      path: '/uses'
+      fullPath: '/uses'
+      preLoaderRoute: typeof appUsesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(app)/about': {
+      id: '/(app)/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof appAboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(app)/updates/': {
+      id: '/(app)/updates/'
       path: '/updates'
       fullPath: '/updates'
-      preLoaderRoute: typeof UpdatesIndexRouteImport
+      preLoaderRoute: typeof appUpdatesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/snippets/': {
-      id: '/snippets/'
+    '/(app)/snippets/': {
+      id: '/(app)/snippets/'
       path: '/snippets'
       fullPath: '/snippets'
-      preLoaderRoute: typeof SnippetsIndexRouteImport
+      preLoaderRoute: typeof appSnippetsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/works/$workId': {
-      id: '/works/$workId'
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(app)/works/$workId': {
+      id: '/(app)/works/$workId'
       path: '/works/$workId'
       fullPath: '/works/$workId'
-      preLoaderRoute: typeof WorksWorkIdRouteImport
+      preLoaderRoute: typeof appWorksWorkIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/updates/$updateId': {
-      id: '/updates/$updateId'
+    '/(app)/updates/$updateId': {
+      id: '/(app)/updates/$updateId'
       path: '/updates/$updateId'
       fullPath: '/updates/$updateId'
-      preLoaderRoute: typeof UpdatesUpdateIdRouteImport
+      preLoaderRoute: typeof appUpdatesUpdateIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/snippets/$snippetId': {
-      id: '/snippets/$snippetId'
+    '/(app)/snippets/$snippetId': {
+      id: '/(app)/snippets/$snippetId'
       path: '/snippets/$snippetId'
       fullPath: '/snippets/$snippetId'
-      preLoaderRoute: typeof SnippetsSnippetIdRouteImport
+      preLoaderRoute: typeof appSnippetsSnippetIdRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/(app)/auth/_auth': {
+      id: '/(app)/auth/_auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof appAuthAuthRouteRouteImport
+      parentRoute: typeof appAuthRoute
+    }
+    '/(app)/auth/_auth/login': {
+      id: '/(app)/auth/_auth/login'
+      path: '/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof appAuthAuthLoginRouteImport
+      parentRoute: typeof appAuthAuthRouteRoute
     }
   }
 }
 
+interface appAuthAuthRouteRouteChildren {
+  appAuthAuthLoginRoute: typeof appAuthAuthLoginRoute
+}
+
+const appAuthAuthRouteRouteChildren: appAuthAuthRouteRouteChildren = {
+  appAuthAuthLoginRoute: appAuthAuthLoginRoute,
+}
+
+const appAuthAuthRouteRouteWithChildren =
+  appAuthAuthRouteRoute._addFileChildren(appAuthAuthRouteRouteChildren)
+
+interface appAuthRouteChildren {
+  appAuthAuthRouteRoute: typeof appAuthAuthRouteRouteWithChildren
+}
+
+const appAuthRouteChildren: appAuthRouteChildren = {
+  appAuthAuthRouteRoute: appAuthAuthRouteRouteWithChildren,
+}
+
+const appAuthRouteWithChildren =
+  appAuthRoute._addFileChildren(appAuthRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
-  UsesRoute: UsesRoute,
-  SnippetsSnippetIdRoute: SnippetsSnippetIdRoute,
-  UpdatesUpdateIdRoute: UpdatesUpdateIdRoute,
-  WorksWorkIdRoute: WorksWorkIdRoute,
-  SnippetsIndexRoute: SnippetsIndexRoute,
-  UpdatesIndexRoute: UpdatesIndexRoute,
+  appAboutRoute: appAboutRoute,
+  appUsesRoute: appUsesRoute,
+  appIndexRoute: appIndexRoute,
+  appAuthRoute: appAuthRouteWithChildren,
+  appSnippetsSnippetIdRoute: appSnippetsSnippetIdRoute,
+  appUpdatesUpdateIdRoute: appUpdatesUpdateIdRoute,
+  appWorksWorkIdRoute: appWorksWorkIdRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
+  appSnippetsIndexRoute: appSnippetsIndexRoute,
+  appUpdatesIndexRoute: appUpdatesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

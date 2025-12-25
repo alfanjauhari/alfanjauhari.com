@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export const serverEnv = createEnv({
   server: {
-    DATABASE_URL: z.url(),
+    APP_DATABASE_URL: z.url(),
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,

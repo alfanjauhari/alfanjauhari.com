@@ -8,7 +8,7 @@ import { clientEnv } from "@/env/client";
 import { calculateReadingTime } from "@/lib/content";
 import { seoHead } from "@/lib/seo";
 
-export const Route = createFileRoute("/updates/$updateId")({
+export const Route = createFileRoute("/(app)/updates/$updateId")({
   component: UpdateId,
   loader: async ({ params }) => {
     const update = allUpdates.find(
