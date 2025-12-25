@@ -14,37 +14,40 @@ import {
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { clientEnv } from "@/env/client";
-import { handleLoginForm, loginFormOpts } from "@/fns/polymorphic/login";
+import {
+  handleRegisterForm,
+  registerFormOpts,
+} from "@/fns/polymorphic/register";
 import { seoHead } from "@/lib/seo";
 
-export const Route = createFileRoute("/(app)/auth/_auth/login")({
+export const Route = createFileRoute("/(app)/auth/_auth/register")({
   component: RouteComponent,
   head: () =>
     seoHead({
-      title: "Login",
+      title: "Register",
       description:
-        "Log in to your account to access personalized features and continue your experience seamlessly.",
-      canonical: "/auth/login",
-      image: `${clientEnv.VITE_CLOUDINARY_URL}/og/auth/login.webp`,
+        "Create an account to unlock personalized features and enjoy a better experience on my platform.",
+      canonical: "/auth/register",
+      image: `${clientEnv.VITE_CLOUDINARY_URL}/og/auth/register.webp`,
     }),
 });
 
 function RouteComponent() {
-  const [loginError, setLoginError] = useState("");
+  const [registerError, setRegisterError] = useState("");
 
   const navigate = Route.useNavigate();
 
-  const loginMutation = useServerFn(handleLoginForm);
+  const registerMutation = useServerFn(handleRegisterForm);
 
   const form = useForm({
-    ...loginFormOpts,
+    ...registerFormOpts,
     listeners: {
       onChange: useCallback(() => {
-        setLoginError("");
+        setRegisterError("");
       }, []),
     },
     onSubmit: async ({ value }) => {
-      const data = await loginMutation({
+      const data = await registerMutation({
         data: value,
       });
 
@@ -54,19 +57,30 @@ function RouteComponent() {
             to: "/",
           });
           break;
-        case "AUTH_ERROR":
-          setLoginError(data.message);
+        case "AUTH_ERROR": {
+          setRegisterError(data.message);
+
+          const emailSpecificErrors = ["USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL"];
+          const passwordSpecificErrors = ["PASSWORD_TOO_SHORT"];
 
           form.setErrorMap({
             onChange: {
               fields: {
-                email: true,
-                password: true,
+                email: emailSpecificErrors.includes(data.errorCode)
+                  ? true
+                  : undefined,
+                password: passwordSpecificErrors.includes(data.errorCode)
+                  ? true
+                  : undefined,
+                confirmPassword: passwordSpecificErrors.includes(data.errorCode)
+                  ? true
+                  : undefined,
               },
             },
           });
 
           break;
+        }
 
         case "VALIDATION_ERROR":
           form.setErrorMap({
@@ -77,7 +91,7 @@ function RouteComponent() {
 
           break;
         default:
-          setLoginError(data.message);
+          setRegisterError(data.message);
           break;
       }
     },
@@ -92,16 +106,16 @@ function RouteComponent() {
   return (
     <div className="w-full max-w-xl border border-border p-8 md:p-12">
       <h1 className="font-serif text-4xl font-bold text-center mb-4">
-        Welcome Back!
+        Hello World!
       </h1>
       <p className="text-center text-sm mb-8 font-mono uppercase tracking-widest text-foreground/50">
-        Login to access your account
+        Create an account to enjoy a better experience
       </p>
 
-      {loginError && (
+      {registerError && (
         <Alert variant="destructive" className="mb-8">
-          <AlertTitle>Login Failed</AlertTitle>
-          <AlertDescription>{loginError}</AlertDescription>
+          <AlertTitle>Register Failed</AlertTitle>
+          <AlertDescription>{registerError}</AlertDescription>
         </Alert>
       )}
 
@@ -113,13 +127,34 @@ function RouteComponent() {
         </div>
         <div className="relative flex justify-center text-xs uppercase">
           <span className="bg-background px-4 text-foreground/50 font-mono">
-            Or login with email
+            Or register with email
           </span>
         </div>
       </div>
 
       <form onSubmit={onSubmit} className="mb-12">
         <FieldGroup>
+          <form.Field name="name">
+            {(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
+
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel htmlFor={field.name}>Name</FieldLabel>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    aria-invalid={isInvalid}
+                  />
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
+            }}
+          </form.Field>
           <form.Field name="email">
             {(field) => {
               const isInvalid =
@@ -164,12 +199,36 @@ function RouteComponent() {
               );
             }}
           </form.Field>
+          <form.Field name="confirmPassword">
+            {(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
+
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel htmlFor={field.name}>
+                    Password Confirmation
+                  </FieldLabel>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    type="password"
+                    aria-invalid={isInvalid}
+                  />
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
+            }}
+          </form.Field>
 
           <form.Subscribe selector={(formState) => formState.isSubmitting}>
             {(isSubmitting) => (
               <Button className="h-10">
                 {isSubmitting && <Spinner />}
-                Login
+                Register
               </Button>
             )}
           </form.Subscribe>
@@ -177,9 +236,9 @@ function RouteComponent() {
       </form>
 
       <p className="text-foreground/50 text-sm text-center">
-        Don't have an account?{" "}
-        <Link to="/auth/register" className="text-foreground underline">
-          Register here
+        Already have an account?{" "}
+        <Link to="/auth/login" className="text-foreground underline">
+          Login here
         </Link>
       </p>
     </div>
