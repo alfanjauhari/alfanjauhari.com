@@ -8,6 +8,7 @@ import { accountsTable } from "@/db/schemas/accounts";
 import { sessionsTable } from "@/db/schemas/sessions";
 import { usersTable } from "@/db/schemas/users";
 import { verificationsTable } from "@/db/schemas/verifications";
+import { serverEnv } from "@/env/server";
 
 export const auth = betterAuth({
   database: drizzleAdapter(client, {
@@ -21,6 +22,17 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+  },
+  baseURL: serverEnv.BETTER_AUTH_URL,
+  socialProviders: {
+    google: {
+      clientId: serverEnv.GOOGLE_CLIENT_ID,
+      clientSecret: serverEnv.GOOGLE_CLIENT_SECRET,
+    },
+    github: {
+      clientId: serverEnv.GITHUB_CLIENT_ID,
+      clientSecret: serverEnv.GITHUB_CLIENT_SECRET,
+    },
   },
   advanced: {
     database: {

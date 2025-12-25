@@ -10,7 +10,7 @@ import { nitro } from "nitro/vite";
 import { defineConfig } from "vite";
 import viteTsConfigPaths from "vite-tsconfig-paths";
 
-const nonPrerenderedRoutes = ["/resume.pdf", "/login"];
+const nonPrerenderedRoutes = ["/resume.pdf", "/auth/login", "/auth/register"];
 
 const config = defineConfig({
   plugins: [
