@@ -82,6 +82,8 @@ services:
       alfanjauhari_com_db:
         condition: service_healthy
     env_file: $RUNTIME_ENV_FILE
+    environment:
+      DATABASE_URL: $ANALYTICS_DATABASE_URL
     networks:
       - web
     healthcheck:

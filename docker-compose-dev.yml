@@ -46,6 +46,7 @@ services:
   alfanjauhari_com_db_dev:
     image: postgres:alpine
     container_name: alfanjauhari_com_db_dev
+    env_file: ${RUNTIME_ENV_FILE:-.env}
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-postgres}
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
@@ -60,6 +61,8 @@ services:
       - db_data:/var/lib/postgresql/data
     networks:
       - web
+    ports:
+      - 5432:5432
 
   alfanjauhari_com_analytics_dev:
     image: ghcr.io/umami-software/umami:latest
@@ -68,6 +71,7 @@ services:
     depends_on:
       alfanjauhari_com_db_dev:
         condition: service_healthy
+    env_file: ${RUNTIME_ENV_FILE:-.env}
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@alfanjauhari_com_db_dev:5432/${POSTGRES_DB:-postgres}
       APP_SECRET: replace-me-with-a-random-string

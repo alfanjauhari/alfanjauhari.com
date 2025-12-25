@@ -7,7 +7,7 @@ import { PAGE_TRANSITIONS } from "@/constants";
 import { clientEnv } from "@/env/client";
 import { seoHead } from "@/lib/seo";
 
-export const Route = createFileRoute("/snippets/$snippetId")({
+export const Route = createFileRoute("/(app)/snippets/$snippetId")({
   component: Snippet,
   loader: async ({ params }) => {
     const snippet = allSnippets.find(

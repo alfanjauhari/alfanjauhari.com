@@ -14,7 +14,7 @@ import { clientEnv } from "@/env/client";
 import { calculateReadingTime } from "@/lib/content";
 import { seoHead } from "@/lib/seo";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/(app)/")({
   component: Home,
   head: () =>
     seoHead({
@@ -96,7 +96,7 @@ function Home() {
               build <span className="font-serif italic">pixel-perfect</span>{" "}
               interfaces and scalable systems for everyone.
             </p>
-            <div className="flex gap-4">
+            <div className="flex flex-col md:flex-row gap-4">
               <Button size="xl" asChild>
                 <a href="#works">View Works</a>
               </Button>
