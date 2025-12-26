@@ -17,7 +17,7 @@ import { clientEnv } from "@/env/client";
 import { handleLoginForm, loginFormOpts } from "@/fns/polymorphic/login";
 import { seoHead } from "@/lib/seo";
 
-export const Route = createFileRoute("/(app)/auth/_auth/login")({
+export const Route = createFileRoute("/_auth/auth/login")({
   component: RouteComponent,
   head: () =>
     seoHead({

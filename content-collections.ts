@@ -1,35 +1,47 @@
-import { defineCollection, defineConfig } from "@content-collections/core";
+import { Context, defineCollection, defineConfig, Document } from "@content-collections/core";
 import { compileMDX } from "@content-collections/mdx";
 import { z } from "zod";
 import rehypeShiki from '@shikijs/rehype'
+
+async function MDXTransformer<TSchema extends Document & {content: string}>(document: TSchema, context: Context<TSchema>) {
+  const mdx = await compileMDX(context, document, {
+    rehypePlugins: [[rehypeShiki, {
+      themes: {
+        light: 'catppuccin-latte',
+        dark: 'catppuccin-mocha'
+      },
+      inline: 'tailing-curly-colon',
+    }]]
+  });
+
+  return {
+    ...document,
+    mdx,
+  };
+}
+
+const UpdateSchema = z.object({
+  title: z.string(),
+  tag: z.string(),
+  summary: z.string(),
+  date: z.coerce.date(),
+  content: z.string()
+})
 
 const updates = defineCollection({
   name: "updates",
   directory: "content/updates",
   include: "*.mdx",
-  schema: z.object({
-    title: z.string(),
-    tag: z.string(),
-    summary: z.string(),
-    date: z.coerce.date(),
-    isMemberOnly: z.literal(false).default(false),
-    content: z.string()
-  }),
-  transform: async (document, context) => {
-    const mdx = await compileMDX(context, document, {
-      rehypePlugins: [[rehypeShiki, {
-        themes: {
-          light: 'catppuccin-latte',
-          dark: 'catppuccin-mocha'
-        },
-        inline: 'tailing-curly-colon',
-      }]]
-    });
-    return {
-      ...document,
-      mdx,
-    };
-  },
+  schema: UpdateSchema,
+  transform: MDXTransformer
+});
+
+const restrictedUpdates = defineCollection({
+  name: "restrictedUpdates",
+  directory: "content/.updates",
+  include: "*.mdx",
+  schema: UpdateSchema,
+  transform: MDXTransformer,
 });
 
 const works = defineCollection({
@@ -49,21 +61,7 @@ const works = defineCollection({
     thumbnail: z.string(),
     content: z.string()
   }),
-  transform: async (document, context) => {
-    const mdx = await compileMDX(context, document, {
-      rehypePlugins: [[rehypeShiki, {
-        themes: {
-          light: 'catppuccin-latte',
-          dark: 'catppuccin-mocha'
-        },
-        inline: 'tailing-curly-colon',
-      }]]
-    });
-    return {
-      ...document,
-      mdx,
-    };
-  },
+  transform: MDXTransformer
 })
 
 const snippets = defineCollection({
@@ -77,23 +75,9 @@ const snippets = defineCollection({
     tags: z.array(z.string()),
     content: z.string()
   }),
-  transform: async (document, context) => {
-    const mdx = await compileMDX(context, document, {
-      rehypePlugins: [[rehypeShiki, {
-        themes: {
-          light: 'catppuccin-latte',
-          dark: 'catppuccin-mocha'
-        },
-        inline: 'tailing-curly-colon',
-      }]]
-    });
-    return {
-      ...document,
-      mdx,
-    };
-  },
+  transform: MDXTransformer
 })
 
 export default defineConfig({
-  collections: [updates, works, snippets],
+  collections: [updates, restrictedUpdates, works, snippets],
 });

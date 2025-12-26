@@ -21,7 +21,7 @@ import { PAGE_TRANSITIONS } from "@/constants";
 import { clientEnv } from "@/env/client";
 import { seoHead } from "@/lib/seo";
 
-export const Route = createFileRoute("/(app)/works/$workId")({
+export const Route = createFileRoute("/works/$workId")({
   component: WorkDetail,
   loader: async ({ params }) => {
     const work = allWorks.find((work) => work._meta.path === params.workId);

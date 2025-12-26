@@ -19,5 +19,12 @@ export const getRouter = () => {
         </QueryClientProvider>
       );
     },
+    defaultNotFoundComponent: () => {
+      return (
+        <div>
+          <p>Not found!</p>
+        </div>
+      );
+    },
   });
 };
