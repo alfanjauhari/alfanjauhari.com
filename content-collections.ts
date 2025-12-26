@@ -38,7 +38,7 @@ const updates = defineCollection({
 
 const restrictedUpdates = defineCollection({
   name: "restrictedUpdates",
-  directory: "content/.updates",
+  directory: "content/privates/updates",
   include: "*.mdx",
   schema: UpdateSchema,
   transform: MDXTransformer,

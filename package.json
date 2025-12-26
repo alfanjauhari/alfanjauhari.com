@@ -8,6 +8,7 @@
     "build": "pnpm build:content && pnpm build:og && vite build && pnpm upload",
     "build:content": "content-collections build",
     "build:og": "tsx ./scripts/generate-og.tsx",
+    "sync:content": "./scripts/sync-contents.sh",
     "upload": "tsx ./scripts/upload-assets.ts",
     "serve": "vite preview",
     "test": "vitest run",
