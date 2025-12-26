@@ -8,7 +8,7 @@ import { PAGE_TRANSITIONS } from "@/constants";
 import { clientEnv } from "@/env/client";
 import { seoHead } from "@/lib/seo";
 
-export const Route = createFileRoute("/(app)/about")({
+export const Route = createFileRoute("/about")({
   component: About,
   head: () =>
     seoHead({

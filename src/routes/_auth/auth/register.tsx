@@ -20,7 +20,7 @@ import {
 } from "@/fns/polymorphic/register";
 import { seoHead } from "@/lib/seo";
 
-export const Route = createFileRoute("/(app)/auth/_auth/register")({
+export const Route = createFileRoute("/_auth/auth/register")({
   component: RouteComponent,
   head: () =>
     seoHead({

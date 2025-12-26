@@ -14,7 +14,7 @@ import { clientEnv } from "@/env/client";
 import { calculateReadingTime } from "@/lib/content";
 import { seoHead } from "@/lib/seo";
 
-export const Route = createFileRoute("/(app)/")({
+export const Route = createFileRoute("/")({
   component: Home,
   head: () =>
     seoHead({

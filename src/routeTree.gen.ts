@@ -11,232 +11,288 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as appIndexRouteImport } from './routes/(app)/index'
-import { Route as appUsesRouteImport } from './routes/(app)/uses'
-import { Route as appAboutRouteImport } from './routes/(app)/about'
-import { Route as appUpdatesIndexRouteImport } from './routes/(app)/updates/index'
-import { Route as appSnippetsIndexRouteImport } from './routes/(app)/snippets/index'
+import { Route as UsesRouteImport } from './routes/uses'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as AuthRouteRouteImport } from './routes/_auth/route'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as UpdatesIndexRouteImport } from './routes/updates/index'
+import { Route as SnippetsIndexRouteImport } from './routes/snippets/index'
+import { Route as WorksWorkIdRouteImport } from './routes/works/$workId'
+import { Route as UpdatesUpdateIdRouteImport } from './routes/updates/$updateId'
+import { Route as SnippetsSnippetIdRouteImport } from './routes/snippets/$snippetId'
+import { Route as DashboardAdminRouteRouteImport } from './routes/dashboard/_admin/route'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
-import { Route as appWorksWorkIdRouteImport } from './routes/(app)/works/$workId'
-import { Route as appUpdatesUpdateIdRouteImport } from './routes/(app)/updates/$updateId'
-import { Route as appSnippetsSnippetIdRouteImport } from './routes/(app)/snippets/$snippetId'
-import { Route as appAuthAuthRouteRouteImport } from './routes/(app)/auth/_auth/route'
-import { Route as appAuthAuthRegisterRouteImport } from './routes/(app)/auth/_auth/register'
-import { Route as appAuthAuthLoginRouteImport } from './routes/(app)/auth/_auth/login'
+import { Route as AuthAuthRegisterRouteImport } from './routes/_auth/auth/register'
+import { Route as AuthAuthLoginRouteImport } from './routes/_auth/auth/login'
+import { Route as DashboardAdminAdminIndexRouteImport } from './routes/dashboard/_admin/admin/index'
 
-const appAuthRouteImport = createFileRoute('/(app)/auth')()
+const DashboardRouteImport = createFileRoute('/dashboard')()
 
-const appAuthRoute = appAuthRouteImport.update({
-  id: '/(app)/auth',
-  path: '/auth',
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
-const appIndexRoute = appIndexRouteImport.update({
-  id: '/(app)/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const appUsesRoute = appUsesRouteImport.update({
-  id: '/(app)/uses',
+const UsesRoute = UsesRouteImport.update({
+  id: '/uses',
   path: '/uses',
   getParentRoute: () => rootRouteImport,
 } as any)
-const appAboutRoute = appAboutRouteImport.update({
-  id: '/(app)/about',
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
-const appUpdatesIndexRoute = appUpdatesIndexRouteImport.update({
-  id: '/(app)/updates/',
+const AuthRouteRoute = AuthRouteRouteImport.update({
+  id: '/_auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UpdatesIndexRoute = UpdatesIndexRouteImport.update({
+  id: '/updates/',
   path: '/updates/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const appSnippetsIndexRoute = appSnippetsIndexRouteImport.update({
-  id: '/(app)/snippets/',
+const SnippetsIndexRoute = SnippetsIndexRouteImport.update({
+  id: '/snippets/',
   path: '/snippets/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const WorksWorkIdRoute = WorksWorkIdRouteImport.update({
+  id: '/works/$workId',
+  path: '/works/$workId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UpdatesUpdateIdRoute = UpdatesUpdateIdRouteImport.update({
+  id: '/updates/$updateId',
+  path: '/updates/$updateId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SnippetsSnippetIdRoute = SnippetsSnippetIdRouteImport.update({
+  id: '/snippets/$snippetId',
+  path: '/snippets/$snippetId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardAdminRouteRoute = DashboardAdminRouteRouteImport.update({
+  id: '/_admin',
+  getParentRoute: () => DashboardRoute,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const appWorksWorkIdRoute = appWorksWorkIdRouteImport.update({
-  id: '/(app)/works/$workId',
-  path: '/works/$workId',
-  getParentRoute: () => rootRouteImport,
+const AuthAuthRegisterRoute = AuthAuthRegisterRouteImport.update({
+  id: '/auth/register',
+  path: '/auth/register',
+  getParentRoute: () => AuthRouteRoute,
 } as any)
-const appUpdatesUpdateIdRoute = appUpdatesUpdateIdRouteImport.update({
-  id: '/(app)/updates/$updateId',
-  path: '/updates/$updateId',
-  getParentRoute: () => rootRouteImport,
+const AuthAuthLoginRoute = AuthAuthLoginRouteImport.update({
+  id: '/auth/login',
+  path: '/auth/login',
+  getParentRoute: () => AuthRouteRoute,
 } as any)
-const appSnippetsSnippetIdRoute = appSnippetsSnippetIdRouteImport.update({
-  id: '/(app)/snippets/$snippetId',
-  path: '/snippets/$snippetId',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const appAuthAuthRouteRoute = appAuthAuthRouteRouteImport.update({
-  id: '/_auth',
-  getParentRoute: () => appAuthRoute,
-} as any)
-const appAuthAuthRegisterRoute = appAuthAuthRegisterRouteImport.update({
-  id: '/register',
-  path: '/register',
-  getParentRoute: () => appAuthAuthRouteRoute,
-} as any)
-const appAuthAuthLoginRoute = appAuthAuthLoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => appAuthAuthRouteRoute,
-} as any)
+const DashboardAdminAdminIndexRoute =
+  DashboardAdminAdminIndexRouteImport.update({
+    id: '/admin/',
+    path: '/admin/',
+    getParentRoute: () => DashboardAdminRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/about': typeof appAboutRoute
-  '/uses': typeof appUsesRoute
-  '/': typeof appIndexRoute
-  '/auth': typeof appAuthAuthRouteRouteWithChildren
-  '/snippets/$snippetId': typeof appSnippetsSnippetIdRoute
-  '/updates/$updateId': typeof appUpdatesUpdateIdRoute
-  '/works/$workId': typeof appWorksWorkIdRoute
+  '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/uses': typeof UsesRoute
+  '/dashboard': typeof DashboardAdminRouteRouteWithChildren
+  '/snippets/$snippetId': typeof SnippetsSnippetIdRoute
+  '/updates/$updateId': typeof UpdatesUpdateIdRoute
+  '/works/$workId': typeof WorksWorkIdRoute
+  '/snippets': typeof SnippetsIndexRoute
+  '/updates': typeof UpdatesIndexRoute
+  '/auth/login': typeof AuthAuthLoginRoute
+  '/auth/register': typeof AuthAuthRegisterRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/snippets': typeof appSnippetsIndexRoute
-  '/updates': typeof appUpdatesIndexRoute
-  '/auth/login': typeof appAuthAuthLoginRoute
-  '/auth/register': typeof appAuthAuthRegisterRoute
+  '/dashboard/admin': typeof DashboardAdminAdminIndexRoute
 }
 export interface FileRoutesByTo {
-  '/about': typeof appAboutRoute
-  '/uses': typeof appUsesRoute
-  '/': typeof appIndexRoute
-  '/auth': typeof appAuthAuthRouteRouteWithChildren
-  '/snippets/$snippetId': typeof appSnippetsSnippetIdRoute
-  '/updates/$updateId': typeof appUpdatesUpdateIdRoute
-  '/works/$workId': typeof appWorksWorkIdRoute
+  '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/uses': typeof UsesRoute
+  '/dashboard': typeof DashboardAdminRouteRouteWithChildren
+  '/snippets/$snippetId': typeof SnippetsSnippetIdRoute
+  '/updates/$updateId': typeof UpdatesUpdateIdRoute
+  '/works/$workId': typeof WorksWorkIdRoute
+  '/snippets': typeof SnippetsIndexRoute
+  '/updates': typeof UpdatesIndexRoute
+  '/auth/login': typeof AuthAuthLoginRoute
+  '/auth/register': typeof AuthAuthRegisterRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/snippets': typeof appSnippetsIndexRoute
-  '/updates': typeof appUpdatesIndexRoute
-  '/auth/login': typeof appAuthAuthLoginRoute
-  '/auth/register': typeof appAuthAuthRegisterRoute
+  '/dashboard/admin': typeof DashboardAdminAdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/(app)/about': typeof appAboutRoute
-  '/(app)/uses': typeof appUsesRoute
-  '/(app)/': typeof appIndexRoute
-  '/(app)/auth': typeof appAuthRouteWithChildren
-  '/(app)/auth/_auth': typeof appAuthAuthRouteRouteWithChildren
-  '/(app)/snippets/$snippetId': typeof appSnippetsSnippetIdRoute
-  '/(app)/updates/$updateId': typeof appUpdatesUpdateIdRoute
-  '/(app)/works/$workId': typeof appWorksWorkIdRoute
+  '/': typeof IndexRoute
+  '/_auth': typeof AuthRouteRouteWithChildren
+  '/about': typeof AboutRoute
+  '/uses': typeof UsesRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/dashboard/_admin': typeof DashboardAdminRouteRouteWithChildren
+  '/snippets/$snippetId': typeof SnippetsSnippetIdRoute
+  '/updates/$updateId': typeof UpdatesUpdateIdRoute
+  '/works/$workId': typeof WorksWorkIdRoute
+  '/snippets/': typeof SnippetsIndexRoute
+  '/updates/': typeof UpdatesIndexRoute
+  '/_auth/auth/login': typeof AuthAuthLoginRoute
+  '/_auth/auth/register': typeof AuthAuthRegisterRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/(app)/snippets/': typeof appSnippetsIndexRoute
-  '/(app)/updates/': typeof appUpdatesIndexRoute
-  '/(app)/auth/_auth/login': typeof appAuthAuthLoginRoute
-  '/(app)/auth/_auth/register': typeof appAuthAuthRegisterRoute
+  '/dashboard/_admin/admin/': typeof DashboardAdminAdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/about'
     | '/uses'
-    | '/'
-    | '/auth'
+    | '/dashboard'
     | '/snippets/$snippetId'
     | '/updates/$updateId'
     | '/works/$workId'
-    | '/api/auth/$'
     | '/snippets'
     | '/updates'
     | '/auth/login'
     | '/auth/register'
+    | '/api/auth/$'
+    | '/dashboard/admin'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/'
     | '/about'
     | '/uses'
-    | '/'
-    | '/auth'
+    | '/dashboard'
     | '/snippets/$snippetId'
     | '/updates/$updateId'
     | '/works/$workId'
-    | '/api/auth/$'
     | '/snippets'
     | '/updates'
     | '/auth/login'
     | '/auth/register'
+    | '/api/auth/$'
+    | '/dashboard/admin'
   id:
     | '__root__'
-    | '/(app)/about'
-    | '/(app)/uses'
-    | '/(app)/'
-    | '/(app)/auth'
-    | '/(app)/auth/_auth'
-    | '/(app)/snippets/$snippetId'
-    | '/(app)/updates/$updateId'
-    | '/(app)/works/$workId'
+    | '/'
+    | '/_auth'
+    | '/about'
+    | '/uses'
+    | '/dashboard'
+    | '/dashboard/_admin'
+    | '/snippets/$snippetId'
+    | '/updates/$updateId'
+    | '/works/$workId'
+    | '/snippets/'
+    | '/updates/'
+    | '/_auth/auth/login'
+    | '/_auth/auth/register'
     | '/api/auth/$'
-    | '/(app)/snippets/'
-    | '/(app)/updates/'
-    | '/(app)/auth/_auth/login'
-    | '/(app)/auth/_auth/register'
+    | '/dashboard/_admin/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  appAboutRoute: typeof appAboutRoute
-  appUsesRoute: typeof appUsesRoute
-  appIndexRoute: typeof appIndexRoute
-  appAuthRoute: typeof appAuthRouteWithChildren
-  appSnippetsSnippetIdRoute: typeof appSnippetsSnippetIdRoute
-  appUpdatesUpdateIdRoute: typeof appUpdatesUpdateIdRoute
-  appWorksWorkIdRoute: typeof appWorksWorkIdRoute
+  IndexRoute: typeof IndexRoute
+  AuthRouteRoute: typeof AuthRouteRouteWithChildren
+  AboutRoute: typeof AboutRoute
+  UsesRoute: typeof UsesRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
+  SnippetsSnippetIdRoute: typeof SnippetsSnippetIdRoute
+  UpdatesUpdateIdRoute: typeof UpdatesUpdateIdRoute
+  WorksWorkIdRoute: typeof WorksWorkIdRoute
+  SnippetsIndexRoute: typeof SnippetsIndexRoute
+  UpdatesIndexRoute: typeof UpdatesIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
-  appSnippetsIndexRoute: typeof appSnippetsIndexRoute
-  appUpdatesIndexRoute: typeof appUpdatesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/(app)/auth': {
-      id: '/(app)/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof appAuthRouteImport
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(app)/': {
-      id: '/(app)/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof appIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(app)/uses': {
-      id: '/(app)/uses'
+    '/uses': {
+      id: '/uses'
       path: '/uses'
       fullPath: '/uses'
-      preLoaderRoute: typeof appUsesRouteImport
+      preLoaderRoute: typeof UsesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(app)/about': {
-      id: '/(app)/about'
+    '/about': {
+      id: '/about'
       path: '/about'
       fullPath: '/about'
-      preLoaderRoute: typeof appAboutRouteImport
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(app)/updates/': {
-      id: '/(app)/updates/'
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/updates/': {
+      id: '/updates/'
       path: '/updates'
       fullPath: '/updates'
-      preLoaderRoute: typeof appUpdatesIndexRouteImport
+      preLoaderRoute: typeof UpdatesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(app)/snippets/': {
-      id: '/(app)/snippets/'
+    '/snippets/': {
+      id: '/snippets/'
       path: '/snippets'
       fullPath: '/snippets'
-      preLoaderRoute: typeof appSnippetsIndexRouteImport
+      preLoaderRoute: typeof SnippetsIndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/works/$workId': {
+      id: '/works/$workId'
+      path: '/works/$workId'
+      fullPath: '/works/$workId'
+      preLoaderRoute: typeof WorksWorkIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/updates/$updateId': {
+      id: '/updates/$updateId'
+      path: '/updates/$updateId'
+      fullPath: '/updates/$updateId'
+      preLoaderRoute: typeof UpdatesUpdateIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/snippets/$snippetId': {
+      id: '/snippets/$snippetId'
+      path: '/snippets/$snippetId'
+      fullPath: '/snippets/$snippetId'
+      preLoaderRoute: typeof SnippetsSnippetIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/_admin': {
+      id: '/dashboard/_admin'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardAdminRouteRouteImport
+      parentRoute: typeof DashboardRoute
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -245,86 +301,79 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/(app)/works/$workId': {
-      id: '/(app)/works/$workId'
-      path: '/works/$workId'
-      fullPath: '/works/$workId'
-      preLoaderRoute: typeof appWorksWorkIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(app)/updates/$updateId': {
-      id: '/(app)/updates/$updateId'
-      path: '/updates/$updateId'
-      fullPath: '/updates/$updateId'
-      preLoaderRoute: typeof appUpdatesUpdateIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(app)/snippets/$snippetId': {
-      id: '/(app)/snippets/$snippetId'
-      path: '/snippets/$snippetId'
-      fullPath: '/snippets/$snippetId'
-      preLoaderRoute: typeof appSnippetsSnippetIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/(app)/auth/_auth': {
-      id: '/(app)/auth/_auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof appAuthAuthRouteRouteImport
-      parentRoute: typeof appAuthRoute
-    }
-    '/(app)/auth/_auth/register': {
-      id: '/(app)/auth/_auth/register'
-      path: '/register'
+    '/_auth/auth/register': {
+      id: '/_auth/auth/register'
+      path: '/auth/register'
       fullPath: '/auth/register'
-      preLoaderRoute: typeof appAuthAuthRegisterRouteImport
-      parentRoute: typeof appAuthAuthRouteRoute
+      preLoaderRoute: typeof AuthAuthRegisterRouteImport
+      parentRoute: typeof AuthRouteRoute
     }
-    '/(app)/auth/_auth/login': {
-      id: '/(app)/auth/_auth/login'
-      path: '/login'
+    '/_auth/auth/login': {
+      id: '/_auth/auth/login'
+      path: '/auth/login'
       fullPath: '/auth/login'
-      preLoaderRoute: typeof appAuthAuthLoginRouteImport
-      parentRoute: typeof appAuthAuthRouteRoute
+      preLoaderRoute: typeof AuthAuthLoginRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/dashboard/_admin/admin/': {
+      id: '/dashboard/_admin/admin/'
+      path: '/admin'
+      fullPath: '/dashboard/admin'
+      preLoaderRoute: typeof DashboardAdminAdminIndexRouteImport
+      parentRoute: typeof DashboardAdminRouteRoute
     }
   }
 }
 
-interface appAuthAuthRouteRouteChildren {
-  appAuthAuthLoginRoute: typeof appAuthAuthLoginRoute
-  appAuthAuthRegisterRoute: typeof appAuthAuthRegisterRoute
+interface AuthRouteRouteChildren {
+  AuthAuthLoginRoute: typeof AuthAuthLoginRoute
+  AuthAuthRegisterRoute: typeof AuthAuthRegisterRoute
 }
 
-const appAuthAuthRouteRouteChildren: appAuthAuthRouteRouteChildren = {
-  appAuthAuthLoginRoute: appAuthAuthLoginRoute,
-  appAuthAuthRegisterRoute: appAuthAuthRegisterRoute,
+const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthAuthLoginRoute: AuthAuthLoginRoute,
+  AuthAuthRegisterRoute: AuthAuthRegisterRoute,
 }
 
-const appAuthAuthRouteRouteWithChildren =
-  appAuthAuthRouteRoute._addFileChildren(appAuthAuthRouteRouteChildren)
+const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
+  AuthRouteRouteChildren,
+)
 
-interface appAuthRouteChildren {
-  appAuthAuthRouteRoute: typeof appAuthAuthRouteRouteWithChildren
+interface DashboardAdminRouteRouteChildren {
+  DashboardAdminAdminIndexRoute: typeof DashboardAdminAdminIndexRoute
 }
 
-const appAuthRouteChildren: appAuthRouteChildren = {
-  appAuthAuthRouteRoute: appAuthAuthRouteRouteWithChildren,
+const DashboardAdminRouteRouteChildren: DashboardAdminRouteRouteChildren = {
+  DashboardAdminAdminIndexRoute: DashboardAdminAdminIndexRoute,
 }
 
-const appAuthRouteWithChildren =
-  appAuthRoute._addFileChildren(appAuthRouteChildren)
+const DashboardAdminRouteRouteWithChildren =
+  DashboardAdminRouteRoute._addFileChildren(DashboardAdminRouteRouteChildren)
+
+interface DashboardRouteChildren {
+  DashboardAdminRouteRoute: typeof DashboardAdminRouteRouteWithChildren
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardAdminRouteRoute: DashboardAdminRouteRouteWithChildren,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
-  appAboutRoute: appAboutRoute,
-  appUsesRoute: appUsesRoute,
-  appIndexRoute: appIndexRoute,
-  appAuthRoute: appAuthRouteWithChildren,
-  appSnippetsSnippetIdRoute: appSnippetsSnippetIdRoute,
-  appUpdatesUpdateIdRoute: appUpdatesUpdateIdRoute,
-  appWorksWorkIdRoute: appWorksWorkIdRoute,
+  IndexRoute: IndexRoute,
+  AuthRouteRoute: AuthRouteRouteWithChildren,
+  AboutRoute: AboutRoute,
+  UsesRoute: UsesRoute,
+  DashboardRoute: DashboardRouteWithChildren,
+  SnippetsSnippetIdRoute: SnippetsSnippetIdRoute,
+  UpdatesUpdateIdRoute: UpdatesUpdateIdRoute,
+  WorksWorkIdRoute: WorksWorkIdRoute,
+  SnippetsIndexRoute: SnippetsIndexRoute,
+  UpdatesIndexRoute: UpdatesIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
-  appSnippetsIndexRoute: appSnippetsIndexRoute,
-  appUpdatesIndexRoute: appUpdatesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
