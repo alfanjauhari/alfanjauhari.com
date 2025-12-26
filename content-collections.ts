@@ -32,7 +32,9 @@ const updates = defineCollection({
   name: "updates",
   directory: "content/updates",
   include: "*.mdx",
-  schema: UpdateSchema,
+  schema: UpdateSchema.extend({
+    restricted: z.literal(false).optional().transform(() => false)
+  }),
   transform: MDXTransformer
 });
 
@@ -40,7 +42,9 @@ const restrictedUpdates = defineCollection({
   name: "restrictedUpdates",
   directory: "content/privates/updates",
   include: "*.mdx",
-  schema: UpdateSchema,
+  schema: UpdateSchema.extend({
+    restricted: z.literal(true).optional().transform(() => true)
+  }),
   transform: MDXTransformer,
 });
 

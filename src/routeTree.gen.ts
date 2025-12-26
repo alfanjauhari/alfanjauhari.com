@@ -21,6 +21,7 @@ import { Route as WorksWorkIdRouteImport } from './routes/works/$workId'
 import { Route as UpdatesUpdateIdRouteImport } from './routes/updates/$updateId'
 import { Route as SnippetsSnippetIdRouteImport } from './routes/snippets/$snippetId'
 import { Route as DashboardAdminRouteRouteImport } from './routes/dashboard/_admin/route'
+import { Route as UpdatesRUpdateIdRouteImport } from './routes/updates/r.$updateId'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AuthAuthRegisterRouteImport } from './routes/_auth/auth/register'
 import { Route as AuthAuthLoginRouteImport } from './routes/_auth/auth/login'
@@ -81,6 +82,11 @@ const DashboardAdminRouteRoute = DashboardAdminRouteRouteImport.update({
   id: '/_admin',
   getParentRoute: () => DashboardRoute,
 } as any)
+const UpdatesRUpdateIdRoute = UpdatesRUpdateIdRouteImport.update({
+  id: '/updates/r/$updateId',
+  path: '/updates/r/$updateId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -116,6 +122,7 @@ export interface FileRoutesByFullPath {
   '/auth/login': typeof AuthAuthLoginRoute
   '/auth/register': typeof AuthAuthRegisterRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/updates/r/$updateId': typeof UpdatesRUpdateIdRoute
   '/dashboard/admin': typeof DashboardAdminAdminIndexRoute
 }
 export interface FileRoutesByTo {
@@ -131,6 +138,7 @@ export interface FileRoutesByTo {
   '/auth/login': typeof AuthAuthLoginRoute
   '/auth/register': typeof AuthAuthRegisterRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/updates/r/$updateId': typeof UpdatesRUpdateIdRoute
   '/dashboard/admin': typeof DashboardAdminAdminIndexRoute
 }
 export interface FileRoutesById {
@@ -149,6 +157,7 @@ export interface FileRoutesById {
   '/_auth/auth/login': typeof AuthAuthLoginRoute
   '/_auth/auth/register': typeof AuthAuthRegisterRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/updates/r/$updateId': typeof UpdatesRUpdateIdRoute
   '/dashboard/_admin/admin/': typeof DashboardAdminAdminIndexRoute
 }
 export interface FileRouteTypes {
@@ -166,6 +175,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/register'
     | '/api/auth/$'
+    | '/updates/r/$updateId'
     | '/dashboard/admin'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -181,6 +191,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/register'
     | '/api/auth/$'
+    | '/updates/r/$updateId'
     | '/dashboard/admin'
   id:
     | '__root__'
@@ -198,6 +209,7 @@ export interface FileRouteTypes {
     | '/_auth/auth/login'
     | '/_auth/auth/register'
     | '/api/auth/$'
+    | '/updates/r/$updateId'
     | '/dashboard/_admin/admin/'
   fileRoutesById: FileRoutesById
 }
@@ -213,6 +225,7 @@ export interface RootRouteChildren {
   SnippetsIndexRoute: typeof SnippetsIndexRoute
   UpdatesIndexRoute: typeof UpdatesIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  UpdatesRUpdateIdRoute: typeof UpdatesRUpdateIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -294,6 +307,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAdminRouteRouteImport
       parentRoute: typeof DashboardRoute
     }
+    '/updates/r/$updateId': {
+      id: '/updates/r/$updateId'
+      path: '/updates/r/$updateId'
+      fullPath: '/updates/r/$updateId'
+      preLoaderRoute: typeof UpdatesRUpdateIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -374,6 +394,7 @@ const rootRouteChildren: RootRouteChildren = {
   SnippetsIndexRoute: SnippetsIndexRoute,
   UpdatesIndexRoute: UpdatesIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  UpdatesRUpdateIdRoute: UpdatesRUpdateIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
