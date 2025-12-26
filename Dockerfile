@@ -19,12 +19,11 @@ RUN --mount=type=cache,target=/pnpm/store \
 # ------------------------------------------------
 FROM base AS builder
 
-ARG VITE_SITE_URL CD_CLOUD_NAME VITE_CLOUDINARY_URL PRIVATE_CONTENT_REPO
+ARG VITE_SITE_URL CD_CLOUD_NAME VITE_CLOUDINARY_URL
 
 ENV VITE_SITE_URL=$VITE_SITE_URL
 ENV CD_CLOUD_NAME=$CD_CLOUD_NAME
 ENV VITE_CLOUDINARY_URL=$VITE_CLOUDINARY_URL
-ENV PRIVATE_CONTENT_REPO=$PRIVATE_CONTENT_REPO
 
 COPY package.json pnpm-lock.yaml ./
 
@@ -33,7 +32,6 @@ RUN --mount=type=cache,target=/pnpm/store \
 
 COPY . .
 
-RUN pnpm run sync:content
 RUN --mount=type=secret,id=CD_API_KEY,env=CD_API_KEY \
   --mount=type=secret,id=CD_API_SECRET,env=CD_API_SECRET \
   pnpm run build
