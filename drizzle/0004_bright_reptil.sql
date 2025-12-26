@@ -1,0 +1,1 @@
+ALTER TABLE "updates" DROP COLUMN "source_path";

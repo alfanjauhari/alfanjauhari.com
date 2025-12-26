@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { PAGE_TRANSITIONS } from "@/constants";
 import { clientEnv } from "@/env/client";
 import { getSessionFn } from "@/fns/polymorphic/auth";
+import { getUpdateLikesMetadata } from "@/fns/polymorphic/likes";
 import { calculateReadingTime } from "@/lib/content";
 import { seoHead } from "@/lib/seo";
 
@@ -23,6 +24,17 @@ export const Route = createFileRoute("/updates/r/$updateId")({
     }
 
     const session = await getSessionFn();
+
+    console.log(params.updateId);
+
+    const data = await getUpdateLikesMetadata({
+      data: {
+        slug: params.updateId,
+        userId: session?.user.id,
+      },
+    });
+
+    console.log(data);
 
     return { update, authenticated: !!session };
   },
