@@ -16,6 +16,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Restore content cache
+        uses: actions/cache@v4
+        with:
+          path: content
+          key: content-${{ runner.os }}-${{ env.CONTENT_SHA }}
+
+      - name: Sync private contents
+        run: ./scripts/sync-content.sh
+
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5

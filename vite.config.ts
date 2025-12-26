@@ -10,7 +10,12 @@ import { nitro } from "nitro/vite";
 import { defineConfig } from "vite";
 import viteTsConfigPaths from "vite-tsconfig-paths";
 
-const nonPrerenderedRoutes = ["/resume.pdf", "/auth/login", "/auth/register"];
+const nonPrerenderedRoutes = [
+  "/resume.pdf",
+  "/auth/login",
+  "/auth/register",
+  "/updates/r",
+];
 
 const config = defineConfig({
   plugins: [
@@ -24,7 +29,7 @@ const config = defineConfig({
       prerender: {
         enabled: true,
         filter: ({ path }) => {
-          if (!nonPrerenderedRoutes.includes(path)) {
+          if (!nonPrerenderedRoutes.some((_path) => path.includes(_path))) {
             return true;
           }
 

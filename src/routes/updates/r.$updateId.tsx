@@ -1,17 +1,20 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
-import { allUpdates } from "content-collections";
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { allRestrictedUpdates } from "content-collections";
+import { LockIcon } from "lucide-react";
 import { motion, useScroll, useSpring } from "motion/react";
 import { ContentInteractions } from "@/components/content-interactions";
 import { MDXContent } from "@/components/mdx-content";
+import { Button } from "@/components/ui/button";
 import { PAGE_TRANSITIONS } from "@/constants";
 import { clientEnv } from "@/env/client";
+import { getSessionFn } from "@/fns/polymorphic/auth";
 import { calculateReadingTime } from "@/lib/content";
 import { seoHead } from "@/lib/seo";
 
-export const Route = createFileRoute("/updates/$updateId")({
+export const Route = createFileRoute("/updates/r/$updateId")({
   component: UpdateId,
   loader: async ({ params }) => {
-    const update = allUpdates.find(
+    const update = allRestrictedUpdates.find(
       (update) => update._meta.path === params.updateId,
     );
 
@@ -19,19 +22,21 @@ export const Route = createFileRoute("/updates/$updateId")({
       throw notFound();
     }
 
-    return update;
+    const session = await getSessionFn();
+
+    return { update, authenticated: !!session };
   },
   head: ({ loaderData, match, params }) =>
     seoHead({
-      title: loaderData?.title,
-      description: loaderData?.summary || "",
+      title: loaderData?.update?.title,
+      description: loaderData?.update?.summary || "",
       canonical: match.pathname,
-      image: `${clientEnv.VITE_CLOUDINARY_URL}/og/updates/${params.updateId}.webp`,
+      image: `${clientEnv.VITE_CLOUDINARY_URL}/og/updates/r/${params.updateId}.webp`,
     }),
 });
 
 function UpdateId() {
-  const update = Route.useLoaderData();
+  const { update, authenticated } = Route.useLoaderData();
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
@@ -56,6 +61,10 @@ function UpdateId() {
             <span>
               {calculateReadingTime(update.content)} Minute Reading Time
             </span>
+            <span className="text-foreground/30">•</span>
+            <span className="text-yellow-600 font-bold flex items-center gap-1">
+              <LockIcon className="size-2.5" /> Restricted
+            </span>
           </div>
 
           <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl leading-none mb-8 tracking-tight">
@@ -73,7 +82,21 @@ function UpdateId() {
             {update.summary}
           </p>
           <hr />
-          <MDXContent code={update.mdx} />
+          {!authenticated ? (
+            <div className="p-12 text-center rounded-lg">
+              <LockIcon className="size-12 mx-auto mb-6 opacity-50" />
+              <h2 className="font-serif text-3xl mb-4">Members Only Update</h2>
+              <p className="text-foreground/50 font-normal mb-8 max-w-md mx-auto">
+                This piece is available exclusively to members. Join to access
+                premium content, leave comments, and save your favorites.
+              </p>
+              <Button size="xl" asChild>
+                <Link to="/auth/login">Login or Join</Link>
+              </Button>
+            </div>
+          ) : (
+            <MDXContent code={update.mdx} />
+          )}
         </motion.article>
 
         <ContentInteractions />
