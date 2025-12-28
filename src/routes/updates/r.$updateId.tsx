@@ -110,7 +110,7 @@ function UpdateId() {
           )}
         </motion.article>
 
-        <ContentInteractions routeId="/updates/r/$updateId" />
+        {/*<ContentInteractions routeId="/updates/r/$updateId" />*/}
       </div>
     </motion.section>
   );

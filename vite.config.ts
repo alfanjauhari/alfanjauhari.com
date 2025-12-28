@@ -15,6 +15,8 @@ const nonPrerenderedRoutes = [
   "/auth/login",
   "/auth/register",
   "/updates/r",
+  "/dashboard",
+  "/api",
 ];
 
 const config = defineConfig({
