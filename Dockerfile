@@ -26,7 +26,7 @@ ENV CD_CLOUD_NAME=$CD_CLOUD_NAME
 ENV VITE_CLOUDINARY_URL=$VITE_CLOUDINARY_URL
 ENV BETTER_AUTH_URL=$BETTER_AUTH_URL
 
-ENV BETTER_AUTH_SECRET=XXX
+# Its required to make env chekcs happy
 ENV APP_DATABASE_URL=XXX
 ENV GOOGLE_CLIENT_ID=XXX
 ENV GOOGLE_CLIENT_SECRET=XXX
@@ -42,6 +42,7 @@ COPY . .
 
 RUN --mount=type=secret,id=CD_API_KEY,env=CD_API_KEY \
   --mount=type=secret,id=CD_API_SECRET,env=CD_API_SECRET \
+  --mount=type=secret,id=BETTER_AUTH_SECRET,env=BETTER_AUTH_SECRET \
   pnpm run build
 
 # ------------------------------------------------

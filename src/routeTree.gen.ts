@@ -8,32 +8,17 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router'
-
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UsesRouteImport } from './routes/uses'
 import { Route as AboutRouteImport } from './routes/about'
-import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UpdatesIndexRouteImport } from './routes/updates/index'
 import { Route as SnippetsIndexRouteImport } from './routes/snippets/index'
 import { Route as WorksWorkIdRouteImport } from './routes/works/$workId'
 import { Route as UpdatesUpdateIdRouteImport } from './routes/updates/$updateId'
 import { Route as SnippetsSnippetIdRouteImport } from './routes/snippets/$snippetId'
-import { Route as DashboardAdminRouteRouteImport } from './routes/dashboard/_admin/route'
 import { Route as UpdatesRUpdateIdRouteImport } from './routes/updates/r.$updateId'
-import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
-import { Route as AuthAuthRegisterRouteImport } from './routes/_auth/auth/register'
-import { Route as AuthAuthLoginRouteImport } from './routes/_auth/auth/login'
-import { Route as DashboardAdminAdminIndexRouteImport } from './routes/dashboard/_admin/admin/index'
 
-const DashboardRouteImport = createFileRoute('/dashboard')()
-
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const UsesRoute = UsesRouteImport.update({
   id: '/uses',
   path: '/uses',
@@ -42,10 +27,6 @@ const UsesRoute = UsesRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRouteRoute = AuthRouteRouteImport.update({
-  id: '/_auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -78,87 +59,45 @@ const SnippetsSnippetIdRoute = SnippetsSnippetIdRouteImport.update({
   path: '/snippets/$snippetId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardAdminRouteRoute = DashboardAdminRouteRouteImport.update({
-  id: '/_admin',
-  getParentRoute: () => DashboardRoute,
-} as any)
 const UpdatesRUpdateIdRoute = UpdatesRUpdateIdRouteImport.update({
   id: '/updates/r/$updateId',
   path: '/updates/r/$updateId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
-  id: '/api/auth/$',
-  path: '/api/auth/$',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthAuthRegisterRoute = AuthAuthRegisterRouteImport.update({
-  id: '/auth/register',
-  path: '/auth/register',
-  getParentRoute: () => AuthRouteRoute,
-} as any)
-const AuthAuthLoginRoute = AuthAuthLoginRouteImport.update({
-  id: '/auth/login',
-  path: '/auth/login',
-  getParentRoute: () => AuthRouteRoute,
-} as any)
-const DashboardAdminAdminIndexRoute =
-  DashboardAdminAdminIndexRouteImport.update({
-    id: '/admin/',
-    path: '/admin/',
-    getParentRoute: () => DashboardAdminRouteRoute,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/uses': typeof UsesRoute
-  '/dashboard': typeof DashboardAdminRouteRouteWithChildren
   '/snippets/$snippetId': typeof SnippetsSnippetIdRoute
   '/updates/$updateId': typeof UpdatesUpdateIdRoute
   '/works/$workId': typeof WorksWorkIdRoute
   '/snippets': typeof SnippetsIndexRoute
   '/updates': typeof UpdatesIndexRoute
-  '/auth/login': typeof AuthAuthLoginRoute
-  '/auth/register': typeof AuthAuthRegisterRoute
-  '/api/auth/$': typeof ApiAuthSplatRoute
   '/updates/r/$updateId': typeof UpdatesRUpdateIdRoute
-  '/dashboard/admin': typeof DashboardAdminAdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/uses': typeof UsesRoute
-  '/dashboard': typeof DashboardAdminRouteRouteWithChildren
   '/snippets/$snippetId': typeof SnippetsSnippetIdRoute
   '/updates/$updateId': typeof UpdatesUpdateIdRoute
   '/works/$workId': typeof WorksWorkIdRoute
   '/snippets': typeof SnippetsIndexRoute
   '/updates': typeof UpdatesIndexRoute
-  '/auth/login': typeof AuthAuthLoginRoute
-  '/auth/register': typeof AuthAuthRegisterRoute
-  '/api/auth/$': typeof ApiAuthSplatRoute
   '/updates/r/$updateId': typeof UpdatesRUpdateIdRoute
-  '/dashboard/admin': typeof DashboardAdminAdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/_auth': typeof AuthRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/uses': typeof UsesRoute
-  '/dashboard': typeof DashboardRouteWithChildren
-  '/dashboard/_admin': typeof DashboardAdminRouteRouteWithChildren
   '/snippets/$snippetId': typeof SnippetsSnippetIdRoute
   '/updates/$updateId': typeof UpdatesUpdateIdRoute
   '/works/$workId': typeof WorksWorkIdRoute
   '/snippets/': typeof SnippetsIndexRoute
   '/updates/': typeof UpdatesIndexRoute
-  '/_auth/auth/login': typeof AuthAuthLoginRoute
-  '/_auth/auth/register': typeof AuthAuthRegisterRoute
-  '/api/auth/$': typeof ApiAuthSplatRoute
   '/updates/r/$updateId': typeof UpdatesRUpdateIdRoute
-  '/dashboard/_admin/admin/': typeof DashboardAdminAdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -166,77 +105,50 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/uses'
-    | '/dashboard'
     | '/snippets/$snippetId'
     | '/updates/$updateId'
     | '/works/$workId'
     | '/snippets'
     | '/updates'
-    | '/auth/login'
-    | '/auth/register'
-    | '/api/auth/$'
     | '/updates/r/$updateId'
-    | '/dashboard/admin'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/uses'
-    | '/dashboard'
     | '/snippets/$snippetId'
     | '/updates/$updateId'
     | '/works/$workId'
     | '/snippets'
     | '/updates'
-    | '/auth/login'
-    | '/auth/register'
-    | '/api/auth/$'
     | '/updates/r/$updateId'
-    | '/dashboard/admin'
   id:
     | '__root__'
     | '/'
-    | '/_auth'
     | '/about'
     | '/uses'
-    | '/dashboard'
-    | '/dashboard/_admin'
     | '/snippets/$snippetId'
     | '/updates/$updateId'
     | '/works/$workId'
     | '/snippets/'
     | '/updates/'
-    | '/_auth/auth/login'
-    | '/_auth/auth/register'
-    | '/api/auth/$'
     | '/updates/r/$updateId'
-    | '/dashboard/_admin/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AuthRouteRoute: typeof AuthRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   UsesRoute: typeof UsesRoute
-  DashboardRoute: typeof DashboardRouteWithChildren
   SnippetsSnippetIdRoute: typeof SnippetsSnippetIdRoute
   UpdatesUpdateIdRoute: typeof UpdatesUpdateIdRoute
   WorksWorkIdRoute: typeof WorksWorkIdRoute
   SnippetsIndexRoute: typeof SnippetsIndexRoute
   UpdatesIndexRoute: typeof UpdatesIndexRoute
-  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   UpdatesRUpdateIdRoute: typeof UpdatesRUpdateIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/uses': {
       id: '/uses'
       path: '/uses'
@@ -249,13 +161,6 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_auth': {
-      id: '/_auth'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AuthRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -300,13 +205,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SnippetsSnippetIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard/_admin': {
-      id: '/dashboard/_admin'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardAdminRouteRouteImport
-      parentRoute: typeof DashboardRoute
-    }
     '/updates/r/$updateId': {
       id: '/updates/r/$updateId'
       path: '/updates/r/$updateId'
@@ -314,86 +212,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UpdatesRUpdateIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/auth/$': {
-      id: '/api/auth/$'
-      path: '/api/auth/$'
-      fullPath: '/api/auth/$'
-      preLoaderRoute: typeof ApiAuthSplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_auth/auth/register': {
-      id: '/_auth/auth/register'
-      path: '/auth/register'
-      fullPath: '/auth/register'
-      preLoaderRoute: typeof AuthAuthRegisterRouteImport
-      parentRoute: typeof AuthRouteRoute
-    }
-    '/_auth/auth/login': {
-      id: '/_auth/auth/login'
-      path: '/auth/login'
-      fullPath: '/auth/login'
-      preLoaderRoute: typeof AuthAuthLoginRouteImport
-      parentRoute: typeof AuthRouteRoute
-    }
-    '/dashboard/_admin/admin/': {
-      id: '/dashboard/_admin/admin/'
-      path: '/admin'
-      fullPath: '/dashboard/admin'
-      preLoaderRoute: typeof DashboardAdminAdminIndexRouteImport
-      parentRoute: typeof DashboardAdminRouteRoute
-    }
   }
 }
 
-interface AuthRouteRouteChildren {
-  AuthAuthLoginRoute: typeof AuthAuthLoginRoute
-  AuthAuthRegisterRoute: typeof AuthAuthRegisterRoute
-}
-
-const AuthRouteRouteChildren: AuthRouteRouteChildren = {
-  AuthAuthLoginRoute: AuthAuthLoginRoute,
-  AuthAuthRegisterRoute: AuthAuthRegisterRoute,
-}
-
-const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
-  AuthRouteRouteChildren,
-)
-
-interface DashboardAdminRouteRouteChildren {
-  DashboardAdminAdminIndexRoute: typeof DashboardAdminAdminIndexRoute
-}
-
-const DashboardAdminRouteRouteChildren: DashboardAdminRouteRouteChildren = {
-  DashboardAdminAdminIndexRoute: DashboardAdminAdminIndexRoute,
-}
-
-const DashboardAdminRouteRouteWithChildren =
-  DashboardAdminRouteRoute._addFileChildren(DashboardAdminRouteRouteChildren)
-
-interface DashboardRouteChildren {
-  DashboardAdminRouteRoute: typeof DashboardAdminRouteRouteWithChildren
-}
-
-const DashboardRouteChildren: DashboardRouteChildren = {
-  DashboardAdminRouteRoute: DashboardAdminRouteRouteWithChildren,
-}
-
-const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
-  DashboardRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AuthRouteRoute: AuthRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   UsesRoute: UsesRoute,
-  DashboardRoute: DashboardRouteWithChildren,
   SnippetsSnippetIdRoute: SnippetsSnippetIdRoute,
   UpdatesUpdateIdRoute: UpdatesUpdateIdRoute,
   WorksWorkIdRoute: WorksWorkIdRoute,
   SnippetsIndexRoute: SnippetsIndexRoute,
   UpdatesIndexRoute: UpdatesIndexRoute,
-  ApiAuthSplatRoute: ApiAuthSplatRoute,
   UpdatesRUpdateIdRoute: UpdatesRUpdateIdRoute,
 }
 export const routeTree = rootRouteImport

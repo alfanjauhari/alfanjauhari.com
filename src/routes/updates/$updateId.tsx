@@ -77,7 +77,7 @@ function UpdateId() {
           <MDXContent code={update.mdx} />
         </motion.article>
 
-        {/*<ContentInteractions routeId="/updates/$updateId" />*/}
+        <ContentInteractions routeId="/updates/$updateId" />
       </div>
     </motion.section>
   );
