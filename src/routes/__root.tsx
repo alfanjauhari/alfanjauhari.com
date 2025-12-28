@@ -13,6 +13,7 @@ import { AnimatePresence } from "motion/react";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { Loader } from "@/components/loader";
+import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/context/theme-context";
 import { clientEnv } from "@/env/client";
 import type { RouterContext } from "@/router-context";
@@ -117,6 +118,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
               ]}
             />
           </ThemeProvider>
+          <Toaster />
           <Scripts />
         </body>
       </html>

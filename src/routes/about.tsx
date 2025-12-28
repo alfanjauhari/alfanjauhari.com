@@ -137,7 +137,7 @@ function About() {
 
             <a
               href="/resume.pdf"
-              className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest mt-8 border-b border-ink pb-1 hover:opacity-60 transition-opacity"
+              className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest mt-8 border-b pb-1 hover:opacity-60 transition-opacity"
             >
               Download Resume <ArrowUpRightIcon className="size-3" />
             </a>

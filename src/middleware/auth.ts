@@ -11,7 +11,11 @@ export const authMiddleware = createMiddleware().server(async ({ next }) => {
     throw redirect({ to: "/auth/login" });
   }
 
-  return await next();
+  return await next({
+    context: {
+      session,
+    },
+  });
 });
 
 export const nonAuthenticatedMiddleware = createMiddleware().server(

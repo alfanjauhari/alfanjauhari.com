@@ -53,7 +53,7 @@ function UseItem({
       transition={{ delay }}
       className="group"
     >
-      <h3 className="font-serif text-2xl text-ink mb-4 group-hover:text-foreground/60 transition-colors">
+      <h3 className="font-serif text-2xl mb-4 group-hover:text-foreground/60 transition-colors">
         {title}
       </h3>
       <p className="prose prose-primary leading-relaxed">{children}</p>
@@ -78,7 +78,7 @@ function BuildItem({
       className="group md:col-span-2 border border-border p-8 rounded-sm"
     >
       <div className="mb-8">
-        <h3 className="font-serif text-3xl text-ink mb-4">{title}</h3>
+        <h3 className="font-serif text-3xl mb-4">{title}</h3>
         <p className="text-base text-foreground/60 font-normal leading-relaxed max-w-2xl">
           {description}
         </p>
@@ -93,9 +93,7 @@ function BuildItem({
             <span className="font-mono text-xxs uppercase tracking-widest text-foreground/50">
               {spec.label}
             </span>
-            <span className="font-serif text-lg text-ink text-end">
-              {spec.value}
-            </span>
+            <span className="font-serif text-lg text-end">{spec.value}</span>
           </div>
         ))}
       </div>
