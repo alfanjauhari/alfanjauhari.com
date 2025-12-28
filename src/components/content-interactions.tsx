@@ -2,6 +2,7 @@ import { useForm } from "@tanstack/react-form";
 import {
   useMutation,
   useQueryClient,
+  useSuspenseQueries,
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import {
@@ -71,9 +72,53 @@ function ContentInteractionsCountFallback() {
           <Skeleton className="h-4 w-10" />
         </div>
         <div className="flex items-center gap-2">
-          <MessageSquareIcon className="size-6" />
+          <MessageSquareIcon className="size-6 text-foreground/40" />
           <Skeleton className="h-4 w-10" />
         </div>
+      </div>
+    </div>
+  );
+}
+
+function ContentDiscussionsFallback() {
+  return (
+    <div>
+      <h3 className="font-serif text-3xl mb-8">Discussion.</h3>
+
+      <span className="block text-xxs font-mono uppercase tracking-widest text-foreground/40 mb-4">
+        Post a comment
+      </span>
+
+      <div className="relative">
+        <Textarea
+          placeholder="Add to the discussion..."
+          className="min-h-24 rounded-none mb-8"
+          disabled
+        />
+
+        <Button
+          type="submit"
+          className="absolute bottom-3 right-3 p-1.5"
+          variant="ghost"
+          size="icon"
+          disabled
+        >
+          <SendIcon className="size-3.5" />
+        </Button>
+      </div>
+
+      <div className="space-y-10">
+        {Array.from({ length: 4 }).map((_, i) => (
+          // biome-ignore lint/suspicious/noArrayIndexKey: Only for static data
+          <div className="border border-border p-4" key={i}>
+            <div className="flex items-center justify-between">
+              <Skeleton className="h-4 w-24" />
+              <Skeleton className="h-4 w-18" />
+            </div>
+            <Skeleton className="h-12 w-full my-2" />
+            <Skeleton className="h-4 w-18" />
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -87,9 +132,17 @@ function ContentInteractionsCount() {
   });
   const navigate = useNavigate();
 
-  const { data } = useSuspenseQuery(
-    getUpdateLikesMetadataQueryOptions(match.params.updateId),
-  );
+  const [
+    { data },
+    {
+      data: { count: commentCount },
+    },
+  ] = useSuspenseQueries({
+    queries: [
+      getUpdateLikesMetadataQueryOptions(match.params.updateId),
+      getUpdateCommentsQueryOptions(match.params.updateId),
+    ],
+  });
 
   const queryClient = useQueryClient();
 
@@ -187,7 +240,7 @@ function ContentInteractionsCount() {
         </button>
         <div className="flex items-center gap-2 text-foreground/40">
           <MessageSquareIcon className="size-6" />
-          <span className="text-xs font-mono font-bold">1000</span>
+          <span className="text-xs font-mono font-bold">{commentCount}</span>
         </div>
       </div>
     </div>
@@ -613,7 +666,7 @@ export function ContentInteractions({
           <ContentInteractionsCount />
         </Suspense>
 
-        <Suspense fallback="Loading...">
+        <Suspense fallback={<ContentDiscussionsFallback />}>
           <ContentDiscussions />
         </Suspense>
       </div>
