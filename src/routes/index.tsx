@@ -13,6 +13,7 @@ import { PAGE_TRANSITIONS } from "@/constants";
 import { clientEnv } from "@/env/client";
 import { calculateReadingTime } from "@/lib/content";
 import { seoHead } from "@/lib/seo";
+import { formatDate } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -265,7 +266,7 @@ function Home() {
                   </div>
                   <div className="md:w-1/4 md:text-right flex flex-row md:flex-col gap-4 md:gap-0 items-center md:items-end">
                     <span className="font-mono text-xs text-foreground/50 uppercase tracking-widest mb-2">
-                      {new Intl.DateTimeFormat("id-ID").format(update.date)}
+                      {formatDate(update.date)}
                     </span>
                     <span className="font-mono text-xxs text-foreground/50 uppercase tracking-widest">
                       {calculateReadingTime(update.content)} Minute Reading Time

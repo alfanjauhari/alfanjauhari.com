@@ -2,6 +2,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { LockIcon } from "lucide-react";
 import { getUpdatesQueryOptions } from "@/fns/polymorphic/updates";
+import { formatDate } from "@/lib/utils";
 
 export function UpdatesList() {
   const { data } = useSuspenseQuery(getUpdatesQueryOptions);
@@ -23,9 +24,7 @@ export function UpdatesList() {
                 <div className="font-serif text-2xl">{update.title}</div>
               </div>
               <div className="flex gap-4 text-xs font-mono text-gray-400">
-                <span>
-                  {new Intl.DateTimeFormat("id-ID").format(update.date)}
-                </span>
+                <span>{formatDate(update.date)}</span>
                 <span>•</span>
                 <span>{update.tag}</span>
                 {update.restricted && (

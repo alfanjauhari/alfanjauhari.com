@@ -8,13 +8,15 @@ import { Button } from "@/components/ui/button";
 import { PAGE_TRANSITIONS } from "@/constants";
 import { clientEnv } from "@/env/client";
 import { getSessionFn } from "@/fns/polymorphic/auth";
-import { getUpdateLikesMetadata } from "@/fns/polymorphic/likes";
+import { getUpdateCommentsQueryOptions } from "@/fns/polymorphic/comments";
+import { getUpdateLikesMetadataQueryOptions } from "@/fns/polymorphic/likes";
 import { calculateReadingTime } from "@/lib/content";
 import { seoHead } from "@/lib/seo";
+import { formatDate } from "@/lib/utils";
 
 export const Route = createFileRoute("/updates/r/$updateId")({
   component: UpdateId,
-  loader: async ({ params }) => {
+  loader: async ({ params, context }) => {
     const update = allRestrictedUpdates.find(
       (update) => update._meta.path === params.updateId,
     );
@@ -25,18 +27,15 @@ export const Route = createFileRoute("/updates/r/$updateId")({
 
     const session = await getSessionFn();
 
-    console.log(params.updateId);
+    // Deferred queries
+    context.queryClient.prefetchQuery(
+      getUpdateLikesMetadataQueryOptions(params.updateId),
+    );
+    context.queryClient.prefetchQuery(
+      getUpdateCommentsQueryOptions(params.updateId),
+    );
 
-    const data = await getUpdateLikesMetadata({
-      data: {
-        slug: params.updateId,
-        userId: session?.user.id,
-      },
-    });
-
-    console.log(data);
-
-    return { update, authenticated: !!session };
+    return { update, userId: session?.user.id };
   },
   head: ({ loaderData, match, params }) =>
     seoHead({
@@ -48,7 +47,7 @@ export const Route = createFileRoute("/updates/r/$updateId")({
 });
 
 function UpdateId() {
-  const { update, authenticated } = Route.useLoaderData();
+  const { update, userId } = Route.useLoaderData();
 
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
@@ -66,7 +65,7 @@ function UpdateId() {
       <div className="max-w-3xl mx-auto">
         <header className="text-center mb-20">
           <div className="flex flex-wrap justify-center gap-4 text-xxs font-mono uppercase tracking-[0.2em] text-foreground/40 mb-8">
-            <span>{new Intl.DateTimeFormat("id-ID").format(update.date)}</span>
+            <span>{formatDate(update.date)}</span>
             <span className="text-foreground/30">•</span>
             <span>{update.tag}</span>
             <span className="text-foreground/30">•</span>
@@ -94,8 +93,8 @@ function UpdateId() {
             {update.summary}
           </p>
           <hr />
-          {!authenticated ? (
-            <div className="p-12 text-center rounded-lg">
+          {!userId ? (
+            <div className="p-12 text-center rounded-lg not-prose">
               <LockIcon className="size-12 mx-auto mb-6 opacity-50" />
               <h2 className="font-serif text-3xl mb-4">Members Only Update</h2>
               <p className="text-foreground/50 font-normal mb-8 max-w-md mx-auto">
@@ -111,7 +110,7 @@ function UpdateId() {
           )}
         </motion.article>
 
-        <ContentInteractions />
+        <ContentInteractions routeId="/updates/r/$updateId" />
       </div>
     </motion.section>
   );

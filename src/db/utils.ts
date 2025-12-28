@@ -12,8 +12,8 @@ export interface BaseTableColumns {
   id: HasDefault<
     IsPrimaryKey<NotNull<t.PgTextBuilderInitial<"id", [string, ...string[]]>>>
   >;
-  createdAt: HasDefault<t.PgTimestampBuilderInitial<"created_at">>;
-  updatedAt: HasDefault<t.PgTimestampBuilderInitial<"updated_at">>;
+  createdAt: HasDefault<NotNull<t.PgTimestampBuilderInitial<"created_at">>>;
+  updatedAt: HasDefault<NotNull<t.PgTimestampBuilderInitial<"updated_at">>>;
 }
 
 export const buildSchemas = <
@@ -31,8 +31,8 @@ export const buildSchemas = <
     (t) => ({
       id: t.text("id").primaryKey().default(sql`generate_nanoid()`),
       ...schema(t),
-      createdAt: t.timestamp("created_at").default(sql`now()`),
-      updatedAt: t.timestamp("updated_at").default(sql`now()`),
+      createdAt: t.timestamp("created_at").default(sql`now()`).notNull(),
+      updatedAt: t.timestamp("updated_at").default(sql`now()`).notNull(),
     }),
     extraConfig,
   );

@@ -7,6 +7,7 @@ import { PAGE_TRANSITIONS } from "@/constants";
 import { clientEnv } from "@/env/client";
 import { calculateReadingTime } from "@/lib/content";
 import { seoHead } from "@/lib/seo";
+import { formatDate } from "@/lib/utils";
 
 export const Route = createFileRoute("/updates/$updateId")({
   component: UpdateId,
@@ -49,7 +50,7 @@ function UpdateId() {
       <div className="max-w-3xl mx-auto">
         <header className="text-center mb-20">
           <div className="flex flex-wrap justify-center gap-4 text-xxs font-mono uppercase tracking-[0.2em] text-foreground/40 mb-8">
-            <span>{new Intl.DateTimeFormat("id-ID").format(update.date)}</span>
+            <span>{formatDate(update.date)}</span>
             <span className="text-foreground/30">•</span>
             <span>{update.tag}</span>
             <span className="text-foreground/30">•</span>
@@ -76,7 +77,7 @@ function UpdateId() {
           <MDXContent code={update.mdx} />
         </motion.article>
 
-        <ContentInteractions />
+        <ContentInteractions routeId="/updates/$updateId" />
       </div>
     </motion.section>
   );

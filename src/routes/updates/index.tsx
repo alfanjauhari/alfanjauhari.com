@@ -7,6 +7,7 @@ import { clientEnv } from "@/env/client";
 import { calculateReadingTime } from "@/lib/content";
 import { omit } from "@/lib/object";
 import { seoHead } from "@/lib/seo";
+import { formatDate } from "@/lib/utils";
 
 export const Route = createFileRoute("/updates/")({
   component: Updates,
@@ -69,26 +70,22 @@ function Updates() {
                 <h3 className="font-serif text-4xl md:text-6xl group-hover:opacity-70 transition-opacity duration-300 max-w-4xl">
                   {update.title}
                 </h3>
-                <ArrowUpRightIcon className="opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-2 group-hover:-translate-y-2 size-12" />
+                <ArrowUpRightIcon className="opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-2 group-hover:-translate-y-2 size-12 hidden lg:block" />
               </div>
-              <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8 mt-6 mb-8">
-                <div className="flex gap-4 text-xs font-mono uppercase tracking-widest text-foreground/50">
-                  <span>
-                    {new Intl.DateTimeFormat("id-ID").format(update.date)}
-                  </span>
-                  <span className="text-foreground/30">/</span>
-                  <span>{update.tag}</span>
-                  <span className="text-foreground/30">/</span>
-                  <span>{update.readingTime} Minute Reading Time</span>
-                  {update.restricted && (
-                    <>
-                      <span className="text-foreground/30">/</span>
-                      <span className="text-yellow-600 font-bold flex items-center gap-1">
-                        <LockIcon className="size-2.5" /> Restricted
-                      </span>
-                    </>
-                  )}
-                </div>
+              <div className="flex gap-4 md:gap-8 mt-6 mb-8 text-xs font-mono uppercase tracking-widest text-foreground/50 flex-wrap">
+                <span>{formatDate(update.date)}</span>
+                <span className="text-foreground/30">/</span>
+                <span>{update.tag}</span>
+                <span className="text-foreground/30">/</span>
+                <span>{update.readingTime} Minute Reading Time</span>
+                {update.restricted && (
+                  <>
+                    <span className="text-foreground/30">/</span>
+                    <span className="text-yellow-600 font-bold flex items-center gap-1">
+                      <LockIcon className="size-2.5" /> Restricted
+                    </span>
+                  </>
+                )}
               </div>
               <p className="text-foreground/60 font-normal max-w-2xl leading-relaxed">
                 {update.summary}

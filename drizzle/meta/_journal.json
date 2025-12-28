@@ -36,6 +36,34 @@
       "when": 1766763676110,
       "tag": "0004_bright_reptil",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1766850355516,
+      "tag": "0005_steep_karen_page",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1766882414273,
+      "tag": "0006_ordinary_amazoness",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1766890245752,
+      "tag": "0007_colorful_junta",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1766907867418,
+      "tag": "0008_overconfident_yellow_claw",
+      "breakpoints": true
     }
   ]
 }

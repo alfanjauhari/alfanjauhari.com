@@ -8,8 +8,6 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router'
-
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UsesRouteImport } from './routes/uses'
 import { Route as AboutRouteImport } from './routes/about'
@@ -27,13 +25,6 @@ import { Route as AuthAuthRegisterRouteImport } from './routes/_auth/auth/regist
 import { Route as AuthAuthLoginRouteImport } from './routes/_auth/auth/login'
 import { Route as DashboardAdminAdminIndexRouteImport } from './routes/dashboard/_admin/admin/index'
 
-const DashboardRouteImport = createFileRoute('/dashboard')()
-
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const UsesRoute = UsesRouteImport.update({
   id: '/uses',
   path: '/uses',
@@ -79,8 +70,9 @@ const SnippetsSnippetIdRoute = SnippetsSnippetIdRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardAdminRouteRoute = DashboardAdminRouteRouteImport.update({
-  id: '/_admin',
-  getParentRoute: () => DashboardRoute,
+  id: '/dashboard/_admin',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const UpdatesRUpdateIdRoute = UpdatesRUpdateIdRouteImport.update({
   id: '/updates/r/$updateId',
@@ -147,7 +139,6 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/uses': typeof UsesRoute
-  '/dashboard': typeof DashboardRouteWithChildren
   '/dashboard/_admin': typeof DashboardAdminRouteRouteWithChildren
   '/snippets/$snippetId': typeof SnippetsSnippetIdRoute
   '/updates/$updateId': typeof UpdatesUpdateIdRoute
@@ -199,7 +190,6 @@ export interface FileRouteTypes {
     | '/_auth'
     | '/about'
     | '/uses'
-    | '/dashboard'
     | '/dashboard/_admin'
     | '/snippets/$snippetId'
     | '/updates/$updateId'
@@ -218,7 +208,7 @@ export interface RootRouteChildren {
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   UsesRoute: typeof UsesRoute
-  DashboardRoute: typeof DashboardRouteWithChildren
+  DashboardAdminRouteRoute: typeof DashboardAdminRouteRouteWithChildren
   SnippetsSnippetIdRoute: typeof SnippetsSnippetIdRoute
   UpdatesUpdateIdRoute: typeof UpdatesUpdateIdRoute
   WorksWorkIdRoute: typeof WorksWorkIdRoute
@@ -230,13 +220,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/uses': {
       id: '/uses'
       path: '/uses'
@@ -305,7 +288,7 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardAdminRouteRouteImport
-      parentRoute: typeof DashboardRoute
+      parentRoute: typeof rootRouteImport
     }
     '/updates/r/$updateId': {
       id: '/updates/r/$updateId'
@@ -370,24 +353,12 @@ const DashboardAdminRouteRouteChildren: DashboardAdminRouteRouteChildren = {
 const DashboardAdminRouteRouteWithChildren =
   DashboardAdminRouteRoute._addFileChildren(DashboardAdminRouteRouteChildren)
 
-interface DashboardRouteChildren {
-  DashboardAdminRouteRoute: typeof DashboardAdminRouteRouteWithChildren
-}
-
-const DashboardRouteChildren: DashboardRouteChildren = {
-  DashboardAdminRouteRoute: DashboardAdminRouteRouteWithChildren,
-}
-
-const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
-  DashboardRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   UsesRoute: UsesRoute,
-  DashboardRoute: DashboardRouteWithChildren,
+  DashboardAdminRouteRoute: DashboardAdminRouteRouteWithChildren,
   SnippetsSnippetIdRoute: SnippetsSnippetIdRoute,
   UpdatesUpdateIdRoute: UpdatesUpdateIdRoute,
   WorksWorkIdRoute: WorksWorkIdRoute,
