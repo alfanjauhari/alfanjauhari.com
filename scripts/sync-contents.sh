@@ -1,6 +1,6 @@
 #!/bin/sh
 
-PRIVATE_CONTENT_DIR="content/privates"
+PRIVATE_CONTENT_DIR=${PRIVATE_CONTENT_DIR:-content/privates}
 PRIVATE_CONTENT_BRANCH="${PRIVATE_CONTENT_BRANCH:-main}"
 PRIVATE_CONTENT_REPO="${PRIVATE_CONTENT_REPO:?PRIVATE_CONTENT_REPO required}"
 
@@ -32,5 +32,5 @@ if [ "${GITHUB_ACTIONS:-}" = "true" ]; then
 fi
 
 echo "Syncing metadata to Postgres"
-tsx scripts/sync-contents-db.ts
+node scripts/sync-contents-db.cjs
 echo "Metadata sync done"

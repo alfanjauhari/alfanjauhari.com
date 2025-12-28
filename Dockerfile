@@ -26,7 +26,7 @@ ENV CD_CLOUD_NAME=$CD_CLOUD_NAME
 ENV VITE_CLOUDINARY_URL=$VITE_CLOUDINARY_URL
 ENV BETTER_AUTH_URL=$BETTER_AUTH_URL
 
-# Its required to make env chekcs happy
+# Its required to make env checks happy
 ENV APP_DATABASE_URL=XXX
 ENV GOOGLE_CLIENT_ID=XXX
 ENV GOOGLE_CLIENT_SECRET=XXX
@@ -43,17 +43,25 @@ COPY . .
 RUN --mount=type=secret,id=CD_API_KEY,env=CD_API_KEY \
   --mount=type=secret,id=CD_API_SECRET,env=CD_API_SECRET \
   --mount=type=secret,id=BETTER_AUTH_SECRET,env=BETTER_AUTH_SECRET \
-  pnpm run build
+  pnpm vite build
+
+RUN pnpm run build:scripts
 
 # ------------------------------------------------
 FROM base AS runner
 
+RUN apk add git
+
 COPY --from=deps --chown=nonroot:nonroot /app/node_modules ./node_modules
 COPY --from=builder --chown=nonroot:nonroot /app/.output ./.output
+COPY --from=builder --chown=nonroot:nonroot /app/scripts ./scripts
+COPY entrypoint.sh /entrypoint.sh
 
 WORKDIR /app/.output
+
+RUN chmod +x /entrypoint.sh
 
 USER nonroot:nonroot
 
 EXPOSE 3000
-CMD ["server/index.mjs"]
+ENTRYPOINT ["/entrypoint.sh"]
