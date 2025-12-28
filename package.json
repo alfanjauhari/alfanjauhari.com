@@ -9,6 +9,7 @@
     "build:content": "content-collections build",
     "build:og": "tsx ./scripts/generate-og.tsx",
     "sync:content": "./scripts/sync-contents.sh",
+    "sync:content-db": "tsx -r dotenv/config ./scripts/sync-contents-db.ts",
     "upload": "tsx ./scripts/upload-assets.ts",
     "serve": "vite preview",
     "test": "vitest run",

@@ -23,7 +23,9 @@ jobs:
           key: content-${{ runner.os }}-${{ env.CONTENT_SHA }}
 
       - name: Sync private contents
-        run: ./scripts/sync-content.sh
+        run: ./scripts/sync-contents.sh
+        env:
+          PRIVATE_CONTENT_REPO: ${{ vars.PRIVATE_CONTENT_REPO }}
 
       - name: Docker meta
         id: meta
