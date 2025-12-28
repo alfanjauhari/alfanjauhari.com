@@ -1,5 +1,4 @@
 #!/bin/sh
-set -euo pipefail
 
 PRIVATE_CONTENT_DIR="content/privates"
 PRIVATE_CONTENT_BRANCH="${PRIVATE_CONTENT_BRANCH:-main}"
@@ -25,6 +24,11 @@ echo "Content synced at $CONTENT_SHA"
 # export for CI
 if [ -n "${GITHUB_ENV:-}" ]; then
   echo "CONTENT_SHA=$CONTENT_SHA" >> "$GITHUB_ENV"
+fi
+
+if [ "${GITHUB_ACTIONS:-}" = "true" ]; then
+  echo "Skipping DB sync on GitHub Actions"
+  exit 0
 fi
 
 echo "Syncing metadata to Postgres"
