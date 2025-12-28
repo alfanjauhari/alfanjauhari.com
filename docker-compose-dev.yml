@@ -8,9 +8,11 @@ services:
         VITE_SITE_URL: $VITE_SITE_URL
         CD_CLOUD_NAME: $CD_CLOUD_NAME
         VITE_CLOUDINARY_URL: $VITE_CLOUDINARY_URL
+        BETTER_AUTH_URL: $BETTER_AUTH_URL
       secrets:
         - CD_API_KEY
         - CD_API_SECRET
+        - BETTER_AUTH_SECRET
     ports:
       - 3000:3000
     volumes:
@@ -102,3 +104,5 @@ secrets:
     environment: CD_API_KEY
   CD_API_SECRET:
     environment: CD_API_SECRET
+  BETTER_AUTH_SECRET:
+    environment: BETTER_AUTH_SECRET

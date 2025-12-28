@@ -64,6 +64,7 @@ jobs:
           secrets: |
             CD_API_KEY=${{ secrets.CD_API_KEY }}
             CD_API_SECRET=${{ secrets.CD_API_SECRET }}
+            BETTER_AUTH_SECRET=${{ secrets.BETTER_AUTH_SECRET }}
           context: .
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
