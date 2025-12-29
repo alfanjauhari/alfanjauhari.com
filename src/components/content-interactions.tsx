@@ -11,10 +11,10 @@ import {
   useMatch,
   useNavigate,
 } from "@tanstack/react-router";
-import type { InferSelectModel } from "drizzle-orm";
 import {
   HeartIcon,
   MessageSquareIcon,
+  Reply,
   ReplyIcon,
   SendIcon,
   XIcon,
@@ -28,8 +28,6 @@ import {
 } from "react";
 import { toast } from "sonner";
 import z from "zod";
-import type { commentsTable } from "@/db/schemas/comments";
-import type { usersTable } from "@/db/schemas/users";
 import {
   addCommentToUpdateMutationOptions,
   getUpdateCommentsQueryOptions,
@@ -38,6 +36,7 @@ import {
   getUpdateLikesMetadataQueryOptions,
   likeUpdateFn,
 } from "@/fns/polymorphic/likes";
+import { type CommentWithReplies, commentsTree } from "@/lib/content";
 import { cn, formatDate } from "@/lib/utils";
 import { Route } from "@/routes/__root";
 import { Button } from "./ui/button";
@@ -107,7 +106,7 @@ function ContentDiscussionsFallback() {
         </Button>
       </div>
 
-      <div className="space-y-10">
+      <div className="space-y-6">
         {Array.from({ length: 4 }).map((_, i) => (
           // biome-ignore lint/suspicious/noArrayIndexKey: Only for static data
           <div className="border border-border p-4" key={i}>
@@ -247,37 +246,6 @@ function ContentInteractionsCount() {
   );
 }
 
-type Comment = InferSelectModel<typeof commentsTable> & {
-  user: InferSelectModel<typeof usersTable>;
-};
-
-type CommentWithReplies = Comment & {
-  replies: CommentWithReplies[];
-  depth: number;
-};
-
-const commentsTree = (comments: Comment[]): CommentWithReplies[] => {
-  const map = new Map<string | null, Comment[]>();
-
-  for (const c of comments) {
-    const key = c.parentId ?? null;
-
-    if (!map.has(key)) map.set(key, []);
-
-    // biome-ignore lint/style/noNonNullAssertion: Already checked above
-    map.get(key)!.push(c);
-  }
-
-  const walk = (parentId: string | null, depth = 1): CommentWithReplies[] =>
-    (map.get(parentId) ?? []).map((c) => ({
-      ...c,
-      depth,
-      replies: walk(c.id, depth + 1),
-    }));
-
-  return walk(null);
-};
-
 const ReplySchema = z.object({
   slug: z.string(),
   parentId: z.nanoid(),
@@ -343,18 +311,25 @@ function ContentComment({
   return (
     <div
       key={comment.id}
-      className={cn("border border-border p-4", {
-        "pl-4 py-0 pr-0 border-r-0 border-y-0 border-l border-l-foreground/30":
-          comment.parentId,
+      id={`comment-${comment.id}`}
+      className={cn("border border-border p-4 target:outline scroll-mt-32", {
+        "p-4 border-r-0 border-y-0 border-l border-l-foreground/30":
+          comment.rootId,
       })}
     >
       <div className="flex justify-between items-baseline mb-2">
         <div className="flex items-center gap-2">
           <span className="font-bold text-sm">{comment.user.name}</span>
-          {comment.status === "pending" && (
-            <span className="text-xxs uppercase tracking-widest px-1.5 py-0.5 rounded font-mono bg-yellow-500">
-              Pending
-            </span>
+          {comment.parent?.user && (
+            <a
+              href={`#comment-${comment.parentId}`}
+              className="text-foreground/50 flex items-center gap-2"
+            >
+              <Reply className="size-3 rotate-180" />
+              <span className="uppercase font-mono text-xxs">
+                Replied to {comment.parent.user.name}
+              </span>
+            </a>
           )}
         </div>
         <span className="text-xxs text-foreground/40 font-mono uppercase tracking-widest">
@@ -366,7 +341,7 @@ function ContentComment({
       <div className="mt-2 flex gap-4">
         <Button
           onClick={() => {
-            if (comment.status !== "approved") return;
+            if (comment.status !== "published") return;
 
             if (userId) {
               return setReplyingTo((prevState) =>
@@ -388,7 +363,7 @@ function ContentComment({
           variant="ghost"
           size="sm"
           className="text-foreground/40 p-0! h-auto hover:bg-transparent"
-          disabled={comment.status !== "approved"}
+          disabled={comment.status !== "published"}
         >
           {replyingTo === comment.id ? (
             <XIcon className="size-3" />
@@ -635,7 +610,7 @@ function ContentDiscussions() {
       )}
 
       {/* Comment List */}
-      <div className="space-y-10 mb-12">
+      <div className="space-y-6 mb-12">
         {comments.length > 0 ? (
           commentsTree(comments).map((comment) => (
             <ContentComment

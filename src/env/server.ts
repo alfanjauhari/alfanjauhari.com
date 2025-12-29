@@ -11,6 +11,8 @@ export const serverEnv = createEnv({
     GOOGLE_CLIENT_SECRET: z.string(),
     GITHUB_CLIENT_ID: z.string(),
     GITHUB_CLIENT_SECRET: z.string(),
+
+    ADMIN_EMAIL: z.string().transform((email) => email.split(",")),
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,

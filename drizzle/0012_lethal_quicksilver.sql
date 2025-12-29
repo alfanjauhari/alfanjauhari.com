@@ -1,0 +1,2 @@
+ALTER TABLE "comments" ADD COLUMN "root_id" varchar(255);--> statement-breakpoint
+ALTER TABLE "comments" ADD CONSTRAINT "comments_root_id_comments_id_fk" FOREIGN KEY ("root_id") REFERENCES "public"."comments"("id") ON DELETE no action ON UPDATE no action;
