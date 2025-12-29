@@ -16,13 +16,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          submodules: recursive
+          submodules: false
 
       - name: Restore content cache
         uses: actions/cache@v4
         with:
           path: content
           key: content-${{ runner.os }}-${{ env.CONTENT_SHA }}
+
+      - name: Setup SSH for private content repo
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.PRIVATE_CONTENT_REPO_SSH }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      - name: Init and update submodules
+        run: |
+          git submodule sync
+          git submodule update --init --recursive
 
       - name: Docker meta
         id: meta
