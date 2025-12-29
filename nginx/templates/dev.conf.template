@@ -16,6 +16,13 @@ server {
     add_header Content-Type text/plain;
   }
 
+  location /assets/ {
+    proxy_pass http://${APP_UPSTREAM};
+
+    include /etc/nginx/snippets/headers.conf;
+    include /etc/nginx/snippets/cache-static.conf;
+  }
+
   location / {
     proxy_pass http://${APP_UPSTREAM};
 
