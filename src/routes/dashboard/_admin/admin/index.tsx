@@ -1,12 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Suspense } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getAllCommentsQueryOptions } from "@/fns/polymorphic/comments";
 import { getUpdatesQueryOptions } from "@/fns/polymorphic/updates";
+import { CommentsList } from "./-comments-list";
+import { ListFeedback } from "./-list-fallback";
 import { UpdatesList } from "./-updates-list";
 
 export const Route = createFileRoute("/dashboard/_admin/admin/")({
   component: RouteComponent,
   loader: ({ context }) => {
     context.queryClient.prefetchQuery(getUpdatesQueryOptions);
+    context.queryClient.prefetchQuery(getAllCommentsQueryOptions);
   },
 });
 
@@ -14,6 +19,10 @@ const TABS = [
   {
     label: "Updates",
     value: "updates",
+  },
+  {
+    label: "Comments",
+    value: "comments",
   },
 ];
 
@@ -39,7 +48,14 @@ function RouteComponent() {
           ))}
         </TabsList>
         <TabsContent value="updates" className="py-12">
-          <UpdatesList />
+          <Suspense fallback={<ListFeedback />}>
+            <UpdatesList />
+          </Suspense>
+        </TabsContent>
+        <TabsContent value="comments" className="py-12">
+          <Suspense fallback={<ListFeedback />}>
+            <CommentsList />
+          </Suspense>
         </TabsContent>
         <TabsContent value="password">Change your password here.</TabsContent>
       </Tabs>

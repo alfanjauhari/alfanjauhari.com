@@ -1,15 +1,64 @@
 import { mutationOptions, queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
-import { and, desc, eq, getTableColumns, inArray, or, sql } from "drizzle-orm";
+import {
+  and,
+  desc,
+  eq,
+  getTableColumns,
+  type InferSelectModel,
+  inArray,
+  or,
+  type SQL,
+  sql,
+} from "drizzle-orm";
+import { alias } from "drizzle-orm/pg-core";
 import z from "zod";
 import { client } from "@/db/client";
 import { commentsTable } from "@/db/schemas/comments";
 import { updatesTable } from "@/db/schemas/updates";
 import { usersTable } from "@/db/schemas/users";
 import { withPagination } from "@/lib/queries.server";
-import { authMiddleware } from "@/middleware/auth";
+import { adminMiddleware, authMiddleware } from "@/middleware/auth";
 import { getSessionFn } from "./auth";
 import { LikeFnsSchema } from "./likes";
+
+const parent = alias(commentsTable, "parent");
+const parentUser = alias(usersTable, "parent_user");
+
+export const getAllCommentsFn = createServerFn()
+  .middleware([adminMiddleware])
+  .handler(async () => {
+    const comments = await client
+      .select({
+        ...getTableColumns(commentsTable),
+        user: usersTable,
+        parent: {
+          ...getTableColumns(parent),
+          user: getTableColumns(parentUser) as unknown as SQL<InferSelectModel<
+            typeof usersTable
+          > | null>,
+        },
+        update: updatesTable,
+      })
+      .from(commentsTable)
+      .innerJoin(
+        updatesTable,
+        and(
+          eq(commentsTable.refTable, "updates"),
+          eq(commentsTable.refId, updatesTable.id),
+        ),
+      )
+      .innerJoin(usersTable, eq(commentsTable.userId, usersTable.id))
+      .leftJoin(parent, eq(commentsTable.parentId, parent.id))
+      .leftJoin(parentUser, eq(parent.userId, parentUser.id));
+
+    return comments;
+  });
+
+export const getAllCommentsQueryOptions = queryOptions({
+  queryKey: ["comments"],
+  queryFn: getAllCommentsFn,
+});
 
 export const getUpdateCommentsFn = createServerFn()
   .inputValidator(LikeFnsSchema)
@@ -20,6 +69,12 @@ export const getUpdateCommentsFn = createServerFn()
       .select({
         ...getTableColumns(commentsTable),
         user: usersTable,
+        parent: {
+          ...getTableColumns(parent),
+          user: getTableColumns(parentUser) as unknown as SQL<InferSelectModel<
+            typeof usersTable
+          > | null>,
+        },
       })
       .from(updatesTable)
       .innerJoin(
@@ -30,22 +85,19 @@ export const getUpdateCommentsFn = createServerFn()
         ),
       )
       .innerJoin(usersTable, eq(commentsTable.userId, usersTable.id))
+      .leftJoin(parent, eq(commentsTable.parentId, parent.id))
+      .leftJoin(parentUser, eq(parent.userId, parentUser.id))
       .where(
         or(
           and(
             eq(updatesTable.slug, data.slug),
-            eq(commentsTable.status, "approved"),
+            eq(commentsTable.status, "published"),
           ),
           session
             ? and(
                 eq(updatesTable.slug, data.slug),
                 eq(commentsTable.userId, session.user.id),
-                inArray(commentsTable.status, [
-                  "approved",
-                  "deleted",
-                  "pending",
-                  "deleted_by_admin",
-                ]),
+                inArray(commentsTable.status, ["deleted", "deleted_by_admin"]),
               )
             : undefined,
         ),
@@ -54,7 +106,6 @@ export const getUpdateCommentsFn = createServerFn()
 
     const { countQuery, dataQuery } = withPagination(commentsQuery, [
       desc(commentsTable.createdAt),
-      sql`${commentsTable.parentId} NULLS FIRST`,
     ]);
 
     const comments = await dataQuery();
@@ -108,7 +159,7 @@ export const addCommentToUpdate = createServerFn({ method: "POST" })
           refTable: "updates",
           refId: sql`(select * from ${updateSq})`,
           userId: session.user.id,
-          status: "pending",
+          status: "published",
         })
         .returning({
           id: commentsTable.id,

@@ -3,9 +3,7 @@ import { buildSchemas } from "../utils";
 import { usersTable } from "./users";
 
 export const commentStatus = pgEnum("comment_status_enum", [
-  "pending",
-  "approved",
-  "rejected",
+  "published",
   "deleted",
   "deleted_by_admin",
 ]);
@@ -22,12 +20,18 @@ export const commentsTable = buildSchemas(
     content: t.text("content").notNull(),
     status: commentStatus("status").notNull(),
     parentId: t.varchar("parent_id", { length: 255 }),
+    rootId: t.varchar("root_id", { length: 255 }),
   }),
   (table) => [
     foreignKey({
       columns: [table.parentId],
       foreignColumns: [table.id],
       name: "comments_parent_id_comments_id_fk",
+    }),
+    foreignKey({
+      columns: [table.rootId],
+      foreignColumns: [table.id],
+      name: "comments_root_id_comments_id_fk",
     }),
   ],
 );

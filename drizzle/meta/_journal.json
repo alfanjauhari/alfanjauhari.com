@@ -71,6 +71,27 @@
       "when": 1766977403614,
       "tag": "0009_wise_nightshade",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1766994479313,
+      "tag": "0010_open_talisman",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1766995826156,
+      "tag": "0011_dry_tana_nile",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1767006319406,
+      "tag": "0012_lethal_quicksilver",
+      "breakpoints": true
     }
   ]
 }

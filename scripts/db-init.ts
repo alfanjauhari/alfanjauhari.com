@@ -37,16 +37,17 @@ async function main() {
       slug: update._meta.path,
       summary: update.summary,
       date: update.date.toISOString(),
+      restricted: update.restricted,
     }));
 
   const sqlChunks = [
-    sql`INSERT INTO updates (title, slug, summary, date) VALUES`,
+    sql`INSERT INTO updates (title, slug, summary, date, restricted) VALUES`,
     ...updates.map((update, index, self) =>
       index === self.length - 1
-        ? sql`(${update.title}, ${update.slug}, ${update.summary}, ${update.date}) `
-        : sql`(${update.title}, ${update.slug}, ${update.summary}, ${update.date}),`,
+        ? sql`(${update.title}, ${update.slug}, ${update.summary}, ${update.date}, ${update.restricted})`
+        : sql`(${update.title}, ${update.slug}, ${update.summary}, ${update.date}, ${update.restricted})`,
     ),
-    sql`ON CONFLICT (slug) DO UPDATE SET title = EXCLUDED.title, slug = EXCLUDED.slug, summary = EXCLUDED.summary, date = EXCLUDED.date`,
+    sql`ON CONFLICT (slug) DO UPDATE SET title = EXCLUDED.title, slug = EXCLUDED.slug, summary = EXCLUDED.summary, date = EXCLUDED.date, restricted = EXCLUDED.restricted`,
   ];
 
   await client.execute(sql.join(sqlChunks));

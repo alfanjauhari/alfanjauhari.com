@@ -5,4 +5,5 @@ export const updatesTable = buildSchemas("updates", (t) => ({
   slug: t.varchar("slug", { length: 255 }).unique().notNull(),
   summary: t.text("summary").notNull(),
   date: t.timestamp("date").notNull(),
+  restricted: t.boolean("restricted"),
 }));
