@@ -2,7 +2,7 @@
 set -e
 
 echo "Running Content sync..."
-sh /app/scripts/sync-contents.sh
+node /app/scripts/sync-contents-db.cjs
 
 echo "Starting server..."
 exec node server/index.mjs

@@ -64,6 +64,13 @@
       "when": 1766907867418,
       "tag": "0008_overconfident_yellow_claw",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1766977403614,
+      "tag": "0009_wise_nightshade",
+      "breakpoints": true
     }
   ]
 }

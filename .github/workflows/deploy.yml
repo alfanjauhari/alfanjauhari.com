@@ -22,19 +22,6 @@ jobs:
           path: content
           key: content-${{ runner.os }}-${{ env.CONTENT_SHA }}
 
-      - name: Setup SSH for private content repo
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.PRIVATE_CONTENT_REPO_SSH }}" > ~/.ssh/id_ed25519
-          chmod 600 ~/.ssh/id_ed25519
-
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-
-      - name: Sync private contents
-        run: ./scripts/sync-contents.sh
-        env:
-          PRIVATE_CONTENT_REPO: ${{ vars.PRIVATE_CONTENT_REPO }}
-
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
@@ -99,7 +86,7 @@ jobs:
           script: |
             cd $DIRECTORY
 
-            git pull origin main
+            git pull origin main --recurse-submodule
 
             docker compose \
               -p "${PROJECT_NAME}" \

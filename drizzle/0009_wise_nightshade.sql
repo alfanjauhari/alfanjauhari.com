@@ -1,0 +1,1 @@
+ALTER TABLE "updates" DROP COLUMN "git_sha";

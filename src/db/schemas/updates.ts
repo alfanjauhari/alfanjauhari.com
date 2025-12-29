@@ -5,5 +5,4 @@ export const updatesTable = buildSchemas("updates", (t) => ({
   slug: t.varchar("slug", { length: 255 }).unique().notNull(),
   summary: t.text("summary").notNull(),
   date: t.timestamp("date").notNull(),
-  gitSha: t.varchar("git_sha", { length: 255 }).notNull(),
 }));

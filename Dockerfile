@@ -43,18 +43,16 @@ COPY . .
 RUN --mount=type=secret,id=CD_API_KEY,env=CD_API_KEY \
   --mount=type=secret,id=CD_API_SECRET,env=CD_API_SECRET \
   --mount=type=secret,id=BETTER_AUTH_SECRET,env=BETTER_AUTH_SECRET \
-  pnpm vite build
+  pnpm build
 
 RUN pnpm run build:scripts
 
 # ------------------------------------------------
 FROM base AS runner
 
-RUN apk add git
-
 COPY --from=deps --chown=nonroot:nonroot /app/node_modules ./node_modules
 COPY --from=builder --chown=nonroot:nonroot /app/.output ./.output
-COPY --from=builder --chown=nonroot:nonroot /app/scripts ./scripts
+COPY --from=builder --chown=nonroot:nonroot /app/scripts/sync-contents-db.cjs ./scripts/sync-contents-db.cjs
 COPY entrypoint.sh /entrypoint.sh
 
 WORKDIR /app/.output
