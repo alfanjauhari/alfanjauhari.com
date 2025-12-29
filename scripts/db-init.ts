@@ -1,3 +1,4 @@
+import path from "node:path";
 import {
   allRestrictedUpdates,
   allUpdates,
@@ -5,6 +6,7 @@ import {
 } from "content-collections";
 import { sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/node-postgres";
+import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { Pool } from "pg";
 
 async function main() {
@@ -16,6 +18,11 @@ async function main() {
     connectionString: process.env.APP_DATABASE_URL,
   });
   const client = drizzle(pool);
+
+  console.info("Running migration");
+  await migrate(client, {
+    migrationsFolder: path.join(process.cwd(), "drizzle"),
+  }).then(() => console.info("Successfully migrated"));
 
   const updates = [...allUpdates, ...allRestrictedUpdates]
     .reduce((unique, update) => {

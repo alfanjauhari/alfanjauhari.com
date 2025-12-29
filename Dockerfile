@@ -52,10 +52,11 @@ FROM base AS runner
 
 COPY --from=deps --chown=nonroot:nonroot /app/node_modules ./node_modules
 COPY --from=builder --chown=nonroot:nonroot /app/.output ./.output
-COPY --from=builder --chown=nonroot:nonroot /app/scripts/sync-contents-db.cjs ./scripts/sync-contents-db.cjs
+COPY --from=builder --chown=nonroot:nonroot /app/scripts/db-init.cjs ./scripts/db-init.cjs
+COPY --from=builder --chown=nonroot:nonroot /app/drizzle ./drizzle
 COPY entrypoint.sh /entrypoint.sh
 
-WORKDIR /app/.output
+WORKDIR /app
 
 RUN chmod +x /entrypoint.sh
 

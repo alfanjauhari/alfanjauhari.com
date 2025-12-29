@@ -16,4 +16,4 @@ todos.json
 .content-collections
 .artifacts
 nginx/cloudflare.ini
-scripts/sync-contents-db.cjs
+scripts/db-init.cjs

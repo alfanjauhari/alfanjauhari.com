@@ -8,14 +8,14 @@
     "build": "pnpm build:content && pnpm build:og && vite build && pnpm upload",
     "build:content": "content-collections build",
     "build:og": "tsx ./scripts/generate-og.tsx",
-    "build:scripts": "esbuild scripts/sync-contents-db.ts --bundle --packages=external --outfile=scripts/sync-contents-db.cjs --platform=node",
-    "sync:content": "pnpm build:scripts && node scripts/sync-contents-db.cjs",
+    "build:scripts": "esbuild scripts/db-init.ts --bundle --packages=external --outfile=scripts/db-init.cjs --platform=node",
     "upload": "tsx ./scripts/upload-assets.ts",
     "serve": "vite preview",
     "test": "vitest run",
     "format": "biome format",
     "lint": "biome lint",
     "check": "biome check",
+    "db:init": "pnpm build:scripts && node scripts/db-init.cjs",
     "db:kit": "drizzle-kit"
   },
   "dependencies": {

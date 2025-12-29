@@ -1,8 +1,8 @@
 #!/bin/sh
 set -e
 
-echo "Running Content sync..."
-node /app/scripts/sync-contents-db.cjs
+echo "Running DB initialization..."
+node scripts/db-init.cjs
 
 echo "Starting server..."
-exec node server/index.mjs
+exec node .output/server/index.mjs
