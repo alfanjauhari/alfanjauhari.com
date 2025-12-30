@@ -114,7 +114,6 @@ services:
 
 volumes:
   app_data:
-  nginx_cache:
   db_data:
 
 networks:

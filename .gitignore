@@ -15,5 +15,4 @@ count.txt
 todos.json
 .content-collections
 .artifacts
-nginx/cloudflare.ini
 scripts/db-init.cjs
