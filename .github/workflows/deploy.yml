@@ -1,6 +1,8 @@
 name: Build & Deploy
 
 on:
+  repository_dispatch:
+    types: [build]
   push:
     branches:
       - main

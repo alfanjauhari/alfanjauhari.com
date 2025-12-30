@@ -40,4 +40,5 @@ export const auth = betterAuth({
     },
   },
   plugins: [openAPI(), tanstackStartCookies()],
+  trustedOrigins: ["https://*.alfanjauhari.com"],
 });
