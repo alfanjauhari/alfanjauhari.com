@@ -1,12 +1,25 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { createFileRoute, notFound, Outlet } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { PAGE_TRANSITIONS } from "@/constants";
-import { adminMiddleware } from "@/middleware/auth";
+import { serverEnv } from "@/env/server";
+import { getSessionFn } from "@/fns/server/auth";
 
 export const Route = createFileRoute("/dashboard/_admin")({
   component: RouteComponent,
-  server: {
-    middleware: [adminMiddleware],
+  loader: async () => {
+    const session = await getSessionFn();
+
+    if (!session) {
+      throw notFound();
+    }
+
+    const admins = serverEnv.ADMIN_EMAIL.includes(session.user.email);
+
+    if (!admins) {
+      throw notFound();
+    }
+
+    return session;
   },
 });
 

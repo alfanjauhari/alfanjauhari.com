@@ -1,10 +1,10 @@
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
-import { staticFunctionMiddleware } from "@tanstack/start-static-server-functions";
 import { allRestrictedUpdates, allUpdates } from "content-collections";
+import { adminMiddleware } from "@/middleware/auth";
 
 const getUpdates = createServerFn()
-  .middleware([staticFunctionMiddleware])
+  .middleware([adminMiddleware])
   .handler(async () => {
     const restrictedUpdates = allRestrictedUpdates.map((update) => ({
       id: update._meta.path,
