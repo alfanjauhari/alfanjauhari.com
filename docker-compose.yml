@@ -1,4 +1,44 @@
 services:
+  alfanjauhari_com_traefik:
+    image: traefik:v3.6.6
+    container_name: alfanjauhari_com_traefik
+    restart: unless-stopped
+    environment:
+      CF_DNS_API_TOKEN: ${CF_DNS_API_TOKEN}
+      TRAEFIK_SSL_EMAIL: ${TRAEFIK_SSL_EMAIL:-hi@alfanjauhari.com}
+    command:
+      - "--log.level=DEBUG"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entryPoints.app.address=:80"
+      - "--entryPoints.appsecure.address=:443"
+      - "--entryPoints.app.http.redirections.entryPoint.to=appsecure"
+      - "--entryPoints.app.http.redirections.entryPoint.scheme=https"
+      - "--certificatesresolvers.letsencrypt.acme.email=${TRAEFIK_SSL_EMAIL:-hi@alfanjauhari.com}"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/certs/acme.json"
+      - "--certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare"
+      - "--certificatesresolvers.letsencrypt.acme.dnschallenge.delaybeforecheck=0"
+    ports:
+      - "80:80"
+      - "443:443"
+      - :8080
+    networks:
+      - web
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - traefik-certs:/certs
+    labels:
+      - "traefik.enable=true"
+
+      - "traefik.http.middlewares.redirect-www.redirectregex.regex=^https?://alfanjauhari\\.com/(.*)"
+      - "traefik.http.middlewares.redirect-www.redirectregex.replacement=https://www.alfanjauhari.com/$${1}"
+      - "traefik.http.middlewares.redirect-www.redirectregex.permanent=true"
+    depends_on:
+      alfanjauhari_com_analytics:
+        condition: service_healthy
+      alfanjauhari_com_app:
+        condition: service_started
+
   alfanjauhari_com_app:
     image: alfanjauhari/alfanjauhari-com:main
     container_name: alfanjauhari_com_app
@@ -11,54 +51,18 @@ services:
     networks:
       - web
     user: "1000"
+    labels:
+      - "traefik.enable=true"
 
-  alfanjauhari_com_nginx:
-    image: nginx:1.27-alpine
-    container_name: alfanjauhari_com_nginx
-    platform: linux/amd64
-    deploy:
-      resources:
-        limits:
-          cpus: 1
-          memory: "512m"
-    depends_on:
-      alfanjauhari_com_app:
-        condition: service_started
-      alfanjauhari_com_analytics:
-        condition: service_healthy
-    environment:
-      APP_URL: ${APP_URL:-alfanjauhari.com}
-      APP_UPSTREAM: alfanjauhari_com_app:3000
-      ANALYTICS_UPSTREAM: alfanjauhari_com_analytics:3000
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/templates/analytics.conf.template:/etc/nginx/templates/analytics.conf.template:ro
-      - ./nginx/templates/ssl.conf.template:/etc/nginx/templates/ssl.conf.template:ro
-      - ./nginx/snippets:/etc/nginx/snippets:ro
-      - letsencrypt:/etc/letsencrypt:ro
-      - nginx_cache:/var/cache/nginx
-    networks:
-      - web
-    restart: unless-stopped
+      - "traefik.http.routers.app-nonwww.rule=Host(`alfanjauhari.com`)"
+      - "traefik.http.routers.app-nonwww.entrypoints=appsecure"
+      - "traefik.http.routers.app-nonwww.middlewares=redirect-www"
+      - "traefik.http.routers.app-nonwww.tls.certresolver=letsencrypt"
 
-  alfanjauhari_com_certbot:
-    image: certbot/dns-cloudflare:latest
-    profiles:
-      - certbot
-    volumes:
-      - letsencrypt:/etc/letsencrypt
-      - ./nginx/cloudflare.ini:/etc/letsencrypt/cloudflare.ini:ro
-    command: >
-      certonly
-      --non-interactive
-      --dns-cloudflare
-      --dns-cloudflare-credentials /etc/letsencrypt/cloudflare.ini
-      --dns-cloudflare-propagation-seconds 60
-      --agree-tos -m "${APP_SSL_EMAIL:-hi@alfanjauhari.com}"
-      -d "${APP_URL:-alfanjauhari.com}" -d "www.${APP_URL:-alfanjauhari.com}" -d "analytics.${APP_URL:-alfanjauhari.com}"
+      - "traefik.http.routers.app.rule=Host(`www.alfanjauhari.com`)"
+      - "traefik.http.routers.app.entrypoints=appsecure"
+      - "traefik.http.routers.app.tls.certresolver=letsencrypt"
+      - "traefik.http.services.app.loadbalancer.server.port=3000"
 
   alfanjauhari_com_db:
     image: postgres:alpine
@@ -82,8 +86,6 @@ services:
       alfanjauhari_com_db:
         condition: service_healthy
     env_file: $RUNTIME_ENV_FILE
-    environment:
-      DATABASE_URL: $ANALYTICS_DATABASE_URL
     networks:
       - web
     healthcheck:
@@ -98,16 +100,17 @@ services:
         limits:
           cpus: 1
           memory: "1g"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.analytics.rule=Host(`analytics.alfanjauhari.com`)"
+      - "traefik.http.routers.analytics.entrypoints=appsecure"
+      - "traefik.http.routers.analytics.tls.certresolver=letsencrypt"
+      - "traefik.http.services.analytics.loadbalancer.server.port=3000"
 
 volumes:
   app_data:
-    driver: local
-  letsencrypt:
-    driver: local
-  nginx_cache:
-    driver: local
+  traefik-certs:
   db_data:
-    driver: local
 
 networks:
   web:

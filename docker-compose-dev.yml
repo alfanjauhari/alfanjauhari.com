@@ -20,30 +20,50 @@ services:
     networks:
       - web
     user: "1000"
+    labels:
+      - "traefik.enable=true"
 
-  alfanjauhari_com_nginx_dev:
-    image: nginx:1.27-alpine
-    container_name: alfanjauhari_com_nginx_dev
+      - "traefik.http.routers.app-nonwww.rule=Host(`alfanjauhari.localhost`)"
+      - "traefik.http.routers.app-nonwww.entrypoints=web"
+      - "traefik.http.routers.app-nonwww.middlewares=redirect-www"
+
+      - "traefik.http.routers.app.rule=Host(`www.alfanjauhari.localhost`)"
+      - "traefik.http.routers.app.entrypoints=web"
+      - "traefik.http.services.app.loadbalancer.server.port=3000"
+
+  alfanjauhari_com_traefik_dev:
+    image: traefik:v3.6.6
+    container_name: alfanjauhari_com_traefik_dev
+    restart: unless-stopped
+    command:
+      - "--log.level=DEBUG"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+
+      # HTTP only
+      - "--entryPoints.web.address=:80"
+
+      # Dashboard (optional)
+      - "--api.dashboard=true"
+      - "--api.insecure=true"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+
+      - "traefik.http.middlewares.redirect-www.redirectregex.regex=^http://alfanjauhari\\.localhost/(.*)"
+      - "traefik.http.middlewares.redirect-www.redirectregex.replacement=http://www.alfanjauhari.localhost/$${1}"
+      - "traefik.http.middlewares.redirect-www.redirectregex.permanent=true"
     depends_on:
       alfanjauhari_com_app_dev:
         condition: service_started
       alfanjauhari_com_analytics_dev:
         condition: service_healthy
-    environment:
-      APP_URL: alfanjauhari.localhost
-      APP_UPSTREAM: alfanjauhari_com_app_dev:3000
-      ANALYTICS_UPSTREAM: alfanjauhari_com_analytics_dev:3000
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/templates/dev.conf.template:/etc/nginx/templates/dev.conf.template:ro
-      - ./nginx/snippets:/etc/nginx/snippets:ro
-      - nginx_cache:/var/cache/nginx
-    networks:
-      - web
-    restart: unless-stopped
 
   alfanjauhari_com_db_dev:
     image: postgres:alpine
@@ -86,14 +106,16 @@ services:
       retries: 5
     init: true
     restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.analytics.rule=Host(`analytics.alfanjauhari.localhost`)"
+      - "traefik.http.routers.analytics.entrypoints=web"
+      - "traefik.http.services.analytics.loadbalancer.server.port=3000"
 
 volumes:
   app_data:
-    driver: local
   nginx_cache:
-    driver: local
   db_data:
-    driver: local
 
 networks:
   web:
