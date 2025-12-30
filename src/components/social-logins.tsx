@@ -5,7 +5,7 @@ import { GoogleIcon } from "./icons/google";
 import { Button } from "./ui/button";
 import { Spinner } from "./ui/spinner";
 
-export function SocialLogins({ redirectTo }: { redirectTo: string }) {
+export function SocialLogins({ redirectTo }: { redirectTo?: string }) {
   const [socialLogin, setSocialLogin] = useState<"github" | "google">();
 
   const onSocialLogin = (provider: "github" | "google") => async () => {

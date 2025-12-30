@@ -16,10 +16,9 @@ export const Route = createFileRoute("/_auth")({
 function RouteComponent() {
   return (
     <motion.div
-      className="min-h-[calc(100vh-6rem*2)] flex flex-col justify-center items-center"
+      className="flex flex-col justify-center items-center"
       {...PAGE_TRANSITIONS}
     >
-      <h1>Hllo</h1>
       <Outlet />
     </motion.div>
   );

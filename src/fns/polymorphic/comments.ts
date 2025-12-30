@@ -20,10 +20,17 @@ import { usersTable } from "@/db/schemas/users";
 import { withPagination } from "@/lib/queries.server";
 import { adminMiddleware, authMiddleware } from "@/middleware/auth";
 import { getSessionFn } from "./auth";
-import { LikeFnsSchema } from "./likes";
 
 const parent = alias(commentsTable, "parent");
 const parentUser = alias(usersTable, "parent_user");
+
+const CommentFnsSchema = z.object({
+  slug: z.string(),
+  page: z.number().default(1).optional(),
+  size: z.number().default(10).optional(),
+});
+
+type CommentFnsSchema = z.infer<typeof CommentFnsSchema>;
 
 export const getAllCommentsFn = createServerFn()
   .middleware([adminMiddleware])
@@ -60,8 +67,48 @@ export const getAllCommentsQueryOptions = queryOptions({
   queryFn: getAllCommentsFn,
 });
 
+const UserCommentsFnSchema = CommentFnsSchema.omit({ slug: true });
+export const getUserCommentsFn = createServerFn()
+  .middleware([authMiddleware])
+  .inputValidator(UserCommentsFnSchema)
+  .handler(async ({ context }) => {
+    const commentsQuery = client
+      .select({
+        ...getTableColumns(commentsTable),
+        update: updatesTable,
+      })
+      .from(usersTable)
+      .where(eq(usersTable.id, context.session.user.id))
+      .innerJoin(commentsTable, eq(commentsTable.userId, usersTable.id))
+      .innerJoin(updatesTable, eq(updatesTable.id, commentsTable.refId))
+      .$dynamic();
+
+    const { countQuery, dataQuery } = withPagination(commentsQuery, [
+      desc(commentsTable.createdAt),
+    ]);
+
+    const comments = await dataQuery();
+    const count = await countQuery();
+
+    return {
+      comments,
+      count,
+    };
+  });
+
+export const getUserCommentsQueryOptions = (
+  data: z.infer<typeof UserCommentsFnSchema> = {},
+) =>
+  queryOptions({
+    queryKey: ["user-comments", data],
+    queryFn: () =>
+      getUserCommentsFn({
+        data,
+      }),
+  });
+
 export const getUpdateCommentsFn = createServerFn()
-  .inputValidator(LikeFnsSchema)
+  .inputValidator(CommentFnsSchema)
   .handler(async ({ data }) => {
     const session = await getSessionFn();
 
@@ -104,9 +151,12 @@ export const getUpdateCommentsFn = createServerFn()
       )
       .$dynamic();
 
-    const { countQuery, dataQuery } = withPagination(commentsQuery, [
-      desc(commentsTable.createdAt),
-    ]);
+    const { countQuery, dataQuery } = withPagination(
+      commentsQuery,
+      [desc(commentsTable.createdAt)],
+      data.page,
+      data.size,
+    );
 
     const comments = await dataQuery();
     const count = await countQuery();
@@ -118,14 +168,12 @@ export const getUpdateCommentsFn = createServerFn()
     };
   });
 
-export const getUpdateCommentsQueryOptions = (slug: string) =>
+export const getUpdateCommentsQueryOptions = (data: CommentFnsSchema) =>
   queryOptions({
-    queryKey: ["update-comments", slug],
+    queryKey: ["update-comments", data],
     queryFn: () =>
       getUpdateCommentsFn({
-        data: {
-          slug,
-        },
+        data,
       }),
   });
 

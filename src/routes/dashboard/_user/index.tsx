@@ -1,9 +1,30 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { HeartIcon, MessageSquareIcon } from "lucide-react";
+import { Suspense } from "react";
+import { LogoutButton } from "@/components/logout-button";
+import { clientEnv } from "@/env/client";
+import { getUserCommentsQueryOptions } from "@/fns/polymorphic/comments";
+import { getUserLikesQueryOptions } from "@/fns/polymorphic/likes";
+import { seoHead } from "@/lib/seo";
 import { formatDate } from "@/lib/utils";
+import { CommentsList } from "./-comments-list";
+import { LikesList } from "./-likes-list";
+import { ListFeedback } from "./-list-fallback";
 
 export const Route = createFileRoute("/dashboard/_user/")({
   component: RouteComponent,
+  loader: ({ context }) => {
+    context.queryClient.prefetchQuery(getUserCommentsQueryOptions());
+    context.queryClient.prefetchQuery(getUserLikesQueryOptions());
+  },
+  head: () =>
+    seoHead({
+      title: "Dashboard",
+      description:
+        "Manage your account, likes and comments in one single place.",
+      canonical: "/dashboard",
+      image: `${clientEnv.VITE_CLOUDINARY_URL}/og/home.webp`,
+    }),
 });
 
 function RouteComponent() {
@@ -11,62 +32,38 @@ function RouteComponent() {
 
   return (
     <>
-      <div className="mb-12">
-        <h1 className="font-serif text-5xl mb-4">Hello, {user.name}!</h1>
-        <p className="font-mono text-sm text-foreground/50">
-          Member since {formatDate(user.createdAt)}
-        </p>
+      <div className="mb-12 flex items-center justify-between">
+        <div>
+          <h1 className="font-serif text-5xl mb-4">Hello, {user.name}!</h1>
+          <p className="font-mono text-sm text-foreground/50">
+            Member since {formatDate(user.createdAt)}
+          </p>
+        </div>
+
+        <LogoutButton />
       </div>
 
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <HeartIcon className="size-6" />
-            <span>Like History</span>
-            <span className="size-6 rounded-full bg-foreground/10 text-xs flex items-center justify-center">
-              10
-            </span>
-          </div>
-          <hr />
-          <div className="space-y-4">
-            <div className="p-4 bg-foreground/10 space-y-2">
-              <p className="font-serif text-lg">Hello World</p>
-              <p className="font-mono text-sm text-foreground/50">
-                26 Dec 2025
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <MessageSquareIcon className="size-6" />
-            <span>Comment History</span>
-            <span className="size-6 rounded-full bg-foreground/10 text-xs flex items-center justify-center">
-              10
-            </span>
-          </div>
-          <hr />
-          <div className="space-y-4">
-            <div className="px-4 border-l-2 border-l-foreground/30 space-y-4">
-              <div className="flex justify-between items-center gap-4">
-                <p className="font-serif">Hello World</p>
-                <span className="text-accent font-mono p-1 bg-foreground uppercase text-xxs">
-                  Published
-                </span>
-              </div>
-              <div className="italic text-foreground/70 line-clamp-3">
-                "Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Maiores, eveniet! Facilis illo cumque perspiciatis autem
-                veritatis commodi unde laboriosam accusantium nesciunt dolore?
-                Debitis veniam ipsam obcaecati sapiente velit repudiandae
-                nostrum?"
-              </div>
-              <p className="font-mono text-sm text-foreground/50">
-                26 Dec 2025
-              </p>
-            </div>
-          </div>
-        </div>
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12">
+        <Suspense
+          fallback={
+            <ListFeedback>
+              <HeartIcon className="size-6" />
+              <span>Likes History</span>
+            </ListFeedback>
+          }
+        >
+          <LikesList />
+        </Suspense>
+        <Suspense
+          fallback={
+            <ListFeedback>
+              <MessageSquareIcon className="size-6" />
+              <span>Comment History</span>
+            </ListFeedback>
+          }
+        >
+          <CommentsList />
+        </Suspense>
       </section>
     </>
   );

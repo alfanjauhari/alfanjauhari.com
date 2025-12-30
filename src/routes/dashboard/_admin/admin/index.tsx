@@ -1,8 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Suspense } from "react";
+import { LogoutButton } from "@/components/logout-button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { clientEnv } from "@/env/client";
 import { getAllCommentsQueryOptions } from "@/fns/polymorphic/comments";
 import { getUpdatesQueryOptions } from "@/fns/polymorphic/updates";
+import { seoHead } from "@/lib/seo";
 import { CommentsList } from "./-comments-list";
 import { ListFeedback } from "./-list-fallback";
 import { UpdatesList } from "./-updates-list";
@@ -13,6 +16,14 @@ export const Route = createFileRoute("/dashboard/_admin/admin/")({
     context.queryClient.prefetchQuery(getUpdatesQueryOptions);
     context.queryClient.prefetchQuery(getAllCommentsQueryOptions);
   },
+  head: () =>
+    seoHead({
+      title: "Dashboard Admin",
+      description:
+        "Manage content, moderate discussions, and configure platform settings.",
+      canonical: "/dashboard/admin",
+      image: `${clientEnv.VITE_CLOUDINARY_URL}/og/home.webp`,
+    }),
 });
 
 const TABS = [
@@ -29,11 +40,15 @@ const TABS = [
 function RouteComponent() {
   return (
     <>
-      <div className="mb-12">
-        <h1 className="font-serif text-5xl mb-4">Overview</h1>
-        <p className="text-foreground/60 font-normal leading-relaxed">
-          Manage content, moderate discussions, and configure platform settings.
-        </p>
+      <div className="mb-12 flex items-center justify-between gap-4">
+        <div>
+          <h1 className="font-serif text-5xl mb-4">Overview</h1>
+          <p className="text-foreground/60 font-normal leading-relaxed">
+            Manage content, moderate discussions, and configure platform
+            settings.
+          </p>
+        </div>
+        <LogoutButton />
       </div>
       <Tabs defaultValue="updates">
         <TabsList className="bg-background border-b border-b-accent p-0 h-auto w-full block">

@@ -54,7 +54,7 @@ function Home() {
     <motion.div {...PAGE_TRANSITIONS}>
       <section
         id="hero"
-        className="flex flex-col justify-center relative z-10 min-h-[calc(100vh-6rem)] mb-40"
+        className="flex flex-col justify-center relative z-10 mb-40"
       >
         <div className="my-16 xl:mb-24">
           <motion.div

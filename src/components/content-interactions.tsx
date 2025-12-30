@@ -139,7 +139,9 @@ function ContentInteractionsCount() {
   ] = useSuspenseQueries({
     queries: [
       getUpdateLikesMetadataQueryOptions(match.params.updateId),
-      getUpdateCommentsQueryOptions(match.params.updateId),
+      getUpdateCommentsQueryOptions({
+        slug: match.params.updateId,
+      }),
     ],
   });
 
@@ -289,8 +291,9 @@ function ContentComment({
 
       if ("id" in result) {
         await queryClient.invalidateQueries({
-          queryKey: getUpdateCommentsQueryOptions(match.params.updateId)
-            .queryKey,
+          queryKey: getUpdateCommentsQueryOptions({
+            slug: match.params.updateId,
+          }).queryKey,
         });
 
         setReplyingTo(undefined);
@@ -483,8 +486,9 @@ function ContentDiscussions() {
 
         if ("id" in result) {
           await queryClient.invalidateQueries({
-            queryKey: getUpdateCommentsQueryOptions(match.params.updateId)
-              .queryKey,
+            queryKey: getUpdateCommentsQueryOptions({
+              slug: match.params.updateId,
+            }).queryKey,
           });
 
           return form.reset();
@@ -509,7 +513,11 @@ function ContentDiscussions() {
 
   const {
     data: { comments, userId },
-  } = useSuspenseQuery(getUpdateCommentsQueryOptions(match.params.updateId));
+  } = useSuspenseQuery(
+    getUpdateCommentsQueryOptions({
+      slug: match.params.updateId,
+    }),
+  );
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
