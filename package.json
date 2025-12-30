@@ -16,7 +16,8 @@
     "lint": "biome lint",
     "check": "biome check",
     "db:init": "pnpm build:scripts && node scripts/db-init.cjs",
-    "db:kit": "drizzle-kit"
+    "db:kit": "drizzle-kit",
+    "typecheck": "tsc -p ./tsconfig.json"
   },
   "dependencies": {
     "@codesandbox/sandpack-react": "^2.20.0",

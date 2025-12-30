@@ -32,7 +32,9 @@ export const Route = createFileRoute("/updates/r/$updateId")({
       getUpdateLikesMetadataQueryOptions(params.updateId),
     );
     context.queryClient.prefetchQuery(
-      getUpdateCommentsQueryOptions(params.updateId),
+      getUpdateCommentsQueryOptions({
+        slug: params.updateId,
+      }),
     );
 
     return { update, userId: session?.user.id };

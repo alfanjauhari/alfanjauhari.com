@@ -1,17 +1,66 @@
 import { queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
 import { APIError } from "better-auth";
-import { and, count, eq, sql } from "drizzle-orm";
+import { and, count, desc, eq, getTableColumns, sql } from "drizzle-orm";
 import z from "zod";
 import { client } from "@/db/client";
 import { likesTable } from "@/db/schemas/likes";
 import { updatesTable } from "@/db/schemas/updates";
+import { usersTable } from "@/db/schemas/users";
+import { withPagination } from "@/lib/queries.server";
 import { authMiddleware } from "@/middleware/auth";
 import { getSessionFn } from "./auth";
 
 export const LikeFnsSchema = z.object({
   slug: z.string(),
 });
+
+const UserLikesFnSchema = z.object({
+  page: z.number().default(1).optional(),
+  size: z.number().default(10).optional(),
+});
+
+export const getUserLikesFn = createServerFn()
+  .middleware([authMiddleware])
+  .inputValidator(UserLikesFnSchema)
+  .handler(async ({ data, context }) => {
+    const likesQuery = client
+      .select({
+        ...getTableColumns(likesTable),
+        update: updatesTable,
+      })
+      .from(usersTable)
+      .where(eq(usersTable.id, context.session.user.id))
+      .innerJoin(likesTable, eq(likesTable.userId, usersTable.id))
+      .innerJoin(updatesTable, eq(updatesTable.id, likesTable.refId))
+      .$dynamic();
+
+    const { countQuery, dataQuery } = withPagination(
+      likesQuery,
+      [desc(likesTable.createdAt)],
+      data.page,
+      data.size,
+    );
+
+    const likes = await dataQuery();
+    const count = await countQuery();
+
+    return {
+      likes,
+      count,
+    };
+  });
+
+export const getUserLikesQueryOptions = (
+  data: z.infer<typeof UserLikesFnSchema> = {},
+) =>
+  queryOptions({
+    queryKey: ["user-likes", data],
+    queryFn: () =>
+      getUserLikesFn({
+        data,
+      }),
+  });
 
 export const getUpdateLikesMetadataFn = createServerFn()
   .inputValidator(LikeFnsSchema)

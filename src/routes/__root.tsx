@@ -102,7 +102,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             </AnimatePresence>
             <Header />
             <div className="grow px-6 md:px-12 mx-auto relative w-full z-10 bg-background origin-top rounded-b-[3rem] mb-[500px] md:mb-[600px]">
-              <main className="max-w-7xl mx-auto mb-32">{children}</main>
+              <main className="max-w-7xl mx-auto mb-32 min-h-[calc(100vh-6rem*2)] flex flex-col justify-center">
+                {children}
+              </main>
             </div>
             <Footer />
             <TanStackDevtools

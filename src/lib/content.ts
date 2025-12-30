@@ -53,3 +53,14 @@ export function commentsTree<Update extends boolean>(
 
   return [...roots.values()];
 }
+
+export function commentStatusMap(status: Comment["status"]) {
+  switch (status) {
+    case "published":
+      return "Published";
+    case "deleted":
+      return "Deleted";
+    case "deleted_by_admin":
+      return "Deleted by Admin";
+  }
+}
