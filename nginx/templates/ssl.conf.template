@@ -1,18 +1,13 @@
-map $http_upgrade $connection_upgrade {
-  default upgrade;
-  ''      close;
-}
-
 server {
-  listen 80;
-  listen [::]:80;
+  listen 80 default_server;
+  listen [::]:80 default_server;
   server_name ${APP_URL} www.${APP_URL};
   return 301 https://$host$request_uri;
 }
 
 server {
-  listen 443 ssl http2;
-  listen [::]:443 ssl http2;
+  listen 443 ssl default_server;
+  listen [::]:443 ssl default_server;
   server_name ${APP_URL} www.${APP_URL};
 
   ssl_certificate /etc/letsencrypt/live/${APP_URL}/fullchain.pem;
