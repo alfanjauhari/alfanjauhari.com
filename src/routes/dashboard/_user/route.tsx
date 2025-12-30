@@ -1,7 +1,7 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { PAGE_TRANSITIONS } from "@/constants";
-import { getSessionFn } from "@/fns/polymorphic/auth";
+import { getSessionFn } from "@/fns/server/auth";
 
 export const Route = createFileRoute("/dashboard/_user")({
   component: RouteComponent,

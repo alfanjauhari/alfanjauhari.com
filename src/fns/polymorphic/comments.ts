@@ -19,7 +19,7 @@ import { updatesTable } from "@/db/schemas/updates";
 import { usersTable } from "@/db/schemas/users";
 import { withPagination } from "@/lib/queries.server";
 import { adminMiddleware, authMiddleware } from "@/middleware/auth";
-import { getSessionFn } from "./auth";
+import { getSessionFn } from "../server/auth";
 
 const parent = alias(commentsTable, "parent");
 const parentUser = alias(usersTable, "parent_user");

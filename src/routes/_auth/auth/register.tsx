@@ -14,10 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { clientEnv } from "@/env/client";
-import {
-  handleRegisterForm,
-  registerFormOpts,
-} from "@/fns/polymorphic/register";
+import { handleRegisterForm, registerFormOpts } from "@/fns/polymorphic/auth";
 import { seoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/_auth/auth/register")({

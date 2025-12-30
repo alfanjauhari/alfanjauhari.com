@@ -1,10 +1,9 @@
 import { useForm } from "@tanstack/react-form";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { type FormEvent, useCallback, useState } from "react";
 import z from "zod";
-import { SocialLogins } from "@/components/social-logins";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,71 +15,83 @@ import {
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { clientEnv } from "@/env/client";
-import { handleLoginForm, loginFormOpts } from "@/fns/polymorphic/auth";
+import {
+  handleResetPasswordForm,
+  resetPasswordFormOpts,
+} from "@/fns/polymorphic/auth";
+import { checkToken } from "@/fns/server/auth";
 import { seoHead } from "@/lib/seo";
 
-export const Route = createFileRoute("/_auth/auth/login")({
-  component: LoginPage,
-  head: () =>
-    seoHead({
-      title: "Login",
-      description:
-        "Log in to your account to access personalized features and continue your experience seamlessly.",
-      canonical: "/auth/login",
-      image: `${clientEnv.VITE_CLOUDINARY_URL}/og/auth/login.webp`,
-    }),
+export const Route = createFileRoute("/_auth/auth/reset-password")({
+  component: RouteComponent,
   validateSearch: zodValidator(
     z.object({
-      redirectTo: z
-        .string()
-        .default("/")
-        .transform((url) => {
-          if (url.includes("http")) {
-            return "/";
-          }
-
-          return url;
-        }),
+      token: z.string(),
     }),
   ),
+  loaderDeps: ({ search }) => {
+    return {
+      token: search.token,
+    };
+  },
+  loader: async ({ deps }) => {
+    await checkToken("reset-password", deps.token);
+
+    return {
+      token: deps.token,
+    };
+  },
+  head: () =>
+    seoHead({
+      title: "Reset Password",
+      description: "Enter your new password to complete the reset process.",
+      canonical: "/auth/reset-password",
+      image: `${clientEnv.VITE_CLOUDINARY_URL}/og/auth/reset-password.webp`,
+    }),
 });
 
-function LoginPage() {
-  const [loginError, setLoginError] = useState("");
+function RouteComponent() {
+  const { token } = Route.useLoaderData();
 
-  const navigate = Route.useNavigate();
-  const searchParams = Route.useSearch();
+  const [resetPasswordResult, setResetPasswordResult] = useState<{
+    error: boolean;
+    message: string;
+  }>();
 
-  const redirectTo = searchParams.redirectTo;
-
-  const loginMutation = useServerFn(handleLoginForm);
+  const resetPasswordMutation = useServerFn(handleResetPasswordForm);
 
   const form = useForm({
-    ...loginFormOpts,
+    ...resetPasswordFormOpts(token),
     listeners: {
       onChange: useCallback(() => {
-        setLoginError("");
+        setResetPasswordResult(undefined);
       }, []),
     },
-    onSubmit: async ({ value }) => {
-      const data = await loginMutation({
+    onSubmit: async ({ value, formApi }) => {
+      const data = await resetPasswordMutation({
         data: value,
       });
 
       switch (data.code) {
         case "SUCCESS":
-          navigate({
-            to: redirectTo,
+          setResetPasswordResult({
+            error: false,
+            message:
+              "Your password has been successfully reset. You can now sign in with your new password.",
           });
+
+          formApi.reset();
 
           break;
         case "AUTH_ERROR":
-          setLoginError(data.message);
+          setResetPasswordResult({
+            error: true,
+            message: data.message,
+          });
 
           form.setErrorMap({
             onChange: {
               fields: {
-                email: true,
                 password: true,
               },
             },
@@ -97,7 +108,10 @@ function LoginPage() {
 
           break;
         default:
-          setLoginError(data.message);
+          setResetPasswordResult({
+            error: true,
+            message: data.message,
+          });
           break;
       }
     },
@@ -111,59 +125,28 @@ function LoginPage() {
 
   return (
     <div className="w-full max-w-xl border border-border p-8 md:p-12">
-      <div className="login-header">
-        <h1 className="font-serif text-4xl font-bold text-center mb-4">
-          Welcome Back!
-        </h1>
-        <p className="text-center text-sm mb-8 font-mono uppercase tracking-widest text-foreground/50">
-          Login to access your account
-        </p>
-      </div>
+      <h1 className="font-serif text-4xl font-bold text-center mb-4">
+        Reset Your Password
+      </h1>
+      <p className="text-center text-sm mb-8 font-mono uppercase tracking-widest text-foreground/50">
+        Enter your new password below to complete the reset process.
+      </p>
 
-      {loginError && (
+      {resetPasswordResult?.error === true && (
         <Alert variant="destructive" className="mb-8">
-          <AlertTitle>Login Failed</AlertTitle>
-          <AlertDescription>{loginError}</AlertDescription>
+          <AlertTitle>Reset Password Failed</AlertTitle>
+          <AlertDescription>{resetPasswordResult.message}</AlertDescription>
+        </Alert>
+      )}
+      {resetPasswordResult?.error === false && (
+        <Alert className="mb-8">
+          <AlertTitle>Reset Password Success</AlertTitle>
+          <AlertDescription>{resetPasswordResult.message}</AlertDescription>
         </Alert>
       )}
 
-      <SocialLogins redirectTo={redirectTo} />
-
-      <div className="relative my-8">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-border"></div>
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-4 text-foreground/50 font-mono">
-            Or login with email
-          </span>
-        </div>
-      </div>
-
       <form onSubmit={onSubmit} className="mb-12">
         <FieldGroup>
-          <form.Field name="email">
-            {(field) => {
-              const isInvalid =
-                field.state.meta.isTouched && !field.state.meta.isValid;
-
-              return (
-                <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>Email</FieldLabel>
-                  <Input
-                    id={field.name}
-                    name={field.name}
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    type="email"
-                    aria-invalid={isInvalid}
-                  />
-                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                </Field>
-              );
-            }}
-          </form.Field>
           <form.Field name="password">
             {(field) => {
               const isInvalid =
@@ -178,8 +161,30 @@ function LoginPage() {
                     value={field.state.value}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
-                    type="password"
                     aria-invalid={isInvalid}
+                    type="password"
+                  />
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
+            }}
+          </form.Field>
+          <form.Field name="confirmPassword">
+            {(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
+
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel htmlFor={field.name}>Confirm Password</FieldLabel>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    aria-invalid={isInvalid}
+                    type="password"
                   />
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
                 </Field>
@@ -191,19 +196,12 @@ function LoginPage() {
             {(isSubmitting) => (
               <Button className="h-10">
                 {isSubmitting && <Spinner />}
-                Login
+                Submit
               </Button>
             )}
           </form.Subscribe>
         </FieldGroup>
       </form>
-
-      <p className="text-foreground/50 text-sm text-center">
-        Don't have an account?{" "}
-        <Link to="/auth/register" className="text-foreground underline">
-          Register here
-        </Link>
-      </p>
     </div>
   );
 }

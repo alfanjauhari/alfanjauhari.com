@@ -9,6 +9,7 @@ import { sessionsTable } from "@/db/schemas/sessions";
 import { usersTable } from "@/db/schemas/users";
 import { verificationsTable } from "@/db/schemas/verifications";
 import { serverEnv } from "@/env/server";
+import { sendEmail } from "./email";
 
 export const auth = betterAuth({
   database: drizzleAdapter(client, {
@@ -22,6 +23,17 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+    sendResetPassword: async ({ user, url }) => {
+      await sendEmail({
+        to: user.email,
+        template: {
+          id: "forgot-password",
+          variables: {
+            link: url,
+          },
+        },
+      });
+    },
   },
   baseURL: serverEnv.BETTER_AUTH_URL,
   socialProviders: {

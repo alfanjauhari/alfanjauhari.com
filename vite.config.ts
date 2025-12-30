@@ -12,11 +12,10 @@ import viteTsConfigPaths from "vite-tsconfig-paths";
 
 const nonPrerenderedRoutes = [
   "/resume.pdf",
-  "/auth/login",
-  "/auth/register",
   "/updates/r",
   "/dashboard",
   "/api",
+  "/auth/",
 ];
 
 const config = defineConfig({

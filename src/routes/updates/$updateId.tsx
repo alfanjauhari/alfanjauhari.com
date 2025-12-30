@@ -5,15 +5,27 @@ import { ContentInteractions } from "@/components/content-interactions";
 import { MDXContent } from "@/components/mdx-content";
 import { PAGE_TRANSITIONS } from "@/constants";
 import { clientEnv } from "@/env/client";
+import { getUpdateCommentsQueryOptions } from "@/fns/polymorphic/comments";
+import { getUpdateLikesMetadataQueryOptions } from "@/fns/polymorphic/likes";
 import { calculateReadingTime } from "@/lib/content";
 import { seoHead } from "@/lib/seo";
 import { formatDate } from "@/lib/utils";
 
 export const Route = createFileRoute("/updates/$updateId")({
   component: UpdateId,
-  loader: async ({ params }) => {
+  ssr: "data-only",
+  loader: async ({ params, context }) => {
     const update = allUpdates.find(
       (update) => update._meta.path === params.updateId,
+    );
+
+    context.queryClient.prefetchQuery(
+      getUpdateLikesMetadataQueryOptions(params.updateId),
+    );
+    context.queryClient.prefetchQuery(
+      getUpdateCommentsQueryOptions({
+        slug: params.updateId,
+      }),
     );
 
     if (!update) {

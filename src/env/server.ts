@@ -13,6 +13,8 @@ export const serverEnv = createEnv({
     GITHUB_CLIENT_SECRET: z.string(),
 
     ADMIN_EMAIL: z.string().transform((email) => email.split(",")),
+
+    RESEND_API_TOKEN: z.string(),
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,

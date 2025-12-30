@@ -47,6 +47,18 @@ const ALLOWED_OG_ROUTES = [
     title: "Login",
     meta: "Log in to your account to access personalized features and continue your experience seamlessly.",
   },
+  {
+    path: "auth/forgot-password",
+    type: "page" as const,
+    title: "Forgot Password",
+    meta: "Forgot your password? Enter your email to receive password reset instructions.",
+  },
+  {
+    path: "auth/reset-password",
+    type: "page" as const,
+    title: "Reset Password",
+    meta: "Enter your new password to complete the reset process.",
+  },
   ...allUpdates.map((update) => ({
     path: `updates/${update._meta.path}`,
     type: "update" as const,

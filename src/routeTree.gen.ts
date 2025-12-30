@@ -25,8 +25,10 @@ import { Route as DashboardAdminRouteRouteImport } from './routes/dashboard/_adm
 import { Route as DashboardUserIndexRouteImport } from './routes/dashboard/_user/index'
 import { Route as UpdatesRUpdateIdRouteImport } from './routes/updates/r.$updateId'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as AuthAuthResetPasswordRouteImport } from './routes/_auth/auth/reset-password'
 import { Route as AuthAuthRegisterRouteImport } from './routes/_auth/auth/register'
 import { Route as AuthAuthLoginRouteImport } from './routes/_auth/auth/login'
+import { Route as AuthAuthForgotPasswordRouteImport } from './routes/_auth/auth/forgot-password'
 import { Route as DashboardAdminAdminIndexRouteImport } from './routes/dashboard/_admin/admin/index'
 
 const DashboardRouteImport = createFileRoute('/dashboard')()
@@ -103,6 +105,11 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthAuthResetPasswordRoute = AuthAuthResetPasswordRouteImport.update({
+  id: '/auth/reset-password',
+  path: '/auth/reset-password',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
 const AuthAuthRegisterRoute = AuthAuthRegisterRouteImport.update({
   id: '/auth/register',
   path: '/auth/register',
@@ -111,6 +118,11 @@ const AuthAuthRegisterRoute = AuthAuthRegisterRouteImport.update({
 const AuthAuthLoginRoute = AuthAuthLoginRouteImport.update({
   id: '/auth/login',
   path: '/auth/login',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthAuthForgotPasswordRoute = AuthAuthForgotPasswordRouteImport.update({
+  id: '/auth/forgot-password',
+  path: '/auth/forgot-password',
   getParentRoute: () => AuthRouteRoute,
 } as any)
 const DashboardAdminAdminIndexRoute =
@@ -130,8 +142,10 @@ export interface FileRoutesByFullPath {
   '/works/$workId': typeof WorksWorkIdRoute
   '/snippets': typeof SnippetsIndexRoute
   '/updates': typeof UpdatesIndexRoute
+  '/auth/forgot-password': typeof AuthAuthForgotPasswordRoute
   '/auth/login': typeof AuthAuthLoginRoute
   '/auth/register': typeof AuthAuthRegisterRoute
+  '/auth/reset-password': typeof AuthAuthResetPasswordRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/updates/r/$updateId': typeof UpdatesRUpdateIdRoute
   '/dashboard/': typeof DashboardUserIndexRoute
@@ -147,8 +161,10 @@ export interface FileRoutesByTo {
   '/works/$workId': typeof WorksWorkIdRoute
   '/snippets': typeof SnippetsIndexRoute
   '/updates': typeof UpdatesIndexRoute
+  '/auth/forgot-password': typeof AuthAuthForgotPasswordRoute
   '/auth/login': typeof AuthAuthLoginRoute
   '/auth/register': typeof AuthAuthRegisterRoute
+  '/auth/reset-password': typeof AuthAuthResetPasswordRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/updates/r/$updateId': typeof UpdatesRUpdateIdRoute
   '/dashboard/admin': typeof DashboardAdminAdminIndexRoute
@@ -167,8 +183,10 @@ export interface FileRoutesById {
   '/works/$workId': typeof WorksWorkIdRoute
   '/snippets/': typeof SnippetsIndexRoute
   '/updates/': typeof UpdatesIndexRoute
+  '/_auth/auth/forgot-password': typeof AuthAuthForgotPasswordRoute
   '/_auth/auth/login': typeof AuthAuthLoginRoute
   '/_auth/auth/register': typeof AuthAuthRegisterRoute
+  '/_auth/auth/reset-password': typeof AuthAuthResetPasswordRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/updates/r/$updateId': typeof UpdatesRUpdateIdRoute
   '/dashboard/_user/': typeof DashboardUserIndexRoute
@@ -186,8 +204,10 @@ export interface FileRouteTypes {
     | '/works/$workId'
     | '/snippets'
     | '/updates'
+    | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/register'
+    | '/auth/reset-password'
     | '/api/auth/$'
     | '/updates/r/$updateId'
     | '/dashboard/'
@@ -203,8 +223,10 @@ export interface FileRouteTypes {
     | '/works/$workId'
     | '/snippets'
     | '/updates'
+    | '/auth/forgot-password'
     | '/auth/login'
     | '/auth/register'
+    | '/auth/reset-password'
     | '/api/auth/$'
     | '/updates/r/$updateId'
     | '/dashboard/admin'
@@ -222,8 +244,10 @@ export interface FileRouteTypes {
     | '/works/$workId'
     | '/snippets/'
     | '/updates/'
+    | '/_auth/auth/forgot-password'
     | '/_auth/auth/login'
     | '/_auth/auth/register'
+    | '/_auth/auth/reset-password'
     | '/api/auth/$'
     | '/updates/r/$updateId'
     | '/dashboard/_user/'
@@ -352,6 +376,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_auth/auth/reset-password': {
+      id: '/_auth/auth/reset-password'
+      path: '/auth/reset-password'
+      fullPath: '/auth/reset-password'
+      preLoaderRoute: typeof AuthAuthResetPasswordRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
     '/_auth/auth/register': {
       id: '/_auth/auth/register'
       path: '/auth/register'
@@ -366,6 +397,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAuthLoginRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_auth/auth/forgot-password': {
+      id: '/_auth/auth/forgot-password'
+      path: '/auth/forgot-password'
+      fullPath: '/auth/forgot-password'
+      preLoaderRoute: typeof AuthAuthForgotPasswordRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
     '/dashboard/_admin/admin/': {
       id: '/dashboard/_admin/admin/'
       path: '/admin'
@@ -377,13 +415,17 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthRouteRouteChildren {
+  AuthAuthForgotPasswordRoute: typeof AuthAuthForgotPasswordRoute
   AuthAuthLoginRoute: typeof AuthAuthLoginRoute
   AuthAuthRegisterRoute: typeof AuthAuthRegisterRoute
+  AuthAuthResetPasswordRoute: typeof AuthAuthResetPasswordRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthAuthForgotPasswordRoute: AuthAuthForgotPasswordRoute,
   AuthAuthLoginRoute: AuthAuthLoginRoute,
   AuthAuthRegisterRoute: AuthAuthRegisterRoute,
+  AuthAuthResetPasswordRoute: AuthAuthResetPasswordRoute,
 }
 
 const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
