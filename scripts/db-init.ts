@@ -45,7 +45,7 @@ async function main() {
     ...updates.map((update, index, self) =>
       index === self.length - 1
         ? sql`(${update.title}, ${update.slug}, ${update.summary}, ${update.date}, ${update.restricted})`
-        : sql`(${update.title}, ${update.slug}, ${update.summary}, ${update.date}, ${update.restricted})`,
+        : sql`(${update.title}, ${update.slug}, ${update.summary}, ${update.date}, ${update.restricted}),`,
     ),
     sql`ON CONFLICT (slug) DO UPDATE SET title = EXCLUDED.title, slug = EXCLUDED.slug, summary = EXCLUDED.summary, date = EXCLUDED.date, restricted = EXCLUDED.restricted`,
   ];
