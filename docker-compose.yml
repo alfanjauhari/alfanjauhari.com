@@ -51,6 +51,9 @@ services:
     networks:
       - web
     user: "1000"
+    depends_on:
+      alfanjauhari_com_db:
+        condition: service_healthy
     labels:
       - "traefik.enable=true"
 
