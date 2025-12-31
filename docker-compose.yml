@@ -132,6 +132,7 @@ volumes:
   app_data:
   traefik-certs:
   db_data:
+  redis_data:
 
 networks:
   web:
