@@ -89,7 +89,7 @@ services:
     container_name: alfanjauhari_com_redis
     env_file: ${RUNTIME_ENV_FILE:-.env}
     healthcheck:
-      test: ["CMD-SHELL", "redis-cli ping | grep PONG || exit 1"]
+      test: ["CMD", "redis-cli", "-a", "$$REDIS_PASSWORD", "ping"]
       interval: 30s
       timeout: 3s
       retries: 2

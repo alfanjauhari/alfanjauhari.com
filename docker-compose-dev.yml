@@ -2,6 +2,11 @@ services:
   alfanjauhari_com_app_dev:
     container_name: alfanjauhari_com_app_dev
     env_file: ${RUNTIME_ENV_FILE:-.env}
+    depends_on:
+      alfanjauhari_com_db_dev:
+        condition: service_healthy
+      alfanjauhari_com_redis_dev:
+        condition: service_healthy
     build:
       context: .
       args:
@@ -91,7 +96,7 @@ services:
     container_name: alfanjauhari_com_redis_dev
     env_file: ${RUNTIME_ENV_FILE:-.env}
     healthcheck:
-      test: ["CMD-SHELL", "redis-cli ping | grep PONG || exit 1"]
+      test: ["CMD", "redis-cli", "-a", "$$REDIS_PASSWORD", "ping"]
       interval: 30s
       timeout: 3s
       retries: 2
