@@ -16,9 +16,7 @@ export const serverEnv = createEnv({
 
     RESEND_API_TOKEN: z.string(),
 
-    REDIS_HOST: z.string(),
-    REDIS_PORT: z.string().transform(Number),
-    REDIS_PASSWORD: z.string(),
+    REDIS_URL: z.string(),
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,
