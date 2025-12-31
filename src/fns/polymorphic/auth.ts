@@ -1,4 +1,5 @@
 import { formOptions } from "@tanstack/react-form";
+import { mutationOptions } from "@tanstack/react-query";
 import { notFound } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeaders } from "@tanstack/react-start/server";
@@ -9,6 +10,7 @@ import { client } from "@/db/client";
 import { verificationsTable } from "@/db/schemas/verifications";
 import { auth } from "@/lib/auth.server";
 import { handleCommonApiError, hasMiddlewareError } from "@/lib/error";
+import { authMiddleware } from "@/middleware/auth";
 import { rateLimitMiddleware } from "@/middleware/rate-limit";
 
 export const getSessionFn = createServerFn().handler(async () => {
@@ -311,3 +313,41 @@ export const handleResetPasswordForm = createServerFn({ method: "POST" })
       };
     }
   });
+
+export const requestEmailVerificationFn = createServerFn()
+  .middleware([authMiddleware, rateLimitMiddleware("verify-email", 2)])
+  .handler(async ({ context }) => {
+    try {
+      const { email } = context.session.user;
+
+      if (hasMiddlewareError(context)) {
+        const { error } = context;
+
+        throw new APIError(error.status, {
+          message: error.message,
+          code: error.code,
+        });
+      }
+
+      return auth.api.sendVerificationEmail({
+        body: {
+          email,
+        },
+      });
+    } catch (error) {
+      if (error instanceof APIError) {
+        return {
+          code: error.body?.code,
+          message: handleCommonApiError(error),
+        };
+      }
+
+      return {
+        message: "Something went wrong. Probably the wind",
+      };
+    }
+  });
+
+export const requestEmailVerificationMutation = mutationOptions({
+  mutationFn: () => requestEmailVerificationFn(),
+});

@@ -37,6 +37,22 @@ export const auth = betterAuth({
       });
     },
   },
+  emailVerification: {
+    sendOnSignUp: true,
+    sendVerificationEmail: async ({ user, url }) => {
+      await sendEmail({
+        to: user.email,
+        template: {
+          id: "email-verification",
+          variables: {
+            link: url,
+            name: user.name,
+          },
+        },
+        subject: "Email Verification Instruction",
+      });
+    },
+  },
   baseURL: serverEnv.BETTER_AUTH_URL,
   socialProviders: {
     google: {

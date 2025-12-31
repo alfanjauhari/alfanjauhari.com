@@ -10,7 +10,6 @@ import {
   inArray,
   or,
   type SQL,
-  sql,
 } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import z from "zod";
@@ -18,6 +17,8 @@ import { client } from "@/db/client";
 import { commentsTable } from "@/db/schemas/comments";
 import { updatesTable } from "@/db/schemas/updates";
 import { usersTable } from "@/db/schemas/users";
+import { clientEnv } from "@/env/client";
+import { sendEmail } from "@/lib/email";
 import { handleCommonApiError, hasMiddlewareError } from "@/lib/error";
 import { withPagination } from "@/lib/queries.server";
 import { adminMiddleware, authMiddleware } from "@/middleware/auth";
@@ -202,29 +203,61 @@ export const addCommentToUpdate = createServerFn({ method: "POST" })
 
       const session = context.session;
 
-      const updateSq = client.$with("update").as(
-        client
-          .select({
-            id: updatesTable.id,
-          })
+      if (!session.user.emailVerified) {
+        throw new APIError(403, {
+          code: "UNVERIFIED_EMAIL",
+          message: "Your email must've been verified to comment",
+        });
+      }
+
+      const createdComment = await client.transaction(async (tx) => {
+        const update = await tx
+          .select()
           .from(updatesTable)
           .where(eq(updatesTable.slug, data.slug))
-          .limit(1),
-      );
-      const createdComment = await client
-        .with(updateSq)
-        .insert(commentsTable)
-        .values({
-          ...data,
-          refTable: "updates",
-          refId: sql`(select * from ${updateSq})`,
-          userId: session.user.id,
-          status: "published",
-        })
-        .returning({
-          id: commentsTable.id,
-        })
-        .execute();
+          .limit(1)
+          .then((res) => res[0]);
+
+        if (data.parentId) {
+          const userParent = await tx
+            .select({
+              email: usersTable.email,
+            })
+            .from(commentsTable)
+            .where(eq(commentsTable.id, data.parentId))
+            .innerJoin(usersTable, eq(usersTable.id, commentsTable.userId))
+            .then((res) => res[0]);
+
+          await sendEmail({
+            to: userParent.email,
+            template: {
+              id: "mention",
+              variables: {
+                name: session.user.name,
+                update_title: update.title,
+                reply_content: data.content,
+                link: update.restricted
+                  ? `${clientEnv.VITE_SITE_URL}/r/${data.slug}`
+                  : `${clientEnv.VITE_SITE_URL}/${data.slug}`,
+              },
+            },
+          });
+        }
+
+        return tx
+          .insert(commentsTable)
+          .values({
+            ...data,
+            refTable: "updates",
+            refId: update.id,
+            userId: session.user.id,
+            status: "published",
+          })
+          .returning({
+            id: commentsTable.id,
+          })
+          .execute();
+      });
 
       return {
         id: createdComment[0].id,
@@ -232,8 +265,10 @@ export const addCommentToUpdate = createServerFn({ method: "POST" })
     } catch (error) {
       if (error instanceof APIError) {
         return {
+          code: error.body?.code,
           message: handleCommonApiError(error, {
             "429": "Wow wow wow easyyyy!!! Try to chill out",
+            "403": error.message,
           }),
         };
       }

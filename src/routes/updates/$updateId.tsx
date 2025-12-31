@@ -13,7 +13,6 @@ import { formatDate } from "@/lib/utils";
 
 export const Route = createFileRoute("/updates/$updateId")({
   component: UpdateId,
-  ssr: "data-only",
   loader: async ({ params, context }) => {
     const update = allUpdates.find(
       (update) => update._meta.path === params.updateId,

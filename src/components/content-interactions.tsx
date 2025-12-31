@@ -23,11 +23,13 @@ import {
   createContext,
   type FormEvent,
   Suspense,
+  useCallback,
   useContext,
   useState,
 } from "react";
 import { toast } from "sonner";
 import z from "zod";
+import { requestEmailVerificationMutation } from "@/fns/polymorphic/auth";
 import {
   addCommentToUpdateMutationOptions,
   getUpdateCommentsQueryOptions,
@@ -39,6 +41,7 @@ import {
 import { type CommentWithReplies, commentsTree } from "@/lib/content";
 import { cn, formatDate } from "@/lib/utils";
 import { Route } from "@/routes/__root";
+import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { Button } from "./ui/button";
 import { Collapsible, CollapsibleContent } from "./ui/collapsible";
 import { Field, FieldError } from "./ui/field";
@@ -270,10 +273,20 @@ function ContentComment({
   const queryClient = useQueryClient();
 
   const [replyingTo, setReplyingTo] = useState<string>();
+  const [isUnverified, setIsUnverified] = useState(false);
 
   const replyMutation = useMutation(
     addCommentToUpdateMutationOptions(match.params.updateId),
   );
+  const verifyEmailMutation = useMutation(requestEmailVerificationMutation);
+
+  const onVerify = async () => {
+    const result = await verifyEmailMutation.mutateAsync();
+
+    if ("message" in result) {
+      toast.error(result.message);
+    }
+  };
 
   const form = useForm({
     defaultValues: {
@@ -301,7 +314,11 @@ function ContentComment({
         return form.reset();
       }
 
-      toast.error(result.message);
+      if (result.code && result.code === "UNVERIFIED_EMAIL") {
+        setIsUnverified(true);
+      } else {
+        toast.error(result.message);
+      }
     },
   });
 
@@ -386,56 +403,75 @@ function ContentComment({
                   field.state.meta.isTouched && !field.state.meta.isValid;
 
                 return (
-                  <Field data-invalid={isInvalid}>
-                    <div className="relative">
-                      <Textarea
-                        placeholder={`Replying to ${comment.user.name}...`}
-                        className="min-h-24 rounded-none"
-                        id={field.name}
-                        name={field.name}
-                        value={field.state.value}
-                        onBlur={field.handleBlur}
-                        onChange={(e) => field.handleChange(e.target.value)}
-                        aria-invalid={isInvalid}
-                        ref={(node) => {
-                          if (!node) return;
+                  <>
+                    <Field data-invalid={isInvalid}>
+                      <div className="relative">
+                        <Textarea
+                          placeholder={`Replying to ${comment.user.name}...`}
+                          className="min-h-24 rounded-none"
+                          id={field.name}
+                          name={field.name}
+                          value={field.state.value}
+                          onBlur={field.handleBlur}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          aria-invalid={isInvalid}
+                          ref={(node) => {
+                            if (!node) return;
 
-                          node.addEventListener("keydown", (e) => {
-                            if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
-                              const form = (
-                                e.currentTarget as HTMLTextAreaElement
-                              ).closest("form");
+                            node.addEventListener("keydown", (e) => {
+                              if (
+                                e.key === "Enter" &&
+                                (e.metaKey || e.ctrlKey)
+                              ) {
+                                const form = (
+                                  e.currentTarget as HTMLTextAreaElement
+                                ).closest("form");
 
-                              if (!form) return;
+                                if (!form) return;
 
-                              form.requestSubmit();
-                            }
-                          });
-                        }}
-                      />
-                      <form.Subscribe
-                        selector={(formState) => formState.isSubmitting}
-                      >
-                        {(isSubmitting) => (
-                          <Button
-                            type="submit"
-                            className="absolute bottom-3 right-3 p-1.5"
-                            variant="ghost"
-                            size="icon"
-                          >
-                            {isSubmitting ? (
-                              <Spinner className="size-3.5" />
-                            ) : (
-                              <SendIcon className="size-3.5" />
-                            )}
+                                form.requestSubmit();
+                              }
+                            });
+                          }}
+                        />
+                        <form.Subscribe
+                          selector={(formState) => formState.isSubmitting}
+                        >
+                          {(isSubmitting) => (
+                            <Button
+                              type="submit"
+                              className="absolute bottom-3 right-3 p-1.5"
+                              variant="ghost"
+                              size="icon"
+                            >
+                              {isSubmitting ? (
+                                <Spinner className="size-3.5" />
+                              ) : (
+                                <SendIcon className="size-3.5" />
+                              )}
+                            </Button>
+                          )}
+                        </form.Subscribe>
+                      </div>
+                      {isInvalid && (
+                        <FieldError errors={field.state.meta.errors} />
+                      )}
+                    </Field>
+                    {isUnverified ? (
+                      <Alert variant="destructive" className="mt-2">
+                        <AlertTitle>Email Unverified</AlertTitle>
+                        <AlertDescription className="flex items-center justify-between gap-4">
+                          <span>
+                            Your email must've been verified to comment
+                          </span>
+                          <Button size="sm" onClick={onVerify}>
+                            {verifyEmailMutation.isPending && <Spinner />}{" "}
+                            Verify now
                           </Button>
-                        )}
-                      </form.Subscribe>
-                    </div>
-                    {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
-                    )}
-                  </Field>
+                        </AlertDescription>
+                      </Alert>
+                    ) : null}
+                  </>
                 );
               }}
             </form.Field>
@@ -457,6 +493,8 @@ function ContentComment({
 function ContentDiscussions() {
   const routeId = useContentInteractionsContext();
 
+  const [isUnverified, setIsUnverified] = useState(false);
+
   const match = useMatch({
     from: routeId,
   });
@@ -467,6 +505,15 @@ function ContentDiscussions() {
   const addCommentMutation = useMutation(
     addCommentToUpdateMutationOptions(match.params.updateId),
   );
+  const verifyEmailMutation = useMutation(requestEmailVerificationMutation);
+
+  const onVerify = async () => {
+    const result = await verifyEmailMutation.mutateAsync();
+
+    if ("message" in result) {
+      toast.error(result.message);
+    }
+  };
 
   const form = useForm({
     defaultValues: {
@@ -477,6 +524,11 @@ function ContentDiscussions() {
       onChange: ReplySchema.omit({
         parentId: true,
       }),
+    },
+    listeners: {
+      onChange: useCallback(() => {
+        setIsUnverified(false);
+      }, []),
     },
     onSubmit: async ({ value }) => {
       try {
@@ -494,7 +546,11 @@ function ContentDiscussions() {
           return form.reset();
         }
 
-        toast.error(result.message);
+        if (result.code && result.code === "UNVERIFIED_EMAIL") {
+          setIsUnverified(true);
+        } else {
+          toast.error(result.message);
+        }
       } catch (err) {
         if (isRedirect(err)) {
           navigate({
@@ -541,56 +597,75 @@ function ContentDiscussions() {
                   field.state.meta.isTouched && !field.state.meta.isValid;
 
                 return (
-                  <Field data-invalid={isInvalid}>
-                    <div className="relative">
-                      <Textarea
-                        placeholder="Add to the discussion..."
-                        className="min-h-24 rounded-none"
-                        id={field.name}
-                        name={field.name}
-                        value={field.state.value}
-                        onBlur={field.handleBlur}
-                        onChange={(e) => field.handleChange(e.target.value)}
-                        aria-invalid={isInvalid}
-                        ref={(node) => {
-                          if (!node) return;
+                  <>
+                    <Field data-invalid={isInvalid}>
+                      <div className="relative">
+                        <Textarea
+                          placeholder="Add to the discussion..."
+                          className="min-h-24 rounded-none"
+                          id={field.name}
+                          name={field.name}
+                          value={field.state.value}
+                          onBlur={field.handleBlur}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          aria-invalid={isInvalid}
+                          ref={(node) => {
+                            if (!node) return;
 
-                          node.addEventListener("keydown", (e) => {
-                            if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
-                              const form = (
-                                e.currentTarget as HTMLTextAreaElement
-                              ).closest("form");
+                            node.addEventListener("keydown", (e) => {
+                              if (
+                                e.key === "Enter" &&
+                                (e.metaKey || e.ctrlKey)
+                              ) {
+                                const form = (
+                                  e.currentTarget as HTMLTextAreaElement
+                                ).closest("form");
 
-                              if (!form) return;
+                                if (!form) return;
 
-                              form.requestSubmit();
-                            }
-                          });
-                        }}
-                      />
-                      <form.Subscribe
-                        selector={(formState) => formState.isSubmitting}
-                      >
-                        {(isSubmitting) => (
-                          <Button
-                            type="submit"
-                            className="absolute bottom-3 right-3 p-1.5"
-                            variant="ghost"
-                            size="icon"
-                          >
-                            {isSubmitting ? (
-                              <Spinner className="size-3.5" />
-                            ) : (
-                              <SendIcon className="size-3.5" />
-                            )}
+                                form.requestSubmit();
+                              }
+                            });
+                          }}
+                        />
+                        <form.Subscribe
+                          selector={(formState) => formState.isSubmitting}
+                        >
+                          {(isSubmitting) => (
+                            <Button
+                              type="submit"
+                              className="absolute bottom-3 right-3 p-1.5"
+                              variant="ghost"
+                              size="icon"
+                            >
+                              {isSubmitting ? (
+                                <Spinner className="size-3.5" />
+                              ) : (
+                                <SendIcon className="size-3.5" />
+                              )}
+                            </Button>
+                          )}
+                        </form.Subscribe>
+                      </div>
+                      {isInvalid && (
+                        <FieldError errors={field.state.meta.errors} />
+                      )}
+                    </Field>
+                    {isUnverified ? (
+                      <Alert variant="destructive" className="mt-2">
+                        <AlertTitle>Email Unverified</AlertTitle>
+                        <AlertDescription className="flex items-center justify-between gap-4">
+                          <span>
+                            Your email must've been verified to comment
+                          </span>
+                          <Button size="sm" onClick={onVerify}>
+                            {verifyEmailMutation.isPending && <Spinner />}{" "}
+                            Verify now
                           </Button>
-                        )}
-                      </form.Subscribe>
-                    </div>
-                    {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
-                    )}
-                  </Field>
+                        </AlertDescription>
+                      </Alert>
+                    ) : null}
+                  </>
                 );
               }}
             </form.Field>
