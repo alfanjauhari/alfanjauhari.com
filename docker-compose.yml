@@ -54,6 +54,8 @@ services:
     depends_on:
       alfanjauhari_com_db:
         condition: service_healthy
+      alfanjauhari_com_redis:
+        condition: service_healthy
     labels:
       - "traefik.enable=true"
 
@@ -79,6 +81,22 @@ services:
     restart: always
     volumes:
       - db_data:/var/lib/postgresql/data
+    networks:
+      - web
+
+  alfanjauhari_com_redis:
+    image: redis:alpine
+    container_name: alfanjauhari_com_redis
+    env_file: ${RUNTIME_ENV_FILE:-.env}
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG || exit 1"]
+      interval: 30s
+      timeout: 3s
+      retries: 2
+    command: >
+      --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - redis_data:/data
     networks:
       - web
 

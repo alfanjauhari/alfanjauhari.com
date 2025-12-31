@@ -30,8 +30,10 @@ export const auth = betterAuth({
           id: "forgot-password",
           variables: {
             link: url,
+            name: user.name,
           },
         },
+        subject: "Your Password Reset Instruction",
       });
     },
   },

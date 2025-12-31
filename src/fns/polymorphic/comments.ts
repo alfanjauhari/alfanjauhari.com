@@ -1,5 +1,6 @@
 import { mutationOptions, queryOptions } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
+import { APIError } from "better-auth";
 import {
   and,
   desc,
@@ -17,9 +18,11 @@ import { client } from "@/db/client";
 import { commentsTable } from "@/db/schemas/comments";
 import { updatesTable } from "@/db/schemas/updates";
 import { usersTable } from "@/db/schemas/users";
+import { handleCommonApiError, hasMiddlewareError } from "@/lib/error";
 import { withPagination } from "@/lib/queries.server";
 import { adminMiddleware, authMiddleware } from "@/middleware/auth";
-import { getSessionFn } from "../server/auth";
+import { rateLimitMiddleware } from "@/middleware/rate-limit";
+import { getSessionFn } from "./auth";
 
 const parent = alias(commentsTable, "parent");
 const parentUser = alias(usersTable, "parent_user");
@@ -184,10 +187,19 @@ const NewCommentSchema = z.object({
 });
 
 export const addCommentToUpdate = createServerFn({ method: "POST" })
-  .middleware([authMiddleware])
+  .middleware([authMiddleware, rateLimitMiddleware("comment", 10)])
   .inputValidator(NewCommentSchema)
   .handler(async ({ data, context }) => {
     try {
+      if (hasMiddlewareError(context)) {
+        const { error } = context;
+
+        throw new APIError(error.status, {
+          message: error.message,
+          code: error.code,
+        });
+      }
+
       const session = context.session;
 
       const updateSq = client.$with("update").as(
@@ -217,7 +229,15 @@ export const addCommentToUpdate = createServerFn({ method: "POST" })
       return {
         id: createdComment[0].id,
       };
-    } catch (_) {
+    } catch (error) {
+      if (error instanceof APIError) {
+        return {
+          message: handleCommonApiError(error, {
+            "429": "Wow wow wow easyyyy!!! Try to chill out",
+          }),
+        };
+      }
+
       return {
         message: "Something went wrong. Probably the wind",
       };

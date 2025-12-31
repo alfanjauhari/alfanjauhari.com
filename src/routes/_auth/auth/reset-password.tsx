@@ -1,7 +1,6 @@
 import { useForm } from "@tanstack/react-form";
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { zodValidator } from "@tanstack/zod-adapter";
 import { type FormEvent, useCallback, useState } from "react";
 import z from "zod";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -16,26 +15,29 @@ import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { clientEnv } from "@/env/client";
 import {
+  checkToken,
   handleResetPasswordForm,
   resetPasswordFormOpts,
 } from "@/fns/polymorphic/auth";
-import { checkToken } from "@/fns/server/auth";
 import { seoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/_auth/auth/reset-password")({
   component: RouteComponent,
-  validateSearch: zodValidator(
-    z.object({
-      token: z.string(),
-    }),
-  ),
+  validateSearch: z.object({
+    token: z.string(),
+  }),
   loaderDeps: ({ search }) => {
     return {
       token: search.token,
     };
   },
   loader: async ({ deps }) => {
-    await checkToken("reset-password", deps.token);
+    await checkToken({
+      data: {
+        token: deps.token,
+        type: "reset-password",
+      },
+    });
 
     return {
       token: deps.token,

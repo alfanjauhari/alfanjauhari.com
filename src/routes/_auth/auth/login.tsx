@@ -1,7 +1,6 @@
 import { useForm } from "@tanstack/react-form";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { zodValidator } from "@tanstack/zod-adapter";
 import { type FormEvent, useCallback, useState } from "react";
 import z from "zod";
 import { SocialLogins } from "@/components/social-logins";
@@ -29,20 +28,18 @@ export const Route = createFileRoute("/_auth/auth/login")({
       canonical: "/auth/login",
       image: `${clientEnv.VITE_CLOUDINARY_URL}/og/auth/login.webp`,
     }),
-  validateSearch: zodValidator(
-    z.object({
-      redirectTo: z
-        .string()
-        .default("/")
-        .transform((url) => {
-          if (url.includes("http")) {
-            return "/";
-          }
+  validateSearch: z.object({
+    redirectTo: z
+      .string()
+      .default("/")
+      .transform((url) => {
+        if (url.includes("http")) {
+          return "/";
+        }
 
-          return url;
-        }),
-    }),
-  ),
+        return url;
+      }),
+  }),
 });
 
 function LoginPage() {
@@ -170,19 +167,29 @@ function LoginPage() {
                 field.state.meta.isTouched && !field.state.meta.isValid;
 
               return (
-                <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>Password</FieldLabel>
-                  <Input
-                    id={field.name}
-                    name={field.name}
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    type="password"
-                    aria-invalid={isInvalid}
-                  />
-                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
-                </Field>
+                <>
+                  <Field data-invalid={isInvalid}>
+                    <FieldLabel htmlFor={field.name}>Password</FieldLabel>
+                    <Input
+                      id={field.name}
+                      name={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      type="password"
+                      aria-invalid={isInvalid}
+                    />
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
+                  </Field>
+                  <Link
+                    to="/auth/forgot-password"
+                    className="text-sm underline -mt-3"
+                  >
+                    Forgot your password?
+                  </Link>
+                </>
               );
             }}
           </form.Field>

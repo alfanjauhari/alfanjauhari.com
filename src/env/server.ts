@@ -15,6 +15,10 @@ export const serverEnv = createEnv({
     ADMIN_EMAIL: z.string().transform((email) => email.split(",")),
 
     RESEND_API_TOKEN: z.string(),
+
+    REDIS_HOST: z.string(),
+    REDIS_PORT: z.string().transform(Number),
+    REDIS_PASSWORD: z.string(),
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,

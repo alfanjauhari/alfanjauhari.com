@@ -1,8 +1,45 @@
 import { formOptions } from "@tanstack/react-form";
+import { notFound } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
+import { getRequestHeaders } from "@tanstack/react-start/server";
 import { APIError } from "better-auth";
+import { eq } from "drizzle-orm";
 import z, { ZodError } from "zod";
+import { client } from "@/db/client";
+import { verificationsTable } from "@/db/schemas/verifications";
 import { auth } from "@/lib/auth.server";
+import { handleCommonApiError, hasMiddlewareError } from "@/lib/error";
+import { rateLimitMiddleware } from "@/middleware/rate-limit";
+
+export const getSessionFn = createServerFn().handler(async () => {
+  const headers = getRequestHeaders();
+  const session = await auth.api.getSession({ headers });
+
+  return session;
+});
+
+export const checkToken = createServerFn()
+  .inputValidator(
+    z.object({
+      type: z.enum(["reset-password"]),
+      token: z.string,
+    }),
+  )
+  .handler(async ({ data }) => {
+    const { type, token } = data;
+
+    const tokens = await client
+      .select({ id: verificationsTable.id })
+      .from(verificationsTable)
+      .where(eq(verificationsTable.identifier, `${type}:${token}`))
+      .limit(1);
+
+    if (!tokens.length) {
+      throw notFound();
+    }
+
+    return true;
+  });
 
 const LoginSchema = z.object({
   email: z.email(),
@@ -145,8 +182,17 @@ export const forgotPasswordFormOpts = formOptions({
 
 export const handleForgotPasswordForm = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => data)
-  .handler(async ({ data }) => {
+  .middleware([rateLimitMiddleware("forgot-passwor", 2)])
+  .handler(async ({ data, context }) => {
     try {
+      if (hasMiddlewareError(context)) {
+        const { error } = context;
+        throw new APIError(error.status, {
+          message: error.message,
+          code: error.code,
+        });
+      }
+
       const validatedData = ForgotPasswordSchema.parse(data);
 
       const response = await auth.api.requestPasswordReset({
@@ -180,7 +226,9 @@ export const handleForgotPasswordForm = createServerFn({ method: "POST" })
         return {
           code: "AUTH_ERROR",
           errorCode: error.body?.code || "UNKNOWN_AUTH_ERROR",
-          message: error.message,
+          message: handleCommonApiError(error, {
+            "429": "Too many request. Try again later",
+          }),
         };
       }
 

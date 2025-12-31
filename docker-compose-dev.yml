@@ -86,6 +86,24 @@ services:
     ports:
       - 5432:5432
 
+  alfanjauhari_com_redis_dev:
+    image: redis:alpine
+    container_name: alfanjauhari_com_redis_dev
+    env_file: ${RUNTIME_ENV_FILE:-.env}
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG || exit 1"]
+      interval: 30s
+      timeout: 3s
+      retries: 2
+    command: >
+      --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - redis_data:/data
+    networks:
+      - web
+    ports:
+      - 6379:6379
+
   alfanjauhari_com_analytics_dev:
     image: ghcr.io/umami-software/umami:latest
     container_name: alfanjauhari_com_analytics_dev
@@ -115,6 +133,7 @@ services:
 volumes:
   app_data:
   db_data:
+  redis_data:
 
 networks:
   web:

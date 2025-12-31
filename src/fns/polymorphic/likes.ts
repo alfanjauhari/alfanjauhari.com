@@ -7,9 +7,11 @@ import { client } from "@/db/client";
 import { likesTable } from "@/db/schemas/likes";
 import { updatesTable } from "@/db/schemas/updates";
 import { usersTable } from "@/db/schemas/users";
+import { handleCommonApiError, hasMiddlewareError } from "@/lib/error";
 import { withPagination } from "@/lib/queries.server";
 import { authMiddleware } from "@/middleware/auth";
-import { getSessionFn } from "../server/auth";
+import { rateLimitMiddleware } from "@/middleware/rate-limit";
+import { getSessionFn } from "./auth";
 
 export const LikeFnsSchema = z.object({
   slug: z.string(),
@@ -63,6 +65,7 @@ export const getUserLikesQueryOptions = (
   });
 
 export const getUpdateLikesMetadataFn = createServerFn()
+  .middleware([rateLimitMiddleware("get-like", 10)])
   .inputValidator(LikeFnsSchema)
   .handler(async ({ data }) => {
     try {
@@ -115,11 +118,18 @@ export const getUpdateLikesMetadataQueryOptions = (slug: string) =>
 
 export const likeUpdateFn = createServerFn({ method: "POST" })
   .inputValidator(LikeFnsSchema)
-  .middleware([authMiddleware])
+  .middleware([authMiddleware, rateLimitMiddleware("like")])
   .handler(async ({ data, context }) => {
     const session = context.session;
 
     try {
+      if (hasMiddlewareError(context)) {
+        throw new APIError(context.error.status, {
+          message: context.error.message,
+          code: context.error.code,
+        });
+      }
+
       const updates = await client
         .select({
           id: updatesTable.id,
@@ -165,12 +175,7 @@ export const likeUpdateFn = createServerFn({ method: "POST" })
       };
     } catch (error) {
       if (error instanceof APIError) {
-        return {
-          message:
-            error.status === "NOT_FOUND"
-              ? "For some reason the update record is not found in the database. Please reload and try again"
-              : "Unknown API error. Must be the wind",
-        };
+        return { message: handleCommonApiError(error) };
       }
 
       return {

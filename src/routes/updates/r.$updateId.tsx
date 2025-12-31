@@ -7,15 +7,22 @@ import { MDXContent } from "@/components/mdx-content";
 import { Button } from "@/components/ui/button";
 import { PAGE_TRANSITIONS } from "@/constants";
 import { clientEnv } from "@/env/client";
+import { getSessionFn } from "@/fns/polymorphic/auth";
 import { getUpdateCommentsQueryOptions } from "@/fns/polymorphic/comments";
 import { getUpdateLikesMetadataQueryOptions } from "@/fns/polymorphic/likes";
-import { getSessionFn } from "@/fns/server/auth";
 import { calculateReadingTime } from "@/lib/content";
 import { seoHead } from "@/lib/seo";
 import { formatDate } from "@/lib/utils";
 
 export const Route = createFileRoute("/updates/r/$updateId")({
   component: UpdateId,
+  beforeLoad: async () => {
+    const session = await getSessionFn();
+
+    return {
+      session,
+    };
+  },
   loader: async ({ params, context }) => {
     const update = allRestrictedUpdates.find(
       (update) => update._meta.path === params.updateId,
@@ -24,8 +31,6 @@ export const Route = createFileRoute("/updates/r/$updateId")({
     if (!update) {
       throw notFound();
     }
-
-    const session = await getSessionFn();
 
     // Deferred queries
     context.queryClient.prefetchQuery(
@@ -37,7 +42,7 @@ export const Route = createFileRoute("/updates/r/$updateId")({
       }),
     );
 
-    return { update, userId: session?.user.id };
+    return { update, userId: context.session?.user.id };
   },
   head: ({ loaderData, match, params }) =>
     seoHead({
@@ -46,6 +51,7 @@ export const Route = createFileRoute("/updates/r/$updateId")({
       canonical: match.pathname,
       image: `${clientEnv.VITE_CLOUDINARY_URL}/og/updates/r/${params.updateId}.webp`,
     }),
+  ssr: "data-only",
 });
 
 function UpdateId() {
