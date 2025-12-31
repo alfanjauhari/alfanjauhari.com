@@ -7,6 +7,14 @@ export interface RateLimitOptions {
   windowMs: number;
 }
 
+function shouldBypassRateLimit() {
+  return (
+    process.env.SKIP_RATE_LIMIT === "1" ||
+    process.env.SKIP_RATE_LIMIT === "true" ||
+    process.env.npm_lifecycle_event === "build"
+  );
+}
+
 const slidingWindowScript = `
   -- sliding_window.lua
   -- KEYS[1] = rate limit key
@@ -30,6 +38,13 @@ const slidingWindowScript = `
 `;
 
 export async function rateLimit({ key, limit, windowMs }: RateLimitOptions) {
+  if (shouldBypassRateLimit()) {
+    return {
+      ok: true,
+      remaining: limit,
+    };
+  }
+
   const now = Date.now();
   const requestId = nanoid();
 

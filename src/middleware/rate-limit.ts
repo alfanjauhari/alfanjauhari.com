@@ -1,4 +1,4 @@
-import { createMiddleware, json } from "@tanstack/react-start";
+import { createMiddleware } from "@tanstack/react-start";
 import { getRequestIP } from "@tanstack/react-start/server";
 import { buildMiddlewareError } from "@/lib/error";
 import { rateLimit } from "@/lib/rate-limit";
