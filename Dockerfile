@@ -62,6 +62,8 @@ COPY entrypoint.sh /entrypoint.sh
 
 WORKDIR /app
 
+ENV TZ="Asia/Jakarta"
+
 RUN chmod +x /entrypoint.sh
 
 USER nonroot:nonroot

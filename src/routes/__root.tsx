@@ -70,6 +70,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       timeNow: Intl.DateTimeFormat("id-ID", {
         hour: "2-digit",
         minute: "2-digit",
+        timeZone: "Asia/Jakarta",
       }).format(new Date()),
     };
   },

@@ -131,9 +131,9 @@ export function Loader({ className, ...props }: HTMLMotionProps<"div">) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.5, duration: 1 }}
-          className="border border-border rounded-full px-4 py-1 text-xs font-mono uppercase tracking-widest w-fit"
+          className="border border-border rounded-full px-4 py-1 text-xs font-mono uppercase tracking-widest w-fit absolute bottom-0"
         >
-          Loading...
+          Loading Experience...
         </motion.div>
       </div>
     </motion.div>

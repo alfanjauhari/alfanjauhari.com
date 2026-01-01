@@ -9,6 +9,7 @@ export const getRouter = () => {
 
   return createRouter({
     routeTree,
+    defaultPendingMinMs: 0,
     context: {
       queryClient,
     },

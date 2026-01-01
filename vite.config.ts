@@ -8,6 +8,7 @@ import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
 import { nitro } from "nitro/vite";
 import { defineConfig } from "vite";
+import { analyzer } from "vite-bundle-analyzer";
 import viteTsConfigPaths from "vite-tsconfig-paths";
 
 const nonPrerenderedRoutes = [
@@ -43,6 +44,9 @@ const config = defineConfig({
     }),
     viteReact(),
     contentCollections(),
+    analyzer({
+      enabled: process.env.BUILD_ANALYZE === "true",
+    }),
   ],
   optimizeDeps: {
     exclude: ["@takumi-rs/core"],
