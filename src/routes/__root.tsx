@@ -106,7 +106,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                 {children}
               </main>
             </div>
-            {/* <Footer /> */}
+            <Footer />
             <TanStackDevtools
               plugins={[
                 {
