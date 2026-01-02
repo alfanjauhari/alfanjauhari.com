@@ -93,8 +93,10 @@ services:
       interval: 30s
       timeout: 3s
       retries: 2
-    command: >
-      --requirepass $${REDIS_PASSWORD}
+    command:
+      - redis-server
+      - --requirepass
+      - ${REDIS_PASSWORD}
     volumes:
       - redis_data:/data
     networks:
