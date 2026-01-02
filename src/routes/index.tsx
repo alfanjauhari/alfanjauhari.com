@@ -140,6 +140,7 @@ function Home() {
                       workId: work._meta.path,
                     }}
                     className="absolute inset-0 z-40"
+                    aria-label={`Learn more about ${work.title}...`}
                   />
                   <div className="w-full md:w-1/2 lg:w-7/12 relative overflow-hidden cursor-pointer">
                     <div
@@ -150,7 +151,7 @@ function Home() {
                     />
                     <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
                       <div className="bg-background text-foreground px-6 py-3 rounded-full opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 font-mono text-xs uppercase tracking-widest border border-border">
-                        Explore Case Study
+                        Learn More
                       </div>
                     </div>
                   </div>
