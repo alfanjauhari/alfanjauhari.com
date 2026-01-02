@@ -1,11 +1,9 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { allRestrictedUpdates } from "content-collections";
 import { LockIcon } from "lucide-react";
-import { motion, useScroll, useSpring } from "motion/react";
 import { ContentInteractions } from "@/components/content-interactions";
 import { MDXContent } from "@/components/mdx-content";
 import { Button } from "@/components/ui/button";
-import { PAGE_TRANSITIONS } from "@/constants";
 import { clientEnv } from "@/env/client";
 import { getSessionFn } from "@/fns/polymorphic/auth";
 import { getUpdateCommentsQueryOptions } from "@/fns/polymorphic/comments";
@@ -57,19 +55,8 @@ export const Route = createFileRoute("/updates/r/$updateId")({
 function UpdateId() {
   const { update, userId } = Route.useLoaderData();
 
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
-
   return (
-    <motion.section {...PAGE_TRANSITIONS} className="min-h-screen mt-12">
-      <motion.div
-        className="fixed top-0 inset-x-0 h-2 bg-foreground origin-left z-50"
-        style={{ scaleX }}
-      />
+    <section className="min-h-screen mt-12 page-transition">
       <div className="max-w-3xl mx-auto">
         <header className="text-center mb-20">
           <div className="flex flex-wrap justify-center gap-4 text-xxs font-mono uppercase tracking-[0.2em] text-foreground/40 mb-8">
@@ -91,12 +78,7 @@ function UpdateId() {
           </h1>
         </header>
 
-        <motion.article
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.4, duration: 0.8 }}
-          className="prose prose-primary prose-lg md:prose-xl prose-headings:leading-tight prose-headings:font-serif"
-        >
+        <article className="prose prose-primary prose-lg md:prose-xl prose-headings:leading-tight prose-headings:font-serif motion-translate-y-in-[50px] motion-opacity-in-0 motion-duration-1000 motion-delay-500">
           <p className="text-xl md:text-2xl font-serif italic mb-12">
             {update.summary}
           </p>
@@ -116,10 +98,10 @@ function UpdateId() {
           ) : (
             <MDXContent code={update.mdx} />
           )}
-        </motion.article>
+        </article>
 
         <ContentInteractions routeId="/updates/r/$updateId" />
       </div>
-    </motion.section>
+    </section>
   );
 }

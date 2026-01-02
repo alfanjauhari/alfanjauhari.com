@@ -6,10 +6,9 @@ import {
   ArrowUpRightIcon,
   MapPinIcon,
 } from "lucide-react";
-import { motion } from "motion/react";
+import type { CSSProperties } from "react";
 import { InteractiveTitle } from "@/components/interactive-title";
 import { Button } from "@/components/ui/button";
-import { PAGE_TRANSITIONS } from "@/constants";
 import { clientEnv } from "@/env/client";
 import { calculateReadingTime } from "@/lib/content";
 import { seoHead } from "@/lib/seo";
@@ -51,45 +50,16 @@ const process = [
 
 function Home() {
   return (
-    <motion.div {...PAGE_TRANSITIONS}>
+    <div className="page-transition">
       <section
         id="hero"
         className="flex flex-col justify-center relative z-10 mb-40"
       >
         <div className="my-16 xl:mb-24">
-          <motion.div
-            initial={{
-              y: 40,
-              opacity: 0,
-            }}
-            animate={{
-              y: 0,
-              opacity: 1,
-            }}
-            transition={{
-              duration: 1,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-          >
-            <InteractiveTitle />
-          </motion.div>
+          <InteractiveTitle />
         </div>
 
-        <motion.div
-          initial={{
-            y: 20,
-            opacity: 0,
-          }}
-          animate={{
-            y: 0,
-            opacity: 1,
-          }}
-          transition={{
-            delay: 0.4,
-            duration: 0.8,
-          }}
-          className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-12"
-        >
+        <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-12 motion-translate-y-in-[20px] motion-opacity-in-0 motion-delay-500">
           <div className="space-y-6">
             <p className="text-xl md:text-2xl leading-tight font-normal max-w-2xl">
               A passionate{" "}
@@ -121,7 +91,7 @@ function Home() {
               <ArrowDownIcon className="size-5 text-foreground/40" />
             </div>
           </div>
-        </motion.div>
+        </div>
       </section>
 
       <section id="methodology" className="mb-40">
@@ -129,13 +99,14 @@ function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {process.map((step, i) => (
-            <motion.div
+            <div
+              className="relative flex flex-col group intersect:motion-translate-y-in-25 intersect:motion-opacity-in-0 intersect-once"
               key={step.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="relative flex flex-col group"
+              style={
+                {
+                  "--motion-delay": `${0.1 * i}s`,
+                } as CSSProperties
+              }
             >
               <span className="font-mono text-sm text-foreground/40 mb-6 block">
                 {step.id}
@@ -148,7 +119,7 @@ function Home() {
                   {step.desc}
                 </p>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </section>
@@ -162,13 +133,7 @@ function Home() {
             .sort((a, b) => b.year - a.year)
             .map((work) => (
               <div className="sticky top-30" key={work._meta.path}>
-                <motion.div
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-10%" }}
-                  transition={{ duration: 0.5 }}
-                  className="bg-background border border-border rounded-lg overflow-hidden flex flex-col md:flex-row h-[500px] group relative"
-                >
+                <div className="bg-background border border-border rounded-lg overflow-hidden flex flex-col md:flex-row h-[500px] group relative intersect:motion-opacity-in-0 intersect:motion-translate-y-in-[50px] intersect-once">
                   <Link
                     to="/works/$workId"
                     params={{
@@ -177,13 +142,8 @@ function Home() {
                     className="absolute inset-0 z-40"
                   />
                   <div className="w-full md:w-1/2 lg:w-7/12 relative overflow-hidden cursor-pointer">
-                    <motion.div
-                      className="absolute inset-0 grayscale group-hover:grayscale-0 bg-no-repeat bg-cover bg-center"
-                      whileHover={{ scale: 1.05 }}
-                      transition={{
-                        duration: 0.6,
-                        ease: [0.33, 1, 0.68, 1],
-                      }}
+                    <div
+                      className="absolute inset-0 grayscale group-hover:grayscale-0 bg-no-repeat bg-cover bg-center group-hover:scale-105 duration-700 ease-in"
                       style={{
                         backgroundImage: `url(${work.thumbnail})`,
                       }}
@@ -219,7 +179,7 @@ function Home() {
                       ))}
                     </div>
                   </div>
-                </motion.div>
+                </div>
               </div>
             ))}
         </div>
@@ -249,12 +209,13 @@ function Home() {
                 key={update._meta.path}
                 className="group block"
               >
-                <motion.article
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  className="flex flex-col md:flex-row md:items-baseline justify-between gap-8"
+                <article
+                  className="flex flex-col md:flex-row md:items-baseline justify-between gap-8 intersect:motion-opacity-in-0 intersect:motion-translate-y-in-[50px] intersect-once"
+                  style={
+                    {
+                      "--motion-delay": `${0.1 * index}s`,
+                    } as CSSProperties
+                  }
                 >
                   <div className="md:w-3/4">
                     <h3 className="font-serif text-3xl md:text-4xl group-hover:opacity-60 transition-opacity duration-300 leading-tigh mb-4">
@@ -272,11 +233,11 @@ function Home() {
                       {calculateReadingTime(update.content)} Minute Reading Time
                     </span>
                   </div>
-                </motion.article>
+                </article>
               </Link>
             ))}
         </div>
       </section>
-    </motion.div>
+    </div>
   );
 }

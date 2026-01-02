@@ -20,7 +20,6 @@ My personal portfolio built as a Full-Stack React application to showcase my pro
 ### Styling and Animation
 
 - Tailwind CSS V4
-- Motion
 - Lenis
 
 ### Content Management

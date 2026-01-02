@@ -1,8 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { allRestrictedUpdates, allUpdates } from "content-collections";
 import { ArrowUpRightIcon, LockIcon } from "lucide-react";
-import { motion } from "motion/react";
-import { PAGE_TRANSITIONS } from "@/constants";
+import type { CSSProperties } from "react";
 import { clientEnv } from "@/env/client";
 import { calculateReadingTime } from "@/lib/content";
 import { omit } from "@/lib/object";
@@ -37,7 +36,7 @@ function Updates() {
   const updates = Route.useLoaderData();
 
   return (
-    <motion.section {...PAGE_TRANSITIONS} className="mt-12">
+    <section className="mt-12 page-transition">
       <div className="max-w-2xl mb-24">
         <h1 className="font-serif text-6xl md:text-8xl mb-8 tracking-tight">
           Updates.
@@ -59,12 +58,13 @@ function Updates() {
             }}
             key={update._meta.path}
           >
-            <motion.article
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="group cursor-pointer"
+            <article
+              className="group cursor-pointer intersect:motion-translate-y-in-[50px] intersect:motion-opacity-in-0 intersect-once"
+              style={
+                {
+                  "--motion-delay": `${index * 0.1}s`,
+                } as CSSProperties
+              }
             >
               <div className="flex flex-col md:flex-row justify-between gap-8 mb-4">
                 <h3 className="font-serif text-4xl md:text-6xl group-hover:opacity-70 transition-opacity duration-300 max-w-4xl">
@@ -90,10 +90,10 @@ function Updates() {
               <p className="text-foreground/60 font-normal max-w-2xl leading-relaxed">
                 {update.summary}
               </p>
-            </motion.article>
+            </article>
           </Link>
         ))}
       </div>
-    </motion.section>
+    </section>
   );
 }

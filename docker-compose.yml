@@ -94,7 +94,7 @@ services:
       timeout: 3s
       retries: 2
     command: >
-      --requirepass ${REDIS_PASSWORD}
+      --requirepass $${REDIS_PASSWORD}
     volumes:
       - redis_data:/data
     networks:

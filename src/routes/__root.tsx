@@ -9,10 +9,10 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { ReactLenis } from "lenis/react";
-import { AnimatePresence } from "motion/react";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { Loader } from "@/components/loader";
+import ObserverProvider from "@/components/observer-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/context/theme-context";
 import { clientEnv } from "@/env/client";
@@ -22,6 +22,24 @@ import appCss from "../assets/styles.css?url";
 export const Route = createRootRouteWithContext<RouterContext>()({
   head: () => ({
     links: [
+      {
+        rel: "preload",
+        href: "/fonts/Inter.woff2",
+        as: "font",
+        type: "font/woff2",
+      },
+      {
+        rel: "preload",
+        href: "/fonts/Playfair-Display.woff2",
+        as: "font",
+        type: "font/woff2",
+      },
+      {
+        rel: "preload",
+        href: "/fonts/Playfair-Display-Italic.woff2",
+        as: "font",
+        type: "font/woff2",
+      },
       {
         rel: "stylesheet",
         href: appCss,
@@ -98,28 +116,28 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         </head>
         <body className="relative min-h-screen flex flex-col">
           <ThemeProvider>
-            <AnimatePresence mode="wait">
-              <Loader key="loader" />
-            </AnimatePresence>
-            <Header />
-            <div className="grow px-6 md:px-12 mx-auto relative w-full z-10 bg-background origin-top rounded-b-[3rem] mb-[500px] md:mb-[600px]">
-              <main className="max-w-7xl mx-auto mb-32 min-h-[calc(100vh-6rem*2)] flex flex-col justify-center">
-                {children}
-              </main>
-            </div>
-            <Footer />
-            <TanStackDevtools
-              plugins={[
-                {
-                  name: "Tanstack Router",
-                  render: <TanStackRouterDevtoolsPanel />,
-                },
-                {
-                  name: "Tanstack Query",
-                  render: <ReactQueryDevtoolsPanel client={queryClient} />,
-                },
-              ]}
-            />
+            <ObserverProvider>
+              <Loader />
+              <Header />
+              <div className="grow px-6 md:px-12 mx-auto relative w-full z-10 bg-background origin-top rounded-b-[3rem] mb-[500px] md:mb-[600px]">
+                <main className="max-w-7xl mx-auto mb-32 min-h-[calc(100vh-6rem*2)] flex flex-col justify-center">
+                  {children}
+                </main>
+              </div>
+              <Footer />
+              <TanStackDevtools
+                plugins={[
+                  {
+                    name: "Tanstack Router",
+                    render: <TanStackRouterDevtoolsPanel />,
+                  },
+                  {
+                    name: "Tanstack Query",
+                    render: <ReactQueryDevtoolsPanel client={queryClient} />,
+                  },
+                ]}
+              />
+            </ObserverProvider>
           </ThemeProvider>
           <Toaster />
           <Scripts />

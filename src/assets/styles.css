@@ -2,14 +2,11 @@
 
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "@fontsource-variable/inter/wght-italic.css";
-@import "@fontsource-variable/inter";
-@import "@fontsource-variable/jetbrains-mono/wght-italic.css";
-@import "@fontsource-variable/jetbrains-mono";
-@import "@fontsource-variable/playfair-display/wght-italic.css";
-@import "@fontsource-variable/playfair-display";
+@import "./fonts.css";
 
 @plugin "@tailwindcss/typography";
+@plugin "tailwindcss-motion";
+@plugin "tailwindcss-intersect";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -337,4 +334,8 @@ h6 {
       opacity: 0;
     }
   }
+}
+
+.page-transition {
+  @apply motion-translate-y-in-[100px] motion-opacity-in-0;
 }

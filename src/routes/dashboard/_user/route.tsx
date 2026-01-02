@@ -1,6 +1,4 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import { motion } from "motion/react";
-import { PAGE_TRANSITIONS } from "@/constants";
 import { getSessionFn } from "@/fns/polymorphic/auth";
 
 export const Route = createFileRoute("/dashboard/_user")({
@@ -20,8 +18,8 @@ export const Route = createFileRoute("/dashboard/_user")({
 
 function RouteComponent() {
   return (
-    <motion.div {...PAGE_TRANSITIONS}>
+    <div className="page-transition">
       <Outlet />
-    </motion.div>
+    </div>
   );
 }

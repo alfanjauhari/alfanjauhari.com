@@ -1,10 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ArrowUpRightIcon } from "lucide-react";
-import { motion } from "motion/react";
 import type { CSSProperties } from "react";
 import { DotTitle } from "@/components/dot-title";
 import { Button } from "@/components/ui/button";
-import { PAGE_TRANSITIONS } from "@/constants";
 import { clientEnv } from "@/env/client";
 import { seoHead } from "@/lib/seo";
 
@@ -84,7 +82,7 @@ function TechItem({ category, items }: { category: string; items: string[] }) {
 
 function About() {
   return (
-    <motion.div {...PAGE_TRANSITIONS}>
+    <div className="page-transition">
       <section className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-12 mb-32">
         <div>
           <h1 className="font-serif text-7xl lg:text-9xl mb-12 tracking-tight">
@@ -212,6 +210,6 @@ function About() {
           </Button>
         </div>
       </section>
-    </motion.div>
+    </div>
   );
 }

@@ -1,9 +1,7 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { allSnippets } from "content-collections";
 import { TerminalIcon } from "lucide-react";
-import { motion } from "motion/react";
 import { MDXContent } from "@/components/mdx-content";
-import { PAGE_TRANSITIONS } from "@/constants";
 import { clientEnv } from "@/env/client";
 import { seoHead } from "@/lib/seo";
 
@@ -33,7 +31,7 @@ function Snippet() {
   const snippet = Route.useLoaderData();
 
   return (
-    <motion.section {...PAGE_TRANSITIONS} className="min-h-screen mt-12">
+    <section className="min-h-screen mt-12 page-transition">
       <div className="max-w-3xl mx-auto">
         <header className="mb-20">
           <div className="flex items-center gap-3 mb-6 text-xs font-mono uppercase tracking-widest text-foreground/40">
@@ -52,15 +50,10 @@ function Snippet() {
           <p className="text-xl mb-12 text-foreground/40">{snippet.summary}</p>
         </header>
 
-        <motion.article
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.4, duration: 0.8 }}
-          className="prose prose-primary prose-lg md:prose-xl prose-headings:leading-tight prose-headings:font-serif"
-        >
+        <article className="prose prose-primary prose-lg md:prose-xl prose-headings:leading-tight prose-headings:font-serif motion-translate-y-in-[50px] motion-opacity-in-0 motion-duration-1000 motion-delay-500">
           <MDXContent code={snippet.mdx} />
-        </motion.article>
+        </article>
       </div>
-    </motion.section>
+    </section>
   );
 }

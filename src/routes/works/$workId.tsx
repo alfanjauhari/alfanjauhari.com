@@ -14,10 +14,8 @@ import {
   LightbulbIcon,
   TerminalIcon,
 } from "lucide-react";
-import { motion } from "motion/react";
 import { MDXContent } from "@/components/mdx-content";
 import { Button } from "@/components/ui/button";
-import { PAGE_TRANSITIONS } from "@/constants";
 import { clientEnv } from "@/env/client";
 import { seoHead } from "@/lib/seo";
 
@@ -62,7 +60,7 @@ function WorkDetail() {
   const work = Route.useLoaderData();
 
   return (
-    <motion.div {...PAGE_TRANSITIONS} className="min-h-screen mt-12">
+    <div className="min-h-screen mt-12 page-transition">
       <header className="mb-40">
         <Link
           to="/"
@@ -72,23 +70,13 @@ function WorkDetail() {
           Back to Home
         </Link>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="font-serif text-6xl md:text-8xl mb-8 tracking-tight leading-[0.9]"
-        >
+        <h1 className="font-serif text-6xl md:text-8xl mb-8 tracking-tight leading-[0.9] motion-translate-y-in-[50px] motion-opacity-in-0 motion-duration-1000">
           {work.title}
-        </motion.h1>
+        </h1>
 
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1, duration: 0.8 }}
-          className="text-xl md:text-2xl font-normal text-foreground/60 max-w-2xl leading-relaxed"
-        >
+        <p className="text-xl md:text-2xl font-normal text-foreground/60 max-w-2xl leading-relaxed motion-translate-y-in-[50px] motion-opacity-in-0 motion-duration-1000">
           {work.summary}
-        </motion.p>
+        </p>
       </header>
 
       <section>
@@ -148,13 +136,7 @@ function WorkDetail() {
 
           {/* Main Narrative - 2 Column Layout */}
           <div className="md:col-span-9 md:pl-12">
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-24"
-            >
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-24 intersect:motion-translate-y-in-25 intersect:motion-opacity-in-0 motion-duration-1000 intersect-once">
               {/* Challenge Column */}
               <div className="border border-border p-8 rounded-sm">
                 <div className="flex items-center gap-3 mb-6">
@@ -179,19 +161,14 @@ function WorkDetail() {
                   <p>{work.solution}</p>
                 </div>
               </div>
-            </motion.div>
+            </div>
 
-            <motion.article
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.4, duration: 0.8 }}
-              className="prose prose-primary prose-lg md:prose-xl prose-headings:leading-tight prose-headings:font-serif"
-            >
+            <article className="prose prose-primary prose-lg md:prose-xl prose-headings:leading-tight prose-headings:font-serif motion-translate-y-in-[50px] motion-opacity-in-0 motion-duration-1000 motion-delay-500">
               <MDXContent code={work.mdx} />
-            </motion.article>
+            </article>
           </div>
         </div>
       </section>
-    </motion.div>
+    </div>
   );
 }

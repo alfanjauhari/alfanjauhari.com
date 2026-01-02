@@ -1,6 +1,4 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router";
-import { motion } from "motion/react";
-import { PAGE_TRANSITIONS } from "@/constants";
 import { nonAuthenticatedMiddleware } from "@/middleware/auth";
 
 export const Route = createFileRoute("/_auth")({
@@ -15,11 +13,8 @@ export const Route = createFileRoute("/_auth")({
 
 function RouteComponent() {
   return (
-    <motion.div
-      className="flex flex-col justify-center items-center"
-      {...PAGE_TRANSITIONS}
-    >
+    <div className="flex flex-col justify-center items-center page-transition">
       <Outlet />
-    </motion.div>
+    </div>
   );
 }

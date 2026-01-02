@@ -7,7 +7,7 @@ import { routeTree } from "./routeTree.gen";
 export const getRouter = () => {
   const queryClient = new QueryClient();
 
-  return createRouter({
+  const router = createRouter({
     routeTree,
     defaultPendingMinMs: 0,
     context: {
@@ -28,4 +28,6 @@ export const getRouter = () => {
       );
     },
   });
+
+  return router;
 };

@@ -1,8 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { allSnippets } from "content-collections";
 import { ChevronRightIcon, CodeIcon, HashIcon } from "lucide-react";
-import { motion } from "motion/react";
-import { PAGE_TRANSITIONS } from "@/constants";
 import { clientEnv } from "@/env/client";
 import { seoHead } from "@/lib/seo";
 
@@ -20,7 +18,7 @@ export const Route = createFileRoute("/snippets/")({
 
 function Snippets() {
   return (
-    <motion.section {...PAGE_TRANSITIONS} className="mt-12">
+    <section className="mt-12 page-transition">
       <div className="max-w-2xl mb-24">
         <h1 className="font-serif text-6xl md:text-8xl mb-8 tracking-tight">
           Snippets.
@@ -32,7 +30,7 @@ function Snippets() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px border border-border">
-        {allSnippets.map((snippet, idx) => (
+        {allSnippets.map((snippet) => (
           <Link
             to="/snippets/$snippetId"
             params={{
@@ -41,13 +39,7 @@ function Snippets() {
             key={snippet._meta.path}
             className="block h-full"
           >
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.05 }}
-              className="group p-8 h-full flex flex-col justify-between"
-            >
+            <div className="group p-8 h-full flex flex-col justify-between intersect:motion-opacity-in-0 intersect-once">
               <div>
                 <div className="flex justify-between items-start mb-6">
                   <div className="bg-primary/20 p-3 rounded-sm">
@@ -80,10 +72,10 @@ function Snippets() {
                 </div>
                 <ChevronRightIcon className="text-foreground/40 group-hover:translate-x-1 transition-transform size-4" />
               </div>
-            </motion.div>
+            </div>
           </Link>
         ))}
       </div>
-    </motion.section>
+    </section>
   );
 }

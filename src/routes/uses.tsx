@@ -1,8 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { motion } from "motion/react";
-import type { PropsWithChildren } from "react";
+import type { CSSProperties, PropsWithChildren } from "react";
 import { DotTitle } from "@/components/dot-title";
-import { PAGE_TRANSITIONS } from "@/constants";
 import { clientEnv } from "@/env/client";
 import { seoHead } from "@/lib/seo";
 
@@ -46,18 +44,19 @@ function UseItem({
   children,
 }: PropsWithChildren<{ delay: number; title: string }>) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay }}
-      className="group"
+    <div
+      className="group intersect:motion-translate-y-in-[20px] intersect:motion-opacity-in-0 intersect-once"
+      style={
+        {
+          "--motion-delay": delay,
+        } as CSSProperties
+      }
     >
       <h3 className="font-serif text-2xl mb-4 group-hover:text-foreground/60 transition-colors">
         {title}
       </h3>
       <p className="prose prose-primary leading-relaxed">{children}</p>
-    </motion.div>
+    </div>
   );
 }
 
@@ -71,12 +70,7 @@ function BuildItem({
   specs: { label: string; value: string }[];
 }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      className="group md:col-span-2 border border-border p-8 rounded-sm"
-    >
+    <div className="group md:col-span-2 border border-border p-8 rounded-sm intersect:motion-translate-y-in-[20px] intersect:motion-opacity-in-0 intersect-once">
       <div className="mb-8">
         <h3 className="font-serif text-3xl mb-4">{title}</h3>
         <p className="text-base text-foreground/60 font-normal leading-relaxed max-w-2xl">
@@ -97,13 +91,13 @@ function BuildItem({
           </div>
         ))}
       </div>
-    </motion.div>
+    </div>
   );
 }
 
 function Uses() {
   return (
-    <motion.div {...PAGE_TRANSITIONS} className="mt-12">
+    <div className="mt-12 page-transition">
       <div className="max-w-2xl mb-24">
         <h1 className="font-serif text-6xl md:text-8xl mb-8 tracking-tight">
           Uses
@@ -178,6 +172,6 @@ function Uses() {
           Lightweight terminal alternative that cover anything for my needs
         </UseItem>
       </UseSection>
-    </motion.div>
+    </div>
   );
 }

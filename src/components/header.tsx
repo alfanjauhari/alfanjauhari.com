@@ -1,7 +1,12 @@
-import { Link, useLocation } from "@tanstack/react-router";
+import { Link, useLocation, useRouterState } from "@tanstack/react-router";
 import { Laptop2Icon, MenuIcon, MoonIcon, SunIcon, XIcon } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
-import { forwardRef, type HTMLAttributes, useEffect, useState } from "react";
+import {
+  type CSSProperties,
+  forwardRef,
+  type HTMLAttributes,
+  useEffect,
+  useState,
+} from "react";
 import { NAVIGATIONS } from "@/constants";
 import { useTheme } from "@/context/theme-context";
 import { useToggle } from "@/hooks/use-toggle";
@@ -46,6 +51,9 @@ function ThemeToggleButton() {
 
 export const Header = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
   function Header({ className, ...props }, ref) {
+    const isRouteChanging = useRouterState({
+      select: (state) => state.isLoading,
+    });
     const [isMobileMenuOpen, toggleMobileMenu] = useToggle(false);
 
     const pathname = useLocation({
@@ -68,7 +76,13 @@ export const Header = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
         >
           <Link
             to="/"
-            className="font-serif text-2xl font-bold tracking-tighter hover:opacity-70 transition-opacity text-foreground relative z-50"
+            className={cn(
+              "font-serif text-2xl font-bold tracking-tighter hover:opacity-70 transition-opacity text-foreground relative z-50",
+              {
+                "motion-translate-y-loop-50 motion-ease-bounce":
+                  isRouteChanging,
+              },
+            )}
             title="Alfan Jauhari"
           >
             AJ.
@@ -114,63 +128,57 @@ export const Header = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
 
           {/* Mobile Navigation */}
         </header>
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.nav
-              initial={{
-                opacity: 0,
-                y: -20,
-              }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
-              exit={{
-                opacity: 0,
-                y: -20,
-              }}
-              transition={{
-                duration: 0.2,
-              }}
-              className="fixed inset-0 z-40 bg-background flex flex-col items-center justify-center md:hidden"
-            >
-              <ul className="flex flex-col items-center gap-8">
-                {NAVIGATIONS.filter((nav) => !nav.hideOnNav).map((nav, i) => (
-                  <motion.li
-                    key={nav.path}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                      delay: 0.1 * i,
-                    }}
-                  >
-                    <Link
-                      to={nav.path}
-                      className={cn(
-                        "font-serif text-4xl text-foreground hover:line-through decoration-1 underline-offset-4",
-                        {
-                          "line-through": getIsActive(nav.path),
-                        },
-                      )}
-                      onClick={toggleMobileMenu}
-                    >
-                      {nav.label}
-                    </Link>
-                  </motion.li>
-                ))}
-              </ul>
-
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.4 }}
-                className="absolute bottom-12 text-xs font-mono uppercase tracking-widest text-foreground"
-              >
-                © {new Date().getFullYear()} Alfan Jauhari
-              </motion.p>
-            </motion.nav>
+        <nav
+          className={cn(
+            "fixed inset-0 z-40 bg-background flex flex-col items-center justify-center md:hidden",
+            {
+              "motion-translate-y-in-100": isMobileMenuOpen,
+              "motion-translate-y-out-100": !isMobileMenuOpen,
+            },
           )}
-        </AnimatePresence>
+          aria-hidden={!isMobileMenuOpen}
+        >
+          <ul className="flex flex-col items-center gap-8">
+            {NAVIGATIONS.filter((nav) => !nav.hideOnNav).map((nav, i) => (
+              <li
+                key={nav.path}
+                className={cn({
+                  "motion-translate-y-in-100 motion-opacity-in-0":
+                    isMobileMenuOpen,
+                })}
+                style={
+                  {
+                    "--motion-delay": `${0.2 * i}s`,
+                  } as CSSProperties
+                }
+              >
+                <Link
+                  to={nav.path}
+                  className={cn(
+                    "font-serif text-4xl text-foreground hover:line-through decoration-1 underline-offset-4",
+                    {
+                      "line-through": getIsActive(nav.path),
+                    },
+                  )}
+                  onClick={toggleMobileMenu}
+                >
+                  {nav.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          <p
+            className={cn(
+              "absolute bottom-12 text-xs font-mono uppercase tracking-widest text-foreground",
+              {
+                "motion-opacity-in-0 motion-delay-1000": isMobileMenuOpen,
+              },
+            )}
+          >
+            © {new Date().getFullYear()} Alfan Jauhari
+          </p>
+        </nav>
       </>
     );
   },
