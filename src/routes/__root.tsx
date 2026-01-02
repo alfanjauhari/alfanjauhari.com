@@ -96,7 +96,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
     {
       src: "https://analytics.alfanjauhari.com/script.js",
       defer: true,
-      "data-website-id": "0daa4147-93c4-40be-8457-f62c6a50a6a6",
+      "data-website-id": "9b246e8b-b124-4f0c-8f9c-eb93b55ab490",
     },
   ],
 });
