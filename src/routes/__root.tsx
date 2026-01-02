@@ -23,19 +23,19 @@ export const Route = createRootRouteWithContext<RouterContext>()({
   head: () => ({
     links: [
       {
-        rel: "preload",
+        rel: "preconnect",
         href: "/fonts/Inter.woff2",
         as: "font",
         type: "font/woff2",
       },
       {
-        rel: "preload",
+        rel: "preconnect",
         href: "/fonts/Playfair-Display.woff2",
         as: "font",
         type: "font/woff2",
       },
       {
-        rel: "preload",
+        rel: "preconnect",
         href: "/fonts/Playfair-Display-Italic.woff2",
         as: "font",
         type: "font/woff2",
