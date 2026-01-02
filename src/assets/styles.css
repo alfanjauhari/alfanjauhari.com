@@ -44,12 +44,12 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
   --font-sans:
-    "Inter Variable", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    "Inter Variable", "Adjusted Arial Fallback", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-mono:
-    "JetBrains Mono Variable", SFMono-Regular, Menlo, Monaco, Consolas,
+    "JetBrains Mono Variable", "Adjusted Courier New Fallback", SFMono-Regular, Menlo, Monaco, Consolas,
     "Liberation Mono", "Courier New", monospace;
   --font-serif:
-    "Playfair Display Variable", Georgia, Cambria, "Times New Roman", Times,
+    "Playfair Display Variable", "Adjusted Georgia Fallback", Cambria, "Times New Roman", Times,
     serif;
   --radius: 0;
   --shadow-x: 0;
@@ -108,12 +108,12 @@ html[data-theme="dark"] {
   --sidebar-border: oklch(0.275 0 0);
   --sidebar-ring: oklch(0.439 0 0);
   --font-sans:
-    "Inter Variable", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    "Inter Variable", "Adjusted Arial Fallback", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-mono:
-    "JetBrains Mono Variable", SFMono-Regular, Menlo, Monaco, Consolas,
+    "JetBrains Mono Variable", "Adjusted Courier New Fallback", SFMono-Regular, Menlo, Monaco, Consolas,
     "Liberation Mono", "Courier New", monospace;
   --font-serif:
-    "Playfair Display Variable", Georgia, Cambria, "Times New Roman", Times,
+    "Playfair Display Variable", "Adjusted Georgia Fallback", Cambria, "Times New Roman", Times,
     serif;
   --radius: 0rem;
   --shadow-x: 0;

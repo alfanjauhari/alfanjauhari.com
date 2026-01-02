@@ -62,6 +62,11 @@ const config = defineConfig({
         dir: "public/images",
         maxAge: 60 * 60 * 24 * 365, // 1 year,
       },
+      {
+        baseURL: "fonts",
+        dir: "public/fonts",
+        maxAge: 60 * 60 * 24 * 365, // 1 year,
+      },
     ],
     compressPublicAssets: true,
   },
