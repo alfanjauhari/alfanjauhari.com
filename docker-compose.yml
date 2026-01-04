@@ -1,38 +1,4 @@
 services:
-  alfanjauhari_com_tailscale:
-    image: tailscale/tailscale:latest
-    container_name: alfanjauhari_com_tailscale
-    hostname: alfanjauhari-vps
-    cap_add:
-      - NET_ADMIN
-      - SYS_MODULE
-    volumes:
-      - /dev/net/tun:/dev/net/tun
-      - tailscale_data:/var/lib/tailscale
-    env_file: $RUNTIME_ENV_FILE
-    environment:
-      TS_STATE_DIR: /var/lib/tailscale
-      TS_USERSPACE: "false"
-      TS_EXTRA_ARGS: --hostname=alfanjauhari-vps --accept-dns=false
-    restart: unless-stopped
-
-  alfanjauhari_com_traefik_tailscale:
-    image: traefik:v3.6.6
-    container_name: alfanjauhari_com_traefik_tailscale
-    network_mode: "service:alfanjauhari_com_tailscale"
-    depends_on:
-      - alfanjauhari_com_tailscale
-    restart: unless-stopped
-    command:
-      - "--providers.docker.constraints=Label(`traefik.scope`,`admin`)"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entryPoints.admin.address=:443"
-      - "--entryPoints.admin.http.tls=true"
-      - "--log.level=INFO"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-
   alfanjauhari_com_traefik:
     image: traefik:v3.6.6
     container_name: alfanjauhari_com_traefik
@@ -52,7 +18,6 @@ services:
       - "--certificatesresolvers.letsencrypt.acme.storage=/certs/acme.json"
       - "--certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare"
       - "--certificatesresolvers.letsencrypt.acme.dnschallenge.delaybeforecheck=0"
-      - "--providers.docker.constraints=Label(`traefik.scope`,`public`)"
     ports:
       - "80:80"
       - "443:443"
@@ -166,27 +131,11 @@ services:
       - "traefik.http.services.analytics.loadbalancer.server.port=3000"
       - "traefik.scope=public"
 
-  alfanjauhari_com_portainer:
-    container_name: alfanjauhari_com_portainer
-    image: portainer/portainer-ce:lts
-    network_mode: "service:alfanjauhari_com_tailscale"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
-    labels:
-      - "traefik.enable=true"
-      - "traefik.scope=admin"
-      - "traefik.http.routers.portainer.rule=Host(`portainer.alfanjauhari.com`)"
-      - "traefik.http.routers.portainer.entrypoints=admin"
-      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
-
 volumes:
   app_data:
   traefik-certs:
   db_data:
   redis_data:
-  portainer_data:
-  tailscale_data:
 
 networks:
   web:
