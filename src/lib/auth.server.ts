@@ -21,6 +21,13 @@ export const auth = betterAuth({
       verification: verificationsTable,
     },
   }),
+  session: {
+    storeSessionInDatabase: true,
+    cookieCache: {
+      enabled: true,
+      maxAge: 5 * 60,
+    },
+  },
   emailAndPassword: {
     enabled: true,
     sendResetPassword: async ({ user, url }) => {
