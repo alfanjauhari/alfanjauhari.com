@@ -22,7 +22,6 @@ import { Route as DashboardUserRouteRouteImport } from './routes/dashboard/_user
 import { Route as DashboardAdminRouteRouteImport } from './routes/dashboard/_admin/route'
 import { Route as DashboardUserIndexRouteImport } from './routes/dashboard/_user/index'
 import { Route as UpdatesRUpdateIdRouteImport } from './routes/updates/r.$updateId'
-import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AuthAuthResetPasswordRouteImport } from './routes/_auth/auth/reset-password'
 import { Route as AuthAuthRegisterRouteImport } from './routes/_auth/auth/register'
 import { Route as AuthAuthLoginRouteImport } from './routes/_auth/auth/login'
@@ -93,11 +92,6 @@ const UpdatesRUpdateIdRoute = UpdatesRUpdateIdRouteImport.update({
   path: '/updates/r/$updateId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
-  id: '/api/auth/$',
-  path: '/api/auth/$',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthAuthResetPasswordRoute = AuthAuthResetPasswordRouteImport.update({
   id: '/auth/reset-password',
   path: '/auth/reset-password',
@@ -139,7 +133,6 @@ export interface FileRoutesByFullPath {
   '/auth/login': typeof AuthAuthLoginRoute
   '/auth/register': typeof AuthAuthRegisterRoute
   '/auth/reset-password': typeof AuthAuthResetPasswordRoute
-  '/api/auth/$': typeof ApiAuthSplatRoute
   '/updates/r/$updateId': typeof UpdatesRUpdateIdRoute
   '/dashboard/': typeof DashboardUserIndexRoute
   '/dashboard/admin': typeof DashboardAdminAdminIndexRoute
@@ -158,7 +151,6 @@ export interface FileRoutesByTo {
   '/auth/login': typeof AuthAuthLoginRoute
   '/auth/register': typeof AuthAuthRegisterRoute
   '/auth/reset-password': typeof AuthAuthResetPasswordRoute
-  '/api/auth/$': typeof ApiAuthSplatRoute
   '/updates/r/$updateId': typeof UpdatesRUpdateIdRoute
   '/dashboard/admin': typeof DashboardAdminAdminIndexRoute
 }
@@ -179,7 +171,6 @@ export interface FileRoutesById {
   '/_auth/auth/login': typeof AuthAuthLoginRoute
   '/_auth/auth/register': typeof AuthAuthRegisterRoute
   '/_auth/auth/reset-password': typeof AuthAuthResetPasswordRoute
-  '/api/auth/$': typeof ApiAuthSplatRoute
   '/updates/r/$updateId': typeof UpdatesRUpdateIdRoute
   '/dashboard/_user/': typeof DashboardUserIndexRoute
   '/dashboard/_admin/admin/': typeof DashboardAdminAdminIndexRoute
@@ -200,7 +191,6 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/register'
     | '/auth/reset-password'
-    | '/api/auth/$'
     | '/updates/r/$updateId'
     | '/dashboard/'
     | '/dashboard/admin'
@@ -219,7 +209,6 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/auth/register'
     | '/auth/reset-password'
-    | '/api/auth/$'
     | '/updates/r/$updateId'
     | '/dashboard/admin'
   id:
@@ -239,7 +228,6 @@ export interface FileRouteTypes {
     | '/_auth/auth/login'
     | '/_auth/auth/register'
     | '/_auth/auth/reset-password'
-    | '/api/auth/$'
     | '/updates/r/$updateId'
     | '/dashboard/_user/'
     | '/dashboard/_admin/admin/'
@@ -257,7 +245,6 @@ export interface RootRouteChildren {
   WorksWorkIdRoute: typeof WorksWorkIdRoute
   SnippetsIndexRoute: typeof SnippetsIndexRoute
   UpdatesIndexRoute: typeof UpdatesIndexRoute
-  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   UpdatesRUpdateIdRoute: typeof UpdatesRUpdateIdRoute
 }
 
@@ -354,13 +341,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UpdatesRUpdateIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/auth/$': {
-      id: '/api/auth/$'
-      path: '/api/auth/$'
-      fullPath: '/api/auth/$'
-      preLoaderRoute: typeof ApiAuthSplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_auth/auth/reset-password': {
       id: '/_auth/auth/reset-password'
       path: '/auth/reset-password'
@@ -451,7 +431,6 @@ const rootRouteChildren: RootRouteChildren = {
   WorksWorkIdRoute: WorksWorkIdRoute,
   SnippetsIndexRoute: SnippetsIndexRoute,
   UpdatesIndexRoute: UpdatesIndexRoute,
-  ApiAuthSplatRoute: ApiAuthSplatRoute,
   UpdatesRUpdateIdRoute: UpdatesRUpdateIdRoute,
 }
 export const routeTree = rootRouteImport

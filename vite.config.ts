@@ -3,6 +3,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { devtools } from "@tanstack/devtools-vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
+import { nanoid } from "nanoid";
 import { defineConfig } from "vite";
 import { analyzer } from "vite-bundle-analyzer";
 import viteTsConfigPaths from "vite-tsconfig-paths";
@@ -23,6 +24,9 @@ const config = defineConfig({
     }),
     tailwindcss(),
     tanstackStart({
+      serverFns: {
+        generateFunctionId: () => nanoid(),
+      },
       prerender: {
         enabled: true,
         filter: ({ path }) => {
