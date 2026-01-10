@@ -4,7 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { v2 as cloudinary, type UploadApiResponse } from "cloudinary";
 
-const PUBLIC_DIR = ".output/public";
+const PUBLIC_DIR = "dist/client";
 
 const files = fs
   .readdirSync(path.join(process.cwd(), PUBLIC_DIR, "images"), {

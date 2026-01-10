@@ -55,8 +55,7 @@ RUN pnpm run build:scripts
 FROM base AS runner
 
 COPY --from=deps --chown=nonroot:nonroot /app/node_modules ./node_modules
-COPY --from=builder --chown=nonroot:nonroot /app/.output ./.output
-COPY --from=builder --chown=nonroot:nonroot /app/scripts/db-init.cjs ./scripts/db-init.cjs
+COPY --from=builder --chown=nonroot:nonroot /app/dist ./dist
 COPY --from=builder --chown=nonroot:nonroot /app/drizzle ./drizzle
 COPY entrypoint.sh /entrypoint.sh
 

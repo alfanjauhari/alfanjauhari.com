@@ -2,7 +2,7 @@
 set -e
 
 echo "Running DB initialization..."
-node scripts/db-init.cjs
+node dist/scripts/db-init.js
 
 echo "Starting server..."
-exec node .output/server/index.mjs
+exec node dist/scripts/serve-prod.js

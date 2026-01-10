@@ -1,5 +1,5 @@
 node_modules
-.output
+dist
 .content-collections
 .tanstack
 .vscode

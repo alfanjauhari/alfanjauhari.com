@@ -8,8 +8,6 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router'
-
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UsesRouteImport } from './routes/uses'
 import { Route as AboutRouteImport } from './routes/about'
@@ -31,13 +29,6 @@ import { Route as AuthAuthLoginRouteImport } from './routes/_auth/auth/login'
 import { Route as AuthAuthForgotPasswordRouteImport } from './routes/_auth/auth/forgot-password'
 import { Route as DashboardAdminAdminIndexRouteImport } from './routes/dashboard/_admin/admin/index'
 
-const DashboardRouteImport = createFileRoute('/dashboard')()
-
-const DashboardRoute = DashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const UsesRoute = UsesRouteImport.update({
   id: '/uses',
   path: '/uses',
@@ -83,12 +74,14 @@ const SnippetsSnippetIdRoute = SnippetsSnippetIdRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardUserRouteRoute = DashboardUserRouteRouteImport.update({
-  id: '/_user',
-  getParentRoute: () => DashboardRoute,
+  id: '/dashboard/_user',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardAdminRouteRoute = DashboardAdminRouteRouteImport.update({
-  id: '/_admin',
-  getParentRoute: () => DashboardRoute,
+  id: '/dashboard/_admin',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardUserIndexRoute = DashboardUserIndexRouteImport.update({
   id: '/',
@@ -175,7 +168,6 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteRouteWithChildren
   '/about': typeof AboutRoute
   '/uses': typeof UsesRoute
-  '/dashboard': typeof DashboardRouteWithChildren
   '/dashboard/_admin': typeof DashboardAdminRouteRouteWithChildren
   '/dashboard/_user': typeof DashboardUserRouteRouteWithChildren
   '/snippets/$snippetId': typeof SnippetsSnippetIdRoute
@@ -236,7 +228,6 @@ export interface FileRouteTypes {
     | '/_auth'
     | '/about'
     | '/uses'
-    | '/dashboard'
     | '/dashboard/_admin'
     | '/dashboard/_user'
     | '/snippets/$snippetId'
@@ -259,7 +250,8 @@ export interface RootRouteChildren {
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
   UsesRoute: typeof UsesRoute
-  DashboardRoute: typeof DashboardRouteWithChildren
+  DashboardAdminRouteRoute: typeof DashboardAdminRouteRouteWithChildren
+  DashboardUserRouteRoute: typeof DashboardUserRouteRouteWithChildren
   SnippetsSnippetIdRoute: typeof SnippetsSnippetIdRoute
   UpdatesUpdateIdRoute: typeof UpdatesUpdateIdRoute
   WorksWorkIdRoute: typeof WorksWorkIdRoute
@@ -271,13 +263,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/uses': {
       id: '/uses'
       path: '/uses'
@@ -343,17 +328,17 @@ declare module '@tanstack/react-router' {
     }
     '/dashboard/_user': {
       id: '/dashboard/_user'
-      path: ''
+      path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardUserRouteRouteImport
-      parentRoute: typeof DashboardRoute
+      parentRoute: typeof rootRouteImport
     }
     '/dashboard/_admin': {
       id: '/dashboard/_admin'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardAdminRouteRouteImport
-      parentRoute: typeof DashboardRoute
+      parentRoute: typeof rootRouteImport
     }
     '/dashboard/_user/': {
       id: '/dashboard/_user/'
@@ -454,26 +439,13 @@ const DashboardUserRouteRouteChildren: DashboardUserRouteRouteChildren = {
 const DashboardUserRouteRouteWithChildren =
   DashboardUserRouteRoute._addFileChildren(DashboardUserRouteRouteChildren)
 
-interface DashboardRouteChildren {
-  DashboardAdminRouteRoute: typeof DashboardAdminRouteRouteWithChildren
-  DashboardUserRouteRoute: typeof DashboardUserRouteRouteWithChildren
-}
-
-const DashboardRouteChildren: DashboardRouteChildren = {
-  DashboardAdminRouteRoute: DashboardAdminRouteRouteWithChildren,
-  DashboardUserRouteRoute: DashboardUserRouteRouteWithChildren,
-}
-
-const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
-  DashboardRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   AboutRoute: AboutRoute,
   UsesRoute: UsesRoute,
-  DashboardRoute: DashboardRouteWithChildren,
+  DashboardAdminRouteRoute: DashboardAdminRouteRouteWithChildren,
+  DashboardUserRouteRoute: DashboardUserRouteRouteWithChildren,
   SnippetsSnippetIdRoute: SnippetsSnippetIdRoute,
   UpdatesUpdateIdRoute: UpdatesUpdateIdRoute,
   WorksWorkIdRoute: WorksWorkIdRoute,

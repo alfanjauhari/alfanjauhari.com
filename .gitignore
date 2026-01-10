@@ -7,10 +7,9 @@ count.txt
 .env
 .env*
 !.env.example
-.nitro
 .tanstack
 .wrangler
-.output
+dist
 .vinxi
 todos.json
 .content-collections
