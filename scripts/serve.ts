@@ -66,15 +66,31 @@ if (DEVELOPMENT) {
   const { default: handler } = await import("../server/server.js");
   const nodeHandler = toNodeHandler(handler.fetch) as NodeHttp1Handler;
   app.use(compression());
-  app.use(
-    "/",
-    express.static("dist/client", {
-      maxAge: "1y",
+  app.use("/", (req, res, next) => {
+    const STATIC_PATHS = [
+      "/assets/",
+      "/fonts/",
+      "/sitemap.xml",
+      "/sitemap.webmanifest",
+    ];
+
+    if (STATIC_PATHS.some((path) => req.url.startsWith(path))) {
+      return express.static("dist/client", {
+        immutable: true,
+        maxAge: "1y",
+        setHeaders: (res) => {
+          res.setHeader("x-static-assets", "true");
+        },
+      })(req, res, next);
+    }
+
+    return express.static("dist/client", {
+      cacheControl: false,
       setHeaders: (res) => {
-        res.set("X-Static-Assets", "true");
+        res.setHeader("cache-control", "public, max-age=0, must-revalidate");
       },
-    }),
-  );
+    })(req, res, next);
+  });
   app.use(async (req, res, next) => {
     try {
       await nodeHandler(req, res);
