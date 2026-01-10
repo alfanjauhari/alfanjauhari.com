@@ -1,7 +1,7 @@
 import esbuild from 'esbuild';
 
 await esbuild.build({
-  entryPoints: ['scripts/db-init.ts', 'scripts/serve-prod.ts'],
+  entryPoints: ['scripts/db-init.ts', 'scripts/serve.ts'],
   outdir: 'dist',
   entryNames: 'scripts/[name]',
   bundle: true,
@@ -11,6 +11,6 @@ await esbuild.build({
   metafile: true,
   external: [
     './dist/server/*',
-    '../server/*'
+    '../server/*',
   ]
 })
