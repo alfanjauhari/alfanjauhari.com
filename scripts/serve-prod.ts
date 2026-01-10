@@ -8,7 +8,7 @@ const PORT = Number.parseInt(process.env.PORT || "3000", 10);
 const app = express();
 
 // @ts-expect-error
-const { default: handler } = await import("../dist/server/server.js");
+const { default: handler } = await import("../server/server.js");
 const nodeHandler = toNodeHandler(handler.fetch) as NodeHttp1Handler;
 app.use(compression());
 app.use(
