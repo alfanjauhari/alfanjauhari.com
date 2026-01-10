@@ -8,6 +8,7 @@ import type { NodeHttp1Handler } from "srvx";
 import { toNodeHandler } from "srvx/node";
 import { auth } from "@/lib/auth.server.js";
 import logger from "@/lib/logger";
+import { isStaticRoutes } from "@/lib/server.js";
 
 const DEVELOPMENT = process.env.NODE_ENV === "development";
 const PORT = Number.parseInt(process.env.PORT || "3000", 10);
@@ -65,16 +66,18 @@ if (DEVELOPMENT) {
   // @ts-expect-error
   const { default: handler } = await import("../server/server.js");
   const nodeHandler = toNodeHandler(handler.fetch) as NodeHttp1Handler;
-  app.use(compression());
-  app.use("/", (req, res, next) => {
-    const STATIC_PATHS = [
-      "/assets/",
-      "/fonts/",
-      "/sitemap.xml",
-      "/sitemap.webmanifest",
-    ];
 
-    if (STATIC_PATHS.some((path) => req.url.startsWith(path))) {
+  app.use((req, res, next) => {
+    const compress = compression();
+
+    if (isStaticRoutes(req.url)) {
+      return compress(req, res, next);
+    }
+
+    return next();
+  });
+  app.use("/", (req, res, next) => {
+    if (isStaticRoutes(req.url)) {
       return express.static("dist/client", {
         immutable: true,
         maxAge: "1y",

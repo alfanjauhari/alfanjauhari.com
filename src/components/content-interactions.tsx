@@ -20,6 +20,7 @@ import {
   XIcon,
 } from "lucide-react";
 import {
+  ComponentType,
   createContext,
   type FormEvent,
   Suspense,

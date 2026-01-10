@@ -1,4 +1,4 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+import { ClientOnly, createFileRoute, notFound } from "@tanstack/react-router";
 import { allUpdates } from "content-collections";
 import { ContentInteractions } from "@/components/content-interactions";
 import { MDXContent } from "@/components/mdx-content";
@@ -70,7 +70,9 @@ function UpdateId() {
           <MDXContent code={update.mdx} />
         </article>
 
-        <ContentInteractions routeId="/updates/$updateId" />
+        <ClientOnly>
+          <ContentInteractions routeId="/updates/$updateId" />
+        </ClientOnly>
       </div>
     </section>
   );
