@@ -31,8 +31,8 @@ function Snippet() {
   const snippet = Route.useLoaderData();
 
   return (
-    <section className="min-h-screen mt-12 page-transition">
-      <div className="max-w-3xl mx-auto">
+    <section className="min-h-screen mt-12 page-transition" data-lenis-prevent>
+      <div className="max-w-5xl mx-auto">
         <header className="mb-20">
           <div className="flex items-center gap-3 mb-6 text-xs font-mono uppercase tracking-widest text-foreground/40">
             <TerminalIcon className="size-3.5" />
@@ -50,7 +50,7 @@ function Snippet() {
           <p className="text-xl mb-12 text-foreground/40">{snippet.summary}</p>
         </header>
 
-        <article className="prose prose-primary prose-lg md:prose-xl prose-headings:leading-tight prose-headings:font-serif motion-translate-y-in-[50px] motion-opacity-in-0 motion-duration-1000 motion-delay-500">
+        <article className="prose prose-primary prose-lg md:prose-xl max-w-full prose-headings:leading-tight prose-headings:font-serif motion-translate-y-in-[50px] motion-opacity-in-0 motion-duration-1000 motion-delay-500">
           <MDXContent code={snippet.mdx} />
         </article>
       </div>

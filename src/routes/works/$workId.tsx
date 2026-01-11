@@ -163,7 +163,7 @@ function WorkDetail() {
               </div>
             </div>
 
-            <article className="prose prose-primary prose-lg md:prose-xl prose-headings:leading-tight prose-headings:font-serif motion-translate-y-in-[50px] motion-opacity-in-0 motion-duration-1000 motion-delay-500">
+            <article className="prose prose-primary prose-lg md:prose-xl max-w-full prose-headings:leading-tight prose-headings:font-serif motion-translate-y-in-[50px] motion-opacity-in-0 motion-duration-1000 motion-delay-500">
               <MDXContent code={work.mdx} />
             </article>
           </div>

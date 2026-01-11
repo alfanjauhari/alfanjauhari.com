@@ -45,7 +45,7 @@ function UpdateId() {
 
   return (
     <section className="min-h-screen mt-12 page-transition" data-lenis-prevent>
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         <header className="text-center mb-20">
           <div className="flex flex-wrap justify-center gap-4 text-xxs font-mono uppercase tracking-[0.2em] text-foreground/40 mb-8">
             <span>{formatDate(update.date)}</span>
@@ -62,7 +62,7 @@ function UpdateId() {
           </h1>
         </header>
 
-        <article className="prose prose-primary prose-lg md:prose-xl prose-headings:leading-tight prose-headings:font-serif motion-translate-y-in-[50px] motion-opacity-in-0 motion-duration-1000 motion-delay-500">
+        <article className="prose prose-primary prose-lg md:prose-xl max-w-full prose-headings:leading-tight prose-headings:font-serif motion-translate-y-in-[50px] motion-opacity-in-0 motion-duration-1000 motion-delay-500">
           <p className="text-xl md:text-2xl font-serif italic mb-12">
             {update.summary}
           </p>
