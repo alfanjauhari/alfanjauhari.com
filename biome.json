@@ -14,7 +14,7 @@
       "**/vite.config.ts",
       "!**/src/routeTree.gen.ts",
       "**/generate-og.tsx",
-      "scripts/**/*"
+      "**/scripts/**/*"
     ]
   },
   "formatter": {

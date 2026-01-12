@@ -15,3 +15,22 @@ export function isStaticRoutes(
 
   return [...STATIC_PATHS, paths].some((p) => path.startsWith(p));
 }
+
+export const DEV_ASSETS_PATHS = [
+  "/node_modules/",
+  "/src/",
+  "/.content-collections/",
+  "/@vite/",
+  "/@tanstack-start/",
+];
+
+export function isDevAssetsRoutes(
+  path: string,
+  paths: string | string[] = DEV_ASSETS_PATHS,
+) {
+  if (Array.isArray(paths)) {
+    return paths.some((p) => path.startsWith(p));
+  }
+
+  return [...DEV_ASSETS_PATHS, paths].some((p) => path.startsWith(p));
+}

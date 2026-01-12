@@ -1,14 +1,13 @@
 import { toNodeHandler as betterAuthNodeHandler } from "better-auth/node";
 import compression from "compression";
-import express, { type Request, type Response } from "express";
+import express, { type Request } from "express";
 import { nanoid } from "nanoid";
-import p from "pino";
 import pino from "pino-http";
 import type { NodeHttp1Handler } from "srvx";
 import { toNodeHandler } from "srvx/node";
 import { auth } from "@/lib/auth.server.js";
 import logger from "@/lib/logger";
-import { isStaticRoutes } from "@/lib/server.js";
+import { isDevAssetsRoutes, isStaticRoutes } from "@/lib/server.js";
 
 const DEVELOPMENT = process.env.NODE_ENV === "development";
 const PORT = Number.parseInt(process.env.PORT || "3000", 10);
@@ -18,23 +17,27 @@ const app = express();
 app.use(
   pino({
     logger,
-    wrapSerializers: false,
     serializers: {
       req: (req: Request) => ({
-        id: req.id,
         method: req.method,
         url: req.url,
       }),
-      res: (res: Response) => {
-        const stdSerializer = p.stdSerializers.res(res);
-        const isStaticAssets = res.get("x-static-assets");
-
-        if (DEVELOPMENT) return stdSerializer;
-        if (isStaticAssets) return undefined;
-
-        return stdSerializer;
-      },
       responseTime: () => undefined,
+    },
+    customLogLevel: (req, res, err) => {
+      if (res.statusCode >= 400 && res.statusCode < 500) {
+        return "warn";
+      } else if (res.statusCode >= 500 || err) {
+        return "error";
+      } else if (
+        (res.statusCode >= 300 && res.statusCode < 400) ||
+        isStaticRoutes(req.url) ||
+        isDevAssetsRoutes(req.url)
+      ) {
+        return "silent";
+      }
+
+      return "info";
     },
     redact: ["res.headers.['set-cookie']"],
     genReqId: () => nanoid(),
@@ -81,9 +84,6 @@ if (DEVELOPMENT) {
       return express.static("dist/client", {
         immutable: true,
         maxAge: "1y",
-        setHeaders: (res) => {
-          res.setHeader("x-static-assets", "true");
-        },
       })(req, res, next);
     }
 

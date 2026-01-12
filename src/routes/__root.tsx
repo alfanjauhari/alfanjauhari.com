@@ -119,7 +119,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             <ObserverProvider>
               <Loader />
               <Header />
-              <div className="grow px-6 md:px-12 mx-auto relative w-full z-10 bg-background origin-top rounded-b-[3rem] mb-[500px] md:mb-[600px]">
+              <div className="grow px-6 md:px-12 mx-auto relative w-full z-10 bg-background origin-top rounded-b-[3rem] mb-125 md:mb-150">
                 <main className="max-w-7xl mx-auto mb-32 min-h-[calc(100vh-6rem*2)] flex flex-col justify-center">
                   {children}
                 </main>
