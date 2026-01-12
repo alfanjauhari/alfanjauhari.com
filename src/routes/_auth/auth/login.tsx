@@ -1,7 +1,8 @@
 import { useForm } from "@tanstack/react-form";
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useServerFn } from "@tanstack/react-start";
-import { type FormEvent, useCallback, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { createFileRoute } from "@tanstack/react-router";
+import { type FormEvent, useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
 import z from "zod";
 import { SocialLogins } from "@/components/social-logins";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -15,7 +16,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { clientEnv } from "@/env/client";
-import { handleLoginForm, loginFormOpts } from "@/fns/polymorphic/auth";
+import { loginFormOpts } from "@/fns/polymorphic/auth";
+import { authClient } from "@/lib/auth";
 import { seoHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/_auth/auth/login")({
@@ -31,7 +33,7 @@ export const Route = createFileRoute("/_auth/auth/login")({
   validateSearch: z.object({
     redirectTo: z
       .string()
-      .default("/")
+      .default("/dashboard")
       .transform((url) => {
         if (url.includes("http")) {
           return "/";
@@ -39,18 +41,41 @@ export const Route = createFileRoute("/_auth/auth/login")({
 
         return url;
       }),
+    error: z.string().optional(),
   }),
 });
 
 function LoginPage() {
   const [loginError, setLoginError] = useState("");
 
-  const navigate = Route.useNavigate();
   const searchParams = Route.useSearch();
 
   const redirectTo = searchParams.redirectTo;
+  const error = searchParams.error;
 
-  const loginMutation = useServerFn(handleLoginForm);
+  // #region BEHOLD USEEFFECTS!
+  useEffect(() => {
+    if (!error) return;
+
+    switch (error) {
+      case "INVALID_TOKEN":
+        setLoginError("Invalid login token. Please try again");
+        break;
+      default:
+        setLoginError(error);
+    }
+  }, [error]);
+  // #endregion
+
+  const loginMutation = useMutation({
+    mutationFn: (email: string) =>
+      authClient.signIn.magicLink({
+        email,
+        callbackURL: redirectTo,
+        errorCallbackURL: "/auth/login",
+        newUserCallbackURL: "/dashboard",
+      }),
+  });
 
   const form = useForm({
     ...loginFormOpts,
@@ -60,42 +85,20 @@ function LoginPage() {
       }, []),
     },
     onSubmit: async ({ value }) => {
-      const data = await loginMutation({
-        data: value,
-      });
+      const data = await loginMutation.mutateAsync(value.email);
 
-      switch (data.code) {
-        case "SUCCESS":
-          navigate({
-            to: redirectTo,
-          });
+      if (data.error) {
+        setLoginError(data.error.message || "");
 
-          break;
-        case "AUTH_ERROR":
-          setLoginError(data.message);
-
-          form.setErrorMap({
-            onChange: {
-              fields: {
-                email: true,
-                password: true,
-              },
+        form.setErrorMap({
+          onChange: {
+            fields: {
+              email: true,
             },
-          });
-
-          break;
-
-        case "VALIDATION_ERROR":
-          form.setErrorMap({
-            onSubmit: {
-              fields: data.errors.fieldErrors,
-            },
-          });
-
-          break;
-        default:
-          setLoginError(data.message);
-          break;
+          },
+        });
+      } else {
+        toast.success("Magic link sent. Please check your email!");
       }
     },
   });
@@ -137,7 +140,7 @@ function LoginPage() {
         </div>
       </div>
 
-      <form onSubmit={onSubmit} className="mb-12">
+      <form onSubmit={onSubmit}>
         <FieldGroup>
           <form.Field name="email">
             {(field) => {
@@ -161,56 +164,16 @@ function LoginPage() {
               );
             }}
           </form.Field>
-          <form.Field name="password">
-            {(field) => {
-              const isInvalid =
-                field.state.meta.isTouched && !field.state.meta.isValid;
-
-              return (
-                <>
-                  <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>Password</FieldLabel>
-                    <Input
-                      id={field.name}
-                      name={field.name}
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      type="password"
-                      aria-invalid={isInvalid}
-                    />
-                    {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
-                    )}
-                  </Field>
-                  <Link
-                    to="/auth/forgot-password"
-                    className="text-sm underline -mt-3"
-                  >
-                    Forgot your password?
-                  </Link>
-                </>
-              );
-            }}
-          </form.Field>
-
           <form.Subscribe selector={(formState) => formState.isSubmitting}>
             {(isSubmitting) => (
               <Button className="h-10">
                 {isSubmitting && <Spinner />}
-                Login
+                Send Magic Link
               </Button>
             )}
           </form.Subscribe>
         </FieldGroup>
       </form>
-
-      <p className="text-foreground/50 text-sm text-center">
-        Don't have an account?{" "}
-        <Link to="/auth/register" className="text-foreground underline">
-          Register here
-        </Link>
-      </p>
     </div>
   );
 }

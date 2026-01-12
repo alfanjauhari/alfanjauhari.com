@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { openAPI } from "better-auth/plugins";
+import { magicLink, openAPI } from "better-auth/plugins";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { nanoid } from "nanoid";
 import { client } from "@/db/client";
@@ -21,45 +21,6 @@ export const auth = betterAuth({
       verification: verificationsTable,
     },
   }),
-  session: {
-    storeSessionInDatabase: true,
-    cookieCache: {
-      enabled: true,
-      maxAge: 5 * 60,
-    },
-  },
-  emailAndPassword: {
-    enabled: true,
-    sendResetPassword: async ({ user, url }) => {
-      await sendEmail({
-        to: user.email,
-        template: {
-          id: "forgot-password",
-          variables: {
-            link: url,
-            name: user.name,
-          },
-        },
-        subject: "Your Password Reset Instruction",
-      });
-    },
-  },
-  emailVerification: {
-    sendOnSignUp: true,
-    sendVerificationEmail: async ({ user, url }) => {
-      await sendEmail({
-        to: user.email,
-        template: {
-          id: "email-verification",
-          variables: {
-            link: url,
-            name: user.name,
-          },
-        },
-        subject: "Email Verification Instruction",
-      });
-    },
-  },
   baseURL: serverEnv.BETTER_AUTH_URL,
   socialProviders: {
     google: {
@@ -76,6 +37,23 @@ export const auth = betterAuth({
       generateId: () => nanoid(),
     },
   },
-  plugins: [openAPI(), tanstackStartCookies()],
+  plugins: [
+    openAPI(),
+    tanstackStartCookies(),
+    magicLink({
+      sendMagicLink: async ({ email, url }) => {
+        await sendEmail({
+          to: email,
+          template: {
+            id: "email-login",
+            variables: {
+              link: url,
+            },
+          },
+          subject: "Login to Your Account",
+        });
+      },
+    }),
+  ],
   trustedOrigins: ["https://*.alfanjauhari.com"],
 });

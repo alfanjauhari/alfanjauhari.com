@@ -36,28 +36,10 @@ const ALLOWED_OG_ROUTES = [
     meta: "A collection of my thoughts on software engineering, design systems, and the intersection of humanity and technology.",
   },
   {
-    path: "auth/register",
-    type: "page" as const,
-    title: "Register",
-    meta: "Create an account to unlock personalized features and enjoy a better experience on my platform.",
-  },
-  {
     path: "auth/login",
     type: "page" as const,
     title: "Login",
     meta: "Log in to your account to access personalized features and continue your experience seamlessly.",
-  },
-  {
-    path: "auth/forgot-password",
-    type: "page" as const,
-    title: "Forgot Password",
-    meta: "Forgot your password? Enter your email to receive password reset instructions.",
-  },
-  {
-    path: "auth/reset-password",
-    type: "page" as const,
-    title: "Reset Password",
-    meta: "Enter your new password to complete the reset process.",
   },
   ...allUpdates.map((update) => ({
     path: `updates/${update._meta.path}`,
