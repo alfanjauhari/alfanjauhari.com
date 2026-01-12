@@ -1,29 +1,17 @@
 import {
-  type CodeEditorProps,
-  type PreviewProps,
   SandpackCodeEditor,
   SandpackLayout,
   SandpackPreview,
   SandpackProvider,
-  type SandpackProviderProps,
+  SandpackTests,
 } from "@codesandbox/sandpack-react";
-import {
-  Children,
-  type CSSProperties,
-  isValidElement,
-  type PropsWithChildren,
-} from "react";
+import type { CSSProperties, PropsWithChildren } from "react";
 import { useTheme } from "@/context/theme-context";
+import { type GetSandpackProps, getSandpackProps } from "@/lib/sandpack";
 import {
   catppuccinLatteSandpack,
   catppuccinMochaSandpack,
 } from "@/lib/sandpack-themes";
-import { cn } from "@/lib/utils";
-
-export interface SandpackProps extends SandpackProviderProps {
-  editorProps?: CodeEditorProps;
-  previewProps?: PreviewProps;
-}
 
 export function SandpackFile({
   children,
@@ -34,45 +22,31 @@ export function SandpackFile({
 export function Sandpack({
   editorProps,
   previewProps,
-  children,
-  files: _files,
+  testProps,
+  template,
   ...props
-}: PropsWithChildren<SandpackProps>) {
+}: PropsWithChildren<GetSandpackProps>) {
   const { theme } = useTheme();
-
-  const fileEntries = Children.toArray(children)
-    .map((child) => {
-      if (!isValidElement<{ name: string; children: string }>(child)) {
-        return null;
-      }
-
-      return [child.props.name, child.props.children];
-    })
-    .filter((child): child is [string, string] => {
-      return child !== null;
-    });
-
-  const files = Object.fromEntries(fileEntries);
 
   return (
     <SandpackProvider
-      style={
-        {
+      {...getSandpackProps({
+        template,
+        style: {
           "--sp-layout-height": "420px",
-        } as CSSProperties
-      }
-      template="react-ts"
-      theme={
-        theme === "light" ? catppuccinLatteSandpack : catppuccinMochaSandpack
-      }
-      options={{
-        classes: {
-          "sp-tab-container": "outline-none!",
-          "sp-code-editor": cn("[&_.cm-gutterElement]:text-xs"),
+          "--sp-font-mono": "var(--font-mono)",
+          "--sp-font-body": "var(--font-sans)",
+        } as CSSProperties,
+        theme:
+          theme === "light" ? catppuccinLatteSandpack : catppuccinMochaSandpack,
+        options: {
+          classes: {
+            "sp-tab-container": "outline-none!",
+            "sp-code-editor": "[&_.cm-gutterElement]:text-xs",
+          },
         },
-      }}
-      files={files}
-      {...props}
+        ...props,
+      })}
     >
       <SandpackLayout className="border-none! rounded-none!">
         <SandpackCodeEditor
@@ -83,7 +57,11 @@ export function Sandpack({
           initMode="immediate"
           {...editorProps}
         />
-        <SandpackPreview {...previewProps} />
+        {template === "test" ? (
+          <SandpackTests {...testProps} />
+        ) : (
+          <SandpackPreview {...previewProps} />
+        )}
       </SandpackLayout>
     </SandpackProvider>
   );

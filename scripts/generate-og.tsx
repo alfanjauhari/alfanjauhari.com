@@ -41,18 +41,22 @@ const ALLOWED_OG_ROUTES = [
     title: "Login",
     meta: "Log in to your account to access personalized features and continue your experience seamlessly.",
   },
-  ...allUpdates.map((update) => ({
-    path: `updates/${update._meta.path}`,
-    type: "update" as const,
-    title: update.title,
-    meta: update.summary,
-  })),
-  ...allRestrictedUpdates.map((update) => ({
-    path: `updates/r/${update._meta.path}`,
-    type: "update" as const,
-    title: update.title,
-    meta: update.summary,
-  })),
+  ...allUpdates
+    .filter((update) => !update.draft)
+    .map((update) => ({
+      path: `updates/${update._meta.path}`,
+      type: "update" as const,
+      title: update.title,
+      meta: update.summary,
+    })),
+  ...allRestrictedUpdates
+    .filter((update) => !update.draft)
+    .map((update) => ({
+      path: `updates/r/${update._meta.path}`,
+      type: "update" as const,
+      title: update.title,
+      meta: update.summary,
+    })),
   ...allWorks.map((work) => ({
     path: `works/${work._meta.path}`,
     type: "work" as const,

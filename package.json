@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development tsx watch -r dotenv/config scripts/serve.ts",
+    "dev": "pnpm build:content && pnpm build:og && cross-env NODE_ENV=development tsx watch -r dotenv/config scripts/serve.ts",
     "start": "cross-env NODE_ENV=production node -r dotenv/config dist/scripts/serve.js",
     "build": "pnpm build:content && pnpm build:og && vite build && pnpm upload",
     "build:content": "content-collections build",

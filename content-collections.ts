@@ -25,6 +25,7 @@ const UpdateSchema = z.object({
   tag: z.string(),
   summary: z.string(),
   date: z.coerce.date(),
+  draft: z.boolean().optional(),
   content: z.string()
 })
 
