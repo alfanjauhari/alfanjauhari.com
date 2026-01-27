@@ -6,6 +6,7 @@ import {
   createRootRouteWithContext,
   HeadContent,
   Scripts,
+  useChildMatches,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { ReactLenis } from "lenis/react";
@@ -23,22 +24,8 @@ export const Route = createRootRouteWithContext<RouterContext>()({
   head: () => ({
     links: [
       {
-        rel: "preconnect",
-        href: "/fonts/Inter.woff2",
-        as: "font",
-        type: "font/woff2",
-      },
-      {
-        rel: "preconnect",
-        href: "/fonts/Playfair-Display.woff2",
-        as: "font",
-        type: "font/woff2",
-      },
-      {
-        rel: "preconnect",
-        href: "/fonts/Playfair-Display-Italic.woff2",
-        as: "font",
-        type: "font/woff2",
+        href: "/fonts/fonts.css",
+        rel: "stylesheet",
       },
       {
         rel: "stylesheet",
@@ -80,6 +67,10 @@ export const Route = createRootRouteWithContext<RouterContext>()({
         name: "viewport",
         content: "width=device-width, initial-scale=1.0",
       },
+      {
+        name: "color-scheme",
+        content: "light dark",
+      },
     ],
   }),
   shellComponent: RootDocument,
@@ -104,8 +95,27 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 function RootDocument({ children }: { children: React.ReactNode }) {
   const queryClient = useQueryClient();
 
+  const isLenisPrevented = useChildMatches({
+    select: (matches) => {
+      const index = matches.findIndex((match) =>
+        [
+          "/updates/$updateId",
+          "/updates/r/$updateId",
+          "/snippets/$snippetId",
+        ].some((id) => match.routeId === id),
+      );
+
+      return index !== -1;
+    },
+  });
+
   return (
-    <ReactLenis root>
+    <ReactLenis
+      root
+      options={{
+        smoothWheel: !isLenisPrevented,
+      }}
+    >
       <html
         className="scroll-smooth group/root"
         lang="en"

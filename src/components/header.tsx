@@ -109,7 +109,7 @@ export const Header = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
               <ThemeToggleButton />
             </ul>
           </nav>
-          <div className="flex items-center gap-4 md:hidden text-foreground">
+          <div className="flex items-center gap-4 md:hidden text-foreground print:hidden">
             <ThemeToggleButton />
             <Button
               onClick={toggleMobileMenu}
@@ -130,7 +130,7 @@ export const Header = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
         </header>
         <nav
           className={cn(
-            "fixed inset-0 z-40 bg-background flex flex-col items-center justify-center md:hidden",
+            "fixed inset-0 z-40 bg-background flex flex-col items-center justify-center md:hidden print:hidden",
             {
               "motion-translate-y-in-100": isMobileMenuOpen,
               "motion-translate-y-out-100": !isMobileMenuOpen,

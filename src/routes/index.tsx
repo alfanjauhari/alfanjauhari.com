@@ -133,7 +133,7 @@ function Home() {
             .sort((a, b) => b.year - a.year)
             .map((work) => (
               <div className="sticky top-30" key={work._meta.path}>
-                <div className="bg-background border border-border rounded-lg overflow-hidden flex flex-col md:flex-row h-[500px] group relative intersect:motion-opacity-in-0 intersect:motion-translate-y-in-[50px] intersect-once">
+                <div className="bg-background border border-border rounded-lg overflow-hidden flex flex-col md:flex-row h-125 group relative intersect:motion-opacity-in-0 intersect:motion-translate-y-in-[50px] intersect-once">
                   <Link
                     to="/works/$workId"
                     params={{

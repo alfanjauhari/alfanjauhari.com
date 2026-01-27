@@ -30,17 +30,18 @@ export default function Pre({
   };
 
   return (
-    <pre ref={preRef} {...props} className={cn("relative", className)}>
+    <pre ref={preRef} {...props} className={cn("relative group", className)}>
       <Button
         disabled={isCopied}
         onClick={handleClickCopy}
-        className="absolute right-4 size-8 flex justify-center items-center rounded cursor-pointer disabled:cursor-not-allowed disabled:opacity-100"
+        className="opacity-0 group-hover:opacity-100 absolute right-4 size-6 flex justify-center items-center rounded cursor-pointer disabled:cursor-not-allowed disabled:opacity-100"
         type="button"
+        variant="outline"
       >
         {isCopied ? (
-          <CheckIcon className="size-5" />
+          <CheckIcon className="size-3.5" />
         ) : (
-          <ClipboardIcon className="size-5" />
+          <ClipboardIcon className="size-3.5" />
         )}
       </Button>
       {children}

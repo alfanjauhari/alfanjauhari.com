@@ -56,7 +56,7 @@ function UpdateId() {
   const { update, userId } = Route.useLoaderData();
 
   return (
-    <section className="min-h-screen mt-12 page-transition" data-lenis-prevent>
+    <section className="min-h-screen mt-12 page-transition">
       <div className="max-w-5xl mx-auto">
         <header className="text-center mb-20">
           <div className="flex flex-wrap justify-center gap-4 text-xxs font-mono uppercase tracking-[0.2em] text-foreground/40 mb-8">

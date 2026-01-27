@@ -13,8 +13,11 @@
       "**/index.html",
       "**/vite.config.ts",
       "!**/src/routeTree.gen.ts",
+      "!.content-collections/**/*",
+      "!dist/**/*",
       "**/generate-og.tsx",
-      "**/scripts/**/*"
+      "**/scripts/**/*",
+      "./content-collections.ts"
     ]
   },
   "formatter": {

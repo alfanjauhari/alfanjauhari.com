@@ -2,13 +2,13 @@
 
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "./fonts.css";
 
 @plugin "@tailwindcss/typography";
 @plugin "tailwindcss-motion";
 @plugin "tailwindcss-intersect";
+@config './tailwind.config.js';
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:is([data-theme="dark"] *));
 
 :root {
   --background: oklch(1 0 0);
@@ -44,13 +44,13 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
   --font-sans:
-    "Inter Variable", "Adjusted Arial Fallback", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    "Inter", "Adjusted Arial Fallback", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-mono:
-    "JetBrains Mono Variable", "Adjusted Courier New Fallback", SFMono-Regular, Menlo, Monaco, Consolas,
-    "Liberation Mono", "Courier New", monospace;
+    "JetBrains Mono", "Adjusted Courier New Fallback", SFMono-Regular, Menlo,
+    Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --font-serif:
-    "Playfair Display Variable", "Adjusted Georgia Fallback", Cambria, "Times New Roman", Times,
-    serif;
+    "Playfair Display", "Adjusted Georgia Fallback", Cambria, "Times New Roman",
+    Times, serif;
   --radius: 0;
   --shadow-x: 0;
   --shadow-y: 1px;
@@ -71,7 +71,7 @@
     0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 8px 10px -1px hsl(0 0% 0% / 0.1);
   --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
   --tracking-normal: 0em;
-  --spacing: 0.25rem;
+  --spacing: 0.25rem !important;
 }
 
 html[data-theme="dark"] {
@@ -108,13 +108,13 @@ html[data-theme="dark"] {
   --sidebar-border: oklch(0.275 0 0);
   --sidebar-ring: oklch(0.439 0 0);
   --font-sans:
-    "Inter Variable", "Adjusted Arial Fallback", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    "Inter", "Adjusted Arial Fallback", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-mono:
-    "JetBrains Mono Variable", "Adjusted Courier New Fallback", SFMono-Regular, Menlo, Monaco, Consolas,
-    "Liberation Mono", "Courier New", monospace;
+    "JetBrains Mono", "Adjusted Courier New Fallback", SFMono-Regular, Menlo,
+    Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --font-serif:
-    "Playfair Display Variable", "Adjusted Georgia Fallback", Cambria, "Times New Roman", Times,
-    serif;
+    "Playfair Display", "Adjusted Georgia Fallback", Cambria, "Times New Roman",
+    Times, serif;
   --radius: 0rem;
   --shadow-x: 0;
   --shadow-y: 1px;
@@ -234,6 +234,72 @@ html[data-theme="dark"] {
   --tw-prose-invert-td-borders: var(--input);
 }
 
+@utility catppuccin {
+  --colors-surface1: #eff1f5;
+  --colors-surface2: #e6e9ef;
+  --colors-surface3: #dce0e8;
+  --colors-base: #4c4f69;
+
+  --colors-clickable: #8839ef;
+  --colors-hover: #9c5af2;
+  --colors-accent: #1e66f5;
+
+  --colors-error: #d20f39;
+  --colors-error-surface: #d20f3926;
+
+  --colors-warning: #fe640b;
+  --colors-warning-surface: #fe640b26;
+
+  --colors-success: #40a02b;
+  --colors-active: #8839ef;
+  --colors-disabled: #9ca0b0;
+
+  --syntax-plain: #4c4f69;
+  --syntax-comment: #7c7f93;
+  --syntax-keyword: #8839ef;
+  --syntax-definition: #df8e1d;
+  --syntax-property: #4c4f69;
+  --syntax-static: #fe640b;
+  --syntax-string: #40a02b;
+  --syntax-punctuation: #179299;
+  --syntax-tag: #1e66f5;
+
+  --font-size: 13px;
+  --font-line-height: 1.6;
+}
+
+@utility catppuccin-dark {
+  --colors-surface1: #1e1e2e;
+  --colors-surface2: #181825;
+  --colors-surface3: #11111b;
+  --colors-base: #cdd6f4;
+
+  --colors-clickable: #cba6f7;
+  --colors-hover: #dec7fa;
+  --colors-accent: #89b4fa;
+
+  --colors-error: #f38ba8;
+  --colors-error-surface: #f38ba826;
+
+  --colors-warning: #fab387;
+  --colors-warning-surface: #fab38726;
+
+  --colors-disabled: #6c7086;
+
+  --syntax-plain: #cdd6f4;
+  --syntax-comment: #9399b2;
+  --syntax-keyword: #cba6f7;
+  --syntax-definition: #f9e2af;
+  --syntax-property: #cdd6f4;
+  --syntax-static: #fab387;
+  --syntax-string: #a6e3a1;
+  --syntax-punctuation: #94e2d5;
+  --syntax-tag: #89b4fa;
+
+  --font-size: 14px;
+  --font-line-height: 1.6;
+}
+
 html[data-theme="dark"] .shiki,
 html[data-theme="dark"] .shiki span {
   color: var(--shiki-dark) !important;
@@ -298,8 +364,6 @@ h6 {
   --sidebar-ring: oklch(0.556 0 0);
 }
 
-/*---break--- */
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -338,4 +402,39 @@ h6 {
 
 .page-transition {
   @apply motion-translate-y-in-[100px] motion-opacity-in-0;
+}
+
+/* #region Mermaid Overrides */
+.flowchart .edgeLabel,
+.flowchart .edgeLabel p {
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+}
+
+.flowchart .label text,
+.flowchart span {
+  color: var(--foreground) !important;
+}
+
+.flowchart .node rect,
+.flowchart .node circle,
+.flowchart .node ellipse,
+.flowchart .node polygon,
+.flowchart .node path {
+  fill: var(--background) !important;
+  stroke: var(--foreground) !important;
+}
+
+.flowchart .flowchart-link,
+.flowchart .marker-cross {
+  stroke: var(--foreground) !important;
+}
+
+.flowchart .marker {
+  fill: var(--foreground) !important;
+}
+/* #endregion */
+
+.sandpack-console li[role="treeitem"] {
+  background-color: transparent !important;
 }

@@ -1,17 +1,42 @@
-import { Context, defineCollection, defineConfig, Document } from "@content-collections/core";
+import {
+  type Context,
+  type Document,
+  defineCollection,
+  defineConfig,
+} from "@content-collections/core";
 import { compileMDX } from "@content-collections/mdx";
+import rehypeShiki from "@shikijs/rehype";
+import rehypeMermaid from "rehype-mermaid";
 import { z } from "zod";
-import rehypeShiki from '@shikijs/rehype'
 
-async function MDXTransformer<TSchema extends Document & {content: string}>(document: TSchema, context: Context<TSchema>) {
+async function MDXTransformer<TSchema extends Document & { content: string }>(
+  document: TSchema,
+  context: Context<TSchema>,
+) {
   const mdx = await compileMDX(context, document, {
-    rehypePlugins: [[rehypeShiki, {
-      themes: {
-        light: 'catppuccin-latte',
-        dark: 'catppuccin-mocha'
-      },
-      inline: 'tailing-curly-colon',
-    }]]
+    rehypePlugins: [
+      [
+        rehypeMermaid,
+        {
+          mermaidConfig: {
+            fontFamily: "JetBrains Mono",
+          },
+          // only for build css because we cannot access the local server
+          css: "https://fonts.googleapis.com/css2?family=JetBrains+Mono",
+        },
+      ],
+      [
+        rehypeShiki,
+        {
+          themes: {
+            light: "catppuccin-latte",
+            dark: "catppuccin-mocha",
+          },
+          inline: "tailing-curly-colon",
+          addLanguageClass: true,
+        },
+      ],
+    ],
   });
 
   return {
@@ -26,17 +51,20 @@ const UpdateSchema = z.object({
   summary: z.string(),
   date: z.coerce.date(),
   draft: z.boolean().optional(),
-  content: z.string()
-})
+  content: z.string(),
+});
 
 const updates = defineCollection({
   name: "updates",
   directory: "content/updates",
   include: "*.mdx",
   schema: UpdateSchema.extend({
-    restricted: z.literal(false).optional().transform(() => false)
+    restricted: z
+      .literal(false)
+      .optional()
+      .transform(() => false),
   }),
-  transform: MDXTransformer
+  transform: MDXTransformer,
 });
 
 const restrictedUpdates = defineCollection({
@@ -44,15 +72,18 @@ const restrictedUpdates = defineCollection({
   directory: "content/privates/updates",
   include: "*.mdx",
   schema: UpdateSchema.extend({
-    restricted: z.literal(true).optional().transform(() => true)
+    restricted: z
+      .literal(true)
+      .optional()
+      .transform(() => true),
   }),
   transform: MDXTransformer,
 });
 
 const works = defineCollection({
-  name: 'works',
-  directory: 'content/works',
-  include: '*.mdx',
+  name: "works",
+  directory: "content/works",
+  include: "*.mdx",
   schema: z.object({
     title: z.string(),
     summary: z.string(),
@@ -64,24 +95,24 @@ const works = defineCollection({
     challenge: z.string(),
     solution: z.string(),
     thumbnail: z.string(),
-    content: z.string()
+    content: z.string(),
   }),
-  transform: MDXTransformer
-})
+  transform: MDXTransformer,
+});
 
 const snippets = defineCollection({
-  name: 'snippets',
-  directory: 'content/snippets',
-  include: '*.mdx',
+  name: "snippets",
+  directory: "content/snippets",
+  include: "*.mdx",
   schema: z.object({
     title: z.string(),
     summary: z.string(),
     language: z.string(),
     tags: z.array(z.string()),
-    content: z.string()
+    content: z.string(),
   }),
-  transform: MDXTransformer
-})
+  transform: MDXTransformer,
+});
 
 export default defineConfig({
   collections: [updates, restrictedUpdates, works, snippets],

@@ -40,6 +40,7 @@ await Promise.all(
     try {
       const data = await cloudinary.uploader.upload(file, {
         public_id: publicId,
+        invalidate: true,
       });
 
       console.info(`File ${file} upload successfully with ${publicId} id`);

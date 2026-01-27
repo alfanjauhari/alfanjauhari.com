@@ -15,6 +15,7 @@ export interface SandpackProps extends SandpackProviderProps {
   editorProps?: CodeEditorProps;
   previewProps?: PreviewProps;
   testProps?: ComponentProps<typeof SandpackTests>;
+  tabs?: "preview console" | "preview" | "console test" | "console" | "test";
 }
 
 export const COMMON_FILES = {
@@ -59,7 +60,7 @@ export const TestTemplateSandpack: (
       "package.json": {
         code: JSON.stringify({
           dependencies: {},
-          devDependencies: { typescript: "^4.0.0" },
+          devDependencies: { typescript: "^5.9.0" },
           main: Object.keys(files)[0],
         }),
         hidden: true,
@@ -140,14 +141,26 @@ root.render(
 };
 
 export type GetSandpackProps = Omit<SandpackProps, "template"> & {
-  template: "react" | "test";
+  template: "react" | "test" | "vanilla-ts";
 };
 
-export function getSandpackProps({ template, ...props }: GetSandpackProps) {
+export function getSandpackProps({
+  template,
+  files: _files,
+  children,
+  tabs,
+  ...props
+}: GetSandpackProps) {
   switch (template) {
     case "test":
-      return TestTemplateSandpack(props);
+      return TestTemplateSandpack({ children, ...props });
+    case "react":
+      return ReactTemplateSandpack({ children, ...props });
     default:
-      return ReactTemplateSandpack(props);
+      return {
+        template: "vanilla-ts" as const,
+        files: getFiles(children),
+        ...props,
+      };
   }
 }

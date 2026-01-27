@@ -1,75 +1,102 @@
 import type { SandpackTheme } from "@codesandbox/sandpack-react";
+import type { Styles } from "console-feed/lib/definitions/Styles";
 
-export const catppuccinMochaSandpack: SandpackTheme = {
-  colors: {
-    surface1: "#1e1e2e",
-    surface2: "#181825",
-    surface3: "#11111b",
-    disabled: "#6c7086",
-    base: "#cdd6f4",
-    clickable: "#cba6f7",
-    hover: "#dec7fa",
-    accent: "#89b4fa",
-    error: "#f38ba8",
-    errorSurface: "#f38ba826",
-    warning: "#fab387",
-    warningSurface: "#fab38726",
-  },
+export const sandpackConsoleStyles: Styles = {
+  BASE_BACKGROUND_COLOR: "var(--colors-surface3)",
+  BASE_COLOR: "var(--colors-base)",
+  BASE_FONT_FAMILY: "var(--font-mono)",
+  BASE_FONT_SIZE: "var(--font-size)",
+  BASE_LINE_HEIGHT: "var(--font-line-height)",
+  PADDING: "8px 10px",
 
-  syntax: {
-    plain: "#cdd6f4",
-    comment: "#9399b2",
-    keyword: "#cba6f7",
-    definition: "#f9e2af",
-    punctuation: "#94e2d5",
-    property: "#cdd6f4",
-    tag: "#89b4fa",
-    static: "#fab387",
-    string: "#a6e3a1",
-  },
+  LOG_COLOR: "var(--colors-base)",
+  LOG_BACKGROUND: "var(--colors-surface1)",
+  LOG_BORDER: "1px solid var(--colors-surface2)",
 
-  font: {
-    body: "'Inter', sans-serif",
-    mono: "'JetBrains Mono', monospace",
-    size: "13px",
-    lineHeight: "1.6",
-  },
+  LOG_INFO_COLOR: "var(--colors-accent)",
+  LOG_INFO_BACKGROUND: "var(--colors-surface2)",
+  LOG_INFO_BORDER: "1px solid var(--colors-accent)",
+
+  LOG_COMMAND_COLOR: "var(--colors-clickable)",
+  LOG_COMMAND_BACKGROUND: "var(--colors-surface2)",
+  LOG_COMMAND_BORDER: "1px solid var(--colors-clickable)",
+
+  LOG_RESULT_COLOR: "var(--syntax-string)",
+  LOG_RESULT_BACKGROUND: "var(--colors-surface2)",
+  LOG_RESULT_BORDER: "1px solid var(--syntax-string)",
+
+  LOG_WARN_COLOR: "var(--colors-warning)",
+  LOG_WARN_BACKGROUND: "var(--colors-warning-surface)",
+  LOG_WARN_BORDER: "1px solid var(--colors-warning)",
+
+  LOG_ERROR_COLOR: "var(--colors-error)",
+  LOG_ERROR_BACKGROUND: "var(--colors-error-surface)",
+  LOG_ERROR_BORDER: "1px solid var(--colors-error)",
+
+  OBJECT_NAME_COLOR: "var(--colors-accent)",
+  OBJECT_VALUE_STRING_COLOR: "var(--syntax-string)",
+  OBJECT_VALUE_NUMBER_COLOR: "var(--colors-warning)",
+  OBJECT_VALUE_BOOLEAN_COLOR: "var(--colors-clickable)",
+  OBJECT_VALUE_NULL_COLOR: "var(--colors-disabled)",
+  OBJECT_VALUE_UNDEFINED_COLOR: "var(--colors-disabled)",
+  OBJECT_VALUE_REGEXP_COLOR: "var(--syntax-punctuation)",
+  OBJECT_VALUE_SYMBOL_COLOR: "var(--syntax-definition)",
+  OBJECT_VALUE_FUNCTION_KEYWORD_COLOR: "var(--colors-clickable)",
+
+  HTML_TAG_COLOR: "var(--syntax-tag)",
+  HTML_TAGNAME_COLOR: "var(--syntax-tag)",
+  HTML_ATTRIBUTE_NAME_COLOR: "var(--syntax-punctuation)",
+  HTML_ATTRIBUTE_VALUE_COLOR: "var(--syntax-string)",
+  HTML_COMMENT_COLOR: "var(--syntax-comment)",
+  HTML_DOCTYPE_COLOR: "var(--colors-disabled)",
+
+  ARROW_COLOR: "var(--colors-disabled)",
+  TREENODE_FONT_FAMILY: "var(--font-mono)",
+  TREENODE_FONT_SIZE: "12px",
+  TREENODE_LINE_HEIGHT: "var(--font-line-height)",
+
+  TABLE_BORDER_COLOR: "var(--colors-surface2)",
+  TABLE_TH_BACKGROUND_COLOR: "var(--colors-surface1)",
+  TABLE_TH_HOVER_COLOR: "var(--colors-surface2)",
+  TABLE_SORT_ICON_COLOR: "var(--colors-accent)",
 };
 
-export const catppuccinLatteSandpack = {
+export const sandpackTheme: SandpackTheme = {
   colors: {
-    surface1: "#eff1f5",
-    surface2: "#e6e9ef",
-    surface3: "#dce0e8",
-    base: "#4c4f69",
-    clickable: "#8839ef",
-    hover: "#9c5af2",
-    accent: "#1e66f5",
-    error: "#d20f39",
-    errorSurface: "#d20f3926",
-    warning: "#fe640b",
-    warningSurface: "#fe640b26",
-    success: "#40a02b",
-    active: "#8839ef",
-    disabled: "#9ca0b0",
+    surface1: "var(--colors-surface1)",
+    surface2: "var(--colors-surface2)",
+    surface3: "var(--colors-surface3)",
+    base: "var(--colors-base)",
+
+    clickable: "var(--colors-clickable)",
+    hover: "var(--colors-hover)",
+    accent: "var(--colors-accent)",
+
+    disabled: "var(--colors-disabled)",
+
+    error: "var(--colors-error)",
+    errorSurface: "var(--colors-error-surface)",
+
+    warning: "var(--colors-warning)",
+    warningSurface: "var(--colors-warning-surface)",
   },
 
   syntax: {
-    plain: "#4c4f69",
-    comment: "#7c7f93",
-    keyword: "#8839ef",
-    definition: "#df8e1d",
-    property: "#4c4f69",
-    static: "#fe640b",
-    string: "#40a02b",
-    punctuation: "#179299",
-    tag: "#1e66f5",
+    plain: "var(--syntax-plain)",
+    comment: "var(--syntax-comment)",
+    keyword: "var(--syntax-keyword)",
+    definition: "var(--syntax-definition)",
+    property: "var(--syntax-property)",
+    static: "var(--syntax-static)",
+    string: "var(--syntax-string)",
+    punctuation: "var(--syntax-punctuation)",
+    tag: "var(--syntax-tag)",
   },
 
   font: {
-    body: "'Inter', sans-serif",
-    mono: "'JetBrains Mono', monospace",
-    size: "13px",
-    lineHeight: "1.6",
+    body: "var(--font-sans)",
+    mono: "var(--font-mono)",
+    size: "var(--font-size)",
+    lineHeight: "var(--font-line-height)",
   },
 };
