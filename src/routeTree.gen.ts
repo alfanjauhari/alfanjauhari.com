@@ -109,12 +109,12 @@ export interface FileRoutesByFullPath {
   '/snippets/$snippetId': typeof SnippetsSnippetIdRoute
   '/updates/$updateId': typeof UpdatesUpdateIdRoute
   '/works/$workId': typeof WorksWorkIdRoute
-  '/snippets': typeof SnippetsIndexRoute
-  '/updates': typeof UpdatesIndexRoute
+  '/snippets/': typeof SnippetsIndexRoute
+  '/updates/': typeof UpdatesIndexRoute
   '/auth/login': typeof AuthAuthLoginRoute
   '/updates/r/$updateId': typeof UpdatesRUpdateIdRoute
   '/dashboard/': typeof DashboardUserIndexRoute
-  '/dashboard/admin': typeof DashboardAdminAdminIndexRoute
+  '/dashboard/admin/': typeof DashboardAdminAdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -158,12 +158,12 @@ export interface FileRouteTypes {
     | '/snippets/$snippetId'
     | '/updates/$updateId'
     | '/works/$workId'
-    | '/snippets'
-    | '/updates'
+    | '/snippets/'
+    | '/updates/'
     | '/auth/login'
     | '/updates/r/$updateId'
     | '/dashboard/'
-    | '/dashboard/admin'
+    | '/dashboard/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -231,7 +231,7 @@ declare module '@tanstack/react-router' {
     '/_auth': {
       id: '/_auth'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof AuthRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -245,14 +245,14 @@ declare module '@tanstack/react-router' {
     '/updates/': {
       id: '/updates/'
       path: '/updates'
-      fullPath: '/updates'
+      fullPath: '/updates/'
       preLoaderRoute: typeof UpdatesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/snippets/': {
       id: '/snippets/'
       path: '/snippets'
-      fullPath: '/snippets'
+      fullPath: '/snippets/'
       preLoaderRoute: typeof SnippetsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -315,7 +315,7 @@ declare module '@tanstack/react-router' {
     '/dashboard/_admin/admin/': {
       id: '/dashboard/_admin/admin/'
       path: '/admin'
-      fullPath: '/dashboard/admin'
+      fullPath: '/dashboard/admin/'
       preLoaderRoute: typeof DashboardAdminAdminIndexRouteImport
       parentRoute: typeof DashboardAdminRouteRoute
     }

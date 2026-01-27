@@ -1,5 +1,6 @@
 # ------------------------------------------------
-FROM --platform=$BUILDPLATFORM node:lts-alpine AS base
+# honestly for me bookworm is a no, but i think playwright has other idea for that
+FROM --platform=$BUILDPLATFORM node:lts-bookworm AS base
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
@@ -14,7 +15,7 @@ FROM base AS deps
 COPY package.json pnpm-lock.yaml ./
 
 RUN --mount=type=cache,target=/pnpm/store \
-  pnpm install --prod --frozen-lockfile
+  pnpm install --prod --frozen-lockfile --ignore-scripts
 
 # ------------------------------------------------
 FROM base AS builder

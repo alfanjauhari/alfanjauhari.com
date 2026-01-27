@@ -50,6 +50,9 @@ const config = defineConfig({
       enabled: process.env.BUILD_ANALYZE === "true",
     }),
   ],
+  preview: {
+    host: "0.0.0.0",
+  },
   optimizeDeps: {
     exclude: ["@takumi-rs/core"],
   },
