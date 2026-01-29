@@ -38,7 +38,7 @@ const config = defineConfig({
         },
       },
       sitemap: {
-        host: "http://localhost:3000",
+        host: process.env.VITE_SITE_URL,
       },
       vite: {
         installDevServerMiddleware: true,
