@@ -31,9 +31,14 @@ export const seoHead = ({
       { name: "twitter:description", content: description },
       { name: "twitter:creator", content: "@alfanjauhari_" },
       { name: "twitter:site", content: "@alfanjauhari_" },
-      { name: "og:type", content: "website" },
-      { name: "og:title", content: title },
-      { name: "og:description", content: description },
+      { property: "twitter:url", content: clientEnv.VITE_SITE_URL + canonical },
+      {
+        property: "twitter:domain",
+        content: new URL(clientEnv.VITE_SITE_URL).host,
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
       ...(image
         ? [
             {
@@ -44,7 +49,7 @@ export const seoHead = ({
             },
             { name: "twitter:card", content: "summary_large_image" },
             {
-              name: "og:image",
+              property: "og:image",
               content: image.startsWith("http")
                 ? image
                 : `${clientEnv.VITE_SITE_URL}${image}`,
