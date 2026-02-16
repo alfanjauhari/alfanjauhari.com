@@ -7,6 +7,10 @@ export const NAVIGATIONS = [
     label: "Snippets",
   },
   {
+    path: "/status",
+    label: "Status",
+  },
+  {
     path: "/uses",
     label: "Uses",
     hideOnNav: true,

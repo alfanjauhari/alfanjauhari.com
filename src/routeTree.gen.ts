@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UsesRouteImport } from './routes/uses'
+import { Route as StatusRouteImport } from './routes/status'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -28,6 +29,11 @@ import { Route as DashboardAdminAdminIndexRouteImport } from './routes/dashboard
 const UsesRoute = UsesRouteImport.update({
   id: '/uses',
   path: '/uses',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StatusRoute = StatusRouteImport.update({
+  id: '/status',
+  path: '/status',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -104,21 +110,23 @@ const DashboardAdminAdminIndexRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/status': typeof StatusRoute
   '/uses': typeof UsesRoute
   '/dashboard': typeof DashboardUserRouteRouteWithChildren
   '/snippets/$snippetId': typeof SnippetsSnippetIdRoute
   '/updates/$updateId': typeof UpdatesUpdateIdRoute
   '/works/$workId': typeof WorksWorkIdRoute
-  '/snippets': typeof SnippetsIndexRoute
-  '/updates': typeof UpdatesIndexRoute
+  '/snippets/': typeof SnippetsIndexRoute
+  '/updates/': typeof UpdatesIndexRoute
   '/auth/login': typeof AuthAuthLoginRoute
   '/updates/r/$updateId': typeof UpdatesRUpdateIdRoute
   '/dashboard/': typeof DashboardUserIndexRoute
-  '/dashboard/admin': typeof DashboardAdminAdminIndexRoute
+  '/dashboard/admin/': typeof DashboardAdminAdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/status': typeof StatusRoute
   '/uses': typeof UsesRoute
   '/dashboard': typeof DashboardUserIndexRoute
   '/snippets/$snippetId': typeof SnippetsSnippetIdRoute
@@ -135,6 +143,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/status': typeof StatusRoute
   '/uses': typeof UsesRoute
   '/dashboard/_admin': typeof DashboardAdminRouteRouteWithChildren
   '/dashboard/_user': typeof DashboardUserRouteRouteWithChildren
@@ -153,21 +162,23 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/status'
     | '/uses'
     | '/dashboard'
     | '/snippets/$snippetId'
     | '/updates/$updateId'
     | '/works/$workId'
-    | '/snippets'
-    | '/updates'
+    | '/snippets/'
+    | '/updates/'
     | '/auth/login'
     | '/updates/r/$updateId'
     | '/dashboard/'
-    | '/dashboard/admin'
+    | '/dashboard/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
+    | '/status'
     | '/uses'
     | '/dashboard'
     | '/snippets/$snippetId'
@@ -183,6 +194,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_auth'
     | '/about'
+    | '/status'
     | '/uses'
     | '/dashboard/_admin'
     | '/dashboard/_user'
@@ -201,6 +213,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
+  StatusRoute: typeof StatusRoute
   UsesRoute: typeof UsesRoute
   DashboardAdminRouteRoute: typeof DashboardAdminRouteRouteWithChildren
   DashboardUserRouteRoute: typeof DashboardUserRouteRouteWithChildren
@@ -221,6 +234,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UsesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/status': {
+      id: '/status'
+      path: '/status'
+      fullPath: '/status'
+      preLoaderRoute: typeof StatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -231,7 +251,7 @@ declare module '@tanstack/react-router' {
     '/_auth': {
       id: '/_auth'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof AuthRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -245,14 +265,14 @@ declare module '@tanstack/react-router' {
     '/updates/': {
       id: '/updates/'
       path: '/updates'
-      fullPath: '/updates'
+      fullPath: '/updates/'
       preLoaderRoute: typeof UpdatesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/snippets/': {
       id: '/snippets/'
       path: '/snippets'
-      fullPath: '/snippets'
+      fullPath: '/snippets/'
       preLoaderRoute: typeof SnippetsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
@@ -315,7 +335,7 @@ declare module '@tanstack/react-router' {
     '/dashboard/_admin/admin/': {
       id: '/dashboard/_admin/admin/'
       path: '/admin'
-      fullPath: '/dashboard/admin'
+      fullPath: '/dashboard/admin/'
       preLoaderRoute: typeof DashboardAdminAdminIndexRouteImport
       parentRoute: typeof DashboardAdminRouteRoute
     }
@@ -360,6 +380,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   AboutRoute: AboutRoute,
+  StatusRoute: StatusRoute,
   UsesRoute: UsesRoute,
   DashboardAdminRouteRoute: DashboardAdminRouteRouteWithChildren,
   DashboardUserRouteRoute: DashboardUserRouteRouteWithChildren,
