@@ -1,4 +1,4 @@
-name: Build & Deploy
+name: Build
 
 on:
   repository_dispatch:
@@ -79,42 +79,43 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  deploy:
-    name: Deploy app
-    if: github.event_name != 'pull_request'
-    needs: build
-    runs-on: ubuntu-latest
-    env:
-      PROJECT_NAME: alfanjauhari_com
-    steps:
-      - uses: actions/checkout@v4
+  # Enable if you need to deploy to a remote server via SSH
+  # deploy:
+  #   name: Deploy app
+  #   if: github.event_name != 'pull_request'
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     PROJECT_NAME: alfanjauhari_com
+  #   steps:
+  #     - uses: actions/checkout@v4
 
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.2.0
-        env:
-          RUNTIME_ENV_FILE: ${{ vars.RUNTIME_ENV_FILE }}
-          DIRECTORY: ${{ vars.DIRECTORY }}
-          APP_URL: ${{ vars.APP_URL }}
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          port: ${{ secrets.SSH_PORT || 22 }}
-          envs: RUNTIME_ENV_FILE, DIRECTORY
-          script: |
-            cd $DIRECTORY
+  #     - name: Deploy via SSH
+  #       uses: appleboy/ssh-action@v1.2.0
+  #       env:
+  #         RUNTIME_ENV_FILE: ${{ vars.RUNTIME_ENV_FILE }}
+  #         DIRECTORY: ${{ vars.DIRECTORY }}
+  #         APP_URL: ${{ vars.APP_URL }}
+  #       with:
+  #         host: ${{ secrets.SSH_HOST }}
+  #         username: ${{ secrets.SSH_USER }}
+  #         key: ${{ secrets.SSH_KEY }}
+  #         port: ${{ secrets.SSH_PORT || 22 }}
+  #         envs: RUNTIME_ENV_FILE, DIRECTORY
+  #         script: |
+  #           cd $DIRECTORY
 
-            git pull origin main --recurse-submodule
+  #           git pull origin main --recurse-submodule
 
-            docker compose \
-              -p "${PROJECT_NAME}" \
-              pull
+  #           docker compose \
+  #             -p "${PROJECT_NAME}" \
+  #             pull
 
-            docker compose \
-              -p "${PROJECT_NAME}" \
-              --env-file $RUNTIME_ENV_FILE \
-              up -d --remove-orphans
+  #           docker compose \
+  #             -p "${PROJECT_NAME}" \
+  #             --env-file $RUNTIME_ENV_FILE \
+  #             up -d --remove-orphans
 
-            docker image prune -f
+  #           docker image prune -f
 
-            curl -fsS https://alfanjauhari.com/ -o /dev/null || true
+  #           curl -fsS https://alfanjauhari.com/ -o /dev/null || true
