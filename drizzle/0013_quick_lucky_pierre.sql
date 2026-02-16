@@ -1,0 +1,41 @@
+CREATE TABLE "status_profiles" (
+	"id" text PRIMARY KEY DEFAULT generate_nanoid() NOT NULL,
+	"scope" varchar(32) DEFAULT 'global' NOT NULL,
+	"timezone" varchar(100) DEFAULT 'Asia/Jakarta' NOT NULL,
+	"location_label" varchar(120) DEFAULT 'Jakarta, ID' NOT NULL,
+	"latitude" double precision DEFAULT -6.2088 NOT NULL,
+	"longitude" double precision DEFAULT 106.8456 NOT NULL,
+	"focus_text" text,
+	"focus_progress" integer,
+	"project_name" text,
+	"project_milestone" text,
+	"project_progress" integer,
+	"project_status" varchar(80),
+	"reading_title" text,
+	"reading_author" text,
+	"reading_progress" integer,
+	"playing_title" text,
+	"playing_platform" varchar(80),
+	"weather_manual_summary" text,
+	"weather_manual_temp_c" double precision,
+	"weather_auto_summary" text,
+	"weather_auto_temp_c" double precision,
+	"weather_synced_at" timestamp,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "status_profiles_scope_unique" UNIQUE("scope")
+);
+--> statement-breakpoint
+CREATE TABLE "status_stocks" (
+	"id" text PRIMARY KEY DEFAULT generate_nanoid() NOT NULL,
+	"symbol" varchar(24) NOT NULL,
+	"sort_order" integer DEFAULT 0 NOT NULL,
+	"auto_price" double precision,
+	"auto_change_percent" double precision,
+	"currency" varchar(12),
+	"delayed" boolean DEFAULT true NOT NULL,
+	"synced_at" timestamp,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "status_stocks_symbol_unique" UNIQUE("symbol")
+);
