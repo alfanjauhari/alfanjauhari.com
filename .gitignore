@@ -6,7 +6,9 @@ dist-ssr
 count.txt
 .env
 .env*
-!.env.example
+!.env.app.example
+!.env.analytics.example
+!.env.infra.example
 .tanstack
 .wrangler
 dist

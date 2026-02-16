@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export const serverEnv = createEnv({
   server: {
-    APP_DATABASE_URL: z.string(),
+    DATABASE_URL: z.string(),
 
     BETTER_AUTH_URL: z.url(),
 
@@ -16,7 +16,7 @@ export const serverEnv = createEnv({
 
     RESEND_API_TOKEN: z.string(),
 
-    APP_REDIS_URL: z.string(),
+    REDIS_URL: z.string(),
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,

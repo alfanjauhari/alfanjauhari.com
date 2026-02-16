@@ -10,12 +10,12 @@ import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { Pool } from "pg";
 
 async function main() {
-  if (!process.env.APP_DATABASE_URL) {
-    throw new Error("APP_DATABASE_URL is required");
+  if (!process.env.DATABASE_URL) {
+    throw new Error("DATABASE_URL is required");
   }
 
   const pool = new Pool({
-    connectionString: process.env.APP_DATABASE_URL,
+    connectionString: process.env.DATABASE_URL,
   });
   const client = drizzle(pool);
 
