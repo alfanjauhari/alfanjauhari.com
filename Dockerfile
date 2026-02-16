@@ -55,9 +55,9 @@ RUN pnpm run build:scripts
 # ------------------------------------------------
 FROM base AS runner
 
-COPY --from=deps --chown=nonroot:nonroot /app/node_modules ./node_modules
-COPY --from=builder --chown=nonroot:nonroot /app/dist ./dist
-COPY --from=builder --chown=nonroot:nonroot /app/drizzle ./drizzle
+COPY --from=deps --chown=node:node /app/node_modules ./node_modules
+COPY --from=builder --chown=node:node /app/dist ./dist
+COPY --from=builder --chown=node:node /app/drizzle ./drizzle
 COPY entrypoint.sh /entrypoint.sh
 
 WORKDIR /app
@@ -66,7 +66,7 @@ ENV TZ="Asia/Jakarta"
 
 RUN chmod +x /entrypoint.sh
 
-USER nonroot:nonroot
+USER node
 
 EXPOSE 3000
 ENTRYPOINT ["/entrypoint.sh"]
