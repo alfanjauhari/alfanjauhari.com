@@ -4,12 +4,14 @@ import { asc, eq, notInArray } from "drizzle-orm";
 import z from "zod";
 import { client } from "@/db/client";
 import { statusProfilesTable, statusStocksTable } from "@/db/schemas/status";
+import { serverEnv } from "@/env/server";
 import logger from "@/lib/logger";
 import { adminMiddleware } from "@/middleware/auth";
 
 const STATUS_SCOPE = "global";
 const WEATHER_SYNC_INTERVAL_MS = 30 * 60 * 1000;
 const STOCK_SYNC_INTERVAL_MS = 15 * 60 * 1000;
+const STEAM_SYNC_INTERVAL_MS = 30 * 1000;
 
 const WEATHER_CODE_MAP: Record<number, string> = {
   0: "Clear Sky",
@@ -41,6 +43,17 @@ const WEATHER_CODE_MAP: Record<number, string> = {
   96: "Thunderstorm With Hail",
   99: "Severe Thunderstorm",
 };
+
+type SteamPlayingSnapshot = {
+  title: string;
+  appId?: string | null;
+  syncedAt: Date;
+};
+
+let steamPlayingCache: {
+  value: SteamPlayingSnapshot | null;
+  syncedAt: number;
+} | null = null;
 
 const UpdateStatusProfileSchema = z.object({
   timezone: z.string().min(1),
@@ -168,7 +181,7 @@ async function syncStocks(force = false) {
 
   try {
     const response = await fetch(
-      `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(symbols)}`,
+      `https://query2.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(symbols)}`,
     );
 
     if (!response.ok) {
@@ -229,11 +242,71 @@ async function syncStocks(force = false) {
   }
 }
 
+async function syncSteamPlaying() {
+  const apiKey = serverEnv.STEAM_API_KEY;
+  const steamId = serverEnv.STEAM_ID;
+
+  if (!apiKey || !steamId) {
+    return null;
+  }
+
+  if (
+    steamPlayingCache &&
+    Date.now() - steamPlayingCache.syncedAt < STEAM_SYNC_INTERVAL_MS
+  ) {
+    return steamPlayingCache.value;
+  }
+
+  try {
+    const response = await fetch(
+      `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${encodeURIComponent(
+        apiKey,
+      )}&steamids=${encodeURIComponent(steamId)}`,
+    );
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const payload = (await response.json()) as {
+      response?: {
+        players?: Array<{
+          gameextrainfo?: string;
+          gameid?: string;
+        }>;
+      };
+    };
+
+    const player = payload.response?.players?.[0];
+    const title = player?.gameextrainfo?.trim();
+    const appId = player?.gameid ?? null;
+
+    const value = title
+      ? {
+          title,
+          appId,
+          syncedAt: new Date(),
+        }
+      : null;
+
+    steamPlayingCache = {
+      value,
+      syncedAt: Date.now(),
+    };
+
+    return value;
+  } catch (error) {
+    logger.error(error);
+    return null;
+  }
+}
+
 function buildStatusSnapshot(data: {
   profile: Awaited<ReturnType<typeof ensureStatusProfile>> | null;
   stocks: Awaited<ReturnType<typeof syncStocks>>;
+  steamPlaying: Awaited<ReturnType<typeof syncSteamPlaying>>;
 }) {
-  const { profile, stocks } = data;
+  const { profile, stocks, steamPlaying } = data;
 
   if (!profile) {
     return null;
@@ -246,6 +319,8 @@ function buildStatusSnapshot(data: {
   return {
     profile: {
       ...profile,
+      playingTitle: steamPlaying?.title ?? profile.playingTitle,
+      playingPlatform: steamPlaying?.title ? "Steam" : profile.playingPlatform,
       weather: {
         summary: profile.weatherManualSummary ?? profile.weatherAutoSummary,
         tempC: profile.weatherManualTempC ?? profile.weatherAutoTempC,
@@ -260,8 +335,9 @@ function buildStatusSnapshot(data: {
 async function getStatusSnapshot() {
   const profile = await syncWeather();
   const stocks = await syncStocks();
+  const steamPlaying = await syncSteamPlaying();
 
-  return buildStatusSnapshot({ profile, stocks });
+  return buildStatusSnapshot({ profile, stocks, steamPlaying });
 }
 
 export const getPublicStatusSnapshotFn = createServerFn().handler(async () =>
