@@ -38,7 +38,7 @@ export const checkToken = createServerFn()
     return true;
   });
 
-const LoginSchema = z.object({
+export const LoginSchema = z.object({
   email: z.email(),
 });
 

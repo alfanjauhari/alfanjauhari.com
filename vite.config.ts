@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import contentCollections from "@content-collections/vite";
 import tailwindcss from "@tailwindcss/vite";
 import { devtools } from "@tanstack/devtools-vite";
@@ -15,6 +16,8 @@ const nonPrerenderedRoutes = [
   "/api",
   "/auth/",
 ];
+
+const isTest = process.env.NODE_ENV === "test" || process.env.VITEST;
 
 const config = defineConfig({
   plugins: [
@@ -45,16 +48,23 @@ const config = defineConfig({
       },
     }),
     viteReact(),
-    contentCollections(),
+    !isTest && contentCollections(),
     analyzer({
       enabled: process.env.BUILD_ANALYZE === "true",
     }),
-  ],
+  ].filter(Boolean),
   preview: {
     host: "0.0.0.0",
   },
   optimizeDeps: {
     exclude: ["@takumi-rs/core"],
+  },
+  test: {
+    globals: true,
+    environment: "happy-dom",
+    setupFiles: ["./src/test/setup.ts"],
+    include: ["src/test/**/*.test.{js,ts,jsx,tsx}"],
+    exclude: ["node_modules", "dist"],
   },
 });
 
