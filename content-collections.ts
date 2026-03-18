@@ -116,6 +116,19 @@ const snippets = defineCollection({
   transform: MDXTransformer,
 });
 
+const feeds = defineCollection({
+  name: "feeds",
+  directory: "content/feeds",
+  include: "*.mdx",
+  schema: z.object({
+    date: z.coerce.date(),
+    tag: z.string(),
+    draft: z.boolean().optional(),
+    content: z.string(),
+  }),
+  transform: MDXTransformer,
+});
+
 export default defineConfig({
-  collections: [updates, restrictedUpdates, works, snippets],
+  collections: [updates, restrictedUpdates, works, snippets, feeds],
 });

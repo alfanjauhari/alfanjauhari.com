@@ -42,7 +42,7 @@
         "useUniqueElementIds": {
           "level": "warn",
           "options": {
-            "excludedComponents": ["section"]
+            "excludedComponents": ["section", "input"]
           }
         }
       },

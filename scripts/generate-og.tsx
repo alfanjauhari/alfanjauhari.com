@@ -36,6 +36,12 @@ const ALLOWED_OG_ROUTES = [
     meta: "A collection of my thoughts on software engineering, design systems, and the intersection of humanity and technology.",
   },
   {
+    path: "feeds",
+    type: "page" as const,
+    title: "Feeds",
+    meta: "Short-form life updates, OSS contributions, new features, discoveries, and whatever else is happening.",
+  },
+  {
     path: "auth/login",
     type: "page" as const,
     title: "Login",

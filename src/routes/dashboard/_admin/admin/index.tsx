@@ -4,12 +4,12 @@ import { LogoutButton } from "@/components/logout-button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { clientEnv } from "@/env/client";
 import { getAllCommentsQueryOptions } from "@/fns/polymorphic/comments";
-import { getAdminStatusSnapshotQueryOptions } from "@/fns/polymorphic/status";
+import { getAdminFeedsQueryOptions } from "@/fns/polymorphic/feeds";
 import { getUpdatesQueryOptions } from "@/fns/polymorphic/updates";
 import { seoHead } from "@/lib/seo";
 import { CommentsList } from "./-comments-list";
+import { FeedsPanel } from "./-feeds-panel";
 import { ListFeedback } from "./-list-fallback";
-import { StatusPanel } from "./-status-panel";
 import { UpdatesList } from "./-updates-list";
 
 export const Route = createFileRoute("/dashboard/_admin/admin/")({
@@ -17,7 +17,7 @@ export const Route = createFileRoute("/dashboard/_admin/admin/")({
   loader: ({ context }) => {
     context.queryClient.prefetchQuery(getUpdatesQueryOptions);
     context.queryClient.prefetchQuery(getAllCommentsQueryOptions);
-    context.queryClient.prefetchQuery(getAdminStatusSnapshotQueryOptions);
+    context.queryClient.prefetchQuery(getAdminFeedsQueryOptions);
   },
   head: () =>
     seoHead({
@@ -39,8 +39,8 @@ const TABS = [
     value: "comments",
   },
   {
-    label: "Status",
-    value: "status",
+    label: "Feeds",
+    value: "feeds",
   },
 ];
 
@@ -79,9 +79,9 @@ function RouteComponent() {
             <CommentsList />
           </Suspense>
         </TabsContent>
-        <TabsContent value="status" className="py-12">
+        <TabsContent value="feeds" className="py-12">
           <Suspense fallback={<ListFeedback />}>
-            <StatusPanel />
+            <FeedsPanel />
           </Suspense>
         </TabsContent>
       </Tabs>

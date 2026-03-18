@@ -10,7 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UsesRouteImport } from './routes/uses'
-import { Route as StatusRouteImport } from './routes/status'
+import { Route as FeedsRouteImport } from './routes/feeds'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -31,9 +31,9 @@ const UsesRoute = UsesRouteImport.update({
   path: '/uses',
   getParentRoute: () => rootRouteImport,
 } as any)
-const StatusRoute = StatusRouteImport.update({
-  id: '/status',
-  path: '/status',
+const FeedsRoute = FeedsRouteImport.update({
+  id: '/feeds',
+  path: '/feeds',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -110,7 +110,7 @@ const DashboardAdminAdminIndexRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/status': typeof StatusRoute
+  '/feeds': typeof FeedsRoute
   '/uses': typeof UsesRoute
   '/dashboard': typeof DashboardUserRouteRouteWithChildren
   '/snippets/$snippetId': typeof SnippetsSnippetIdRoute
@@ -126,7 +126,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/status': typeof StatusRoute
+  '/feeds': typeof FeedsRoute
   '/uses': typeof UsesRoute
   '/dashboard': typeof DashboardUserIndexRoute
   '/snippets/$snippetId': typeof SnippetsSnippetIdRoute
@@ -143,7 +143,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteRouteWithChildren
   '/about': typeof AboutRoute
-  '/status': typeof StatusRoute
+  '/feeds': typeof FeedsRoute
   '/uses': typeof UsesRoute
   '/dashboard/_admin': typeof DashboardAdminRouteRouteWithChildren
   '/dashboard/_user': typeof DashboardUserRouteRouteWithChildren
@@ -162,7 +162,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
-    | '/status'
+    | '/feeds'
     | '/uses'
     | '/dashboard'
     | '/snippets/$snippetId'
@@ -178,7 +178,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
-    | '/status'
+    | '/feeds'
     | '/uses'
     | '/dashboard'
     | '/snippets/$snippetId'
@@ -194,7 +194,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_auth'
     | '/about'
-    | '/status'
+    | '/feeds'
     | '/uses'
     | '/dashboard/_admin'
     | '/dashboard/_user'
@@ -213,7 +213,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
-  StatusRoute: typeof StatusRoute
+  FeedsRoute: typeof FeedsRoute
   UsesRoute: typeof UsesRoute
   DashboardAdminRouteRoute: typeof DashboardAdminRouteRouteWithChildren
   DashboardUserRouteRoute: typeof DashboardUserRouteRouteWithChildren
@@ -234,11 +234,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UsesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/status': {
-      id: '/status'
-      path: '/status'
-      fullPath: '/status'
-      preLoaderRoute: typeof StatusRouteImport
+    '/feeds': {
+      id: '/feeds'
+      path: '/feeds'
+      fullPath: '/feeds'
+      preLoaderRoute: typeof FeedsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -380,7 +380,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   AboutRoute: AboutRoute,
-  StatusRoute: StatusRoute,
+  FeedsRoute: FeedsRoute,
   UsesRoute: UsesRoute,
   DashboardAdminRouteRoute: DashboardAdminRouteRouteWithChildren,
   DashboardUserRouteRoute: DashboardUserRouteRouteWithChildren,
