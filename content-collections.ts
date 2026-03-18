@@ -7,6 +7,7 @@ import {
 import { compileMDX } from "@content-collections/mdx";
 import rehypeShiki from "@shikijs/rehype";
 import rehypeMermaid from "rehype-mermaid";
+import remarkGfm from "remark-gfm";
 import { z } from "zod";
 
 async function MDXTransformer<TSchema extends Document & { content: string }>(
@@ -14,6 +15,7 @@ async function MDXTransformer<TSchema extends Document & { content: string }>(
   context: Context<TSchema>,
 ) {
   const mdx = await compileMDX(context, document, {
+    remarkPlugins: [remarkGfm],
     rehypePlugins: [
       [
         rehypeMermaid,
