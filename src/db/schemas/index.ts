@@ -1,8 +1,8 @@
 import { accountsTable } from "./accounts";
 import { commentsTable } from "./comments";
+import { feedsTable } from "./feeds";
 import { likesTable } from "./likes";
 import { sessionsTable } from "./sessions";
-import { statusProfilesTable, statusStocksTable } from "./status";
 import { updatesTable } from "./updates";
 import { usersTable } from "./users";
 import { verificationsTable } from "./verifications";
@@ -14,5 +14,4 @@ export const verifications = verificationsTable;
 export const likes = likesTable;
 export const comments = commentsTable;
 export const updates = updatesTable;
-export const statusProfiles = statusProfilesTable;
-export const statusStocks = statusStocksTable;
+export const feeds = feedsTable;

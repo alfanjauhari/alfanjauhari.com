@@ -7,8 +7,8 @@ export const NAVIGATIONS = [
     label: "Snippets",
   },
   {
-    path: "/status",
-    label: "Status",
+    path: "/feeds",
+    label: "Feeds",
   },
   {
     path: "/uses",

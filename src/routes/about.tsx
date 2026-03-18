@@ -109,7 +109,7 @@ function About() {
           </div>
         </div>
 
-        <div className="relative h-[400px] lg:h-auto rounded-lg overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
+        <div className="relative h-100 lg:h-auto rounded-lg overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
           <div
             className="absolute inset-0 bg-(image:--bg-url) lg:bg-(image:--lg-bg-url) bg-cover opacity-80 hover:scale-105 transition-transform duration-1000"
             style={
