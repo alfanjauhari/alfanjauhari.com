@@ -1,18 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Suspense } from "react";
 import { clientEnv } from "@/env/client";
-import { getPublicFeedsQueryOptions } from "@/fns/polymorphic/feeds";
+import { getPublicFeedsInfiniteOptions } from "@/fns/polymorphic/feeds";
 import { seoHead } from "@/lib/seo";
 import { FeedContent } from "./-feed-content";
 
 export const Route = createFileRoute("/feeds")({
-  component: () => (
-    <Suspense>
-      <FeedContent />
-    </Suspense>
-  ),
-  loader: ({ context }) => {
-    context.queryClient.prefetchQuery(getPublicFeedsQueryOptions);
+  component: FeedContent,
+  loader: async ({ context }) => {
+    await context.queryClient.prefetchInfiniteQuery(
+      getPublicFeedsInfiniteOptions,
+    );
   },
   head: () =>
     seoHead({

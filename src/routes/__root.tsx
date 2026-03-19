@@ -6,10 +6,8 @@ import {
   createRootRouteWithContext,
   HeadContent,
   Scripts,
-  useChildMatches,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-import { ReactLenis } from "lenis/react";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { Loader } from "@/components/loader";
@@ -95,64 +93,43 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 function RootDocument({ children }: { children: React.ReactNode }) {
   const queryClient = useQueryClient();
 
-  const isLenisPrevented = useChildMatches({
-    select: (matches) => {
-      const index = matches.findIndex((match) =>
-        [
-          "/updates/$updateId",
-          "/updates/r/$updateId",
-          "/snippets/$snippetId",
-        ].some((id) => match.routeId === id),
-      );
-
-      return index !== -1;
-    },
-  });
-
   return (
-    <ReactLenis
-      root
-      options={{
-        smoothWheel: !isLenisPrevented,
-      }}
+    <html
+      className="scroll-smooth group/root"
+      lang="en"
+      suppressHydrationWarning
     >
-      <html
-        className="scroll-smooth group/root"
-        lang="en"
-        suppressHydrationWarning
-      >
-        <head>
-          <HeadContent />
-        </head>
-        <body className="relative min-h-screen flex flex-col">
-          <ThemeProvider>
-            <ObserverProvider>
-              <Loader />
-              <Header />
-              <div className="grow px-6 md:px-12 mx-auto relative w-full z-10 bg-background origin-top rounded-b-[3rem] mb-125 md:mb-150">
-                <main className="max-w-7xl mx-auto mb-32 min-h-[calc(100vh-6rem*2)] flex flex-col justify-center">
-                  {children}
-                </main>
-              </div>
-              <Footer />
-              <TanStackDevtools
-                plugins={[
-                  {
-                    name: "Tanstack Router",
-                    render: <TanStackRouterDevtoolsPanel />,
-                  },
-                  {
-                    name: "Tanstack Query",
-                    render: <ReactQueryDevtoolsPanel client={queryClient} />,
-                  },
-                ]}
-              />
-            </ObserverProvider>
-          </ThemeProvider>
-          <Toaster />
-          <Scripts />
-        </body>
-      </html>
-    </ReactLenis>
+      <head>
+        <HeadContent />
+      </head>
+      <body className="relative min-h-screen flex flex-col">
+        <ThemeProvider>
+          <ObserverProvider>
+            <Loader />
+            <Header />
+            <div className="grow px-6 md:px-12 mx-auto relative w-full z-10 bg-background origin-top rounded-b-[3rem] mb-125 md:mb-150">
+              <main className="max-w-7xl mx-auto mb-32 min-h-[calc(100vh-6rem*2)] flex flex-col justify-center">
+                {children}
+              </main>
+            </div>
+            <Footer />
+            <TanStackDevtools
+              plugins={[
+                {
+                  name: "Tanstack Router",
+                  render: <TanStackRouterDevtoolsPanel />,
+                },
+                {
+                  name: "Tanstack Query",
+                  render: <ReactQueryDevtoolsPanel client={queryClient} />,
+                },
+              ]}
+            />
+          </ObserverProvider>
+        </ThemeProvider>
+        <Toaster />
+        <Scripts />
+      </body>
+    </html>
   );
 }
