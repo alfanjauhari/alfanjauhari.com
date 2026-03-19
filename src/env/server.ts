@@ -17,9 +17,6 @@ export const serverEnv = createEnv({
     RESEND_API_TOKEN: z.string(),
 
     REDIS_URL: z.string(),
-
-    STEAM_API_KEY: z.string().optional(),
-    STEAM_ID: z.string().optional(),
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,
