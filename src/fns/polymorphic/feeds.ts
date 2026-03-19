@@ -1,22 +1,49 @@
-import { mutationOptions, queryOptions } from "@tanstack/react-query";
+import {
+  infiniteQueryOptions,
+  mutationOptions,
+  queryOptions,
+} from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq, lt } from "drizzle-orm";
 import z from "zod";
 import { client } from "@/db/client";
 import { feedsTable } from "@/db/schemas/feeds";
 import { adminMiddleware } from "@/middleware/auth";
 
-export const getPublicFeedsFn = createServerFn().handler(async () => {
-  return client
-    .select()
-    .from(feedsTable)
-    .where(eq(feedsTable.draft, false))
-    .orderBy(desc(feedsTable.date));
+const FEEDS_PAGE_SIZE = 10;
+
+const PaginatedFeedsSchema = z.object({
+  cursor: z.string().optional(),
 });
 
-export const getPublicFeedsQueryOptions = queryOptions({
+export const getPublicFeedsFn = createServerFn()
+  .inputValidator(PaginatedFeedsSchema)
+  .handler(async ({ data }) => {
+    const conditions = [eq(feedsTable.draft, false)];
+
+    if (data.cursor) {
+      conditions.push(lt(feedsTable.id, data.cursor));
+    }
+
+    const feeds = await client
+      .select()
+      .from(feedsTable)
+      .where(and(...conditions))
+      .orderBy(desc(feedsTable.date), desc(feedsTable.id))
+      .limit(FEEDS_PAGE_SIZE + 1);
+
+    const hasMore = feeds.length > FEEDS_PAGE_SIZE;
+    const items = hasMore ? feeds.slice(0, FEEDS_PAGE_SIZE) : feeds;
+    const nextCursor = hasMore ? items[items.length - 1].id : undefined;
+
+    return { items, nextCursor };
+  });
+
+export const getPublicFeedsInfiniteOptions = infiniteQueryOptions({
   queryKey: ["public-feeds"],
-  queryFn: getPublicFeedsFn,
+  queryFn: ({ pageParam }) => getPublicFeedsFn({ data: { cursor: pageParam } }),
+  initialPageParam: undefined as string | undefined,
+  getNextPageParam: (lastPage) => lastPage.nextCursor,
 });
 
 export const getAdminFeedsFn = createServerFn()

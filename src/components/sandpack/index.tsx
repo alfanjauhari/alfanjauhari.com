@@ -51,7 +51,6 @@ export function Sandpack({
           showLineNumbers
           showInlineErrors
           wrapContent
-          data-lenis-prevent
           className="md:flex-2!"
           {...editorProps}
         />

@@ -1,3 +1,4 @@
+import { useForm } from "@tanstack/react-form";
 import {
   useMutation,
   useQueryClient,
@@ -7,9 +8,15 @@ import { PencilIcon, PlusIcon, Trash2Icon, XIcon } from "lucide-react";
 import { type FormEvent, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
+import { Spinner } from "@/components/ui/spinner";
 import {
   createFeedMutationOptions,
   deleteFeedMutationOptions,
@@ -37,7 +44,6 @@ function FeedForm({ mode, onClose }: { mode: FormMode; onClose: () => void }) {
   const createMutation = useMutation(createFeedMutationOptions);
   const updateMutation = useMutation(updateFeedMutationOptions);
 
-  const isPending = createMutation.isPending || updateMutation.isPending;
   const initial = mode.type === "edit" ? mode.feed : null;
 
   const invalidate = () =>
@@ -48,36 +54,48 @@ function FeedForm({ mode, onClose }: { mode: FormMode; onClose: () => void }) {
       queryClient.invalidateQueries({ queryKey: ["public-feeds"] }),
     ]);
 
-  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const date = String(formData.get("date") ?? "").trim();
-    const tag = String(formData.get("tag") ?? "").trim();
-    const content = String(formData.get("content") ?? "").trim();
-    const draft = formData.get("draft") === "on";
-
-    if (!date || !tag || !content) {
-      toast.error("Date, tag, and content are required.");
-      return;
-    }
-
-    try {
-      if (mode.type === "create") {
-        await createMutation.mutateAsync({
-          data: { date, tag, content, draft },
-        });
-        toast.success("Feed entry created.");
-      } else {
-        await updateMutation.mutateAsync({
-          data: { id: mode.feed.id, date, tag, content, draft },
-        });
-        toast.success("Feed entry updated.");
+  const form = useForm({
+    defaultValues: {
+      date: initial
+        ? toDateInputValue(initial.date)
+        : toDateInputValue(new Date()),
+      tag: initial?.tag ?? "",
+      content: initial?.content ?? "",
+      draft: initial?.draft ?? false,
+    },
+    onSubmit: async ({ value }) => {
+      const plainContent = value.content.replace(/<[^>]*>/g, "").trim();
+      if (!plainContent) {
+        form.setFieldMeta("content", (prev) => ({
+          ...prev,
+          errorMap: {
+            onChange: "Content is required",
+          },
+        }));
+        return;
       }
-      await invalidate();
-      onClose();
-    } catch {
-      toast.error("Something went wrong.");
-    }
+
+      try {
+        if (mode.type === "create") {
+          await createMutation.mutateAsync({ data: value });
+          toast.success("Feed entry created.");
+        } else {
+          await updateMutation.mutateAsync({
+            data: { id: mode.feed.id, ...value },
+          });
+          toast.success("Feed entry updated.");
+        }
+        await invalidate();
+        onClose();
+      } catch {
+        toast.error("Something went wrong.");
+      }
+    },
+  });
+
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    form.handleSubmit(e.target);
   };
 
   return (
@@ -95,62 +113,121 @@ function FeedForm({ mode, onClose }: { mode: FormMode; onClose: () => void }) {
         </button>
       </div>
 
-      <form onSubmit={onSubmit} className="space-y-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label>Date</Label>
-            <Input
+      <form onSubmit={onSubmit}>
+        <FieldGroup>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <form.Field
               name="date"
-              type="date"
-              defaultValue={
-                initial
-                  ? toDateInputValue(initial.date)
-                  : toDateInputValue(new Date())
-              }
-              required
-            />
-          </div>
-          <div className="space-y-2">
-            <Label>Tag</Label>
-            <Input
+              validators={{
+                onChange: ({ value }) =>
+                  !value ? "Date is required" : undefined,
+              }}
+            >
+              {(field) => {
+                const isInvalid =
+                  field.state.meta.isTouched && !field.state.meta.isValid;
+
+                return (
+                  <Field data-invalid={isInvalid}>
+                    <FieldLabel htmlFor={field.name}>Date</FieldLabel>
+                    <Input
+                      id={field.name}
+                      type="date"
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      aria-invalid={isInvalid}
+                    />
+                    {isInvalid && (
+                      <FieldError
+                        errors={field.state.meta.errors.map((e) => ({
+                          message: String(e),
+                        }))}
+                      />
+                    )}
+                  </Field>
+                );
+              }}
+            </form.Field>
+
+            <form.Field
               name="tag"
-              defaultValue={initial?.tag ?? ""}
-              placeholder="e.g. meta, oss, feature"
-              required
-            />
+              validators={{
+                onChange: ({ value }) =>
+                  !value.trim() ? "Tag is required" : undefined,
+              }}
+            >
+              {(field) => {
+                const isInvalid =
+                  field.state.meta.isTouched && !field.state.meta.isValid;
+
+                return (
+                  <Field data-invalid={isInvalid}>
+                    <FieldLabel htmlFor={field.name}>Tag</FieldLabel>
+                    <Input
+                      id={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      placeholder="e.g. meta, oss, feature"
+                      aria-invalid={isInvalid}
+                    />
+                    {isInvalid && (
+                      <FieldError
+                        errors={field.state.meta.errors.map((e) => ({
+                          message: String(e),
+                        }))}
+                      />
+                    )}
+                  </Field>
+                );
+              }}
+            </form.Field>
           </div>
-        </div>
 
-        <div className="space-y-2">
-          <Label>Content</Label>
-          <Textarea
-            name="content"
-            defaultValue={initial?.content ?? ""}
-            rows={5}
-            placeholder="What's happening..."
-            required
-          />
-        </div>
+          <form.Field name="content">
+            {(field) => (
+              <Field>
+                <FieldLabel>Content</FieldLabel>
+                <RichTextEditor
+                  defaultValue={field.state.value}
+                  onChange={(html) => field.handleChange(html)}
+                />
+              </Field>
+            )}
+          </form.Field>
 
-        <div className="flex items-center gap-2">
-          <input
-            id="draft"
-            name="draft"
-            type="checkbox"
-            defaultChecked={initial?.draft ?? false}
-            className="size-4"
-          />
-          <Label htmlFor="draft">Draft (hidden from public)</Label>
-        </div>
+          <form.Field name="draft">
+            {(field) => (
+              <Field orientation="horizontal">
+                <input
+                  id={field.name}
+                  type="checkbox"
+                  checked={field.state.value}
+                  onChange={(e) => field.handleChange(e.target.checked)}
+                  className="size-4"
+                />
+                <FieldLabel htmlFor={field.name}>
+                  Draft (hidden from public)
+                </FieldLabel>
+              </Field>
+            )}
+          </form.Field>
 
-        <div className="flex gap-2">
-          <Button type="submit" disabled={isPending}>
-            {isPending ? "Saving…" : "Save"}
-          </Button>
-          <Button type="button" variant="outline" onClick={onClose}>
-            Cancel
-          </Button>
-        </div>
+          <div className="flex gap-2">
+            <form.Subscribe selector={(s) => s.isSubmitting}>
+              {(isSubmitting) => (
+                <Button type="submit" disabled={isSubmitting}>
+                  {isSubmitting && <Spinner />}
+                  Save
+                </Button>
+              )}
+            </form.Subscribe>
+            <Button type="button" variant="outline" onClick={onClose}>
+              Cancel
+            </Button>
+          </div>
+        </FieldGroup>
       </form>
     </div>
   );
@@ -231,8 +308,7 @@ export function FeedsPanel() {
                   )}
                 </div>
                 <p className="text-sm text-foreground/70 truncate">
-                  {feed.content.slice(0, 120)}
-                  {feed.content.length > 120 ? "…" : ""}
+                  {feed.content.replace(/<[^>]*>/g, "").slice(0, 120)}
                 </p>
               </div>
               <div className="flex gap-2 shrink-0">
