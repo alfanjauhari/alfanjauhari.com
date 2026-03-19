@@ -123,7 +123,7 @@ for (const data of ALLOWED_OG_ROUTES) {
     fonts,
   });
 
-  const node = await fromJsx(
+  const { node } = await fromJsx(
     <OGTemplate
       title={validatedData.data.title}
       type={data.type}
