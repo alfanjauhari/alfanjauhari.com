@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createRouter } from "@tanstack/react-router";
+import { NotFound } from "./components/not-found";
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
 
@@ -20,13 +21,7 @@ export const getRouter = () => {
         </QueryClientProvider>
       );
     },
-    defaultNotFoundComponent: () => {
-      return (
-        <div>
-          <p>Not found!</p>
-        </div>
-      );
-    },
+    defaultNotFoundComponent: NotFound,
   });
 
   return router;
