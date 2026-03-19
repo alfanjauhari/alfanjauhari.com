@@ -186,15 +186,21 @@ function FeedForm({ mode, onClose }: { mode: FormMode; onClose: () => void }) {
           </div>
 
           <form.Field name="content">
-            {(field) => (
-              <Field>
-                <FieldLabel>Content</FieldLabel>
-                <RichTextEditor
-                  defaultValue={field.state.value}
-                  onChange={(html) => field.handleChange(html)}
-                />
-              </Field>
-            )}
+            {(field) => {
+              const errors = field.state.meta.errorMap?.onChange;
+              return (
+                <Field data-invalid={!!errors}>
+                  <FieldLabel>Content</FieldLabel>
+                  <RichTextEditor
+                    defaultValue={field.state.value}
+                    onChange={(html) => field.handleChange(html)}
+                  />
+                  {errors && (
+                    <FieldError errors={[{ message: String(errors) }]} />
+                  )}
+                </Field>
+              );
+            }}
           </form.Field>
 
           <form.Field name="draft">

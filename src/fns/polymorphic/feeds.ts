@@ -5,6 +5,7 @@ import {
 } from "@tanstack/react-query";
 import { createServerFn } from "@tanstack/react-start";
 import { and, desc, eq, lt } from "drizzle-orm";
+import sanitizeHtml from "sanitize-html";
 import z from "zod";
 import { client } from "@/db/client";
 import { feedsTable } from "@/db/schemas/feeds";
@@ -29,14 +30,22 @@ export const getPublicFeedsFn = createServerFn()
       .select()
       .from(feedsTable)
       .where(and(...conditions))
-      .orderBy(desc(feedsTable.date), desc(feedsTable.id))
+      .orderBy(desc(feedsTable.date))
       .limit(FEEDS_PAGE_SIZE + 1);
 
     const hasMore = feeds.length > FEEDS_PAGE_SIZE;
     const items = hasMore ? feeds.slice(0, FEEDS_PAGE_SIZE) : feeds;
     const nextCursor = hasMore ? items[items.length - 1].id : undefined;
 
-    return { items, nextCursor };
+    return {
+      items: items.map((item) => ({
+        ...item,
+        content: sanitizeHtml(item.content, {
+          allowedTags: ["p", "a", "bold", "em", "i"],
+        }),
+      })),
+      nextCursor,
+    };
   });
 
 export const getPublicFeedsInfiniteOptions = infiniteQueryOptions({
