@@ -90,7 +90,7 @@ export function RichTextEditor({
     }
 
     const url = window.prompt("URL:");
-    if (url) {
+    if (url && /^https?:\/\//i.test(url)) {
       editor.chain().focus().setLink({ href: url }).run();
     }
   };

@@ -22,12 +22,12 @@ describe("utils", () => {
 
   describe("formatDate", () => {
     it("should format date correctly", () => {
-      const date = new Date("2024-01-15");
+      const date = new Date(2024, 0, 15);
       expect(formatDate(date)).toBe("15/1/2024");
     });
 
     it("should format timestamp correctly", () => {
-      const timestamp = new Date("2024-12-25").getTime();
+      const timestamp = new Date(2024, 11, 25).getTime();
       expect(formatDate(timestamp)).toBe("25/12/2024");
     });
   });
