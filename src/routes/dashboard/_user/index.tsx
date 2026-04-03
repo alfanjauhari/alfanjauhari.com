@@ -27,6 +27,7 @@ export const Route = createFileRoute("/dashboard/_user/")({
         "Manage your account, likes and comments in one single place.",
       canonical: "/dashboard",
       image: `${clientEnv.VITE_CLOUDINARY_URL}/og/home.webp`,
+      noIndex: true,
     }),
 });
 

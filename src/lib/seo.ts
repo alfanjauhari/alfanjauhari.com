@@ -8,6 +8,7 @@ export interface SEOHeadParams {
   canonical: string;
   meta?: AnyRouteMatch["meta"];
   links?: AnyRouteMatch["links"];
+  noIndex?: true;
 }
 
 export const seoHead = ({
@@ -17,6 +18,7 @@ export const seoHead = ({
   canonical,
   links,
   meta,
+  noIndex,
 }: SEOHeadParams): {
   meta: AnyRouteMatch["meta"];
   links: AnyRouteMatch["links"];
@@ -39,6 +41,7 @@ export const seoHead = ({
       { property: "og:type", content: "website" },
       { property: "og:title", content: title },
       { property: "og:description", content: description },
+      noIndex ? { name: "robots", content: "noindex" } : {},
       ...(image
         ? [
             {

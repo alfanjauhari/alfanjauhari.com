@@ -26,6 +26,7 @@ export const Route = createFileRoute("/dashboard/_admin/admin/")({
         "Manage content, moderate discussions, and configure platform settings.",
       canonical: "/dashboard/admin",
       image: `${clientEnv.VITE_CLOUDINARY_URL}/og/home.webp`,
+      noIndex: true,
     }),
 });
 
