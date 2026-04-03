@@ -27,17 +27,12 @@ import { formatDate } from "@/lib/utils";
 
 type Feed = {
   id: string;
-  date: Date;
   tag: string;
   content: string;
   draft: boolean;
 };
 
 type FormMode = { type: "create" } | { type: "edit"; feed: Feed };
-
-function toDateInputValue(date: Date) {
-  return date.toISOString().slice(0, 10);
-}
 
 function FeedForm({ mode, onClose }: { mode: FormMode; onClose: () => void }) {
   const queryClient = useQueryClient();
@@ -56,9 +51,6 @@ function FeedForm({ mode, onClose }: { mode: FormMode; onClose: () => void }) {
 
   const form = useForm({
     defaultValues: {
-      date: initial
-        ? toDateInputValue(initial.date)
-        : toDateInputValue(new Date()),
       tag: initial?.tag ?? "",
       content: initial?.content ?? "",
       draft: initial?.draft ?? false,
@@ -116,40 +108,6 @@ function FeedForm({ mode, onClose }: { mode: FormMode; onClose: () => void }) {
       <form onSubmit={onSubmit}>
         <FieldGroup>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <form.Field
-              name="date"
-              validators={{
-                onChange: ({ value }) =>
-                  !value ? "Date is required" : undefined,
-              }}
-            >
-              {(field) => {
-                const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid;
-
-                return (
-                  <Field data-invalid={isInvalid}>
-                    <FieldLabel htmlFor={field.name}>Date</FieldLabel>
-                    <Input
-                      id={field.name}
-                      type="date"
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      aria-invalid={isInvalid}
-                    />
-                    {isInvalid && (
-                      <FieldError
-                        errors={field.state.meta.errors.map((e) => ({
-                          message: String(e),
-                        }))}
-                      />
-                    )}
-                  </Field>
-                );
-              }}
-            </form.Field>
-
             <form.Field
               name="tag"
               validators={{
@@ -302,7 +260,7 @@ export function FeedsPanel() {
               <div className="space-y-1 min-w-0">
                 <div className="flex items-center gap-3 flex-wrap">
                   <span className="font-mono text-xs text-foreground/50 uppercase tracking-widest">
-                    {formatDate(feed.date)}
+                    {formatDate(feed.createdAt)}
                   </span>
                   <span className="font-mono text-xs uppercase tracking-widest border border-border px-2 py-0.5 text-foreground/60">
                     {feed.tag}

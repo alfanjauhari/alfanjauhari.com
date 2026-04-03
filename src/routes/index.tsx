@@ -236,7 +236,8 @@ function Home() {
                   </div>
                 </article>
               </Link>
-            ))}
+            ))
+            .slice(0, 3)}
         </div>
       </section>
     </div>

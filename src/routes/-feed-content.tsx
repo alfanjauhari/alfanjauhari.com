@@ -59,7 +59,7 @@ export function FeedContent() {
               >
                 <div className="flex items-center gap-4 mb-3">
                   <span className="font-mono text-xs uppercase tracking-widest text-foreground/50">
-                    {formatDate(feed.date)}
+                    {formatDate(feed.createdAt)}
                   </span>
                   <span className="font-mono text-xxs uppercase tracking-widest border border-border px-2 py-0.5 text-foreground/60">
                     {feed.tag}

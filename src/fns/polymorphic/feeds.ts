@@ -26,11 +26,12 @@ export const getPublicFeedsFn = createServerFn()
       conditions.push(lt(feedsTable.id, data.cursor));
     }
 
+    // get the first feeds based on FEEDS_PAGE_SIZE plus one item for the next item cursor
     const feeds = await client
       .select()
       .from(feedsTable)
       .where(and(...conditions))
-      .orderBy(desc(feedsTable.date))
+      .orderBy(desc(feedsTable.createdAt))
       .limit(FEEDS_PAGE_SIZE + 1);
 
     const hasMore = feeds.length > FEEDS_PAGE_SIZE;
@@ -58,7 +59,7 @@ export const getPublicFeedsInfiniteOptions = infiniteQueryOptions({
 export const getAdminFeedsFn = createServerFn()
   .middleware([adminMiddleware])
   .handler(async () => {
-    return client.select().from(feedsTable).orderBy(desc(feedsTable.date));
+    return client.select().from(feedsTable).orderBy(desc(feedsTable.createdAt));
   });
 
 export const getAdminFeedsQueryOptions = queryOptions({
@@ -67,7 +68,6 @@ export const getAdminFeedsQueryOptions = queryOptions({
 });
 
 const FeedInputSchema = z.object({
-  date: z.string().min(1, "Date is required"),
   tag: z.string().min(1, "Tag is required"),
   content: z.string().min(1, "Content is required"),
   draft: z.boolean().default(false),
@@ -80,7 +80,6 @@ export const createFeedFn = createServerFn({ method: "POST" })
     const [feed] = await client
       .insert(feedsTable)
       .values({
-        date: new Date(data.date),
         tag: data.tag,
         content: data.content,
         draft: data.draft,
@@ -106,7 +105,6 @@ export const updateFeedFn = createServerFn({ method: "POST" })
     const [feed] = await client
       .update(feedsTable)
       .set({
-        date: new Date(data.date),
         tag: data.tag,
         content: data.content,
         draft: data.draft,
