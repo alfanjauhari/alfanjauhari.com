@@ -117,5 +117,5 @@ const snippets = defineCollection({
 });
 
 export default defineConfig({
-  collections: [updates, restrictedUpdates, works, snippets],
+  content: [updates, restrictedUpdates, works, snippets],
 });

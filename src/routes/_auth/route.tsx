@@ -6,9 +6,6 @@ export const Route = createFileRoute("/_auth")({
   server: {
     middleware: [nonAuthenticatedMiddleware],
   },
-  notFoundComponent: () => {
-    return <p>This setting page doesn't exist!</p>;
-  },
 });
 
 function RouteComponent() {

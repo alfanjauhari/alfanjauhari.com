@@ -5,7 +5,7 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import { PencilIcon, PlusIcon, Trash2Icon, XIcon } from "lucide-react";
-import { type FormEvent, useState } from "react";
+import { type SubmitEvent, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -93,7 +93,7 @@ function FeedForm({ mode, onClose }: { mode: FormMode; onClose: () => void }) {
     },
   });
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     form.handleSubmit(e.target);
   };

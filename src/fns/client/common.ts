@@ -1,6 +1,6 @@
-import { createIsomorphicFn } from "@tanstack/react-start";
+import { createClientOnlyFn } from "@tanstack/react-start";
 
-export const setHasVisited = createIsomorphicFn().client((visited: boolean) => {
+export const setHasVisited = createClientOnlyFn((visited: boolean) => {
   const html = document.documentElement;
   const hasAttribute = html.hasAttribute("data-has-visited");
 

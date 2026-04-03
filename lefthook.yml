@@ -27,7 +27,7 @@ pre-push:
         - "*.jsx"
         - "*.json"
 
-    - run: pnpm run lint {staged_files}
+    - run: pnpm run lint {push_files}
       glob:
         - "*.ts"
         - "*.js"

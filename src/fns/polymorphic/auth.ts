@@ -6,11 +6,28 @@ import { eq } from "drizzle-orm";
 import z from "zod";
 import { client } from "@/db/client";
 import { verificationsTable } from "@/db/schemas/verifications";
+import { serverEnv } from "@/env/server";
 import { auth } from "@/lib/auth.server";
 
 export const getSessionFn = createServerFn().handler(async () => {
   const headers = getRequestHeaders();
   const session = await auth.api.getSession({ headers });
+
+  return session;
+});
+
+export const getAdminSessionFn = createServerFn().handler(async () => {
+  const session = await getSessionFn();
+
+  if (!session) {
+    throw notFound();
+  }
+
+  const admins = serverEnv.ADMIN_EMAIL.includes(session.user.email);
+
+  if (!admins) {
+    throw notFound();
+  }
 
   return session;
 });

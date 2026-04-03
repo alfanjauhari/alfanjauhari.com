@@ -1,7 +1,7 @@
 import { useForm } from "@tanstack/react-form";
 import { useMutation } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { type FormEvent, useCallback, useEffect, useState } from "react";
+import { type SubmitEvent, useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import z from "zod";
 import { SocialLogins } from "@/components/social-logins";
@@ -35,6 +35,7 @@ export const Route = createFileRoute("/_auth/auth/login")({
       .string()
       .default("/dashboard")
       .transform((url) => {
+        // prevent outside url as a redirect path
         if (url.includes("http")) {
           return "/";
         }
@@ -103,7 +104,7 @@ function LoginPage() {
     },
   });
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     form.handleSubmit(e.target);
