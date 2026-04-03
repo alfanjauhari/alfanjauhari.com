@@ -48,11 +48,11 @@ function UseItem({
       className="group intersect:motion-translate-y-in-[20px] intersect:motion-opacity-in-0 intersect-once"
       style={
         {
-          "--motion-delay": delay,
+          "--motion-delay": `${delay}s`,
         } as CSSProperties
       }
     >
-      <h3 className="font-serif text-2xl mb-4 group-hover:text-foreground/60 transition-colors">
+      <h3 className="font-serif text-2xl mb-4 group-hover:text-foreground/60">
         {title}
       </h3>
       <p className="prose prose-primary leading-relaxed">{children}</p>
