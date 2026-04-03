@@ -41,7 +41,10 @@ ENV SKIP_RATE_LIMIT=1
 COPY package.json pnpm-lock.yaml ./
 
 RUN --mount=type=cache,target=/pnpm/store \
-  pnpm install --frozen-lockfile
+  pnpm install --frozen-lockfile --ignore-scripts
+
+RUN --mount=type=cache,target=/pnpm/store \
+  pnpm playwright:install
 
 COPY . .
 
