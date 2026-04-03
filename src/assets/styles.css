@@ -6,7 +6,7 @@
 @plugin "@tailwindcss/typography";
 @plugin "tailwindcss-motion";
 @plugin "tailwindcss-intersect";
-@config './tailwind.config.js';
+@config "./tailwind.config.js";
 
 @custom-variant dark (&:is([data-theme="dark"] *));
 
