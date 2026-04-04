@@ -88,10 +88,7 @@ export const Footer = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
                 <span>&copy; {new Date().getFullYear()}</span>
                 <span className="hidden md:inline">All Rights Reserved</span>
               </div>
-              <div className="flex gap-4">
-                <span>Jakarta, ID</span>
-                <span>Local time: {timeNow}</span>
-              </div>
+              <span>Tulungagung, ID</span>
             </div>
           </div>
         </div>

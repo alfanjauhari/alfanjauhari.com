@@ -52,7 +52,7 @@ function UseItem({
         } as CSSProperties
       }
     >
-      <h3 className="font-serif text-2xl mb-4 group-hover:text-foreground/60">
+      <h3 className="font-serif text-2xl mb-4 group-hover:text-foreground/60 transition-colors">
         {title}
       </h3>
       <p className="prose prose-primary leading-relaxed">{children}</p>

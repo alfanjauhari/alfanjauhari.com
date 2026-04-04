@@ -83,7 +83,7 @@ function Home() {
                 <span className="text-sm font-bold">Tulungagung, ID</span>
               </div>
               <span className="font-mono text-xs text-foreground/40 block">
-                06° 12' S, 106° 49' E
+                8.0912° S, 111.9642° E
               </span>
             </div>
 
