@@ -2,12 +2,9 @@ import { Link } from "@tanstack/react-router";
 import { ArrowUpRightIcon } from "lucide-react";
 import { forwardRef, type HTMLAttributes } from "react";
 import { NAVIGATIONS } from "@/constants";
-import { Route } from "@/routes/__root";
 
 export const Footer = forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(
   function Footer() {
-    const { timeNow } = Route.useLoaderData();
-
     return (
       <footer className="fixed bottom-0 inset-x-0 z-0 h-125 md:h-150">
         <div className="bg-[#0a0a0a] h-full flex flex-col justify-between px-6 pt-6 md:px-12 md:pt-24 pb-6 overflow-hidden relative">
