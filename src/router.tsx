@@ -11,6 +11,7 @@ export const getRouter = () => {
   const router = createRouter({
     routeTree,
     defaultPendingMinMs: 0,
+    scrollToTopSelectors: ["header"],
     context: {
       queryClient,
     },
