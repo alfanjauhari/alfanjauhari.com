@@ -1,1 +1,0 @@
-ALTER TABLE "updates" ADD COLUMN "restricted" boolean;

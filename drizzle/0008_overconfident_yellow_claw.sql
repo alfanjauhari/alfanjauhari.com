@@ -1,1 +1,0 @@
-ALTER TABLE "verifications" ALTER COLUMN "value" SET DATA TYPE text;

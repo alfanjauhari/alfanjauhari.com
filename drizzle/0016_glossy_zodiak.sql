@@ -1,1 +1,0 @@
-ALTER TABLE "feeds" DROP COLUMN "date";
