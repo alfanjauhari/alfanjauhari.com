@@ -1,0 +1,69 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection, getEntry, render } from "astro:content";
+import Image from "../../components/mdx/Image.astro";
+import Sandpack from "../../components/mdx/Sandpack.astro";
+import SandpackFile from "../../components/mdx/SandpackFile.astro";
+import Serif from "../../components/mdx/Serif.astro";
+
+export async function getStaticPaths() {
+	const snippets = await getCollection("snippets");
+	return snippets.map((entry) => ({
+		params: { id: entry.id },
+	}));
+}
+
+const { id } = Astro.params;
+const entry = await getEntry("snippets", id!);
+if (!entry) return new Response(null, { status: 404 });
+const { Content } = await render(entry);
+---
+
+<BaseLayout
+	title={entry.data.title}
+	description={entry.data.summary}
+	image={`/images/og/snippets/${id}.webp`}
+>
+	<div class="min-h-screen mt-12">
+		<div class="max-w-5xl mx-auto">
+			<header class="mb-20">
+				<div class="flex items-center gap-3 mb-6 text-xs font-mono uppercase tracking-widest text-foreground/40">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="14"
+						height="14"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="size-3.5"
+					>
+						<polyline points="4 17 10 11 4 5" />
+						<line x1="12" x2="20" y1="19" y2="19" />
+					</svg>
+					<span>{entry.data.language}</span>
+					<span class="text-foreground/30">&bull;</span>
+					{
+						entry.data.tags.map((tag: string) => (
+							<span>{tag}</span>
+						))
+					}
+				</div>
+
+				<h1 class="font-serif text-4xl md:text-6xl leading-none mb-6">
+					{entry.data.title}
+				</h1>
+
+				<p class="text-xl mb-12 text-foreground/40">
+					{entry.data.summary}
+				</p>
+			</header>
+
+			<article class="prose-primary prose-lg md:prose-xl max-w-full prose-headings:leading-tight prose-headings:font-serif">
+				<Content components={{ Image, Sandpack, SandpackFile, serif: Serif }} />
+			</article>
+		</div>
+	</div>
+</BaseLayout>

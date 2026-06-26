@@ -1,0 +1,54 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import { calculateReadingTime } from "../lib/utils";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+	title: string;
+	tag?: string;
+	summary: string;
+	date: Date;
+	readingTime: number;
+	id: string;
+}
+
+const { title, tag, summary, date, readingTime, id } = Astro.props;
+---
+
+<BaseLayout
+	title={title}
+	description={summary}
+	image={`/images/og/updates/${id}.webp`}
+>
+	<article class="min-h-screen mt-12">
+		<div class="max-w-5xl mx-auto">
+			<header class="text-center mb-20">
+				<div
+					class="flex flex-wrap justify-center gap-4 text-xxs font-mono uppercase tracking-[0.2em] text-foreground/40 mb-8"
+				>
+					<span>{new Intl.DateTimeFormat("id-ID").format(date)}</span>
+					<span class="text-foreground/30">&bull;</span>
+					{tag && (
+						<>
+							<span>{tag}</span>
+							<span class="text-foreground/30">&bull;</span>
+						</>
+					)}
+					<span>{readingTime} Minute Reading Time</span>
+				</div>
+
+				<h1 class="font-serif text-5xl md:text-7xl lg:text-8xl leading-none mb-8 tracking-tight">
+					{title}
+				</h1>
+			</header>
+
+			<div class="prose-primary prose-lg md:prose-xl max-w-full prose-headings:leading-tight prose-headings:font-serif">
+				<p class="text-xl md:text-2xl font-serif italic mb-12">
+					{summary}
+				</p>
+				<hr />
+				<slot />
+			</div>
+		</div>
+	</article>
+</BaseLayout>

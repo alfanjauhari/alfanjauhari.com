@@ -1,0 +1,49 @@
+---
+title: Drizzle ORM Schema Builder
+summary: This snippet provides a function to simply build scalable drizzle schema with initial columns such as id and timestamp columns.
+language: TypeScript
+tags: [TypeScript, Drizzle]
+---
+
+```ts
+import {
+  type BuildExtraConfigColumns,
+  type HasDefault,
+  type IsPrimaryKey,
+  type NotNull,
+  sql,
+} from "drizzle-orm";
+import * as t from "drizzle-orm/pg-core";
+import type { PgColumnsBuilders } from "drizzle-orm/pg-core/columns/all";
+
+export interface BaseTableColumns {
+  id: HasDefault<
+    IsPrimaryKey<NotNull<t.PgTextBuilderInitial<"id", [string, ...string[]]>>>
+  >;
+  createdAt: HasDefault<NotNull<t.PgTimestampBuilderInitial<"created_at">>>;
+  updatedAt: HasDefault<NotNull<t.PgTimestampBuilderInitial<"updated_at">>>;
+}
+
+export const buildSchemas = <
+  TableName extends string,
+  TSchema extends Record<string, t.PgColumnBuilderBase>,
+>(
+  table: TableName,
+  schema: (t: PgColumnsBuilders) => TSchema,
+  // for add constraints, index, etc.
+  extraConfig?: (
+    self: BuildExtraConfigColumns<TableName, TSchema & BaseTableColumns, "pg">,
+  ) => t.PgTableExtraConfigValue[],
+) =>
+  t.pgTable<TableName, TSchema & BaseTableColumns>(
+    table,
+    (t) => ({
+      // just for example. you can use uuid/normal int id
+      id: t.text("id").primaryKey().default(sql`generate_nanoid()`),
+      ...schema(t),
+      createdAt: t.timestamp("created_at").defaultNow().notNull(),
+      updatedAt: t.timestamp("updated_at").defaultNow().notNull(),
+    }),
+    extraConfig,
+  );
+```

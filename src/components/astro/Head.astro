@@ -1,0 +1,58 @@
+---
+import { SITE_URL, SITE_TITLE, SITE_DESCRIPTION } from "../../constants";
+
+interface Props {
+	title?: string;
+	description?: string;
+	image?: string;
+	canonical?: string;
+}
+
+const {
+	title: titleProp,
+	description = SITE_DESCRIPTION,
+	image,
+	canonical,
+} = Astro.props;
+
+const title = titleProp ? `${titleProp} — ${SITE_TITLE}` : SITE_TITLE;
+const ogImage = image
+	? image.startsWith("http")
+		? image
+		: `${SITE_URL}${image}`
+	: `${SITE_URL}/images/og/home.webp`;
+const canonicalUrl = canonical
+	? `${SITE_URL}${canonical}`
+	: new URL(Astro.url.pathname, SITE_URL).href;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalUrl} />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:site_name" content={SITE_TITLE} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+<meta name="twitter:creator" content="@alfanjauhari_" />
+<meta name="twitter:site" content="@alfanjauhari_" />
+
+<meta name="theme-color" content="#0a0a0a" />
+<link rel="icon" type="image/png" sizes="16x16" href="/images/favicons/favicon-16x16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicons/favicon-32x32.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/images/favicons/apple-touch-icon.png" />
+<link rel="icon" type="image/x-icon" href="/images/favicons/favicon.ico" />
+<link rel="manifest" href="/site.webmanifest" />
+
+<link rel="preload" href="/fonts/Inter.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="preload" href="/fonts/Playfair-Display.woff2" as="font" type="font/woff2" crossorigin />
+<link rel="stylesheet" href="/fonts/fonts.css" />

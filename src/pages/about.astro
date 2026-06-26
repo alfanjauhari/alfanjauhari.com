@@ -1,0 +1,217 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import DotTitle from "../components/DotTitle.astro";
+import Button from "../components/ui/Button.astro";
+---
+
+<BaseLayout
+	title="About"
+	description="About me, a passionate Product Engineer building pixel-perfect interfaces and scalable systems for everyone"
+	image="/images/og/about.webp"
+>
+	<div class="mt-12">
+		<section class="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-12 mb-32">
+			<div>
+				<h1 class="font-serif text-7xl lg:text-9xl mb-12 tracking-tight">
+					Who <br />
+					<span class="italic text-foreground/50">am I?</span>
+				</h1>
+
+				<div class="max-w-2xl">
+					<p class="text-xl lg:text-2xl font-normal leading-normal">
+						<span class="float-left text-7xl font-serif pr-4">I</span>
+						am a Product Engineer based in Indonesia. I sit at the intersection
+						of design and engineering, believing that the best digital products
+						must feel <span class="italic">unique</span>, not only functional.
+					</p>
+					<p class="text-foreground/60 font-normal mt-2 leading-normal">
+						With over four years in web development, I've crafted and refined
+						modern interfaces, elevated developer experience, and built tools
+						that make engineering smoother and more reliable. I believe great
+						software isn't just about shipping features but it's about
+						understanding the craft, improving the process, and leaving things
+						better than you found them.
+					</p>
+				</div>
+			</div>
+
+			<div class="relative h-100 lg:h-auto rounded-lg overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
+				<img
+					src="/images/about/profile.avif"
+					alt="Alfan Jauhari"
+					class="absolute inset-0 w-full h-full object-cover opacity-80 hover:scale-105 transition-transform duration-1000"
+					style="object-position: 50% 20%"
+				/>
+			</div>
+		</section>
+
+		<section class="grid grid-cols-1 lg:grid-cols-12 gap-12 py-32">
+			<div class="lg:col-span-4">
+				<div class="sticky top-32">
+					<DotTitle>Experience</DotTitle>
+					<p class="text-foreground/50 font-mono text-xs leading-relaxed max-w-xs">
+						A timeline of my professional career, highlighting key roles and
+						contributions in the tech industry.
+					</p>
+
+					<a
+						href="/resume.pdf"
+						class="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest mt-8 border-b pb-1 hover:opacity-60 transition-opacity"
+					>
+						Download Resume
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="12"
+							height="12"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							class="size-3"
+						>
+							<path d="M7 7h10v10" />
+							<path d="M7 17 17 7" />
+						</svg>
+					</a>
+				</div>
+			</div>
+
+			<div class="lg:col-span-8">
+				<div class="group py-8 border-t border-border first:border-0">
+					<div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-2">
+						<h3 class="font-serif text-2xl">
+							Product Engineer{" "}
+							<span class="text-foreground/50 italic text-lg">
+								at Zero One Group
+							</span>
+						</h3>
+						<span class="font-mono text-xs text-foreground/50 uppercase tracking-widest mt-1 md:mt-0">
+							2022 — Present
+						</span>
+					</div>
+					<p class="text-sm text-foreground/50 leading-relaxed max-w-xl font-normal">
+						Delivered multiple projects by maximizing client resources and
+						applying a strong user-centric approach. Expanded from frontend into
+						full-stack responsibilities, strengthening capabilities in both
+						logic and system implementation. Improved skills in areas like
+						animation and complex operations while optimizing React and Next.js
+						for higher performance and smaller bundle sizes.
+					</p>
+				</div>
+				<div class="group py-8 border-t border-border">
+					<div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-2">
+						<h3 class="font-serif text-2xl">
+							Frontend Developer{" "}
+							<span class="text-foreground/50 italic text-lg">
+								at Nusantech
+							</span>
+						</h3>
+						<span class="font-mono text-xs text-foreground/50 uppercase tracking-widest mt-1 md:mt-0">
+							2021 - 2022
+						</span>
+					</div>
+					<p class="text-sm text-foreground/50 leading-relaxed max-w-xl font-normal">
+						Developed a full-scale ERP and business management platform for
+						Japanese clients, delivering multi-language support with i18n and
+						Docker. Collaborated with large cross-functional teams and optimized
+						the system using Next.js to enhance performance and user experience.
+					</p>
+				</div>
+			</div>
+		</section>
+
+		<section class="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-32 border-t border-border pt-32">
+			<div class="lg:col-span-4">
+				<div class="sticky top-32">
+					<DotTitle>Tech Stack</DotTitle>
+					<p class="text-foreground/50 font-mono text-xs leading-relaxed max-w-xs">
+						The tools and technologies I use to bring ideas to life.
+					</p>
+				</div>
+			</div>
+			<div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
+				<div class="py-6">
+					<h3 class="font-mono text-xs uppercase tracking-widest mb-4">Core</h3>
+					<div class="flex flex-wrap gap-x-4 gap-y-2">
+						<span class="text-lg font-serif">JavaScript</span>
+						<span class="text-lg font-serif">TypeScript</span>
+						<span class="text-lg font-serif">Golang</span>
+					</div>
+				</div>
+				<div class="py-6">
+					<h3 class="font-mono text-xs uppercase tracking-widest mb-4">
+						Frameworks
+					</h3>
+					<div class="flex flex-wrap gap-x-4 gap-y-2">
+						<span class="text-lg font-serif">React</span>
+						<span class="text-lg font-serif">Next.js</span>
+						<span class="text-lg font-serif">Node.js</span>
+					</div>
+				</div>
+				<div class="py-6">
+					<h3 class="font-mono text-xs uppercase tracking-widest mb-4">
+						Styling
+					</h3>
+					<div class="flex flex-wrap gap-x-4 gap-y-2">
+						<span class="text-lg font-serif">Tailwind CSS</span>
+						<span class="text-lg font-serif">Sass</span>
+						<span class="text-lg font-serif">Motion</span>
+					</div>
+				</div>
+				<div class="py-6">
+					<h3 class="font-mono text-xs uppercase tracking-widest mb-4">
+						Database
+					</h3>
+					<div class="flex flex-wrap gap-x-4 gap-y-2">
+						<span class="text-lg font-serif">PostgreSQL</span>
+						<span class="text-lg font-serif">Supabase</span>
+						<span class="text-lg font-serif">Neon</span>
+					</div>
+				</div>
+				<div class="py-6">
+					<h3 class="font-mono text-xs uppercase tracking-widest mb-4">
+						Tools
+					</h3>
+					<div class="flex flex-wrap gap-x-4 gap-y-2">
+						<span class="text-lg font-serif">Git</span>
+						<span class="text-lg font-serif">Docker</span>
+						<span class="text-lg font-serif">Webpack</span>
+						<span class="text-lg font-serif">Vite</span>
+					</div>
+				</div>
+				<div class="py-6">
+					<h3 class="font-mono text-xs uppercase tracking-widest mb-4">
+						Design
+					</h3>
+					<div class="flex flex-wrap gap-x-4 gap-y-2">
+						<span class="text-lg font-serif">Figma</span>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="py-24 border-t border-border">
+			<div class="max-w-4xl mx-auto text-center">
+				<span class="font-mono text-xs uppercase tracking-widest text-foreground/50 mb-6 block">
+					Ready to start?
+				</span>
+				<h2 class="font-serif text-6xl md:text-8xl mb-8 leading-none tracking-tight">
+					Let's work <br />{" "}
+					<span class="italic text-foreground/50">together.</span>
+				</h2>
+				<p class="text-lg text-foreground/50 mb-12 max-w-2xl mx-auto font-normal leading-relaxed">
+					I'm currently open to any interesting opportunity. If you have a
+					project in mind, feel free to reach out.
+				</p>
+				<a
+					href="mailto:hi@alfanjauhari.com"
+					class="inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary/90 h-12 px-8 text-base"
+				>
+					Get in Touch
+				</a>
+			</div>
+		</section>
+	</div>
+</BaseLayout>

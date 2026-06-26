@@ -1,0 +1,20 @@
+---
+interface Props {
+	tag?: string;
+	class?: string;
+}
+const { tag = "h2", class: className } = Astro.props;
+const Tag = tag;
+---
+
+<Tag
+	class={[
+		"text-xs font-bold uppercase tracking-widest mb-4 flex items-center gap-2",
+		className,
+	]
+		.filter(Boolean)
+		.join(" ")}
+>
+	<span class="w-2 h-2 rounded-full bg-foreground"></span>
+	<slot />
+</Tag>

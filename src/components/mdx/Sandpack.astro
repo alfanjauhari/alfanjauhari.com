@@ -1,0 +1,8 @@
+---
+const { template, ...rest } = Astro.props;
+const children = await Astro.slots.render("default");
+---
+
+<div class="not-prose my-8 rounded-lg overflow-hidden border border-border bg-secondary/20" {...rest}>
+	<pre class="p-4 text-sm font-mono overflow-x-auto">{children}</pre>
+</div>

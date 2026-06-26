@@ -1,0 +1,238 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import InteractiveTitle from "../components/solid/InteractiveTitle";
+import Button from "../components/ui/Button.astro";
+import { getAllWorks, getAllUpdates } from "../lib/content";
+import { formatDate, calculateReadingTime } from "../lib/utils";
+
+const works = await getAllWorks();
+const updates = await getAllUpdates();
+
+const process = [
+	{
+		id: "01",
+		title: "Discovery",
+		desc: "Understanding constraints, user needs, and business goals.",
+	},
+	{
+		id: "02",
+		title: "Strategy",
+		desc: "Defining the architecture, tech stack, and design system.",
+	},
+	{
+		id: "03",
+		title: "Build",
+		desc: "Iterative development with a focus on performance and accessibility.",
+	},
+	{
+		id: "04",
+		title: "Refine",
+		desc: "Polishing interactions, optimizing assets, and ensuring quality.",
+	},
+];
+---
+
+<BaseLayout
+	image="/images/og/home.webp"
+	description="A passionate Product Engineer. I build pixel-perfect interfaces and scalable systems for the web."
+>
+	<section id="hero" class="flex flex-col justify-center relative z-10 mb-40">
+		<div class="my-16 xl:mb-24">
+			<InteractiveTitle client:load />
+		</div>
+
+		<div class="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-12">
+			<div class="space-y-6">
+				<p class="text-xl md:text-2xl leading-tight font-normal max-w-2xl">
+					A passionate{" "}
+					<span class="italic font-serif">Product Engineer</span>. I
+					build{" "}
+					<span class="font-serif italic">pixel-perfect</span>{" "}
+					interfaces and scalable systems for everyone.
+				</p>
+				<div class="flex flex-col md:flex-row gap-4">
+					<Button href="#works" variant="default" size="xl">
+						View Works
+					</Button>
+					<Button href="mailto:hi@alfanjauhari.com" variant="outline" size="xl">
+						Contact Me
+					</Button>
+				</div>
+			</div>
+			<div class="flex flex-col justify-between items-start md:items-end text-left md:text-right">
+				<div class="space-y-1">
+					<div class="flex items-center md:justify-end gap-2">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="16"
+							height="16"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							class="size-4"
+						>
+							<path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
+							<circle cx="12" cy="10" r="3" />
+						</svg>
+						<span class="text-sm font-bold">Tulungagung, ID</span>
+					</div>
+					<span class="font-mono text-xs text-foreground/40 block">
+						8.0912&deg; S, 111.9642&deg; E
+					</span>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section id="methodology" class="mb-40">
+		<h2 class="font-serif text-5xl md:text-6xl mb-16">Methodology</h2>
+
+		<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+			{
+				process.map((step) => (
+					<div class="relative flex flex-col group">
+						<span class="font-mono text-sm text-foreground/40 mb-6 block">
+							{step.id}
+						</span>
+						<div>
+							<h3 class="text-3xl font-serif mb-4 group-hover:translate-x-2 transition-transform duration-300">
+								{step.title}
+							</h3>
+							<p class="text-sm text-foreground/60 leading-relaxed font-normal">
+								{step.desc}
+							</p>
+						</div>
+					</div>
+				))
+			}
+		</div>
+	</section>
+
+	<section id="works" class="mb-40 scroll-mt-36">
+		<h2 class="font-serif text-5xl md:text-6xl mb-16">Featured Works</h2>
+		<div class="flex flex-col gap-12 pb-24">
+			{
+				works.map((work) => (
+					<div class="sticky top-30">
+						<div class="bg-background border border-border rounded-lg overflow-hidden flex flex-col md:flex-row h-125 group relative">
+							<a
+								href={`/works/${work.id}`}
+								class="absolute inset-0 z-40"
+								aria-label={`Learn more about ${work.data.title}...`}
+							/>
+							<div class="w-full md:w-1/2 lg:w-7/12 relative overflow-hidden cursor-pointer">
+								<div
+									class="absolute inset-0 grayscale group-hover:grayscale-0 bg-no-repeat bg-cover bg-center group-hover:scale-105 duration-700 ease-in"
+									style={`background-image: url(${work.data.thumbnail})`}
+								/>
+								<div class="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+									<div class="bg-background text-foreground px-6 py-3 rounded-full opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 font-mono text-xs uppercase tracking-widest border border-border">
+										Learn More
+									</div>
+								</div>
+							</div>
+							<div class="w-full md:w-1/2 lg:w-5/12 p-8 lg:p-12 flex flex-col justify-between relative z-30">
+								<div>
+									<div class="flex justify-between items-start mb-6">
+										<span class="text-xs font-mono">{work.data.year}</span>
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											width="20"
+											height="20"
+											viewBox="0 0 24 24"
+											fill="none"
+											stroke="currentColor"
+											stroke-width="2"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											class="size-5"
+										>
+											<path d="M7 7h10v10" />
+											<path d="M7 17 17 7" />
+										</svg>
+									</div>
+									<h3 class="font-serif text-4xl mb-6 leading-tight">
+										{work.data.title}
+									</h3>
+									<p class="leading-relaxed mb-8 line-clamp-4">
+										{work.data.summary}
+									</p>
+								</div>
+
+								<div class="flex flex-wrap gap-2">
+									{
+										work.data.techstack.map((tech: string) => (
+											<div class="border border-border text-foreground/50 text-xxs px-4 py-2 tracking-widest uppercase">
+												{tech}
+											</div>
+										))
+									}
+								</div>
+							</div>
+						</div>
+					</div>
+				))
+			}
+		</div>
+	</section>
+
+	<section id="updates">
+		<div class="flex items-end justify-between mb-16">
+			<h2 class="font-serif text-5xl md:text-6xl">Latest Updates</h2>
+			<a
+				href="/updates"
+				class="hidden md:flex items-center gap-2 text-xs font-mono uppercase tracking-widest hover:underline"
+			>
+				<span>Read All</span>
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					width="12"
+					height="12"
+					viewBox="0 0 24 24"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					class="size-3"
+				>
+					<path d="M5 12h14" />
+					<path d="m12 5 7 7-7 7" />
+				</svg>
+			</a>
+		</div>
+
+		<div class="space-y-16">
+			{
+				updates.slice(0, 3).map((update) => (
+					<a href={`/updates/${update.id}`} class="group block">
+						<article
+							class="flex flex-col md:flex-row md:items-baseline justify-between gap-8"
+						>
+							<div class="md:w-3/4">
+								<h3 class="font-serif text-3xl md:text-4xl group-hover:opacity-60 transition-opacity duration-300 leading-tight mb-4">
+									{update.data.title}
+								</h3>
+								<p class="font-normal leading-relaxed max-w-2xl text-foreground/70">
+									{update.data.summary}
+								</p>
+							</div>
+							<div class="md:w-1/4 md:text-right flex flex-row md:flex-col gap-4 md:gap-0 items-center md:items-end">
+								<span class="font-mono text-xs text-foreground/50 uppercase tracking-widest mb-2">
+									{formatDate(update.data.date)}
+								</span>
+								<span class="font-mono text-xxs text-foreground/50 uppercase tracking-widest">
+									{update.body ? calculateReadingTime(update.body) : 1} Minute
+									Reading Time
+								</span>
+							</div>
+						</article>
+					</a>
+				))
+			}
+		</div>
+	</section>
+</BaseLayout>

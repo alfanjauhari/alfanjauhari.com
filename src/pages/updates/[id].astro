@@ -1,0 +1,35 @@
+---
+import UpdateLayout from "../../layouts/UpdateLayout.astro";
+import { getCollection, getEntry, render } from "astro:content";
+import { calculateReadingTime } from "../../lib/utils";
+import Image from "../../components/mdx/Image.astro";
+import Sandpack from "../../components/mdx/Sandpack.astro";
+import SandpackFile from "../../components/mdx/SandpackFile.astro";
+import Serif from "../../components/mdx/Serif.astro";
+
+export async function getStaticPaths() {
+	const updates = await getCollection("updates");
+	return updates
+		.filter((u) => !u.data.draft)
+		.map((entry) => ({
+			params: { id: entry.id },
+		}));
+}
+
+const { id } = Astro.params;
+const entry = await getEntry("updates", id!);
+if (!entry) return new Response(null, { status: 404 });
+const { Content } = await render(entry);
+const readingTime = entry.body ? calculateReadingTime(entry.body) : 1;
+---
+
+<UpdateLayout
+	title={entry.data.title}
+	tag={entry.data.tag}
+	summary={entry.data.summary}
+	date={entry.data.date}
+	readingTime={readingTime}
+	id={id!}
+>
+	<Content components={{ Image, Sandpack, SandpackFile, serif: Serif }} />
+</UpdateLayout>
