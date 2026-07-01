@@ -1,10 +1,8 @@
 ---
-interface Props {
-	src: string;
-	alt?: string;
-	class?: string;
-}
-const { src, alt = "", class: className } = Astro.props;
+import type { RemoteImageProps } from "astro:assets";
+import { Image as AstroImage } from "astro:assets";
+
+type Props = RemoteImageProps;
 ---
 
-<img src={src} alt={alt} class={className} />
+<AstroImage inferSize {...Astro.props} />

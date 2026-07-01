@@ -1,15 +1,18 @@
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
+import { z } from "astro/zod";
+
+const UpdateSchema = z.object({
+	title: z.string(),
+	tag: z.string().optional(),
+	summary: z.string(),
+	date: z.coerce.date(),
+	draft: z.boolean().default(false),
+});
 
 const updates = defineCollection({
 	loader: glob({ pattern: "**/*.mdx", base: "./src/content/updates" }),
-	schema: z.object({
-		title: z.string(),
-		tag: z.string().optional(),
-		summary: z.string(),
-		date: z.coerce.date(),
-		draft: z.boolean().default(false),
-	}),
+	schema: UpdateSchema,
 });
 
 const restrictedUpdates = defineCollection({
@@ -17,13 +20,7 @@ const restrictedUpdates = defineCollection({
 		pattern: "**/*.mdx",
 		base: "./content/privates/updates",
 	}),
-	schema: z.object({
-		title: z.string(),
-		tag: z.string().optional(),
-		summary: z.string(),
-		date: z.coerce.date(),
-		draft: z.boolean().default(false),
-	}),
+	schema: UpdateSchema,
 });
 
 const works = defineCollection({

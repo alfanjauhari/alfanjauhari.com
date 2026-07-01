@@ -89,7 +89,7 @@
 @utility prose-primary {
 	--tw-prose-body: var(--foreground);
 	--tw-prose-headings: var(--foreground);
-	--tw-prose-lead: var(--secondary-foreground);
+	--tw-prose-lead: var(--foreground);
 	--tw-prose-links: var(--foreground);
 	--tw-prose-bold: var(--foreground);
 	--tw-prose-counters: var(--muted-foreground);
@@ -99,27 +99,42 @@
 	--tw-prose-quote-borders: var(--border);
 	--tw-prose-captions: var(--muted-foreground);
 	--tw-prose-code: var(--foreground);
-	--tw-prose-pre-code: var(--secondary);
-	--tw-prose-pre-bg: var(--primary);
+	--tw-prose-pre-code: var(--foreground);
+	--tw-prose-pre-bg: var(--muted);
 	--tw-prose-th-borders: var(--border);
-	--tw-prose-td-borders: var(--input);
+	--tw-prose-td-borders: var(--border);
 
-	--tw-prose-invert-body: var(--primary-foreground);
+	--tw-prose-invert-body: var(--foreground);
 	--tw-prose-invert-headings: var(--foreground);
-	--tw-prose-invert-lead: var(--secondary);
+	--tw-prose-invert-lead: var(--foreground);
 	--tw-prose-invert-links: var(--foreground);
 	--tw-prose-invert-bold: var(--foreground);
-	--tw-prose-invert-counters: var(--muted);
-	--tw-prose-invert-bullets: var(--muted);
+	--tw-prose-invert-counters: var(--muted-foreground);
+	--tw-prose-invert-bullets: var(--muted-foreground);
 	--tw-prose-invert-hr: var(--border);
 	--tw-prose-invert-quotes: var(--foreground);
 	--tw-prose-invert-quote-borders: var(--border);
-	--tw-prose-invert-captions: var(--muted);
+	--tw-prose-invert-captions: var(--muted-foreground);
 	--tw-prose-invert-code: var(--foreground);
-	--tw-prose-invert-pre-code: var(--secondary);
-	--tw-prose-invert-pre-bg: rgb(255 255 255 / 20%);
+	--tw-prose-invert-pre-code: var(--foreground);
+	--tw-prose-invert-pre-bg: var(--muted);
 	--tw-prose-invert-th-borders: var(--border);
-	--tw-prose-invert-td-borders: var(--input);
+	--tw-prose-invert-td-borders: var(--border);
+}
+
+.shiki,
+.astro-code {
+	padding: 1rem;
+	border-radius: 0.25rem;
+	overflow-x: auto;
+	font-size: 0.875rem;
+	line-height: 1.7;
+	background-color: var(--muted) !important;
+}
+
+[data-theme="dark"] .shiki,
+[data-theme="dark"] .astro-code {
+	background-color: oklch(0.269 0 0) !important;
 }
 
 [data-theme="dark"] .shiki,
@@ -129,6 +144,74 @@
 	font-style: var(--shiki-dark-font-style) !important;
 	font-weight: var(--shiki-dark-font-weight) !important;
 	text-decoration: var(--shiki-dark-text-decoration) !important;
+}
+
+/* Article prose styles */
+[class*="prose"] {
+	ol {
+		list-style-type: decimal;
+		padding-left: 1.5rem;
+		margin-top: 1.25em;
+		margin-bottom: 1.25em;
+	}
+	ul {
+		list-style-type: disc;
+		padding-left: 1.5rem;
+		margin-top: 1.25em;
+		margin-bottom: 1.25em;
+	}
+	li {
+		margin-top: 0.5em;
+		margin-bottom: 0.5em;
+	}
+	:where(code):not(:where(pre code)) {
+		background-color: var(--muted);
+		padding: 0.125rem 0.375rem;
+		border-radius: 0.25rem;
+		font-family: var(--font-mono);
+		font-size: 0.875em;
+	}
+	pre {
+		background-color: var(--muted);
+		border-radius: 0.25rem;
+		overflow-x: auto;
+		margin-top: 1.5em;
+		margin-bottom: 1.5em;
+	}
+	a {
+		text-decoration-line: underline;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 4px;
+		&:hover {
+			opacity: 0.7;
+		}
+	}
+	blockquote {
+		border-left: 2px solid var(--border);
+		padding-left: 1rem;
+		font-style: italic;
+		color: var(--muted-foreground);
+		margin-top: 1.6em;
+		margin-bottom: 1.6em;
+	}
+	h1, h2, h3, h4, h5, h6 {
+		scroll-margin-top: 6rem;
+	}
+	strong {
+		font-weight: 700;
+	}
+	em {
+		font-style: italic;
+	}
+}
+
+[data-theme="dark"] [class*="prose"] {
+	:where(code):not(:where(pre code)) {
+		background-color: oklch(0.269 0 0);
+	}
+	pre {
+		background-color: oklch(0.269 0 0);
+	}
 }
 
 @layer base {

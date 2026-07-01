@@ -1,9 +1,10 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
+import { ArrowRightIcon, ArrowUpRightIcon, MapPinIcon } from "lucide-solid";
 import InteractiveTitle from "../components/solid/InteractiveTitle";
 import Button from "../components/ui/Button.astro";
-import { getAllWorks, getAllUpdates } from "../lib/content";
-import { formatDate, calculateReadingTime } from "../lib/utils";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getAllUpdates, getAllWorks } from "../lib/content";
+import { calculateReadingTime, formatDate } from "../lib/utils";
 
 const works = await getAllWorks();
 const updates = await getAllUpdates();
@@ -62,21 +63,7 @@ const process = [
 			<div class="flex flex-col justify-between items-start md:items-end text-left md:text-right">
 				<div class="space-y-1">
 					<div class="flex items-center md:justify-end gap-2">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="16"
-							height="16"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="size-4"
-						>
-							<path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
-							<circle cx="12" cy="10" r="3" />
-						</svg>
+						<MapPinIcon class="size-4" />
 						<span class="text-sm font-bold">Tulungagung, ID</span>
 					</div>
 					<span class="font-mono text-xs text-foreground/40 block">
@@ -138,21 +125,7 @@ const process = [
 								<div>
 									<div class="flex justify-between items-start mb-6">
 										<span class="text-xs font-mono">{work.data.year}</span>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											width="20"
-											height="20"
-											viewBox="0 0 24 24"
-											fill="none"
-											stroke="currentColor"
-											stroke-width="2"
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											class="size-5"
-										>
-											<path d="M7 7h10v10" />
-											<path d="M7 17 17 7" />
-										</svg>
+										<ArrowUpRightIcon class="size-5" />
 									</div>
 									<h3 class="font-serif text-4xl mb-6 leading-tight">
 										{work.data.title}
@@ -187,21 +160,7 @@ const process = [
 				class="hidden md:flex items-center gap-2 text-xs font-mono uppercase tracking-widest hover:underline"
 			>
 				<span>Read All</span>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					width="12"
-					height="12"
-					viewBox="0 0 24 24"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="2"
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					class="size-3"
-				>
-					<path d="M5 12h14" />
-					<path d="m12 5 7 7-7 7" />
-				</svg>
+				<ArrowRightIcon class="size-3" />
 			</a>
 		</div>
 

@@ -1,10 +1,11 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getCollection, getEntry, render } from "astro:content";
-import Image from "../../components/mdx/Image.astro";
-import Sandpack from "../../components/mdx/Sandpack.astro";
-import SandpackFile from "../../components/mdx/SandpackFile.astro";
-import Serif from "../../components/mdx/Serif.astro";
+import { TerminalIcon } from "lucide-solid";
+import Image from "@/components/mdx/Image.astro";
+import Sandpack from "@/components/mdx/Sandpack.astro";
+import SandpackFile from "@/components/mdx/SandpackFile.astro";
+import Serif from "@/components/mdx/Serif.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 
 export async function getStaticPaths() {
 	const snippets = await getCollection("snippets");
@@ -14,7 +15,7 @@ export async function getStaticPaths() {
 }
 
 const { id } = Astro.params;
-const entry = await getEntry("snippets", id!);
+const entry = await getEntry("snippets", id);
 if (!entry) return new Response(null, { status: 404 });
 const { Content } = await render(entry);
 ---
@@ -28,21 +29,7 @@ const { Content } = await render(entry);
 		<div class="max-w-5xl mx-auto">
 			<header class="mb-20">
 				<div class="flex items-center gap-3 mb-6 text-xs font-mono uppercase tracking-widest text-foreground/40">
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="14"
-						height="14"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-3.5"
-					>
-						<polyline points="4 17 10 11 4 5" />
-						<line x1="12" x2="20" y1="19" y2="19" />
-					</svg>
+					<TerminalIcon class="size-3.5" />
 					<span>{entry.data.language}</span>
 					<span class="text-foreground/30">&bull;</span>
 					{

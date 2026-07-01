@@ -1,7 +1,7 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
+import { ArrowUpRightIcon } from "lucide-solid";
 import DotTitle from "../components/DotTitle.astro";
-import Button from "../components/ui/Button.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout
@@ -59,21 +59,7 @@ import Button from "../components/ui/Button.astro";
 						class="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest mt-8 border-b pb-1 hover:opacity-60 transition-opacity"
 					>
 						Download Resume
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="12"
-							height="12"
-							viewBox="0 0 24 24"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							class="size-3"
-						>
-							<path d="M7 7h10v10" />
-							<path d="M7 17 17 7" />
-						</svg>
+						<ArrowUpRightIcon class="size-3" />
 					</a>
 				</div>
 			</div>

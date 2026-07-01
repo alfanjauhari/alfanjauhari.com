@@ -1,4 +1,5 @@
-import { createSignal, onMount } from "solid-js";
+import { createSignal, onMount, onCleanup, createEffect } from "solid-js";
+import { BanIcon, MousePointer2Icon } from "lucide-solid";
 
 export default function InteractiveTitle() {
 	const [enabled, setEnabled] = createSignal(true);
@@ -22,95 +23,68 @@ export default function InteractiveTitle() {
 			current.x += (target.x - current.x) * 0.08;
 			current.y += (target.y - current.y) * 0.08;
 
-			const rx = current.y * -40;
-			const ry = current.x * 40;
-
-			ref.style.setProperty("--rx", `${rx}deg`);
-			ref.style.setProperty("--ry", `${ry}deg`);
+			ref.style.setProperty("--rx", `${current.y * -40}deg`);
+			ref.style.setProperty("--ry", `${current.x * 40}deg`);
 
 			raf = requestAnimationFrame(animate);
 		};
 
-		window.addEventListener("mousemove", onMove);
+		document.addEventListener("mousemove", onMove, { passive: true });
 		raf = requestAnimationFrame(animate);
 
-		return () => {
-			window.removeEventListener("mousemove", onMove);
+		onCleanup(() => {
+			document.removeEventListener("mousemove", onMove);
 			if (raf) cancelAnimationFrame(raf);
-		};
+		});
 	});
 
 	return (
-		<div class="relative block w-full">
+		<div class="relative w-full">
 			<button
-				class="absolute -top-12 left-0 z-20 flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-foreground hover:text-accent-foreground"
+				class="absolute -top-12 left-0 z-20 flex items-center gap-2 text-xs font-mono uppercase tracking-widest cursor-pointer text-foreground hover:text-accent-foreground transition-colors"
 				onClick={() => setEnabled((v) => !v)}
 				type="button"
 			>
 				{enabled() ? (
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="16"
-						height="16"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-4"
-					>
-						<path d="m3 3 7.07 16.97 2.51-7.39 7.39-2.51L3 3z" />
-						<path d="m13 13 6 6" />
-					</svg>
+					<MousePointer2Icon class="size-4" />
 				) : (
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						width="16"
-						height="16"
-						viewBox="0 0 24 24"
-						fill="none"
-						stroke="currentColor"
-						stroke-width="2"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						class="size-4"
-					>
-						<circle cx="12" cy="12" r="10" />
-						<path d="m4.9 4.9 14.2 14.2" />
-					</svg>
+					<BanIcon class="size-4" />
 				)}
 				{enabled() ? "Motion On" : "Motion Off"}
 			</button>
 
-			<div class="relative flex justify-center py-4 perspective-[2000px]">
+			<div
+				class="relative flex justify-center items-center py-4"
+				style={{ perspective: "2000px" }}
+			>
 				<div
 					ref={ref}
-					class="relative transform-gpu preserve-3d motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-out"
 					style={{
+						"will-change": "transform",
+						"transform-style": "preserve-3d",
 						transform: enabled()
 							? "rotateX(var(--rx)) rotateY(var(--ry))"
 							: "rotateX(0deg) rotateY(0deg)",
+						transition: enabled()
+							? "none"
+							: "transform 0.3s ease",
 					}}
 				>
-					{enabled() ? (
-						<>
-							<p class="invisible select-none font-serif text-[24vw] lg:text-[18vw] leading-[0.8] tracking-tighter">
-								Alfan <br />
-								<span class="ml-[4vw] md:ml-[8vw] italic font-light">
-									Jauhari
-								</span>
-							</p>
+					<h1
+						class="select-none font-serif text-[24vw] lg:text-[18vw] leading-[0.8] tracking-tighter"
+						aria-hidden={enabled()}
+					>
+						Alfan <br />
+						<span class="ml-[4vw] md:ml-[8vw] italic font-light">
+							Jauhari
+						</span>
+					</h1>
 
-							<h1 class="absolute inset-0 -z-10 select-none font-serif text-[24vw] lg:text-[18vw] leading-[0.8] tracking-tighter">
-								Alfan <br />
-								<span class="ml-[4vw] md:ml-[8vw] italic font-light">
-									Jauhari
-								</span>
-							</h1>
-						</>
-					) : (
-						<h1 class="select-none font-serif text-[24vw] lg:text-[18vw] leading-[0.8] tracking-tighter">
+					{enabled() && (
+						<h1
+							class="absolute inset-0 -z-10 select-none font-serif text-[24vw] lg:text-[18vw] leading-[0.8] tracking-tighter"
+							aria-hidden="true"
+						>
 							Alfan <br />
 							<span class="ml-[4vw] md:ml-[8vw] italic font-light">
 								Jauhari

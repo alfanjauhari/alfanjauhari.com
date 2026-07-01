@@ -1,6 +1,7 @@
 ---
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import { getAllWorks } from "../../lib/content";
+import { ArrowUpRightIcon } from "lucide-solid";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getAllWorks } from "@/lib/content";
 
 const works = await getAllWorks();
 ---
@@ -46,21 +47,7 @@ const works = await getAllWorks();
 								<div>
 									<div class="flex justify-between items-start mb-6">
 										<span class="text-xs font-mono">{work.data.year}</span>
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											width="20"
-											height="20"
-											viewBox="0 0 24 24"
-											fill="none"
-											stroke="currentColor"
-											stroke-width="2"
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											class="size-5"
-										>
-											<path d="M7 7h10v10" />
-											<path d="M7 17 17 7" />
-										</svg>
+										<ArrowUpRightIcon class="size-5" />
 									</div>
 									<h3 class="font-serif text-4xl mb-6 leading-tight">
 										{work.data.title}

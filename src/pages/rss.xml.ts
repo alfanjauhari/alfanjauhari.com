@@ -1,6 +1,6 @@
 import rss from "@astrojs/rss";
+import { SITE_DESCRIPTION, SITE_TITLE } from "../constants";
 import { getAllUpdates } from "../lib/content";
-import { SITE_URL, SITE_TITLE, SITE_DESCRIPTION } from "../constants";
 
 export async function GET(context: { site: URL }) {
 	const updates = await getAllUpdates();

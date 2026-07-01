@@ -1,11 +1,11 @@
 ---
-import UpdateLayout from "../../layouts/UpdateLayout.astro";
 import { getCollection, getEntry, render } from "astro:content";
-import { calculateReadingTime } from "../../lib/utils";
-import Image from "../../components/mdx/Image.astro";
-import Sandpack from "../../components/mdx/Sandpack.astro";
-import SandpackFile from "../../components/mdx/SandpackFile.astro";
-import Serif from "../../components/mdx/Serif.astro";
+import Image from "@/components/mdx/Image.astro";
+import Sandpack from "@/components/mdx/Sandpack.astro";
+import SandpackFile from "@/components/mdx/SandpackFile.astro";
+import Serif from "@/components/mdx/Serif.astro";
+import UpdateLayout from "@/layouts/UpdateLayout.astro";
+import { calculateReadingTime } from "@/lib/utils";
 
 export async function getStaticPaths() {
 	const updates = await getCollection("updates");
@@ -17,8 +17,10 @@ export async function getStaticPaths() {
 }
 
 const { id } = Astro.params;
-const entry = await getEntry("updates", id!);
+const entry = await getEntry("updates", id);
+
 if (!entry) return new Response(null, { status: 404 });
+
 const { Content } = await render(entry);
 const readingTime = entry.body ? calculateReadingTime(entry.body) : 1;
 ---
@@ -29,7 +31,7 @@ const readingTime = entry.body ? calculateReadingTime(entry.body) : 1;
 	summary={entry.data.summary}
 	date={entry.data.date}
 	readingTime={readingTime}
-	id={id!}
+	id={id}
 >
 	<Content components={{ Image, Sandpack, SandpackFile, serif: Serif }} />
 </UpdateLayout>

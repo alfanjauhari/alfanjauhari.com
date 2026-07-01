@@ -1,10 +1,10 @@
 ---
-import WorkLayout from "../../layouts/WorkLayout.astro";
 import { getCollection, getEntry, render } from "astro:content";
-import Image from "../../components/mdx/Image.astro";
-import Sandpack from "../../components/mdx/Sandpack.astro";
-import SandpackFile from "../../components/mdx/SandpackFile.astro";
-import Serif from "../../components/mdx/Serif.astro";
+import Image from "@/components/mdx/Image.astro";
+import Sandpack from "@/components/mdx/Sandpack.astro";
+import SandpackFile from "@/components/mdx/SandpackFile.astro";
+import Serif from "@/components/mdx/Serif.astro";
+import WorkLayout from "@/layouts/WorkLayout.astro";
 
 export async function getStaticPaths() {
 	const works = await getCollection("works");
