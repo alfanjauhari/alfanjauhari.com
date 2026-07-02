@@ -14,7 +14,7 @@ export async function getStaticPaths() {
 }
 
 const { id } = Astro.params;
-const entry = await getEntry("works", id!);
+const entry = await getEntry("works", id);
 if (!entry) return new Response(null, { status: 404 });
 const { Content } = await render(entry);
 ---

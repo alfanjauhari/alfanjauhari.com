@@ -1,5 +1,5 @@
-import { createSignal, onMount, onCleanup, createEffect } from "solid-js";
 import { BanIcon, MousePointer2Icon } from "lucide-solid";
+import { createSignal, onCleanup, onMount } from "solid-js";
 
 export default function InteractiveTitle() {
 	const [enabled, setEnabled] = createSignal(true);
@@ -65,30 +65,32 @@ export default function InteractiveTitle() {
 						transform: enabled()
 							? "rotateX(var(--rx)) rotateY(var(--ry))"
 							: "rotateX(0deg) rotateY(0deg)",
-						transition: enabled()
-							? "none"
-							: "transform 0.3s ease",
+						transition: enabled() ? "none" : "transform 0.3s ease",
 					}}
 				>
 					<h1
 						class="select-none font-serif text-[24vw] lg:text-[18vw] leading-[0.8] tracking-tighter"
-						aria-hidden={enabled()}
+						aria-label="Alfan Jauhari"
 					>
-						Alfan <br />
-						<span class="ml-[4vw] md:ml-[8vw] italic font-light">
-							Jauhari
-						</span>
+						<div aria-hidden="true">
+							Alfan <br />
+							<span class="ml-[4vw] md:ml-[8vw] italic font-light">
+								Jauhari
+							</span>
+						</div>
 					</h1>
 
 					{enabled() && (
 						<h1
 							class="absolute inset-0 -z-10 select-none font-serif text-[24vw] lg:text-[18vw] leading-[0.8] tracking-tighter"
-							aria-hidden="true"
+							aria-label="Alfan Jauhari"
 						>
-							Alfan <br />
-							<span class="ml-[4vw] md:ml-[8vw] italic font-light">
-								Jauhari
-							</span>
+							<div aria-hidden="true">
+								Alfan <br />
+								<span class="ml-[4vw] md:ml-[8vw] italic font-light">
+									Jauhari
+								</span>
+							</div>
 						</h1>
 					)}
 				</div>

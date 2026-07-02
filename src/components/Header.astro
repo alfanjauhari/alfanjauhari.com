@@ -41,12 +41,12 @@ const isActive = (path: string) =>
 					</li>
 				))
 			}
-			<ThemeToggle />
+			<ThemeToggle client:load />
 		</ul>
 	</nav>
 
 	<div class="flex items-center gap-4 md:hidden text-foreground">
-		<ThemeToggle />
+		<ThemeToggle client:load />
 		<button
 			id="mobile-menu-toggle"
 			aria-label="Toggle Mobile Menu"

@@ -32,11 +32,9 @@ const classes = [
 	variantClasses[variant],
 	sizeClasses[size],
 	className,
-]
-	.filter(Boolean)
-	.join(" ");
+];
 ---
 
-<a href={href} class={classes} {...rest}>
+<a href={href} class:list={classes} {...rest}>
 	<slot />
 </a>
