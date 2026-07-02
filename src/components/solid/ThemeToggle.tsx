@@ -80,7 +80,7 @@ export default function ThemeToggle() {
 				<div class="size-5" />
 			) : theme() === "dark" ? (
 				<SunIcon class="size-5" />
-			) : resolved() === "light" ? (
+			) : theme() === "light" ? (
 				<MoonIcon class="size-5" />
 			) : (
 				<LaptopMinimalIcon class="size-5" />
