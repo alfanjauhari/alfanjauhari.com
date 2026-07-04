@@ -1,8 +1,8 @@
 ---
 import { getCollection, getEntry, render } from "astro:content";
 import Image from "@/components/mdx/Image.astro";
-import Sandpack from "@/components/mdx/Sandpack.astro";
-import SandpackFile from "@/components/mdx/SandpackFile.astro";
+import Playground from "@/components/mdx/Playground.astro";
+import PlaygroundFile from "@/components/mdx/PlaygroundFile.astro";
 import Serif from "@/components/mdx/Serif.astro";
 import UpdateLayout from "@/layouts/UpdateLayout.astro";
 import { calculateReadingTime } from "@/lib/utils";
@@ -33,5 +33,5 @@ const readingTime = entry.body ? calculateReadingTime(entry.body) : 1;
 	readingTime={readingTime}
 	id={id}
 >
-	<Content components={{ Image, Sandpack, SandpackFile, serif: Serif }} />
+	<Content components={{ Image, Playground, PlaygroundFile, Sandpack: Playground, SandpackFile: PlaygroundFile, serif: Serif }} />
 </UpdateLayout>

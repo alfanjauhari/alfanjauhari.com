@@ -1,0 +1,5 @@
+---
+const { name } = Astro.props;
+const content = await Astro.slots.render("default");
+---
+<template data-playground-file={name}>{content}</template>
