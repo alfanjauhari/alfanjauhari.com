@@ -4,6 +4,7 @@ import { TerminalIcon } from "lucide-solid";
 import Image from "@/components/mdx/Image.astro";
 import Playground from "@/components/mdx/Playground.astro";
 import PlaygroundFile from "@/components/mdx/PlaygroundFile.astro";
+import Pre from "@/components/mdx/Pre.astro";
 import Serif from "@/components/mdx/Serif.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 
@@ -49,7 +50,7 @@ const { Content } = await render(entry);
 			</header>
 
 			<article class="prose-primary prose-lg md:prose-xl max-w-full prose-headings:leading-tight prose-headings:font-serif">
-				<Content components={{ Image, Playground, PlaygroundFile, Sandpack: Playground, SandpackFile: PlaygroundFile, serif: Serif, }} />
+				<Content components={{ Image, Playground, PlaygroundFile, Sandpack: Playground, SandpackFile: PlaygroundFile, serif: Serif, pre: Pre }} />
 			</article>
 		</div>
 	</div>

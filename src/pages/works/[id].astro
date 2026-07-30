@@ -3,6 +3,7 @@ import { getCollection, getEntry, render } from "astro:content";
 import Image from "@/components/mdx/Image.astro";
 import Playground from "@/components/mdx/Playground.astro";
 import PlaygroundFile from "@/components/mdx/PlaygroundFile.astro";
+import Pre from "@/components/mdx/Pre.astro";
 import Serif from "@/components/mdx/Serif.astro";
 import WorkLayout from "@/layouts/WorkLayout.astro";
 
@@ -20,5 +21,5 @@ const { Content } = await render(entry);
 ---
 
 <WorkLayout entry={entry}>
-	<Content components={{ Image, Playground, PlaygroundFile, Sandpack: Playground, SandpackFile: PlaygroundFile, serif: Serif }} />
+	<Content components={{ Image, Playground, PlaygroundFile, Sandpack: Playground, SandpackFile: PlaygroundFile, serif: Serif, pre: Pre }} />
 </WorkLayout>
