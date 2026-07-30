@@ -30,21 +30,21 @@ const user = {
 };
 ```
 
-Now the `user` variable holds everything in one place. You can access values with `user.name{:js}` and you'll get `John Doe`. If you want to remove a field, you can do `delete user.name{:js}` and the name key will be removed from the object.
+Now the `user` variable holds everything in one place. You can access values with `user.name` and you'll get `John Doe`. If you want to remove a field, you can do `delete user.name` and the name key will be removed from the object.
 
 Honestly, with just that, you can already build plenty of real apps. But, let's move to next section (or the real article section (I hope)).
 
 ---
 
-## Let's start with `Object.prototype{:js}`
+## Let's start with `Object.prototype`
 
-When people say "JavaScript objects are simple", they usually mean the syntax is simple. `{}{:js}` feels like a plain bag of data.
+When people say "JavaScript objects are simple", they usually mean the syntax is simple. `{}` feels like a plain bag of data.
 
 But JavaScript objects have one extra feature that changes everything, quoted from [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Inheritance_and_the_prototype_chain):
 
 > Every normal object has a hidden link to another object called its prototype.
 
-That prototype link is why objects can inherit behavior, why some properties "exists" even when you didn't define them, and why you sometimes see "spooky" stuff during debugging such as `toString{:js}`, `hasOwnProperty{:js}`, etc.
+That prototype link is why objects can inherit behavior, why some properties "exists" even when you didn't define them, and why you sometimes see "spooky" stuff during debugging such as `toString`, `hasOwnProperty`, etc.
 
 So yes: a `prototype` is simply another object. Like MDN said, objects in JavaScript carry a hidden internal link to a prototype object. In spec terms, that link is often described as `<prototype>`.
 
@@ -62,13 +62,13 @@ Most of the time, you never set them manually so when you write:
 const o = {};
 ```
 
-That object's prototype is `Object.prototype{:js}`, it comes by default from JavaScript. You can figuring out the prototype by simply: `console.log(Object.getPrototypeOf(o) === Object.prototype);{:js}`. And that's why this works:
+That object's prototype is `Object.prototype`, it comes by default from JavaScript. You can figuring out the prototype by simply: `console.log(Object.getPrototypeOf(o) === Object.prototype);`. And that's why this works:
 
 ```js
 ({}).toString();
 ```
 
-Because you didn't define `toString{:js}`. `Object.prototype{:js}` did, and your object inherits it through the prototype chain. So a "plain object" is never truly empty. It always comes with a prototype... unless you deliberately remove it.
+Because you didn't define `toString`. `Object.prototype` did, and your object inherits it through the prototype chain. So a "plain object" is never truly empty. It always comes with a prototype... unless you deliberately remove it.
 
 ### But, why prototype?
 
@@ -84,17 +84,12 @@ Instead, JavaScript uses delegation:
 
 ### How the prototype behave?
 
-Let's say you are using the user object above and trying to access the `name` property like this `user.name{:js}`. JavaScript basically does a lookup operation like this:
+Let's say you are using the user object above and trying to access the `name` property like this `user.name`. JavaScript basically does a lookup operation like this:
 
 ```mermaid
-flowchart LR
-    1((Access user.name)) --> 2{Is there name property on user?}
-    2 -->|Yes| 3[Return user.name value which is John Doe]
-    2 -->|No| 4{Is there name property on its prototype?}
-    4 -->|Yes| 5[Return prototype name value]
-    4 -->|No| 6{Does the prototype has prototype?}
-    6 -->|Yes| 4
-    6 -->|No| 7[Return undefined]
+graph TD
+    A[Start] --> B[Process]
+    B --> C[End]
 ```
 
 That flowchart shows how the prototype behaves and this is what people call the prototype chain. Here's some demo code:
@@ -133,7 +128,7 @@ You'll see something like this:
   <figcaption>console.log(user) result</figcaption>
 </figure>
 
-We'll focus on `console.log(user){:js}`, which can look a bit strange the first time you see it. That log shows the user object plus its prototype. And you can see we even have a nested prototype, because we declared `__proto__{:js}` inside our `user` object.
+We'll focus on `console.log(user)`, which can look a bit strange the first time you see it. That log shows the user object plus its prototype. And you can see we even have a nested prototype, because we declared `__proto__` inside our `user` object.
 
 So when we try to get a value from a JS object (in this case `hidden` from `user`), JavaScript does something like this:
 
@@ -145,7 +140,7 @@ This lookup is recursive means JavaScript will keep walking up the chain until i
 
 ### Prototype shadowing
 
-Now let's remove the `__proto__{:js}` object inside our `user`:
+Now let's remove the `__proto__` object inside our `user`:
 
 <Sandpack tabs="console">
   <SandpackFile name="/index.ts">
@@ -160,7 +155,7 @@ Now let's remove the `__proto__{:js}` object inside our `user`:
   </SandpackFile>
 </Sandpack>
 
-In the code above you'll see the user object only contains one prototype, which is the default JS prototype that contains multiple property we can use such as `toString{:js}` which used for _stringify_ the object (if you call that function you'll see something like `"[object Object]"{:js}`) its a JS default object prototype.
+In the code above you'll see the user object only contains one prototype, which is the default JS prototype that contains multiple property we can use such as `toString` which used for _stringify_ the object (if you call that function you'll see something like `"[object Object]"`) its a JS default object prototype.
 
 And here's the fun part: you can override (shadow) those default prototype methods by defining the same property on the object itself:
 
@@ -181,7 +176,7 @@ And here's the fun part: you can override (shadow) those default prototype metho
   </SandpackFile>
 </Sandpack>
 
-So when you trying to call `user.toString(){:js}` it will return `Hello string!` instead `"[object Object]"{:js}` from our object. Simply lovely!
+So when you trying to call `user.toString()` it will return `Hello string!` instead `"[object Object]"` from our object. Simply lovely!
 
 ### And these, some of prototype "catches"
 
@@ -207,7 +202,7 @@ So when you trying to call `user.toString(){:js}` it will return `Hello string!`
       </SandpackFile>
     </Sandpack>
 
-    You can see the `a.greet(){:js}` and `b.greet(){:js}` return the same value which is `hello`, that is because the a and b object share the same prototype.
+    You can see the `a.greet()` and `b.greet()` return the same value which is `hello`, that is because the a and b object share the same prototype.
 
 2. It exists vs it's mine
 
@@ -238,9 +233,9 @@ So when you trying to call `user.toString(){:js}` it will return `Hello string!`
     }
     ```
 
-    If payload has a weird prototype (or your intern has their own mind to write JS object), "role" in payload might be true even when it shouldn't be. That's why my default answer for "does this object actually contain this field?" is `Object.hasOwn(object, key){:js}` which is more direct and it matches what you usually mean.
+    If payload has a weird prototype (or your intern has their own mind to write JS object), "role" in payload might be true even when it shouldn't be. That's why my default answer for "does this object actually contain this field?" is `Object.hasOwn(object, key)` which is more direct and it matches what you usually mean.
 
-3. `for...in{:js}` walks inherited enumerable properties
+3. `for...in` walks inherited enumerable properties
     <Sandpack tabs="console">
       <SandpackFile name="/index.ts">
       {`const parent = { inherited: 1 };
@@ -253,15 +248,15 @@ So when you trying to call `user.toString(){:js}` it will return `Hello string!`
       </SandpackFile>
     </Sandpack>
 
-    So, if you only want to get the own keys, prefer `Object.keys(){:js}` or `Object.entries(){:js}`.
+    So, if you only want to get the own keys, prefer `Object.keys()` or `Object.entries()`.
 
 4. You can create object without prototype (if you want to)
 
-    Yes, we can create object without prototype by simply using `Object.create(null){:js}` and assign the prototype easily.
+    Yes, we can create object without prototype by simply using `Object.create(null)` and assign the prototype easily.
 
 ---
 
-## `Map{:js}` for more flexible data
+## `Map` for more flexible data
 
 As you read earlier, JS objects only support string/symbol(we'll discuss symbol in the next part) keyed properties. So if you try this:
 
@@ -274,7 +269,7 @@ console.log(obj[0]) // First
 console.log(obj['0']) // First
 ```
 
-`[0]` and `['0']` return the same value because JavaScript converts keys to strings. Only `symbol{:js}` doesn't get converted.
+`[0]` and `['0']` return the same value because JavaScript converts keys to strings. Only `symbol` doesn't get converted.
 
 Another example: using an object as a key:
 
@@ -287,18 +282,18 @@ Another example: using an object as a key:
   </SandpackFile>
 </Sandpack>
 
-That result is expected because JavaScript stringifies object keys, and _stringifying_ an object returns `[object Object]{:js}`. Even if you add a different object key `obj[{ age: 19 }] = 'Second'{:js}`, JavaScript still treats it as the same property key after stringification.
+That result is expected because JavaScript stringifies object keys, and _stringifying_ an object returns `[object Object]`. Even if you add a different object key `obj[{ age: 19 }] = 'Second'`, JavaScript still treats it as the same property key after stringification.
 
-That behavior makes objects a poor fit for a "true hash map", where keys can be _anything_, not just strings. And that's where `Map(){:js}` comes in.
+That behavior makes objects a poor fit for a "true hash map", where keys can be _anything_, not just strings. And that's where `Map()` comes in.
 
-### Difference between `Map{:js}` and `Object{:js}`
+### Difference between `Map` and `Object`
 
 `Map` is similar to `Object` in a few ways:
 - It stores key/value pairs
 - Their keys are unique
 - You can retrieve, set and delete entries
 
-The main differences is Map doesn't come with any other things by default, while objects often come with a prototype (if we declare the object by `{}{:js}` or `Object.create(obj){:js}`), also it could have a key by any primitive and object type instead of string or symbol only.
+The main differences is Map doesn't come with any other things by default, while objects often come with a prototype (if we declare the object by `{}` or `Object.create(obj)`), also it could have a key by any primitive and object type instead of string or symbol only.
 
 Honestly, those aren't the only differences, but to keep this section aligned with the article topic, I'm focusing on the two that matter most here. If you want the full comparison, check [MDN docs for JavaScript Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map#objects_vs._maps).
 
@@ -322,17 +317,17 @@ You can write Map in two ways:
     ]);
     ```
 
-Those code will return the same Map that contains `1` and `hello` key. You can see that map contains two key with different types which is `number{:js}` and `string{:js}`.
+Those code will return the same Map that contains `1` and `hello` key. You can see that map contains two key with different types which is `number` and `string`.
 
 ### Retrieving, deleting, and checking values
 
-Once you have a `Map{:js}`, the API is pretty straightforward:
+Once you have a `Map`, the API is pretty straightforward:
 
-- `map.get(key){:js}` to read
-- `map.set(key, value){:js}` to write
-- `map.delete(key){:js}` to remove
-- `map.has(key){:js}` to check existence
-- `map.clear(){:js}` to wipe everything
+- `map.get(key)` to read
+- `map.set(key, value)` to write
+- `map.delete(key)` to remove
+- `map.has(key)` to check existence
+- `map.clear()` to wipe everything
 
 ```js
 const map = new Map([
@@ -351,7 +346,7 @@ console.log(map.has(1)); // false
 
 Notice `Map` forces you to be explicit. So you don't need to guess the output from `Map` because no more _stringifying_ key fellas.
 
-### Iterating a `Map{:js}`
+### Iterating a `Map`
 
 One of the most underrated perks of `Map` is: it's iterable by default. It means you can just throw `for...of` at `Map` like this:
 
@@ -405,28 +400,28 @@ If you mean "loop over keys", then yes, `for...in` does that:
 
 But notice: `for...in` iterates keys, not `[key, value]` pairs. And it's also enumeration, not the iterable protocol that powers `for...of`. Plain objects don't implement the iteration protocol, so `for...of` throws unless you:
 
-1. Explicitly convert them into something iterable (like `Object.entries(obj){:js}`), or
-2. Implement `[Symbol.iterator]{:js}` yourself (we'll come back to this in the next section when we talk about `Symbols` especially `Symbol.iterator{:js}`), which is what JavaScript checks to decide whether something is iterable
+1. Explicitly convert them into something iterable (like `Object.entries(obj)`), or
+2. Implement `[Symbol.iterator]` yourself (we'll come back to this in the next section when we talk about `Symbols` especially `Symbol.iterator`), which is what JavaScript checks to decide whether something is iterable
 
-### When to choose `Map{:js}` over `Object{:js}`?
+### When to choose `Map` over `Object`?
 
-Honestly it depends to your needs. But, for myself I'll use `Map{:js}` if:
+Honestly it depends to your needs. But, for myself I'll use `Map` if:
 
 1. My keys are not naturally strings (numbers, objects, tuples-ish structures)
 2. I'll be adding or remove keys a lot
 3. I need reliable iteration without extra conversion
 4. I'm lazy
 
-And I'll choose `Object{:js}` over `Map{:js}` if:
+And I'll choose `Object` over `Map` if:
 
-1. The data is more like a "record" with a stable shape such as `user.name{:js}`, `config.timeout{:js}`, or
+1. The data is more like a "record" with a stable shape such as `user.name`, `config.timeout`, or
 2. I'm expecting to serialize it to JSON
 
 So yeah, if you want a more flexible, more "real collection" key/value structure, `Map` is usually the better tool. And since this article is titled _JavaScript Objects and Their Friends_, I think `Map` only qualifies as a pretty close friend (which is why I'm not gonna explain `Map` deeper 😁).
 
 ---
 
-## `Symbol{:js}` this `Symbol{:js}` that
+## `Symbol` this `Symbol` that
 
 Aight, now we've covered `Object` and `Map`. Earlier I mentioned one important limitation of objects:
 
@@ -447,7 +442,7 @@ JavaScript treats `0` and `"0"` as the same key because it converts non-symbol k
 
 Symbols exist partly to solve this. They're keys that don't get coerced into strings, and they don't accidentally collide with your normal keys.
 
-A `Symbol{:js}` is a primitive type that produces a unique value every time you create it even if you give it the same description.
+A `Symbol` is a primitive type that produces a unique value every time you create it even if you give it the same description.
 
 ```js
 const a = Symbol("id");
@@ -456,7 +451,7 @@ const b = Symbol("id");
 console.log(a === b); // false
 ```
 
-Comparison above return false because when we declare symbol JavaScript will be create a unique identifier, even you are define as much Symbol it still unique and cannot collide to each other. Also you can add description to symbol by simply write `Symbol('description'){:js}` but it's only useful for debugging because it doesn't add identity or another value for the symbol itself.
+Comparison above return false because when we declare symbol JavaScript will be create a unique identifier, even you are define as much Symbol it still unique and cannot collide to each other. Also you can add description to symbol by simply write `Symbol('description')` but it's only useful for debugging because it doesn't add identity or another value for the symbol itself.
 
 So we can agree this is the simplest way to think about Symbols:
 
@@ -464,15 +459,15 @@ So we can agree this is the simplest way to think about Symbols:
 
 ### "Invisible" data
 
-Symbols shine when you want to attach extra information to an object without turning that information into part of the "surface" area. In real code, this happens more often than you'd think maybe when you build a tiny library, you return an object with a nice API, and you need to stash some internal state somewhere: a cache, a timestamp, a plugin context, a counter, a reference to the original config. If you use normal string keys for that (`_internal`, `_meta`, `__state`), it works... until it doesn't. Users can accidentally overwrite it, your internal keys show up in logs and `Object.keys(){:js}`, and at some point you're stuck defending your "internal" naming convention forever (okay that too much, but could be happen, right?).
+Symbols shine when you want to attach extra information to an object without turning that information into part of the "surface" area. In real code, this happens more often than you'd think maybe when you build a tiny library, you return an object with a nice API, and you need to stash some internal state somewhere: a cache, a timestamp, a plugin context, a counter, a reference to the original config. If you use normal string keys for that (`_internal`, `_meta`, `__state`), it works... until it doesn't. Users can accidentally overwrite it, your internal keys show up in logs and `Object.keys()`, and at some point you're stuck defending your "internal" naming convention forever (okay that too much, but could be happen, right?).
 
-A `Symbol{:js}` key "overcome" that whole mess. It gives you a property name that won't collide with normal keys and could be "invisible" in some ways. So your object can carry internal baggage without looking heavier from the outside (if that the right analogy (idk)).
+A `Symbol` key "overcome" that whole mess. It gives you a property name that won't collide with normal keys and could be "invisible" in some ways. So your object can carry internal baggage without looking heavier from the outside (if that the right analogy (idk)).
 
-### `Symbol.for{:js}` and `Symbol.keyFor{:js}` when you *want* a shared Symbol
+### `Symbol.for` and `Symbol.keyFor` when you *want* a shared Symbol
 
-By default, `Symbol(){:js}` always creates a fresh Symbol. That's why the "invisible data" pattern works so nobody can override your internal slot unless they already have the exact Symbol reference.
+By default, `Symbol()` always creates a fresh Symbol. That's why the "invisible data" pattern works so nobody can override your internal slot unless they already have the exact Symbol reference.
 
-Sometimes though, you want different modules (or different copies of a library) to agree on the *same* `Symbol` key without passing it around manually. And that's what `Symbol.for{:js}` does. It looks up a Symbol in the **global Symbol registry** using a string key, and returns the same Symbol every time.
+Sometimes though, you want different modules (or different copies of a library) to agree on the *same* `Symbol` key without passing it around manually. And that's what `Symbol.for` does. It looks up a Symbol in the **global Symbol registry** using a string key, and returns the same Symbol every time.
 
 ```js
 const A = Symbol.for("my-lib.internal");
@@ -499,20 +494,20 @@ export function readDiagnostics(store) {
 
 Now both sides can "meet" on the same key without importing the same constant file so its handy in monorepos, plugin ecosystems, or when multiple bundles might exist.
 
-`Symbol.keyFor{:js}` goes the other way, when we given a Symbol from the registry, it'll returns the registry key.
+`Symbol.keyFor` goes the other way, when we given a Symbol from the registry, it'll returns the registry key.
 
 ```js
 const sym = Symbol.for("store.diagnostics");
 console.log(Symbol.keyFor(sym)); // "store.diagnostics"
 ```
 
-But, `Symbol.keyFor{:js}` only works for Symbols created via `Symbol.for{:js}`. For normal Symbols, it returns undefined:
+But, `Symbol.keyFor` only works for Symbols created via `Symbol.for`. For normal Symbols, it returns undefined:
 
 ```js
 console.log(Symbol.keyFor(Symbol("x"))); // undefined
 ```
 
-In practice, I will use normal `Symbol(){:js}` for a private-ish internals and `Symbol.for(){:js}` for a shared contracts across boundaries. Use the registry deliberately, because once the key becomes "public", other code can access that too.
+In practice, I will use normal `Symbol()` for a private-ish internals and `Symbol.for()` for a shared contracts across boundaries. Use the registry deliberately, because once the key becomes "public", other code can access that too.
 
 ### How to use Symbol, or where should we use it?
 
@@ -572,11 +567,11 @@ Imagine you have a JS library, maybe some logger or whatever it is that using a 
   </SandpackFile>
 </Sandpack>
 
-You can see the `newStore.getValue(){:js}` implementation can be overrided by the user simply by passing new `getValue(){:js}` option but, the internal state couldn't changed even you know the symbol description.
+You can see the `newStore.getValue()` implementation can be overrided by the user simply by passing new `getValue()` option but, the internal state couldn't changed even you know the symbol description.
 
-Your internal state lives behind `[INTERNAL]{:js}` and `[STATE]{:js}` keys, which are Symbols. Even if someone "guesses" the description `"internal"`, they're still creating a *different* Symbol, so they won't hit your internal slot. In practice, this keeps your internal storage from being accidentally replaced by userland options, while still letting users override the parts you meant to be overrideable.
+Your internal state lives behind `[INTERNAL]` and `[STATE]` keys, which are Symbols. Even if someone "guesses" the description `"internal"`, they're still creating a *different* Symbol, so they won't hit your internal slot. In practice, this keeps your internal storage from being accidentally replaced by userland options, while still letting users override the parts you meant to be overrideable.
 
-Symbol-backed fields also doesn't show up in `Object.keys(){:js}`. So if someone prints your store object, they'll mostly see the public API (`getValue`, `override`, etc.), not your internal data. When you do want to inspect everything during debugging, `Reflect.ownKeys(store){:js}` will show both string keys and symbol keys.
+Symbol-backed fields also doesn't show up in `Object.keys()`. So if someone prints your store object, they'll mostly see the public API (`getValue`, `override`, etc.), not your internal data. When you do want to inspect everything during debugging, `Reflect.ownKeys(store)` will show both string keys and symbol keys.
 
 At this point, Symbols should feel less like a "random JS trivia" and could be a practical tool where you can hide internal wiring without bother other code will be break your code and you can share a key across packages when you actually want a shared contract.
 
@@ -584,19 +579,19 @@ Now there's one more reason Symbols matter, and it's a big one (I guess).
 
 JavaScript itself uses Symbols as *hooks* to enable language features. These are called **well known symbols**. It is a "system" symbols used by JavaScript internally, and we can use them, or maybe re-implementing it by ourselves, such as:
 
-- `Symbol.asyncIterator{:js}`
-- `Symbol.iterator{:js}`
-- `Symbol.replace{:js}`
-- `Symbol.seearch{:js}`
-- `Symbol.toPrimitive{:js}`
-- `Symbol.hasInstance{:js}`
+- `Symbol.asyncIterator`
+- `Symbol.iterator`
+- `Symbol.replace`
+- `Symbol.seearch`
+- `Symbol.toPrimitive`
+- `Symbol.hasInstance`
 - ...
 
-But, in this article I want to focus on `Symbol.iterator{:js}`.
+But, in this article I want to focus on `Symbol.iterator`.
 
 ---
 
-## `Symbol.iterator{:js}`
+## `Symbol.iterator`
 
 You've probably seen this error at some point:
 
@@ -613,9 +608,9 @@ for (const x of [1, 2, 3]) {
 }
 ```
 
-That's because arrays is *iterable* and in JavaScript, a value is called iterable when it implements the _iterator protocol_ and it checks for one specific hook which is `value[Symbol.iterator]{:js}`. That iterator must expose a `next(){:js}` method and each call to `next()` returns an object with two fields: `value` and `done`. The `value` is the next item in the sequence, and `done` tells JavaScript whether the sequence has finished. As long as `done` is `false`, `for...of` keeps going and uses `value` as the loop variable. Once `done` becomes `true`, the loop stops.
+That's because arrays is *iterable* and in JavaScript, a value is called iterable when it implements the _iterator protocol_ and it checks for one specific hook which is `value[Symbol.iterator]`. That iterator must expose a `next()` method and each call to `next()` returns an object with two fields: `value` and `done`. The `value` is the next item in the sequence, and `done` tells JavaScript whether the sequence has finished. As long as `done` is `false`, `for...of` keeps going and uses `value` as the loop variable. Once `done` becomes `true`, the loop stops.
 
-Arrays work with `for...of` because they already implement this protocol. Plain objects don't, so JavaScript has no built in to iterate over `{}` unless you convert it first (like `Object.entries(obj){:js}`) or implement `Symbol.iterator{:js}` yourself.
+Arrays work with `for...of` because they already implement this protocol. Plain objects don't, so JavaScript has no built in to iterate over `{}` unless you convert it first (like `Object.entries(obj)`) or implement `Symbol.iterator` yourself.
 
 So, basically when you write this:
 
@@ -626,16 +621,16 @@ for (const item of something) {}
 
 JavaScript does these thing:
 
-1. Look for `something[Symbol.iterator]{:js}`
+1. Look for `something[Symbol.iterator]`
 2. Call it to get an iterator
-3. Keep calling `iterator.next(){:js}` to pull values one by one
+3. Keep calling `iterator.next()` to pull values one by one
 4. And stop when `next()` returns `{ done: true }`
 
 ### Let's try making a plain object iterable
 
-Like I said earlier, a plain object doesn't come with `Symbol.iterator{:js}`. That's why `for...of` throws on `{}` by default. But, lets try to experiment by implementing `Symbol.iterator{:js}` in object by ourselves.
+Like I said earlier, a plain object doesn't come with `Symbol.iterator`. That's why `for...of` throws on `{}` by default. But, lets try to experiment by implementing `Symbol.iterator` in object by ourselves.
 
-At the simplest level, writing an iterable means returning an **iterator** which is an object with `next(){:js}` method that produces `{ value, done }`. The iterator keeps track of its current position, returns the next value, and eventually says if they already completed.
+At the simplest level, writing an iterable means returning an **iterator** which is an object with `next()` method that produces `{ value, done }`. The iterator keeps track of its current position, returns the next value, and eventually says if they already completed.
 
 Here's a minimal example that iterates from `start` to `end`:
 
@@ -686,7 +681,7 @@ for (const [k, v] of user) {
 // name Alfan
 ```
 
-A generator (`function*{:js}`) is the easiest way to implement this because it builds the iterator for you. Each yield becomes one step in the iteration.
+A generator (`function*`) is the easiest way to implement this because it builds the iterator for you. Each yield becomes one step in the iteration.
 
 Now the object works naturally with `for...of`, spread, destructuring, and anything else that consumes iterables:
 
@@ -701,13 +696,13 @@ console.log([...user]);
 
 In practice, I treat these three like a different tools and not interchangeable "JS data structures", it comes with different purpose or you might using them at the same time.
 
-- If the data feels like a **record** with a stable shape that you'll read/write with dot access (`user.name{:js}`, `config.timeout{:js}`), pass around, maybe serialize to JSON then a plain `Object{:js}` is still the most fit for me.
+- If the data feels like a **record** with a stable shape that you'll read/write with dot access (`user.name`, `config.timeout`), pass around, maybe serialize to JSON then a plain `Object` is still the most fit for me.
 
-- If the data feels like a **collection**; keys are dynamic, you add/remove entries a lot, you care about iteration, or your keys aren't naturally strings, then `Map{:js}` usually makes the code cleaner. `Map` doesn't secretly _stringify_ keys, it gives you `size`, and iterating it is a easy thing instead of "convert to entries first and then loop".
+- If the data feels like a **collection**; keys are dynamic, you add/remove entries a lot, you care about iteration, or your keys aren't naturally strings, then `Map` usually makes the code cleaner. `Map` doesn't secretly _stringify_ keys, it gives you `size`, and iterating it is a easy thing instead of "convert to entries first and then loop".
 
-- If you need to attach **internal metadata** to an object (state, plugin data, diagnostics, cache timestamps) without turning it into part of the public surface, then `Symbol{:js}` keys are a really nice move. You avoid key collisions, you avoid leaking internal fields into `Object.keys(){:js}`, doesn't want the "old" naming-convention (`_internal`, `__meta`, etc.). And when the key needs to be shared across modules or bundles, `Symbol.for{:js}` gives you a deliberate "global contract" key.
+- If you need to attach **internal metadata** to an object (state, plugin data, diagnostics, cache timestamps) without turning it into part of the public surface, then `Symbol` keys are a really nice move. You avoid key collisions, you avoid leaking internal fields into `Object.keys()`, doesn't want the "old" naming-convention (`_internal`, `__meta`, etc.). And when the key needs to be shared across modules or bundles, `Symbol.for` gives you a deliberate "global contract" key.
 
-- And for iteration specifically, if you're building a custom structure that genuinely wants to behave like a collection, implementing `Symbol.iterator{:js}` makes it plug into `for...of`, spread, and other iterable consumers. For plain record objects, I usually just loop over `Object.entries(obj){:js}` which is more known by other people (and simple).
+- And for iteration specifically, if you're building a custom structure that genuinely wants to behave like a collection, implementing `Symbol.iterator` makes it plug into `for...of`, spread, and other iterable consumers. For plain record objects, I usually just loop over `Object.entries(obj)` which is more known by other people (and simple).
 
 So basically objects for simple key/value records, maps for real key/value collections, symbols for internal wiring, and iterators when you want a type to participate in the language's iteration protocol.
 

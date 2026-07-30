@@ -94,9 +94,10 @@ As you can see in that playground we have two files that create basic forms with
 <Sandpack
 >
   <SandpackFile name="App.tsx">
-  {`import styles from './App.module.css'
+  {`import React from "react";
+import styles from './App.module.css';
 
-  export default function App() {
+export default function App() {
     const ACTION_URL =
       document.referrer +
       'api/updates/web-development-with-progressive-enhancement/form.html'

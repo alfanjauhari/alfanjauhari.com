@@ -76,6 +76,12 @@ function getGeneratedRuntimeEntry(
 		: runtimeEntry;
 }
 
+/**
+ * Injected into the sandbox iframe's HTML to capture console.log/warn/error etc.
+ * and forward them to the parent window via postMessage. Falls back to
+ * JSON.stringify for non-serializable objects so they still appear in the
+ * playground console panel.
+ */
 const CONSOLE_HOOK_INLINE = (playgroundId: string) =>
 	`<script>window.__PLAYGROUND_ID__=${JSON.stringify(playgroundId)};(function(){var m=["log","debug","info","warn","error"];for(var i=0;i<m.length;i++){(function(method){var o=console[method];console[method]=function(){try{window.parent.postMessage({source:"playground-console",playgroundId:window.__PLAYGROUND_ID__,log:{method:method,data:Array.prototype.slice.call(arguments)}},"*")}catch(_){window.parent.postMessage({source:"playground-console",playgroundId:window.__PLAYGROUND_ID__,log:{method:method,data:Array.prototype.slice.call(arguments).map(function(a){return(typeof a==="object"&&a!==null?JSON.stringify(a,null,2):String(a))})}},"*")};o.apply(console,arguments)}})(m[i])}})();</script>`;
 
@@ -104,6 +110,12 @@ function decodeHtmlEntities(value: string): string {
 	return textarea.value;
 }
 
+/**
+ * When the user's entry file is a .jsx/.tsx module, Sandpack's parcel
+ * template needs an HTML entry. We auto-generate a /index.tsx wrapper that
+ * imports the user's component as the default export and renders it into
+ * #root via React 18's createRoot API.
+ */
 function buildReactEntry(runtimeEntry: string): string {
 	return `import React from "react";
 import { createRoot } from "react-dom/client";
@@ -135,6 +147,18 @@ function createModelUri(
 	return monaco.Uri.parse(`file:///${playgroundId}${sandpackPath(name)}`);
 }
 
+/**
+ * Builds the complete Sandpack sandbox configuration from the user's files.
+ *
+ * Flow:
+ *  1. Copy all user files into the sandbox under their sandpack paths.
+ *  2. If the runtime entry is .jsx/.tsx, generate a React bootstrap wrapper
+ *     (see buildReactEntry) so parcel can serve it as /index.tsx.
+ *  3. Determine the HTML preview entry:
+ *     - If the user already provides an HTML file, use it (after injecting
+ *       the console hook script).
+ *     - Otherwise generate a minimal HTML shell that loads the runtime entry.
+ */
 function buildSandboxSetup(
 	files: PlaygroundFile[],
 	playgroundId: string,
@@ -170,6 +194,12 @@ function buildSandboxSetup(
 	};
 }
 
+/**
+ * Extracts playground source files from MDX content. MDX authors wrap each
+ * file in <template data-playground-file="filename.ext"> elements inside a
+ * container marked with data-playground-root. The browser parses HTML entities
+ * inside <template> tags, so we decode them back before use.
+ */
 function extractMdxFiles(root: Element): PlaygroundFile[] {
 	const templates = root.querySelectorAll<HTMLTemplateElement>(
 		"template[data-playground-file]",
@@ -201,6 +231,11 @@ function parseMessageData(raw: string): unknown {
 	}
 }
 
+/**
+ * Formats any console argument into a human-readable string for display
+ * in the console panel. Handles primitives, Error stacks, and complex
+ * objects (via JSON.stringify with a custom replacer for functions/symbols).
+ */
 function formatConsoleValue(value: unknown, depth = 0): string {
 	if (typeof value === "string") return value;
 	if (value === undefined) return "undefined";
@@ -239,12 +274,14 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 	const playgroundId = `playground-${crypto.randomUUID()}`;
 	const initialFiles = props.files ?? [];
 	let resolvedEntry = props.entryFile ?? initialFiles[0]?.name ?? "index.html";
+
 	const [activeFile, setActiveFile] = createSignal(resolvedEntry);
 	const [files, setFiles] = createSignal<PlaygroundFile[]>(initialFiles);
 	const [viewMode, setViewMode] = createSignal<
 		"editor" | "split" | "preview" | "console"
 	>("split");
 	const [consoleLogs, setConsoleLogs] = createSignal<ConsoleLog[]>([]);
+
 	let playgroundContainer!: HTMLDivElement;
 	let editorContainer!: HTMLDivElement;
 	let previewContainer!: HTMLDivElement;
@@ -254,6 +291,7 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 	let sandpackIframe: HTMLIFrameElement | undefined;
 	let unsubscribeSandpack: UnsubscribeFunction | undefined;
 	let consoleLogId = 0;
+
 	const models = new Map<string, MonacoModel>();
 	let themeObserver: MutationObserver | undefined;
 	let mq: MediaQueryList | undefined;
@@ -294,11 +332,11 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 		};
 		m.editor.defineTheme(
 			"catppuccin-latte",
-			latte as Parameters<typeof m.editor.defineTheme>[1],
+			latte as Monaco.editor.IStandaloneThemeData,
 		);
 		m.editor.defineTheme(
 			"catppuccin-mocha",
-			mocha as Parameters<typeof m.editor.defineTheme>[1],
+			mocha as Monaco.editor.IStandaloneThemeData,
 		);
 	}
 
@@ -350,12 +388,26 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 		sandpackClient.updateSandbox(setup);
 	}
 
+	/**
+	 * Editor → sandbox sync pipeline:
+	 *  1. User types in Monaco → onDidChangeModelContent fires.
+	 *  2. A 500ms debounce (debouncedUpdate) waits for typing to pause.
+	 *  3. syncContentFromEditor pulls the latest content from the Monaco
+	 *     model into the files signal.
+	 *  4. updateSandpack rebuilds the sandbox setup and pushes it to
+	 *     Sandpack, triggering a hot reload in the preview.
+	 */
 	let debounceTimer: ReturnType<typeof setTimeout>;
 	function debouncedUpdate() {
 		clearTimeout(debounceTimer);
 		debounceTimer = setTimeout(updateSandpack, 500);
 	}
 
+	/**
+	 * Switches the editor to a different file tab. Saves current editor
+	 * content back to the files signal, then lazily creates a Monaco model
+	 * for the target file if one doesn't exist yet.
+	 */
 	function switchFile(name: string) {
 		if (name === activeFile()) return;
 		if (!monacoEditor) return;
@@ -421,6 +473,14 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 		]);
 	}
 
+	/**
+	 * Console output arrives via two paths:
+	 *  1. Sandpack's own console listener (readSandpackMessage) — catches
+	 *     bundler diagnostics and runtime logs from the iframe's evaluation.
+	 *  2. window.postMessage (readWindowMessage) — catches console calls
+	 *     captured by the inline CONSOLE_HOOK_INLINE script injected into the
+	 *     preview HTML. This covers logs that Sandpack's listener may miss.
+	 */
 	function readSandpackMessage(
 		message: Parameters<SandpackClient["listen"]>[0] extends (
 			message: infer T,
@@ -450,6 +510,8 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 	}
 
 	onMount(async () => {
+		// If no files were passed as props, extract them from MDX
+		// <template data-playground-file> elements in the parent
 		if (!props.files?.length) {
 			const root = playgroundContainer.closest("[data-playground-root]");
 			const extractedFiles = root ? extractMdxFiles(root) : [];
@@ -508,6 +570,7 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 		});
 		window.addEventListener("message", readWindowMessage);
 
+		// Create the sandbox iframe and load Sandpack client
 		sandpackIframe = document.createElement("iframe");
 		sandpackIframe.style.width = "100%";
 		sandpackIframe.style.height = "100%";
@@ -528,6 +591,9 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 			console.error("Sandpack client failed to load:", err);
 		}
 
+		// Keep Monaco theme in sync with the site's light/dark mode.
+		// Observes [data-theme] attribute changes (manual toggle) and
+		// listens for prefers-color-scheme media query changes (OS setting).
 		themeObserver = new MutationObserver(applyMonacoTheme);
 		themeObserver.observe(document.documentElement, {
 			attributes: true,

@@ -7,6 +7,7 @@ import sitemap from "@astrojs/sitemap";
 import solidJs from "@astrojs/solid-js";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig, envField } from "astro/config";
+import mermaid from "astro-mermaid";
 import viteLucidePreprocess from "vite-plugin-lucide-preprocess";
 
 export default defineConfig({
@@ -14,6 +15,7 @@ export default defineConfig({
 	adapter: cloudflare(),
 	output: "static",
 	integrations: [
+		mermaid(),
 		mdx({
 			processor: unified({
 				gfm: true,
@@ -40,6 +42,16 @@ export default defineConfig({
 				dark: "catppuccin-mocha",
 			},
 			wrap: true,
+			transformers: [
+				{
+					pre(node) {
+						this.addClassToHast(node, this.options.lang);
+					},
+					code(node) {
+						this.addClassToHast(node, this.options.lang);
+					},
+				},
+			],
 		},
 	},
 	env: {
