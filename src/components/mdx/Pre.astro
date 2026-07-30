@@ -17,7 +17,6 @@ const { class: classList, ...props } = Astro.props;
 		"[data-copy-button]:not([data-copy-ready])",
 	);
 
-	console.log(buttons);
 	for (const btn of buttons) {
 		btn.setAttribute("data-copy-ready", "");
 		const copyIcon = btn.querySelector("[data-copy-icon]");
