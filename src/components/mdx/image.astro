@@ -1,0 +1,8 @@
+---
+import type { RemoteImageProps } from "astro:assets";
+import { Image as AstroImage } from "astro:assets";
+
+type Props = RemoteImageProps;
+---
+
+<AstroImage inferSize {...Astro.props} />
