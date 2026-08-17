@@ -11,4 +11,12 @@
 	"observability": {
 		"enabled": true,
 	},
+	"d1_databases": [
+		{
+			"binding": "DATABASE",
+			"database_name": "alfanjauhari_com",
+			"migrations_dir": "drizzle",
+			"migrations_pattern": "drizzle/*/migration.sql",
+		},
+	],
 }

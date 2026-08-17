@@ -13,7 +13,9 @@
     "lint:fix": "oxlint --fix",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
-    "typecheck": "astro check"
+    "typecheck": "astro check",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "wrangler d1 migrations apply DATABASE"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.0.0",
@@ -26,19 +28,25 @@
     "@tailwindcss/vite": "^4.3.1",
     "astro": "^7.0.2",
     "astro-mermaid": "^2.1.0",
+    "better-auth": "1.7.0-beta.10",
     "clsx": "^2.1.1",
     "console-feed": "^3.8.0",
+    "cva": "1.0.0-beta.8",
+    "drizzle-orm": "1.0.0-rc.4",
     "lucide-solid": "^1.21.0",
     "mermaid": "^11.16.0",
     "modern-monaco": "^0.4.2",
     "solid-js": "^1.9.13",
     "tailwind-merge": "^3.6.0",
     "tailwindcss": "^4.3.1",
+    "valibot": "^1.4.2",
     "wrangler": "^4.104.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
     "@tailwindcss/typography": "^0.5.20",
+    "dotenv": "^17.4.2",
+    "drizzle-kit": "1.0.0-rc.4",
     "oxfmt": "^0.63.0",
     "oxlint": "^1.78.0",
     "tsx": "^4.22.4",
