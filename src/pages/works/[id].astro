@@ -1,11 +1,11 @@
 ---
 import { getCollection, getEntry, render } from "astro:content";
-import Image from "@/components/mdx/Image.astro";
-import Playground from "@/components/mdx/Playground.astro";
-import PlaygroundFile from "@/components/mdx/PlaygroundFile.astro";
-import Pre from "@/components/mdx/Pre.astro";
-import Serif from "@/components/mdx/Serif.astro";
-import WorkLayout from "@/layouts/WorkLayout.astro";
+import Image from "@/components/mdx/image.astro";
+import Playground from "@/components/mdx/playground.astro";
+import PlaygroundFile from "@/components/mdx/playground-file.astro";
+import Pre from "@/components/mdx/pre.astro";
+import Serif from "@/components/mdx/serif.astro";
+import WorkLayout from "@/layouts/work-layout.astro";
 
 export async function getStaticPaths() {
 	const works = await getCollection("works");

@@ -1,0 +1,136 @@
+---
+import { actions, isInputError } from "astro:actions";
+import { SocialLogins } from "@/components/solid/social-logins";
+import { Button } from "@/components/solid/ui/button";
+import { Input } from "@/components/solid/ui/input";
+import BaseLayout from "@/layouts/base-layout.astro";
+
+if(Astro.locals.session) {
+	return Astro.redirect("/");
+}
+
+const searchParams = Astro.url.searchParams;
+
+const error = searchParams.get("error");
+const loginError = error
+	? error === "INVALID_TOKEN"
+		? "Invalid login token. Please try again"
+		: error
+	: "";
+
+const rawRedirect = searchParams.get("redirectTo") ?? "/";
+const redirectTo = rawRedirect.includes("http") ? "/" : rawRedirect;
+
+const result = Astro.getActionResult(actions.magicLinkSignIn);
+const actionError = result?.error;
+const emailError =
+	actionError && isInputError(actionError) ? actionError.fields.email?.[0] : "";
+const submitError =
+	actionError && !isInputError(actionError) ? actionError.message : "";
+const sent = !!result && !actionError;
+const alertError = loginError || submitError;
+---
+
+<BaseLayout
+	title="Login"
+	description="Log in to your account to access personalized features and continue your experience seamlessly."
+	canonical="/auth/login"
+>
+	<div class="flex flex-col justify-center items-center">
+		<div class="w-full max-w-xl border border-border p-8 md:p-12">
+			<div class="login-header">
+				<h1 class="font-serif text-4xl font-bold text-center mb-4">
+					Welcome Back!
+				</h1>
+				<p
+					class="text-center text-sm mb-8 font-mono uppercase tracking-widest text-foreground/50"
+				>
+					Login to access your account
+				</p>
+			</div>
+
+			{
+				alertError && (
+					<div
+						class="relative w-full rounded-lg border px-4 py-3 text-sm grid has-[>svg]:grid-cols-[--spacing(4)_1fr] grid-cols-[0_1fr] has-[>svg]:gap-x-3 gap-y-0.5 items-start [&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current text-destructive bg-card *:data-[slot=alert-description]:text-destructive/90 mb-8"
+						role="alert"
+						data-slot="alert"
+					>
+						<div class="col-start-2 line-clamp-1 min-h-4 font-medium tracking-tight">
+							Login Failed
+						</div>
+						<div class="text-muted-foreground col-start-2 grid justify-items-start gap-1 text-sm [&_p]:leading-relaxed">
+							{alertError}
+						</div>
+					</div>
+				)
+			}
+
+			{
+				sent && (
+					<div
+						class="relative w-full rounded-lg border px-4 py-3 text-sm grid has-[>svg]:grid-cols-[--spacing(4)_1fr] grid-cols-[0_1fr] has-[>svg]:gap-x-3 gap-y-0.5 items-start [&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current bg-card text-card-foreground mb-8"
+						role="alert"
+						data-slot="alert"
+					>
+						<div class="col-start-2 line-clamp-1 min-h-4 font-medium tracking-tight">
+							Check Your Inbox
+						</div>
+						<div class="text-muted-foreground col-start-2 grid justify-items-start gap-1 text-sm [&_p]:leading-relaxed">
+							Magic link sent. Please check your email!
+						</div>
+					</div>
+				)
+			}
+
+			<SocialLogins redirectTo={redirectTo} client:load />
+
+			<div class="relative my-8">
+				<div class="absolute inset-0 flex items-center">
+					<div class="w-full border-t border-border"></div>
+				</div>
+				<div class="relative flex justify-center text-xs uppercase">
+					<span class="bg-background px-4 text-foreground/50 font-mono">
+						Or login with email
+					</span>
+				</div>
+			</div>
+
+			<form method="post" action={actions.magicLinkSignIn}>
+				<input type="hidden" name="redirectTo" value={redirectTo} />
+				<div class="flex w-full flex-col gap-6">
+					<div
+						class="group/field flex w-full flex-col gap-3"
+						data-invalid={emailError ? "true" : undefined}
+					>
+						<label
+							for="email"
+							class="flex items-center gap-2 text-sm leading-none font-medium select-none peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+						>
+							Email
+						</label>
+						<Input
+							id="email"
+							name="email"
+							type="email"
+							required
+							autocomplete="email"
+							placeholder="you@example.com"
+							aria-invalid={emailError ? "true" : undefined}
+						/>
+						{
+							emailError && (
+								<p role="alert" class="text-destructive text-sm font-normal">
+									{emailError}
+								</p>
+							)
+						}
+					</div>
+					<Button type="submit">
+						Send Magic Link
+					</Button>
+				</div>
+			</form>
+		</div>
+	</div>
+</BaseLayout>

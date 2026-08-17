@@ -186,25 +186,24 @@ So when you trying to call `user.toString()` it will return `Hello string!` inst
 
     This is important because many devs (understandably) think inheritance means copying. In JavaScript, inheritance is simply delegation. The child object doesn't "contain" the parent's properties. It just knows where to look when it can't find something. That's why if multiple objects share a prototype object, and you mutate that prototype, you affect all of them:
 
-       <Sandpack tabs="console">
-  <SandpackFile name="/index.ts">
-  {`const proto = {
-    greet() {
-      return "hi";
-    }
-  };
+		<Sandpack tabs="console">
+			<SandpackFile name="/index.ts">
+			{`const proto = {
+				greet() {
+					return "hi";
+				}
+			};
 
-    const a = Object.create(proto);
-    const b = Object.create(proto);
+				const a = Object.create(proto);
+				const b = Object.create(proto);
 
-    proto.greet = () => "hello";
+				proto.greet = () => "hello";
 
-    console.log(a.greet()); // "hello"
-    console.log(b.greet()); // "hello"`}
+				console.log(a.greet()); // "hello"
+				console.log(b.greet()); // "hello"`}
 
-         </SandpackFile>
-
-    </Sandpack>
+			</SandpackFile>
+		</Sandpack>
 
     You can see the `a.greet()` and `b.greet()` return the same value which is `hello`, that is because the a and b object share the same prototype.
 
@@ -241,18 +240,16 @@ So when you trying to call `user.toString()` it will return `Hello string!` inst
 
 3.  `for...in` walks inherited enumerable properties
 
-       <Sandpack tabs="console">
-  <SandpackFile name="/index.ts">
-  {`const parent = { inherited: 1 };
-  const child = Object.create(parent);
-  child.own = 2;
+    <Sandpack tabs="console">
+			<SandpackFile name="/index.ts">
+			{`const parent = { inherited: 1 };
+			const child = Object.create(parent);
+			child.own = 2;
 
-    for (const k in child) {
-    console.log(k); // "own" then "inherited"
-    }`}
-
-         </SandpackFile>
-
+				for (const k in child) {
+				console.log(k); // "own" then "inherited"
+				}`}
+    	</SandpackFile>
     </Sandpack>
 
     So, if you only want to get the own keys, prefer `Object.keys()` or `Object.entries()`.

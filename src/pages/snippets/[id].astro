@@ -1,12 +1,12 @@
 ---
 import { getCollection, getEntry, render } from "astro:content";
 import { TerminalIcon } from "lucide-solid";
-import Image from "@/components/mdx/Image.astro";
-import Playground from "@/components/mdx/Playground.astro";
-import PlaygroundFile from "@/components/mdx/PlaygroundFile.astro";
-import Pre from "@/components/mdx/Pre.astro";
-import Serif from "@/components/mdx/Serif.astro";
-import BaseLayout from "@/layouts/BaseLayout.astro";
+import Image from "@/components/mdx/image.astro";
+import Playground from "@/components/mdx/playground.astro";
+import PlaygroundFile from "@/components/mdx/playground-file.astro";
+import Pre from "@/components/mdx/pre.astro";
+import Serif from "@/components/mdx/serif.astro";
+import BaseLayout from "@/layouts/base-layout.astro";
 
 export async function getStaticPaths() {
 	const snippets = await getCollection("snippets");
