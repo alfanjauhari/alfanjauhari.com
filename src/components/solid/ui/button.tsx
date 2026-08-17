@@ -34,7 +34,6 @@ const buttonVariants = cva({
 });
 
 function Button({
-	class: className,
 	variant,
 	size,
 	children,
@@ -45,15 +44,21 @@ function Button({
 		asChild?: boolean;
 	}) {
 	if (asChild) {
-		return <Dynamic component={() => children} />;
+		return (
+			<Dynamic
+				component={() => children}
+				class={cn(buttonVariants({ variant, size, className: props.class }))}
+				{...props}
+			/>
+		);
 	}
 
 	return (
 		<button
-			data-slot="button"
-			class={cn(buttonVariants({ variant, size, className }))}
-			children={children}
 			{...props}
+			data-slot="button"
+			children={children}
+			class={cn(buttonVariants({ variant, size, className: props.class }))}
 		/>
 	);
 }

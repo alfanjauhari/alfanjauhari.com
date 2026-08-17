@@ -56,48 +56,46 @@ export default defineConfig({
 	},
 	env: {
 		schema: {
-			// Secret, server-only — used in later phases
-			DATABASE_URL: envField.string({
+			CLOUDFLARE_ACCOUNT_ID: envField.string({
 				access: "secret",
 				context: "server",
-				optional: true,
-				url: true,
+			}),
+			CLOUDFLARE_DATABASE_ID: envField.string({
+				access: "secret",
+				context: "server",
+			}),
+			CLOUDFLARE_D1_TOKEN: envField.string({
+				access: "secret",
+				context: "server",
 			}),
 			BETTER_AUTH_URL: envField.string({
 				access: "secret",
 				context: "server",
-				optional: true,
 				url: true,
 			}),
 			GOOGLE_CLIENT_ID: envField.string({
 				access: "secret",
 				context: "server",
-				optional: true,
 			}),
 			GOOGLE_CLIENT_SECRET: envField.string({
 				access: "secret",
 				context: "server",
-				optional: true,
 			}),
 			GITHUB_CLIENT_ID: envField.string({
 				access: "secret",
 				context: "server",
-				optional: true,
 			}),
 			GITHUB_CLIENT_SECRET: envField.string({
 				access: "secret",
 				context: "server",
-				optional: true,
 			}),
 			RESEND_API_TOKEN: envField.string({
 				access: "secret",
 				context: "server",
-				optional: true,
 			}),
 			REDIS_URL: envField.string({
 				access: "secret",
 				context: "server",
-				optional: true,
 				url: true,
 			}),
 		},
