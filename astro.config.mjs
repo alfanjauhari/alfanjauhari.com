@@ -59,14 +59,17 @@ export default defineConfig({
 			CLOUDFLARE_ACCOUNT_ID: envField.string({
 				access: "secret",
 				context: "server",
+				optional: true,
 			}),
 			CLOUDFLARE_DATABASE_ID: envField.string({
 				access: "secret",
 				context: "server",
+				optional: true,
 			}),
 			CLOUDFLARE_D1_TOKEN: envField.string({
 				access: "secret",
 				context: "server",
+				optional: true,
 			}),
 			BETTER_AUTH_URL: envField.string({
 				access: "secret",
@@ -102,6 +105,7 @@ export default defineConfig({
 				access: "secret",
 				context: "server",
 				url: true,
+				optional: true,
 			}),
 		},
 	},
