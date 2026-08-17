@@ -93,6 +93,11 @@ export default defineConfig({
 				access: "secret",
 				context: "server",
 			}),
+			ADMIN_EMAIL: envField.string({
+				access: "secret",
+				context: "server",
+				optional: true,
+			}),
 			REDIS_URL: envField.string({
 				access: "secret",
 				context: "server",

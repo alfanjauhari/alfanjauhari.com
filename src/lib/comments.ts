@@ -8,12 +8,19 @@ export type Comment = Exclude<
 	undefined
 >["comments"][number];
 
-export interface CommentWithReplies extends Comment {
-	replies: CommentWithReplies[];
+export interface CommentNode {
+	id: string;
+	rootId: string | null;
 }
 
-export function commentsTree(comments: Comment[]): CommentWithReplies[] {
-	const roots = new Map<string, CommentWithReplies>();
+export type TreeNode<T extends CommentNode> = T & {
+	replies: TreeNode<T>[];
+};
+
+export type CommentWithReplies = TreeNode<Comment>;
+
+export function commentsTree<T extends CommentNode>(comments: T[]): TreeNode<T>[] {
+	const roots = new Map<string, TreeNode<T>>();
 
 	for (const c of comments) {
 		if (c.rootId === null) {
