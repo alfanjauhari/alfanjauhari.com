@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "formisch": {
+      "source": "open-circle/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/formisch/SKILL.md",
+      "computedHash": "0eeaf64db54553d0e98e24fea386adc1889aa443cbc2b00f40149121398c4e0b"
+    },
+    "valibot": {
+      "source": "open-circle/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/valibot/SKILL.md",
+      "computedHash": "6798b923c1bbe9b07cb8c40470ada09c377d666045caefda90d95577e16e8744"
+    }
+  }
+}
