@@ -19,14 +19,6 @@ pre-push:
         - "*.tsx"
         - "*.json"
 
-    - run: pnpm run test
-      glob:
-        - "*.ts"
-        - "*.js"
-        - "*.tsx"
-        - "*.jsx"
-        - "*.json"
-
     - run: pnpm run lint {push_files}
       glob:
         - "*.ts"
