@@ -59,9 +59,9 @@ For example, you can check the support of grid with this code:
 
 ```css
 @supports (display: grid) {
-  .container {
-    display: grid;
-  }
+	.container {
+		display: grid;
+	}
 }
 ```
 
@@ -69,9 +69,9 @@ Or, you want to check if the grid property doesn’t exist and the flex property
 
 ```css
 @supports (display: flex) and (not (display: grid)) {
-  .container {
-    display: flex;
-  }
+	.container {
+		display: flex;
+	}
 }
 ```
 
@@ -164,7 +164,9 @@ export default function App() {
         </button>
       </form>
     )
-  }`}
+
+}`}
+
   </SandpackFile>
   <SandpackFile name="App.module.css">
   {`.form,
@@ -174,43 +176,43 @@ export default function App() {
     display: block;
   }
 
-  .form > :not([hidden]) ~ :not([hidden]) {
-    margin-top: 1rem;
-  }
+.form > :not([hidden]) ~ :not([hidden]) {
+margin-top: 1rem;
+}
 
-  .field > :not([hidden]) ~ :not([hidden]) {
-    margin-top: 0.3rem;
-  }
+.field > :not([hidden]) ~ :not([hidden]) {
+margin-top: 0.3rem;
+}
 
-  .label {
-    font-size: 14px;
-  }
+.label {
+font-size: 14px;
+}
 
-  .input {
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-    color: #333;
-  }
+.input {
+padding: 0.5rem;
+border: 1px solid #ccc;
+border-radius: 4px;
+font-size: 14px;
+color: #333;
+}
 
-  .button {
-    padding: 0.5rem;
-    background-color: #0070f3;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    font-size: 14px;
-    cursor: pointer;
-    width: 100%;
-  }
+.button {
+padding: 0.5rem;
+background-color: #0070f3;
+color: #fff;
+border: none;
+border-radius: 4px;
+font-size: 14px;
+cursor: pointer;
+width: 100%;
+}
 
-  @supports (display: flex) {
-    .form {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
+@supports (display: flex) {
+.form {
+display: flex;
+flex-direction: column;
+gap: 1rem;
+}
 
     .form > :not([hidden]) ~ :not([hidden]) {
       margin-top: 0;
@@ -225,7 +227,9 @@ export default function App() {
     .field > :not([hidden]) ~ :not([hidden]) {
       margin-top: 0;
     }
-  }`}
+
+}`}
+
   </SandpackFile>
 </Sandpack>
 

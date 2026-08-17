@@ -14,9 +14,7 @@ function getStored(): Theme {
 }
 
 function getSystem(): "light" | "dark" {
-	return window.matchMedia("(prefers-color-scheme: dark)").matches
-		? "dark"
-		: "light";
+	return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
 function resolve(t: Theme): "light" | "dark" {

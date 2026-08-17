@@ -6,21 +6,10 @@ import type {
 	UnsubscribeFunction,
 } from "@codesandbox/sandpack-client";
 import { loadSandpackClient } from "@codesandbox/sandpack-client";
-import {
-	CodeXmlIcon,
-	EyeIcon,
-	RotateCcwIcon,
-	TerminalIcon,
-} from "lucide-solid";
+import { CodeXmlIcon, EyeIcon, RotateCcwIcon, TerminalIcon } from "lucide-solid";
 import { init } from "modern-monaco";
 import type * as Monaco from "modern-monaco/editor-core";
-import {
-	type Component,
-	createSignal,
-	For,
-	onCleanup,
-	onMount,
-} from "solid-js";
+import { type Component, createSignal, For, onCleanup, onMount } from "solid-js";
 import { cn } from "@/lib/utils";
 
 export interface PlaygroundFile {
@@ -56,9 +45,7 @@ function hasExtension(name: string, extensions: string[]): boolean {
 
 function getPreviewEntry(files: PlaygroundFile[], entryFile?: string): string {
 	const entry = entryFile ?? files[0]?.name ?? "index.html";
-	return hasExtension(entry, [".html", ".htm"])
-		? sandpackPath(entry)
-		: "/index.html";
+	return hasExtension(entry, [".html", ".htm"]) ? sandpackPath(entry) : "/index.html";
 }
 
 function getRuntimeEntry(files: PlaygroundFile[], entryFile?: string): string {
@@ -66,14 +53,9 @@ function getRuntimeEntry(files: PlaygroundFile[], entryFile?: string): string {
 	return sandpackPath(entry);
 }
 
-function getGeneratedRuntimeEntry(
-	files: PlaygroundFile[],
-	entryFile?: string,
-): string {
+function getGeneratedRuntimeEntry(files: PlaygroundFile[], entryFile?: string): string {
 	const runtimeEntry = getRuntimeEntry(files, entryFile);
-	return hasExtension(runtimeEntry, [".jsx", ".tsx"])
-		? "/index.tsx"
-		: runtimeEntry;
+	return hasExtension(runtimeEntry, [".jsx", ".tsx"]) ? "/index.tsx" : runtimeEntry;
 }
 
 /**
@@ -85,10 +67,7 @@ function getGeneratedRuntimeEntry(
 const CONSOLE_HOOK_INLINE = (playgroundId: string) =>
 	`<script>window.__PLAYGROUND_ID__=${JSON.stringify(playgroundId)};(function(){var m=["log","debug","info","warn","error"];for(var i=0;i<m.length;i++){(function(method){var o=console[method];console[method]=function(){try{window.parent.postMessage({source:"playground-console",playgroundId:window.__PLAYGROUND_ID__,log:{method:method,data:Array.prototype.slice.call(arguments)}},"*")}catch(_){window.parent.postMessage({source:"playground-console",playgroundId:window.__PLAYGROUND_ID__,log:{method:method,data:Array.prototype.slice.call(arguments).map(function(a){return(typeof a==="object"&&a!==null?JSON.stringify(a,null,2):String(a))})}},"*")};o.apply(console,arguments)}})(m[i])}})();</script>`;
 
-function buildGeneratedHtml(
-	runtimeEntry: string,
-	playgroundId: string,
-): string {
+function buildGeneratedHtml(runtimeEntry: string, playgroundId: string): string {
 	return `<!doctype html>
 <html lang="en">
   <head>
@@ -133,17 +112,11 @@ function injectConsoleHook(html: string, playgroundId: string): string {
 }
 
 function getSandboxDependencies(files: PlaygroundFile[]): Dependencies {
-	const needsReact = files.some((file) =>
-		hasExtension(file.name, [".jsx", ".tsx"]),
-	);
+	const needsReact = files.some((file) => hasExtension(file.name, [".jsx", ".tsx"]));
 	return needsReact ? { react: "latest", "react-dom": "latest" } : {};
 }
 
-function createModelUri(
-	monaco: MonacoInstance,
-	playgroundId: string,
-	name: string,
-): Monaco.Uri {
+function createModelUri(monaco: MonacoInstance, playgroundId: string, name: string): Monaco.Uri {
 	return monaco.Uri.parse(`file:///${playgroundId}${sandpackPath(name)}`);
 }
 
@@ -201,9 +174,7 @@ function buildSandboxSetup(
  * inside <template> tags, so we decode them back before use.
  */
 function extractMdxFiles(root: Element): PlaygroundFile[] {
-	const templates = root.querySelectorAll<HTMLTemplateElement>(
-		"template[data-playground-file]",
-	);
+	const templates = root.querySelectorAll<HTMLTemplateElement>("template[data-playground-file]");
 	const result: PlaygroundFile[] = [];
 	for (const template of templates) {
 		const name = template.dataset.playgroundFile ?? "file";
@@ -277,9 +248,7 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 
 	const [activeFile, setActiveFile] = createSignal(resolvedEntry);
 	const [files, setFiles] = createSignal<PlaygroundFile[]>(initialFiles);
-	const [viewMode, setViewMode] = createSignal<
-		"editor" | "split" | "preview" | "console"
-	>("split");
+	const [viewMode, setViewMode] = createSignal<"editor" | "split" | "preview" | "console">("split");
 	const [consoleLogs, setConsoleLogs] = createSignal<ConsoleLog[]>([]);
 
 	let playgroundContainer!: HTMLDivElement;
@@ -330,14 +299,8 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 				"editorBracketMatch.border": "#585b70",
 			},
 		};
-		m.editor.defineTheme(
-			"catppuccin-latte",
-			latte as Monaco.editor.IStandaloneThemeData,
-		);
-		m.editor.defineTheme(
-			"catppuccin-mocha",
-			mocha as Monaco.editor.IStandaloneThemeData,
-		);
+		m.editor.defineTheme("catppuccin-latte", latte as Monaco.editor.IStandaloneThemeData);
+		m.editor.defineTheme("catppuccin-mocha", mocha as Monaco.editor.IStandaloneThemeData);
 	}
 
 	function getMonacoTheme(): string {
@@ -375,9 +338,7 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 		if (!model) return;
 		const content = model.getValue();
 		setFiles((currentFiles) =>
-			currentFiles.map((file) =>
-				file.name === name ? { ...file, content } : file,
-			),
+			currentFiles.map((file) => (file.name === name ? { ...file, content } : file)),
 		);
 	}
 
@@ -456,15 +417,9 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 				: "w-full border-t";
 	}
 
-	function appendConsoleLog(
-		method: string,
-		data: unknown[],
-		fromSandpackClient?: boolean,
-	) {
+	function appendConsoleLog(method: string, data: unknown[], fromSandpackClient?: boolean) {
 		const processed = fromSandpackClient
-			? data.map((item) =>
-					typeof item === "string" ? parseMessageData(item) : item,
-				)
+			? data.map((item) => (typeof item === "string" ? parseMessageData(item) : item))
 			: data;
 
 		setConsoleLogs((logs) => [
@@ -482,11 +437,7 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 	 *     preview HTML. This covers logs that Sandpack's listener may miss.
 	 */
 	function readSandpackMessage(
-		message: Parameters<SandpackClient["listen"]>[0] extends (
-			message: infer T,
-		) => void
-			? T
-			: never,
+		message: Parameters<SandpackClient["listen"]>[0] extends (message: infer T) => void ? T : never,
 	) {
 		if (message.type !== "console") return;
 		for (const log of message.log) {
@@ -516,8 +467,7 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 			const root = playgroundContainer.closest("[data-playground-root]");
 			const extractedFiles = root ? extractMdxFiles(root) : [];
 			setFiles(extractedFiles);
-			resolvedEntry =
-				props.entryFile ?? extractedFiles[0]?.name ?? "index.html";
+			resolvedEntry = props.entryFile ?? extractedFiles[0]?.name ?? "index.html";
 			setActiveFile(resolvedEntry);
 		}
 
@@ -549,8 +499,7 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 			lineNumbers: "on",
 			tabSize: 2,
 			wordWrap: "on",
-			fontFamily:
-				"'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace",
+			fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace",
 		});
 
 		const firstFile = files().find((f) => f.name === resolvedEntry);
@@ -716,27 +665,17 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 					<div ref={editorContainer} class="h-full min-h-80" />
 				</div>
 
-				<div
-					class={cn(`${getOutputClass()} border-border bg-white`, "min-h-80")}
-				>
+				<div class={cn(`${getOutputClass()} border-border bg-white`, "min-h-80")}>
 					<div
 						ref={previewContainer}
-						class={cn(
-							viewMode() === "console" ? "hidden" : "h-full",
-							"min-h-80",
-						)}
+						class={cn(viewMode() === "console" ? "hidden" : "h-full", "min-h-80")}
 					/>
 					<div
-						class={cn(
-							viewMode() === "console" ? "h-full bg-zinc-950 p-3" : "hidden",
-							"min-h-80",
-						)}
+						class={cn(viewMode() === "console" ? "h-full bg-zinc-950 p-3" : "hidden", "min-h-80")}
 					>
 						<For
 							each={consoleLogs()}
-							fallback={
-								<p class="font-mono text-xs text-zinc-500">Console is empty.</p>
-							}
+							fallback={<p class="font-mono text-xs text-zinc-500">Console is empty.</p>}
 						>
 							{(log) => (
 								<div class="mb-1 flex gap-2 font-mono text-xs text-zinc-100">
