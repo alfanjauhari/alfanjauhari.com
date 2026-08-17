@@ -135,7 +135,7 @@ function createModelUri(monaco: MonacoInstance, playgroundId: string, name: stri
 function buildSandboxSetup(
 	files: PlaygroundFile[],
 	playgroundId: string,
-	entryFile?: string,
+	entryFile?: string
 ): SandboxSetup {
 	const bundledFiles: SandpackBundlerFiles = {};
 	for (const file of files) {
@@ -151,7 +151,7 @@ function buildSandboxSetup(
 	if (bundledFiles[previewEntry]) {
 		bundledFiles[previewEntry].code = injectConsoleHook(
 			bundledFiles[previewEntry].code,
-			playgroundId,
+			playgroundId
 		);
 	} else {
 		bundledFiles[previewEntry] = {
@@ -227,7 +227,7 @@ function formatConsoleValue(value: unknown, depth = 0): string {
 					if (typeof v === "bigint") return String(v);
 					return v;
 				},
-				depth > 0 ? 2 : undefined,
+				depth > 0 ? 2 : undefined
 			);
 		} catch {
 			return String(value);
@@ -338,7 +338,7 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 		if (!model) return;
 		const content = model.getValue();
 		setFiles((currentFiles) =>
-			currentFiles.map((file) => (file.name === name ? { ...file, content } : file)),
+			currentFiles.map((file) => (file.name === name ? { ...file, content } : file))
 		);
 	}
 
@@ -381,7 +381,7 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 			const model = monacoInstance.editor.createModel(
 				content,
 				lang,
-				createModelUri(monacoInstance, playgroundId, name),
+				createModelUri(monacoInstance, playgroundId, name)
 			);
 			models.set(name, model);
 		}
@@ -437,7 +437,7 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 	 *     preview HTML. This covers logs that Sandpack's listener may miss.
 	 */
 	function readSandpackMessage(
-		message: Parameters<SandpackClient["listen"]>[0] extends (message: infer T) => void ? T : never,
+		message: Parameters<SandpackClient["listen"]>[0] extends (message: infer T) => void ? T : never
 	) {
 		if (message.type !== "console") return;
 		for (const log of message.log) {
@@ -508,7 +508,7 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 			const model = monacoInstance.editor.createModel(
 				firstFile.content,
 				lang,
-				createModelUri(monacoInstance, playgroundId, firstFile.name),
+				createModelUri(monacoInstance, playgroundId, firstFile.name)
 			);
 			models.set(firstFile.name, model);
 			monacoEditor.setModel(model);
