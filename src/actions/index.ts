@@ -17,10 +17,19 @@ import { SITE_URL } from "@/constants";
 import { client } from "@/db/client";
 import { users } from "@/db/schemas/auth";
 import { comments } from "@/db/schemas/comments";
+import { feeds } from "@/db/schemas/feeds";
 import { likes } from "@/db/schemas/likes";
 import { auth } from "@/lib/auth";
 import { getUpdateBySlug } from "@/lib/content";
+import {
+	getAdminFeedsData,
+	getAllCommentsData,
+	getUserCommentsData,
+	getUserLikesData,
+	isAdminEmail,
+} from "@/lib/dashboard";
 import { sendEmail } from "@/lib/email";
+import { getPublicFeedsData } from "@/lib/feeds";
 import { redactEmail } from "@/utils/redact";
 
 const parentComment = alias(comments, "parent");
@@ -41,6 +50,40 @@ const NewCommentSchema = z.object({
 const LikeFnsSchema = z.object({
 	slug: z.string(),
 });
+
+const FeedInputSchema = z.object({
+	tag: z.string().min(1, "Tag is required"),
+	content: z.string().min(1, "Content is required"),
+	draft: z.boolean().default(false),
+});
+
+const UpdateFeedSchema = FeedInputSchema.extend({
+	id: z.string().min(1, "ID is required"),
+});
+
+const DeleteFeedSchema = z.object({
+	id: z.string().min(1, "ID is required"),
+});
+
+function requireAdmin(ctx: { locals: App.Locals }) {
+	const user = ctx.locals.user;
+
+	if (!user) {
+		throw new ActionError({
+			code: "UNAUTHORIZED",
+			message: "You must be logged in.",
+		});
+	}
+
+	if (!isAdminEmail(user.email)) {
+		throw new ActionError({
+			code: "FORBIDDEN",
+			message: "You don't have access to this.",
+		});
+	}
+
+	return user;
+}
 
 export const server = {
 	magicLinkSignIn: defineAction({
@@ -137,16 +180,16 @@ export const server = {
 					image: row.user.image,
 					emailVerified: row.user.emailVerified,
 				},
-				parent: row.parent?.id
+				parent: row.parent
 					? {
 							id: row.parent.id,
-							content: row.parent.content ?? "",
-							createdAt: new Date((row.parent.createdAt ?? 0) * 1000).toISOString(),
+							content: row.parent.content,
+							createdAt: new Date(row.parent.createdAt * 1000).toISOString(),
 							user: row.parent.user
 								? {
-										id: row.parent.user.id ?? "",
+										id: row.parent.user.id,
 										name: row.parent.user.name,
-										email: redactEmail(row.parent.user.email ?? ""),
+										email: redactEmail(row.parent.user.email),
 										image: row.parent.user.image ?? null,
 									}
 								: null,
@@ -321,6 +364,140 @@ export const server = {
 					message: "Something went wrong. Probably the wind",
 				});
 			}
+		},
+	}),
+
+	getUserLikes: defineAction({
+		handler: async (_input, ctx) => {
+			const user = ctx.locals.user;
+
+			if (!user) {
+				throw new ActionError({
+					code: "UNAUTHORIZED",
+					message: "You must be logged in.",
+				});
+			}
+
+			return getUserLikesData(user.id);
+		},
+	}),
+
+	getUserComments: defineAction({
+		handler: async (_input, ctx) => {
+			const user = ctx.locals.user;
+
+			if (!user) {
+				throw new ActionError({
+					code: "UNAUTHORIZED",
+					message: "You must be logged in.",
+				});
+			}
+
+			return getUserCommentsData(user.id);
+		},
+	}),
+
+	updateUserName: defineAction({
+		accept: "form",
+		input: z.object({
+			name: z.string().min(1, "Name is required"),
+		}),
+		handler: async ({ name }, ctx) => {
+			const user = ctx.locals.user;
+
+			if (!user) {
+				throw new ActionError({
+					code: "UNAUTHORIZED",
+					message: "You must be logged in.",
+				});
+			}
+
+			try {
+				await client.update(users).set({ name }).where(eq(users.id, user.id));
+
+				return true;
+			} catch {
+				throw new ActionError({
+					code: "INTERNAL_SERVER_ERROR",
+					message: "Something went wrong when trying to update name. Must be the wind",
+				});
+			}
+		},
+	}),
+
+	getAllComments: defineAction({
+		handler: async (_input, ctx) => {
+			requireAdmin(ctx);
+			return getAllCommentsData();
+		},
+	}),
+
+	getAdminFeeds: defineAction({
+		handler: async (_input, ctx) => {
+			requireAdmin(ctx);
+			return getAdminFeedsData();
+		},
+	}),
+
+	createFeed: defineAction({
+		accept: "form",
+		input: FeedInputSchema,
+		handler: async ({ tag, content, draft }, ctx) => {
+			requireAdmin(ctx);
+
+			const inserted = await client
+				.insert(feeds)
+				.values({
+					id: crypto.randomUUID(),
+					tag,
+					content,
+					draft: draft ? 1 : 0,
+				})
+				.returning({ id: feeds.id })
+				.get();
+
+			return { id: inserted.id };
+		},
+	}),
+
+	updateFeed: defineAction({
+		accept: "form",
+		input: UpdateFeedSchema,
+		handler: async ({ id, tag, content, draft }, ctx) => {
+			requireAdmin(ctx);
+
+			await client
+				.update(feeds)
+				.set({
+					tag,
+					content,
+					draft: draft ? 1 : 0,
+					updatedAt: Math.floor(Date.now() / 1000),
+				})
+				.where(eq(feeds.id, id));
+
+			return { id };
+		},
+	}),
+
+	deleteFeed: defineAction({
+		accept: "form",
+		input: DeleteFeedSchema,
+		handler: async ({ id }, ctx) => {
+			requireAdmin(ctx);
+
+			await client.delete(feeds).where(eq(feeds.id, id));
+
+			return { id };
+		},
+	}),
+
+	getPublicFeeds: defineAction({
+		input: z.object({
+			page: z.number().default(0),
+		}),
+		handler: async ({ page }) => {
+			return getPublicFeedsData(page);
 		},
 	}),
 };
