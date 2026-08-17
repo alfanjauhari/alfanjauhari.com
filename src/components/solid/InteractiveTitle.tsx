@@ -45,18 +45,11 @@ export default function InteractiveTitle() {
 				onClick={() => setEnabled((v) => !v)}
 				type="button"
 			>
-				{enabled() ? (
-					<MousePointer2Icon class="size-4" />
-				) : (
-					<BanIcon class="size-4" />
-				)}
+				{enabled() ? <MousePointer2Icon class="size-4" /> : <BanIcon class="size-4" />}
 				{enabled() ? "Motion On" : "Motion Off"}
 			</button>
 
-			<div
-				class="relative flex justify-center items-center py-4"
-				style={{ perspective: "2000px" }}
-			>
+			<div class="relative flex justify-center items-center py-4" style={{ perspective: "2000px" }}>
 				<div
 					ref={ref}
 					style={{
@@ -74,9 +67,7 @@ export default function InteractiveTitle() {
 					>
 						<div aria-hidden="true">
 							Alfan <br />
-							<span class="ml-[4vw] md:ml-[8vw] italic font-light">
-								Jauhari
-							</span>
+							<span class="ml-[4vw] md:ml-[8vw] italic font-light">Jauhari</span>
 						</div>
 					</h1>
 
@@ -87,9 +78,7 @@ export default function InteractiveTitle() {
 						>
 							<div aria-hidden="true">
 								Alfan <br />
-								<span class="ml-[4vw] md:ml-[8vw] italic font-light">
-									Jauhari
-								</span>
+								<span class="ml-[4vw] md:ml-[8vw] italic font-light">Jauhari</span>
 							</div>
 						</h1>
 					)}
