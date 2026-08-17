@@ -1,0 +1,44 @@
+---
+import { CheckIcon, ClipboardIcon } from "lucide-solid";
+import { cn } from "@/lib/utils";
+
+const { class: classList, ...props } = Astro.props;
+---
+
+<pre
+	class={cn("relative group", classList)}
+	{...props}><button type="button" class="opacity-0 group-hover:opacity-100 absolute right-4 size-6 flex justify-center items-center rounded cursor-pointer disabled:cursor-not-allowed disabled:opacity-100" data-copy-button>
+    <span data-copy-icon><ClipboardIcon class="size-3.5" /></span>
+    <span data-check-icon class="hidden"><CheckIcon class="size-3.5" /></span>
+  </button><slot /></pre>
+
+<script>
+	const buttons = document.querySelectorAll(
+		"[data-copy-button]:not([data-copy-ready])",
+	);
+
+	for (const btn of buttons) {
+		btn.setAttribute("data-copy-ready", "");
+		const copyIcon = btn.querySelector("[data-copy-icon]");
+		const checkIcon = btn.querySelector("[data-check-icon]");
+		const pre = btn.closest("pre");
+		let timer: number;
+
+		btn.addEventListener("click", async () => {
+			const code =
+				pre?.querySelector("code")?.textContent ?? pre?.textContent ?? "";
+			try {
+				await navigator.clipboard.writeText(code);
+			} catch {}
+			copyIcon?.classList.add("hidden");
+			checkIcon?.classList.remove("hidden");
+			btn.setAttribute("disabled", "");
+			clearTimeout(timer);
+			timer = window.setTimeout(() => {
+				copyIcon?.classList.remove("hidden");
+				checkIcon?.classList.add("hidden");
+				btn.removeAttribute("disabled");
+			}, 2000);
+		});
+	}
+</script>
