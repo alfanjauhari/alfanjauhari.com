@@ -1,4 +1,5 @@
 ---
+import { ContentInteractions } from "@/components/solid/content-interactions";
 import BaseLayout from "./base-layout.astro";
 
 interface Props {
@@ -47,6 +48,8 @@ const { title, tag, summary, date, readingTime, id } = Astro.props;
 				<hr />
 				<slot />
 			</div>
+
+			<ContentInteractions slug={id} client:load />
 		</div>
 	</article>
 </BaseLayout>

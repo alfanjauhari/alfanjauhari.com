@@ -1,4 +1,6 @@
 ---
+export const prerender = false;
+
 import { actions, isInputError } from "astro:actions";
 import { SocialLogins } from "@/components/solid/social-logins";
 import { Button } from "@/components/solid/ui/button";
@@ -22,6 +24,7 @@ const rawRedirect = searchParams.get("redirectTo") ?? "/";
 const redirectTo = rawRedirect.includes("http") ? "/" : rawRedirect;
 
 const result = Astro.getActionResult(actions.magicLinkSignIn);
+
 const actionError = result?.error;
 const emailError =
 	actionError && isInputError(actionError) ? actionError.fields.email?.[0] : "";
