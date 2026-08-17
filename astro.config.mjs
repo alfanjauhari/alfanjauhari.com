@@ -72,8 +72,8 @@ export default defineConfig({
 				optional: true,
 			}),
 			BETTER_AUTH_URL: envField.string({
-				access: "secret",
-				context: "server",
+				access: "public",
+				context: "client",
 				url: true,
 			}),
 			GOOGLE_CLIENT_ID: envField.string({

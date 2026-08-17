@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { cva } from "@/utils/cva";
 import type { VariantProps } from "cva";
-import { type ComponentProps } from "solid-js";
+import { splitProps, type Component, type ComponentProps, type JSX } from "solid-js";
 import { Dynamic } from "solid-js/web";
 
 const buttonVariants = cva({
@@ -33,32 +33,22 @@ const buttonVariants = cva({
 	},
 });
 
-function Button({
-	variant,
-	size,
-	children,
-	asChild,
-	...props
-}: ComponentProps<"button"> &
+type ElementType = keyof JSX.IntrinsicElements | Component<any>;
+
+type ButtonProps<T extends ElementType> = ComponentProps<T> &
 	VariantProps<typeof buttonVariants> & {
-		asChild?: boolean;
-	}) {
-	if (asChild) {
-		return (
-			<Dynamic
-				component={() => children}
-				class={cn(buttonVariants({ variant, size, className: props.class }))}
-				{...props}
-			/>
-		);
-	}
+		as?: T;
+	};
+
+function Button<T extends ElementType = "button">(props: ButtonProps<T>) {
+	const [local, rest] = splitProps(props, ["as"]);
 
 	return (
-		<button
-			{...props}
+		<Dynamic
+			{...rest}
 			data-slot="button"
-			children={children}
-			class={cn(buttonVariants({ variant, size, className: props.class }))}
+			class={cn(buttonVariants({ variant: rest.variant, size: rest.size, className: rest.class }))}
+			component={local.as || "button"}
 		/>
 	);
 }

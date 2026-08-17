@@ -5,6 +5,7 @@ import BaseLayout from "../layouts/base-layout.astro";
 import { getAllUpdates, getAllWorks } from "../lib/content";
 import { calculateReadingTime, formatDate } from "../lib/utils";
 import { Button } from "@/components/solid/ui/button";
+import {env} from 'cloudflare:workers';
 
 const works = await getAllWorks();
 const updates = await getAllUpdates();
@@ -52,11 +53,11 @@ const process = [
 					interfaces and scalable systems for everyone.
 				</p>
 				<div class="flex flex-col md:flex-row gap-4">
-					<Button variant="default" size="xl" asChild>
-						<a href="#works">View Works</a>
+					<Button variant="default" size="xl" as="a" href="#works">
+						View Works
 					</Button>
-					<Button variant="outline" size="xl" asChild>
-						<a href="mailto:hi@alfanjauhari.com">Contact Me</a>
+					<Button variant="outline" size="xl" as="a" href="mailto:hi@alfanjauhari.com">
+						Contact Me
 					</Button>
 				</div>
 			</div>

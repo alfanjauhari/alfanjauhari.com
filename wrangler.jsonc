@@ -31,4 +31,7 @@
 			"migrations_pattern": "drizzle/*/migration.sql",
 		},
 	],
+	"vars": {
+		"BETTER_AUTH_URL": "https://alfanjauhari.com",
+	},
 }
