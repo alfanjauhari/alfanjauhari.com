@@ -31,6 +31,9 @@ export default defineConfig({
 				"@": "/src",
 			},
 		},
+		define: {
+			"process.env": process.env,
+		},
 	},
 	image: {
 		domains: ["res.cloudinary.com"],
@@ -77,7 +80,7 @@ export default defineConfig({
 				url: true,
 			}),
 			GOOGLE_CLIENT_ID: envField.string({
-				access: "public",
+				access: "secret",
 				context: "server",
 			}),
 			GOOGLE_CLIENT_SECRET: envField.string({
@@ -85,7 +88,7 @@ export default defineConfig({
 				context: "server",
 			}),
 			GITHUB_CLIENT_ID: envField.string({
-				access: "public",
+				access: "secret",
 				context: "server",
 			}),
 			GITHUB_CLIENT_SECRET: envField.string({
