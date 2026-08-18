@@ -5,7 +5,6 @@ import BaseLayout from "../layouts/base-layout.astro";
 import { getAllUpdates, getAllWorks } from "../lib/content";
 import { calculateReadingTime, formatDate } from "../lib/utils";
 import { Button } from "@/components/solid/ui/button";
-import {env} from 'cloudflare:workers';
 
 const works = await getAllWorks();
 const updates = await getAllUpdates();

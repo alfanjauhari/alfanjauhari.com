@@ -77,7 +77,7 @@ export default defineConfig({
 				url: true,
 			}),
 			GOOGLE_CLIENT_ID: envField.string({
-				access: "secret",
+				access: "public",
 				context: "server",
 			}),
 			GOOGLE_CLIENT_SECRET: envField.string({
@@ -85,7 +85,7 @@ export default defineConfig({
 				context: "server",
 			}),
 			GITHUB_CLIENT_ID: envField.string({
-				access: "secret",
+				access: "public",
 				context: "server",
 			}),
 			GITHUB_CLIENT_SECRET: envField.string({
