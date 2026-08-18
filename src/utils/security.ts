@@ -1,3 +1,9 @@
+export function getTurnstileTokenFromForm(event: SubmitEvent): string | null {
+	const formData = new FormData(event.currentTarget as HTMLFormElement);
+
+	return formData.get("cf-turnstile-response") as string | null;
+}
+
 export function redactEmail(email: string): string {
 	const [localPart, domain] = email.split("@");
 	const redactedDomain = domain

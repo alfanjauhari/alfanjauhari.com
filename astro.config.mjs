@@ -107,6 +107,14 @@ export default defineConfig({
 				url: true,
 				optional: true,
 			}),
+			CLOUDFLARE_TURNSTILE_SITE_KEY: envField.string({
+				access: "public",
+				context: "client",
+			}),
+			CLOUDFLARE_TURNSTILE_SECRET_KEY: envField.string({
+				access: "secret",
+				context: "server",
+			}),
 		},
 	},
 });

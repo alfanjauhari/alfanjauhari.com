@@ -32,6 +32,7 @@
 		},
 	],
 	"vars": {
-		"BETTER_AUTH_URL": "https://alfanjauhari.com",
+		"BETTER_AUTH_URL": "https://www.alfanjauhari.com",
+		"CLOUDFLARE_TURNSTILE_SITE_KEY": "0x4AAAAAAETZWBIg7K3oJMAb",
 	},
 }

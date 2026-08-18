@@ -7,7 +7,7 @@ import { users } from "@/db/schemas/auth";
 import { comments } from "@/db/schemas/comments";
 import { feeds } from "@/db/schemas/feeds";
 import { likes } from "@/db/schemas/likes";
-import { redactEmail } from "@/utils/redact";
+import { redactEmail } from "@/utils/security";
 import type { CommentStatus } from "./comments";
 
 const parentComment = alias(comments, "parent");

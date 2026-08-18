@@ -30,7 +30,8 @@ import {
 } from "@/lib/dashboard";
 import { sendEmail } from "@/lib/email";
 import { getPublicFeedsData } from "@/lib/feeds";
-import { redactEmail } from "@/utils/redact";
+import { verifyTurnstileToken } from "@/lib/turnstile";
+import { redactEmail } from "@/utils/security";
 
 const parentComment = alias(comments, "parent");
 const parentUser = alias(users, "parent_user");
@@ -45,6 +46,7 @@ const NewCommentSchema = z.object({
 	slug: z.string().min(1, "Slug is required"),
 	parentId: z.string().optional(),
 	content: z.string().min(1, "Content is required"),
+	turnstileToken: z.string().min(1, "Verification is required"),
 });
 
 const LikeFnsSchema = z.object({
@@ -208,13 +210,22 @@ export const server = {
 	addComment: defineAction({
 		accept: "form",
 		input: NewCommentSchema,
-		handler: async ({ slug, parentId, content }, ctx) => {
+		handler: async ({ slug, parentId, content, turnstileToken }, ctx) => {
 			const sessionUser = ctx.locals.user;
 
 			if (!sessionUser) {
 				throw new ActionError({
 					code: "UNAUTHORIZED",
 					message: "You must be logged in to comment.",
+				});
+			}
+
+			const turnstileValid = await verifyTurnstileToken(turnstileToken, ctx.clientAddress);
+
+			if (!turnstileValid) {
+				throw new ActionError({
+					code: "FORBIDDEN",
+					message: "Verification failed. Please try again.",
 				});
 			}
 

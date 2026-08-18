@@ -10,7 +10,9 @@ import { Field, FieldError } from "./ui/field";
 import { Skeleton } from "./ui/skeleton";
 import { Spinner } from "./ui/spinner";
 import { Textarea } from "./ui/textarea";
+import { Turnstile } from "./turnstile";
 import { type Comment } from "@/lib/comments";
+import { getTurnstileTokenFromForm } from "@/utils/security";
 
 const CommentSchema = v.object({
 	content: v.pipe(v.string("Content is required"), v.minLength(1, "Content is required")),
@@ -162,16 +164,26 @@ interface CommentFormProps {
 function CommentForm(props: CommentFormProps) {
 	const form = createForm({ schema: CommentSchema });
 	const [error, setError] = createSignal<string>();
+	let resetTurnstile: (() => void) | undefined;
 
-	const onSubmit = async (output: v.InferOutput<typeof CommentSchema>) => {
+	const onSubmit = async (output: v.InferOutput<typeof CommentSchema>, event: SubmitEvent) => {
 		setError(undefined);
+
+		const token = getTurnstileTokenFromForm(event);
+		if (!token) {
+			setError("Turnstile verification failed. Please try again.");
+			return;
+		}
 
 		const { error: actionError } = await actions.addComment(
 			toFormData({
 				slug: props.slug,
 				content: output.content,
+				turnstileToken: token,
 			})
 		);
+
+		resetTurnstile?.();
 
 		if (actionError) {
 			if (actionError.code === "UNAUTHORIZED") {
@@ -195,6 +207,8 @@ function CommentForm(props: CommentFormProps) {
 				submitting={form.isSubmitting}
 				error={error()}
 			/>
+
+			<Turnstile class="mt-4" registerReset={(reset) => (resetTurnstile = reset)} />
 		</Form>
 	);
 }
@@ -209,17 +223,27 @@ interface ReplyFormProps {
 function ReplyForm(props: ReplyFormProps) {
 	const form = createForm({ schema: CommentSchema });
 	const [error, setError] = createSignal<string>();
+	let resetTurnstile: (() => void) | undefined;
 
-	const onSubmit = async (output: v.InferOutput<typeof CommentSchema>) => {
+	const onSubmit = async (output: v.InferOutput<typeof CommentSchema>, event: SubmitEvent) => {
 		setError(undefined);
+
+		const token = getTurnstileTokenFromForm(event);
+		if (!token) {
+			setError("Turnstile verification failed. Please try again.");
+			return;
+		}
 
 		const { error: actionError } = await actions.addComment(
 			toFormData({
 				slug: props.slug,
 				parentId: props.parentId,
 				content: output.content,
+				turnstileToken: token,
 			})
 		);
+
+		resetTurnstile?.();
 
 		if (actionError) {
 			if (actionError.code === "UNAUTHORIZED") {
@@ -243,6 +267,8 @@ function ReplyForm(props: ReplyFormProps) {
 				submitting={form.isSubmitting}
 				error={error()}
 			/>
+
+			<Turnstile class="mt-4" registerReset={(reset) => (resetTurnstile = reset)} />
 		</Form>
 	);
 }

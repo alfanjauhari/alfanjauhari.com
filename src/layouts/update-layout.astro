@@ -27,21 +27,27 @@ const { title, tag, summary, date, readingTime, id } = Astro.props;
 				>
 					<span>{new Intl.DateTimeFormat("id-ID").format(date)}</span>
 					<span class="text-foreground/30">&bull;</span>
-					{tag && (
-						<>
-							<span>{tag}</span>
-							<span class="text-foreground/30">&bull;</span>
-						</>
-					)}
+					{
+						tag && (
+							<>
+								<span>{tag}</span>
+								<span class="text-foreground/30">&bull;</span>
+							</>
+						)
+					}
 					<span>{readingTime} Minute Reading Time</span>
 				</div>
 
-				<h1 class="font-serif text-5xl md:text-7xl lg:text-8xl leading-none mb-8 tracking-tight">
+				<h1
+					class="font-serif text-5xl md:text-7xl lg:text-8xl leading-none mb-8 tracking-tight"
+				>
 					{title}
 				</h1>
 			</header>
 
-			<div class="prose prose-primary prose-lg md:prose-xl max-w-full prose-headings:leading-tight prose-headings:font-serif">
+			<div
+				class="prose prose-primary prose-lg md:prose-xl max-w-full prose-headings:leading-tight prose-headings:font-serif"
+			>
 				<p class="text-xl md:text-2xl font-serif italic mb-12">
 					{summary}
 				</p>
@@ -49,6 +55,9 @@ const { title, tag, summary, date, readingTime, id } = Astro.props;
 				<slot />
 			</div>
 
+			<script
+				src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
+				is:inline></script>
 			<ContentInteractions slug={id} client:load />
 		</div>
 	</article>
