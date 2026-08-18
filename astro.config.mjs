@@ -31,9 +31,6 @@ export default defineConfig({
 				"@": "/src",
 			},
 		},
-		define: {
-			"process.env": process.env,
-		},
 	},
 	image: {
 		domains: ["res.cloudinary.com"],

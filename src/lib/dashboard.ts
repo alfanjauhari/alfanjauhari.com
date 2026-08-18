@@ -1,5 +1,5 @@
 import { getCollection } from "astro:content";
-import { ADMIN_EMAIL } from "astro:env/server";
+import { env } from "cloudflare:workers";
 import { and, desc, eq, getColumns, SQL, type InferSelectModel } from "drizzle-orm";
 import { alias } from "drizzle-orm/sqlite-core";
 import { client } from "@/db/client";
@@ -16,7 +16,7 @@ const parentUser = alias(users, "parent_user");
 const toISO = (seconds: number) => new Date(seconds * 1000).toISOString();
 
 export function isAdminEmail(email: string) {
-	const admins = (ADMIN_EMAIL ?? "")
+	const admins = (env.ADMIN_EMAIL ?? "")
 		.split(",")
 		.map((entry) => entry.trim().toLowerCase())
 		.filter(Boolean);

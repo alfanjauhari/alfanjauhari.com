@@ -3,12 +3,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { magicLink } from "better-auth/plugins";
 import { client } from "@/db/client";
 import { sendEmail } from "./email";
-import {
-	GOOGLE_CLIENT_ID,
-	GOOGLE_CLIENT_SECRET,
-	GITHUB_CLIENT_ID,
-	GITHUB_CLIENT_SECRET,
-} from "astro:env/server";
+import { env } from "cloudflare:workers";
 import * as schema from "@/db/schemas";
 
 export const auth = betterAuth({
@@ -19,12 +14,12 @@ export const auth = betterAuth({
 	}),
 	socialProviders: {
 		google: {
-			clientId: GOOGLE_CLIENT_ID,
-			clientSecret: GOOGLE_CLIENT_SECRET,
+			clientId: env.GOOGLE_CLIENT_ID,
+			clientSecret: env.GOOGLE_CLIENT_SECRET,
 		},
 		github: {
-			clientId: GITHUB_CLIENT_ID,
-			clientSecret: GITHUB_CLIENT_SECRET,
+			clientId: env.GITHUB_CLIENT_ID,
+			clientSecret: env.GITHUB_CLIENT_SECRET,
 		},
 	},
 	plugins: [
