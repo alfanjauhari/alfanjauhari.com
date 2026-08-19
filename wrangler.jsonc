@@ -8,6 +8,24 @@
 		"directory": "./dist",
 		"binding": "ASSETS",
 	},
+	"ratelimits": [
+		{
+			"name": "LIKE_RATE_LIMITER",
+			"namespace_id": "1",
+			"simple": {
+				"limit": 6,
+				"period": 60,
+			},
+		},
+		{
+			"name": "MAGIC_LINK_RATE_LIMITER",
+			"namespace_id": "2",
+			"simple": {
+				"limit": 1,
+				"period": 60,
+			},
+		},
+	],
 	"observability": {
 		"enabled": false,
 		"head_sampling_rate": 1,

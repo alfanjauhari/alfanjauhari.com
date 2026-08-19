@@ -32,6 +32,7 @@ import { sendEmail } from "@/lib/email";
 import { getPublicFeedsData } from "@/lib/feeds";
 import { verifyTurnstileToken } from "@/lib/turnstile";
 import { redactEmail } from "@/utils/security";
+import { env } from "cloudflare:workers";
 
 const parentComment = alias(comments, "parent");
 const parentUser = alias(users, "parent_user");
@@ -95,6 +96,17 @@ export const server = {
 			redirectTo: z.string().default("/"),
 		}),
 		handler: async ({ email, redirectTo }, ctx) => {
+			const { success } = await env.MAGIC_LINK_RATE_LIMITER.limit({
+				key: email,
+			});
+
+			if (!success) {
+				throw new ActionError({
+					code: "TOO_MANY_REQUESTS",
+					message: "Too many requests. Please wait 60 seconds before trying again.",
+				});
+			}
+
 			const callbackURL = redirectTo.includes("http") ? "/" : redirectTo;
 
 			const headers = new Headers(ctx.request.headers);
@@ -334,6 +346,17 @@ export const server = {
 				throw new ActionError({
 					code: "UNAUTHORIZED",
 					message: "You must be logged in to like.",
+				});
+			}
+
+			const { success } = await env.LIKE_RATE_LIMITER.limit({
+				key: sessionUser.id,
+			});
+
+			if (!success) {
+				throw new ActionError({
+					code: "TOO_MANY_REQUESTS",
+					message: "You are liking too fast. Please slow down.",
 				});
 			}
 

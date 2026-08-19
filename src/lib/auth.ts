@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth/minimal";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { magicLink } from "better-auth/plugins";
+import { magicLink, openAPI } from "better-auth/plugins";
 import { client } from "@/db/client";
 import { sendEmail } from "./email";
 import { env } from "cloudflare:workers";
@@ -22,7 +22,14 @@ export const auth = betterAuth({
 			clientSecret: env.GITHUB_CLIENT_SECRET,
 		},
 	},
+	rateLimit: {
+		enabled: true,
+		max: 2,
+		window: 60,
+		storage: "database",
+	},
 	plugins: [
+		openAPI(),
 		magicLink({
 			sendMagicLink: async ({ email, url }) => {
 				await sendEmail({
