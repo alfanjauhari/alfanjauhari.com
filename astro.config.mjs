@@ -21,7 +21,9 @@ export default defineConfig({
 				gfm: true,
 			}),
 		}),
-		sitemap(),
+		sitemap({
+			filter: (page) => !page.includes("/dashboard"),
+		}),
 		solidJs(),
 	],
 	vite: {
