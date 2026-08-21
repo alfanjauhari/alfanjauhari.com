@@ -26,7 +26,12 @@ const font = (filename, name, style) => ({
 
 export default defineConfig({
 	site: "https://alfanjauhari.com",
-	adapter: cloudflare(),
+	adapter: cloudflare({
+		imageService: {
+			build: "cloudflare-binding",
+			runtime: "cloudflare-binding",
+		},
+	}),
 	output: "static",
 	integrations: [
 		ogImages({

@@ -18,17 +18,17 @@
     "db:migrate": "wrangler d1 migrations apply DATABASE"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^14.0.0",
-    "@astrojs/markdown-remark": "^7.2.0",
-    "@astrojs/mdx": "^7.0.0",
-    "@astrojs/rss": "^4.0.18",
+    "@astrojs/cloudflare": "^14.2.3",
+    "@astrojs/markdown-remark": "^7.2.4",
+    "@astrojs/mdx": "^7.0.7",
+    "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.3",
-    "@astrojs/solid-js": "^7.0.0",
+    "@astrojs/solid-js": "^7.0.2",
     "@codesandbox/sandpack-client": "^2.19.8",
     "@formisch/solid": "1.0.0-rc.0",
     "@prosemirror-adapter/solid": "^0.5.5",
     "@tailwindcss/vite": "^4.3.1",
-    "astro": "^7.0.2",
+    "astro": "^7.2.4",
     "astro-mermaid": "^2.1.0",
     "better-auth": "1.7.0-beta.10",
     "clsx": "^2.1.1",
@@ -54,7 +54,7 @@
     "wrangler": "^4.104.0"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.9",
+    "@astrojs/check": "^0.9.10",
     "@tailwindcss/typography": "^0.5.20",
     "@takumi-rs/core": "^2.10.0",
     "@types/jsdom": "^28.0.3",

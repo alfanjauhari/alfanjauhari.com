@@ -8,6 +8,12 @@
 		"directory": "./dist",
 		"binding": "ASSETS",
 	},
+	"images": {
+		"binding": "IMAGES",
+	},
+	"cache": {
+		"enabled": true,
+	},
 	"ratelimits": [
 		{
 			"name": "LIKE_RATE_LIMITER",
