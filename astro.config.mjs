@@ -1,5 +1,6 @@
 // @ts-check
 
+import { readFileSync } from "node:fs";
 import cloudflare from "@astrojs/cloudflare";
 import { unified } from "@astrojs/markdown-remark";
 import mdx from "@astrojs/mdx";
@@ -9,12 +10,39 @@ import tailwindcss from "@tailwindcss/vite";
 import { defineConfig, envField } from "astro/config";
 import mermaid from "astro-mermaid";
 import viteLucidePreprocess from "vite-plugin-lucide-preprocess";
+import ogImages from "./src/integrations/og/index.ts";
+import { renderOgTemplate } from "./src/integrations/og/template.ts";
+
+/**
+ * @param {string} filename
+ * @param {string} name
+ * @param {"normal" | "italic"} [style]
+ */
+const font = (filename, name, style) => ({
+	data: readFileSync(new URL(`./public/fonts/${filename}`, import.meta.url)),
+	name,
+	...(style ? { style } : {}),
+});
 
 export default defineConfig({
 	site: "https://alfanjauhari.com",
 	adapter: cloudflare(),
 	output: "static",
 	integrations: [
+		ogImages({
+			fontFamilies: ["Inter", "JetBrains Mono", "Playfair Display"],
+			fonts: [
+				font("Inter.woff2", "Inter"),
+				font("JetBrains-Mono.woff2", "JetBrains Mono"),
+				font("Playfair-Display.woff2", "Playfair Display"),
+				font("Playfair-Display-Italic.woff2", "Playfair Display", "italic"),
+			],
+			height: 630,
+			format: "webp",
+			render: renderOgTemplate,
+			verbose: true,
+			width: 1200,
+		}),
 		mermaid(),
 		mdx({
 			processor: unified({
@@ -32,6 +60,9 @@ export default defineConfig({
 			alias: {
 				"@": "/src",
 			},
+		},
+		ssr: {
+			external: ["takumi-js", "@takumi-rs/core", "@takumi-rs/helpers", "jsdom"],
 		},
 	},
 	image: {

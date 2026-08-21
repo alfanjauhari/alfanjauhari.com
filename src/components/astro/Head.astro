@@ -1,10 +1,10 @@
 ---
 import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@/constants";
+import { getOgImagePath } from "@/integrations/og/get-image-path";
 
 interface Props {
 	title?: string;
 	description?: string;
-	image?: string;
 	canonical?: string;
 	noIndex?: boolean;
 }
@@ -12,17 +12,12 @@ interface Props {
 const {
 	title: titleProp,
 	description = SITE_DESCRIPTION,
-	image,
 	canonical,
 	noIndex = false,
 } = Astro.props;
 
 const title = titleProp ? `${titleProp} — ${SITE_TITLE}` : SITE_TITLE;
-const ogImage = image
-	? image.startsWith("http")
-		? image
-		: `${SITE_URL}${image}`
-	: `${SITE_URL}/images/og/home.webp`;
+const ogImage = getOgImagePath({ format: "webp", site: Astro.site, url: Astro.url });
 const canonicalUrl = canonical
 	? `${SITE_URL}${canonical}`
 	: new URL(Astro.url.pathname, SITE_URL).href;

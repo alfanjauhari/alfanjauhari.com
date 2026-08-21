@@ -9,7 +9,6 @@ import { NAVIGATIONS } from "../constants";
 interface Props {
 	title?: string;
 	description?: string;
-	image?: string;
 	canonical?: string;
 	noIndex?: boolean;
 }
@@ -21,7 +20,6 @@ const props = Astro.props;
 		<Head
 			title={props.title}
 			description={props.description}
-			image={props.image}
 			canonical={Astro.url.pathname}
 			noIndex={props.noIndex}
 		/>
