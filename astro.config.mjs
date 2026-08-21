@@ -65,9 +65,6 @@ export default defineConfig({
 			external: ["takumi-js", "@takumi-rs/core", "@takumi-rs/helpers", "jsdom"],
 		},
 	},
-	image: {
-		domains: ["res.cloudinary.com"],
-	},
 	markdown: {
 		shikiConfig: {
 			themes: {

@@ -87,9 +87,15 @@ Instead, JavaScript uses delegation:
 Let's say you are using the user object above and trying to access the `name` property like this `user.name`. JavaScript basically does a lookup operation like this:
 
 ```mermaid
-graph TD
-    A[Start] --> B[Process]
-    B --> C[End]
+flowchart LR
+    1((Access user.name)) --> 2{Is there name property on user?}
+    2 -->|Yes| 3[Return user.name value which is John Doe]
+    2 -->|No| 4{Is there name property on its prototype?}
+    4 -->|Yes| 5[Return prototype name value]
+    4 -->|No| 6{Does the prototype has prototype?}
+    6 -->|Yes| 4
+    6 -->|No| 7[Return undefined]
+
 ```
 
 That flowchart shows how the prototype behaves and this is what people call the prototype chain. Here's some demo code:
@@ -120,8 +126,11 @@ You'll see something like this:
 
 <figure>
 	<Image
-		src="https://res.cloudinary.com/alfanjauhari/image/upload/updates/javascript-object-and-its-friends/object-result.avif"
-		layout="fullWidth"
+		src="/images/updates/javascript-object-and-its-friends/object-result.avif"
+		width={1024}
+		height={576}
+		widths={[1024, 2048, 3072]}
+		sizes="(max-width: 1024px) 100vw, 1024px"
 		alt="Console log result from user object"
 		title="Console log result from user object"
 	/>

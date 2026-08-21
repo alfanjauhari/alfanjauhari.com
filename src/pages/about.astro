@@ -2,6 +2,7 @@
 import { ArrowUpRightIcon } from "lucide-solid";
 import DotTitle from "../components/astro/dot-title.astro";
 import BaseLayout from "../layouts/base-layout.astro";
+import { Image } from "astro:assets";
 ---
 
 <BaseLayout
@@ -19,9 +20,9 @@ import BaseLayout from "../layouts/base-layout.astro";
 				<div class="max-w-2xl">
 					<p class="text-xl lg:text-2xl font-normal leading-normal">
 						<span class="float-left text-7xl font-serif pr-4">I</span>
-						am a Product Engineer based in Indonesia. I sit at the intersection
-						of design and engineering, believing that the best digital products
-						must feel <span class="italic">unique</span>, not only functional.
+						am a Product Engineer based in Indonesia. I sit at the intersection of
+						design and engineering, believing that the best digital products must
+						feel <span class="italic">unique</span>, not only functional.
 					</p>
 					<p class="text-foreground/60 font-normal mt-2 leading-normal">
 						With over four years in web development, I've crafted and refined
@@ -34,8 +35,15 @@ import BaseLayout from "../layouts/base-layout.astro";
 				</div>
 			</div>
 
-			<div class="relative h-100 lg:h-auto rounded-lg overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
-				<img
+			<div
+				class="relative h-100 lg:h-auto rounded-lg overflow-hidden grayscale hover:grayscale-0 transition-all duration-700"
+			>
+				<Image
+					width={400}
+					height={600}
+					widths={[400, 800, 1200]}
+					format="webp"
+					sizes="(max-width: 1024px) 100vw, 400px"
 					src="/images/about/profile.avif"
 					alt="Alfan Jauhari"
 					class="absolute inset-0 w-full h-full object-cover opacity-80 hover:scale-105 transition-transform duration-1000"
@@ -48,7 +56,9 @@ import BaseLayout from "../layouts/base-layout.astro";
 			<div class="lg:col-span-4">
 				<div class="sticky top-32">
 					<DotTitle>Experience</DotTitle>
-					<p class="text-foreground/50 font-mono text-xs leading-relaxed max-w-xs">
+					<p
+						class="text-foreground/50 font-mono text-xs leading-relaxed max-w-xs"
+					>
 						A timeline of my professional career, highlighting key roles and
 						contributions in the tech industry.
 					</p>
@@ -65,18 +75,24 @@ import BaseLayout from "../layouts/base-layout.astro";
 
 			<div class="lg:col-span-8">
 				<div class="group py-8 border-t border-border first:border-0">
-					<div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-2">
+					<div
+						class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-2"
+					>
 						<h3 class="font-serif text-2xl">
 							Product Engineer{" "}
 							<span class="text-foreground/50 italic text-lg">
 								at Zero One Group
 							</span>
 						</h3>
-						<span class="font-mono text-xs text-foreground/50 uppercase tracking-widest mt-1 md:mt-0">
+						<span
+							class="font-mono text-xs text-foreground/50 uppercase tracking-widest mt-1 md:mt-0"
+						>
 							2022 — Present
 						</span>
 					</div>
-					<p class="text-sm text-foreground/50 leading-relaxed max-w-xl font-normal">
+					<p
+						class="text-sm text-foreground/50 leading-relaxed max-w-xl font-normal"
+					>
 						Delivered multiple projects by maximizing client resources and
 						applying a strong user-centric approach. Expanded from frontend into
 						full-stack responsibilities, strengthening capabilities in both
@@ -86,18 +102,24 @@ import BaseLayout from "../layouts/base-layout.astro";
 					</p>
 				</div>
 				<div class="group py-8 border-t border-border">
-					<div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-2">
+					<div
+						class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-2"
+					>
 						<h3 class="font-serif text-2xl">
 							Frontend Developer{" "}
 							<span class="text-foreground/50 italic text-lg">
 								at Nusantech
 							</span>
 						</h3>
-						<span class="font-mono text-xs text-foreground/50 uppercase tracking-widest mt-1 md:mt-0">
+						<span
+							class="font-mono text-xs text-foreground/50 uppercase tracking-widest mt-1 md:mt-0"
+						>
 							2021 - 2022
 						</span>
 					</div>
-					<p class="text-sm text-foreground/50 leading-relaxed max-w-xl font-normal">
+					<p
+						class="text-sm text-foreground/50 leading-relaxed max-w-xl font-normal"
+					>
 						Developed a full-scale ERP and business management platform for
 						Japanese clients, delivering multi-language support with i18n and
 						Docker. Collaborated with large cross-functional teams and optimized
@@ -107,16 +129,22 @@ import BaseLayout from "../layouts/base-layout.astro";
 			</div>
 		</section>
 
-		<section class="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-32 border-t border-border pt-32">
+		<section
+			class="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-32 border-t border-border pt-32"
+		>
 			<div class="lg:col-span-4">
 				<div class="sticky top-32">
 					<DotTitle>Tech Stack</DotTitle>
-					<p class="text-foreground/50 font-mono text-xs leading-relaxed max-w-xs">
+					<p
+						class="text-foreground/50 font-mono text-xs leading-relaxed max-w-xs"
+					>
 						The tools and technologies I use to bring ideas to life.
 					</p>
 				</div>
 			</div>
-			<div class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
+			<div
+				class="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4"
+			>
 				<div class="py-6">
 					<h3 class="font-mono text-xs uppercase tracking-widest mb-4">Core</h3>
 					<div class="flex flex-wrap gap-x-4 gap-y-2">
@@ -179,14 +207,20 @@ import BaseLayout from "../layouts/base-layout.astro";
 
 		<section class="py-24 border-t border-border">
 			<div class="max-w-4xl mx-auto text-center">
-				<span class="font-mono text-xs uppercase tracking-widest text-foreground/50 mb-6 block">
+				<span
+					class="font-mono text-xs uppercase tracking-widest text-foreground/50 mb-6 block"
+				>
 					Ready to start?
 				</span>
-				<h2 class="font-serif text-6xl md:text-8xl mb-8 leading-none tracking-tight">
+				<h2
+					class="font-serif text-6xl md:text-8xl mb-8 leading-none tracking-tight"
+				>
 					Let's work <br />{" "}
 					<span class="italic text-foreground/50">together.</span>
 				</h2>
-				<p class="text-lg text-foreground/50 mb-12 max-w-2xl mx-auto font-normal leading-relaxed">
+				<p
+					class="text-lg text-foreground/50 mb-12 max-w-2xl mx-auto font-normal leading-relaxed"
+				>
 					I'm currently open to any interesting opportunity. If you have a
 					project in mind, feel free to reach out.
 				</p>
