@@ -1,0 +1,126 @@
+---
+import CommentRecord from "@/components/astro/dashboard/admin-comment.astro";
+import { FeedsPanel } from "../../../components/solid/dashboard/feeds-panel";
+import { LogoutButton } from "../../../components/solid/dashboard/logout-button";
+import BaseLayout from "@/layouts/base-layout.astro";
+import { commentsTree } from "../../../lib/comments";
+import {
+	getAdminFeedsData,
+	getAllCommentsData,
+	getUpdatesListData,
+	isAdminEmail,
+} from "../../../lib/dashboard";
+import { cn, formatDate } from "../../../lib/utils";
+
+export const prerender = false;
+
+const user = Astro.locals.user;
+
+if (!user || !isAdminEmail(user.email)) {
+	return new Response(null, { status: 404 });
+}
+
+const [updates, allComments, feeds] = await Promise.all([
+	getUpdatesListData(),
+	getAllCommentsData(),
+	getAdminFeedsData(),
+]);
+
+const comments = commentsTree(allComments);
+
+const tabs = [
+	{ value: "updates", label: "Updates" },
+	{ value: "comments", label: "Comments" },
+	{ value: "feeds", label: "Feeds" },
+];
+
+const rawTab = Astro.url.searchParams.get("tab");
+const currentTab = tabs.some((tab) => tab.value === rawTab)
+	? rawTab
+	: "updates";
+---
+
+<BaseLayout
+	title="Dashboard Admin"
+	description="Manage content, moderate discussions, and configure platform settings."
+	noIndex
+>
+	<div class="mb-12 flex items-center justify-between gap-4">
+		<div>
+			<h1 class="font-serif text-5xl mb-4">Overview</h1>
+			<p class="text-foreground/60 font-normal leading-relaxed">
+				Manage content, moderate discussions, and configure platform settings.
+			</p>
+		</div>
+		<LogoutButton client:load />
+	</div>
+
+	<div class="bg-background border-b border-b-accent p-0 h-auto w-full block">
+		{
+			tabs.map((tab) => (
+				<a
+					href={`/dashboard/admin?tab=${tab.value}`}
+					class={cn(
+						"inline-flex items-center justify-center gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap transition-[color,box-shadow] text-foreground mr-2 last:mr-0",
+						{
+							"border-b-2 border-b-foreground": currentTab === tab.value,
+						},
+					)}
+				>
+					{tab.label}
+				</a>
+			))
+		}
+	</div>
+
+	{
+		currentTab === "updates" && (
+			<div class="py-12 space-y-4">
+				{updates.map((update) => (
+					<a
+						href={`/updates/${update.slug}`}
+						class="border border-border p-6 block hover:border-foreground duration-300 group"
+					>
+						<div class="flex items-center justify-between">
+							<div>
+								<div class="flex items-center gap-2 mb-4">
+									<div class="font-serif text-2xl">{update.title}</div>
+								</div>
+								<div class="flex gap-4 text-xs font-mono text-gray-400">
+									<span>{formatDate(update.date)}</span>
+									{update.tag && (
+										<>
+											<span>&bull;</span>
+											<span>{update.tag}</span>
+										</>
+									)}
+								</div>
+							</div>
+							<p class="text-foreground/50 uppercase font-mono max-lg:hidden lg:invisible group-hover:visible">
+								View
+							</p>
+						</div>
+					</a>
+				))}
+			</div>
+		)
+	}
+
+	{
+		currentTab === "comments" && (
+			<div class="py-12 space-y-4">
+				{comments.map((comment) => (
+					<CommentRecord comment={comment} />
+				))}
+			</div>
+		)
+	}
+
+	{
+		currentTab === "feeds" && (
+			<div class="py-12">
+				<FeedsPanel feeds={feeds} client:load />
+			</div>
+		)
+	}
+</BaseLayout>

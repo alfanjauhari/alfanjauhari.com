@@ -1,0 +1,8 @@
+---
+import { Playground as PlaygroundClient } from "../solid/playground";
+---
+
+<div class="not-prose my-8" data-playground-root>
+	<PlaygroundClient client:only="solid-js" />
+	{Astro.slots.has("default") && <slot />}
+</div>

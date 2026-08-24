@@ -1,0 +1,68 @@
+---
+import { ChevronRightIcon, CodeXmlIcon, HashIcon } from "lucide-solid";
+import BaseLayout from "@/layouts/base-layout.astro";
+import { getAllSnippets } from "../../lib/content";
+
+const snippets = await getAllSnippets();
+---
+
+<BaseLayout
+	title="Snippets"
+	description="A collection of copy-pasteable code blocks, utility functions, and hooks I use across my projects."
+>
+	<div class="mt-12">
+		<div class="max-w-2xl mb-24">
+			<h1 class="font-serif text-6xl md:text-8xl mb-8 tracking-tight">
+				Snippets.
+			</h1>
+			<p
+				class="text-lg md:text-xl text-foreground/60 font-normal leading-relaxed"
+			>
+				A collection of copy-pasteable code blocks, utility functions, and hooks
+				I use across my projects.
+			</p>
+		</div>
+
+		<div
+			class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px border border-border"
+		>
+			{
+				snippets.map((snippet) => (
+					<a href={`/snippets/${snippet.id}`} class="block h-full">
+						<div class="group p-8 h-full flex flex-col justify-between">
+							<div>
+								<div class="flex justify-between items-start mb-6">
+									<div class="bg-primary/20 p-3 rounded-sm">
+										<CodeXmlIcon class="size-5" />
+									</div>
+									<span class="text-xs font-mono uppercase tracking-widest text-foreground/40">
+										{snippet.data.language}
+									</span>
+								</div>
+
+								<h3 class="font-serif text-2xl mb-3 group-hover:underline decoration-1 underline-offset-4">
+									{snippet.data.title}
+								</h3>
+								<p class="text-sm text-foreground/60 font-light leading-relaxed mb-6">
+									{snippet.data.summary}
+								</p>
+							</div>
+
+							<div class="flex items-center justify-between mt-4 pt-4 border-t border-foreground/80">
+								<div class="flex gap-2">
+									{snippet.data.tags.slice(0, 2).map((tag: string) => (
+										<span class="flex items-center text-xxs font-mono uppercase text-foreground/50">
+											<HashIcon class="mr-0.5 size-2.5" />
+											{tag}
+										</span>
+									))}
+								</div>
+								<ChevronRightIcon class="text-foreground/40 group-hover:translate-x-1 transition-transform size-4" />
+							</div>
+						</div>
+					</a>
+				))
+			}
+		</div>
+	</div>
+</BaseLayout>
