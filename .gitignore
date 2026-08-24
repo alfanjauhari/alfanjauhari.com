@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # cloudflare
 .wrangler/
+
+# turbo
+.turbo

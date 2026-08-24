@@ -5,4 +5,5 @@ allowBuilds:
   workerd: true
 
 packages:
-  - .
+  - "packages/*"
+  - "apps/*"

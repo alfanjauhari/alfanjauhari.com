@@ -1,0 +1,75 @@
+---
+import { ArrowUpRightIcon } from "lucide-solid";
+import BaseLayout from "@/layouts/base-layout.astro";
+import { getAllWorks } from "../../lib/content";
+
+const works = await getAllWorks();
+---
+
+<BaseLayout
+	title="Works"
+	description="A selection of projects I've worked on across web development and design."
+>
+	<div class="mt-12">
+		<div class="max-w-2xl mb-24">
+			<h1 class="font-serif text-6xl md:text-8xl mb-8 tracking-tight">
+				Works.
+			</h1>
+			<p
+				class="text-lg md:text-xl text-foreground/60 font-normal leading-relaxed"
+			>
+				A selection of projects I've worked on across web development and
+				design.
+			</p>
+		</div>
+
+		<div class="flex flex-col gap-12 pb-24">
+			{
+				works.map((work) => (
+					<div class="sticky top-30">
+						<div class="bg-background border border-border rounded-lg overflow-hidden flex flex-col md:flex-row h-125 group relative">
+							<a
+								href={`/works/${work.id}`}
+								class="absolute inset-0 z-40"
+								aria-label={`Learn more about ${work.data.title}...`}
+							/>
+							<div class="w-full md:w-1/2 lg:w-7/12 relative overflow-hidden cursor-pointer">
+								<div
+									class="absolute inset-0 grayscale group-hover:grayscale-0 bg-no-repeat bg-cover bg-center group-hover:scale-105 duration-700 ease-in"
+									style={`background-image: url(${work.data.thumbnail})`}
+								/>
+								<div class="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+									<div class="bg-background text-foreground px-6 py-3 rounded-full opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-500 font-mono text-xs uppercase tracking-widest border border-border">
+										Learn More
+									</div>
+								</div>
+							</div>
+							<div class="w-full md:w-1/2 lg:w-5/12 p-8 lg:p-12 flex flex-col justify-between relative z-30">
+								<div>
+									<div class="flex justify-between items-start mb-6">
+										<span class="text-xs font-mono">{work.data.year}</span>
+										<ArrowUpRightIcon class="size-5" />
+									</div>
+									<h3 class="font-serif text-4xl mb-6 leading-tight">
+										{work.data.title}
+									</h3>
+									<p class="leading-relaxed mb-8 line-clamp-4">
+										{work.data.summary}
+									</p>
+								</div>
+
+								<div class="flex flex-wrap gap-2">
+									{work.data.techstack.map((tech: string) => (
+										<div class="border border-border text-foreground/50 text-xxs px-4 py-2 tracking-widest uppercase">
+											{tech}
+										</div>
+									))}
+								</div>
+							</div>
+						</div>
+					</div>
+				))
+			}
+		</div>
+	</div>
+</BaseLayout>
