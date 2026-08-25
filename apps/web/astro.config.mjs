@@ -7,10 +7,10 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import solidJs from "@astrojs/solid-js";
 import tailwindcss from "@tailwindcss/vite";
+import ogImages from "@alfanjauhari/astro-og-images";
 import { defineConfig, envField } from "astro/config";
 import mermaid from "astro-mermaid";
 import viteLucidePreprocess from "vite-plugin-lucide-preprocess";
-import ogImages from "./src/integrations/og/index.ts";
 import { renderOgTemplate } from "./src/integrations/og/template.ts";
 
 /**
@@ -67,7 +67,13 @@ export default defineConfig({
 			},
 		},
 		ssr: {
-			external: ["takumi-js", "@takumi-rs/core", "@takumi-rs/helpers", "jsdom"],
+			external: [
+				"@alfanjauhari/astro-og-images",
+				"takumi-js",
+				"@takumi-rs/core",
+				"@takumi-rs/helpers",
+				"jsdom",
+			],
 		},
 	},
 	markdown: {

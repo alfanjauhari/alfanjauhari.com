@@ -1,0 +1,169 @@
+{
+  "name": "@alfanjauhari/solid-prosemirror",
+  "version": "0.1.0",
+  "description": "A SolidJS rich text editor built on ProseMirror.",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "type": "module",
+  "sideEffects": [
+    "dist/**/*.css"
+  ],
+  "main": "./dist/index/server.js",
+  "module": "./dist/index/index.js",
+  "browser": {
+    "./dist/index/server.js": "./dist/index/index.js",
+    "./dist/core/server.js": "./dist/core/index.js"
+  },
+  "types": "./dist/index/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "core": [
+        "./dist/core/index.d.ts"
+      ]
+    }
+  },
+  "exports": {
+    ".": {
+      "worker": {
+        "solid": "./dist/index/server.jsx",
+        "import": {
+          "types": "./dist/index/index.d.ts",
+          "default": "./dist/index/server.js"
+        }
+      },
+      "browser": {
+        "solid": {
+          "development": "./dist/index/dev.jsx",
+          "import": "./dist/index/index.jsx"
+        },
+        "development": {
+          "import": {
+            "types": "./dist/index/index.d.ts",
+            "default": "./dist/index/dev.js"
+          }
+        },
+        "import": {
+          "types": "./dist/index/index.d.ts",
+          "default": "./dist/index/index.js"
+        }
+      },
+      "deno": {
+        "solid": "./dist/index/server.jsx",
+        "import": {
+          "types": "./dist/index/index.d.ts",
+          "default": "./dist/index/server.js"
+        }
+      },
+      "node": {
+        "solid": "./dist/index/server.jsx",
+        "import": {
+          "types": "./dist/index/index.d.ts",
+          "default": "./dist/index/server.js"
+        }
+      },
+      "solid": {
+        "development": "./dist/index/dev.jsx",
+        "import": "./dist/index/index.jsx"
+      },
+      "development": {
+        "import": {
+          "types": "./dist/index/index.d.ts",
+          "default": "./dist/index/dev.js"
+        }
+      },
+      "import": {
+        "types": "./dist/index/index.d.ts",
+        "default": "./dist/index/index.js"
+      }
+    },
+    "./core": {
+      "worker": {
+        "import": {
+          "types": "./dist/core/index.d.ts",
+          "default": "./dist/core/server.js"
+        }
+      },
+      "browser": {
+        "development": {
+          "import": {
+            "types": "./dist/core/index.d.ts",
+            "default": "./dist/core/dev.js"
+          }
+        },
+        "import": {
+          "types": "./dist/core/index.d.ts",
+          "default": "./dist/core/index.js"
+        }
+      },
+      "deno": {
+        "import": {
+          "types": "./dist/core/index.d.ts",
+          "default": "./dist/core/server.js"
+        }
+      },
+      "node": {
+        "import": {
+          "types": "./dist/core/index.d.ts",
+          "default": "./dist/core/server.js"
+        }
+      },
+      "development": {
+        "import": {
+          "types": "./dist/core/index.d.ts",
+          "default": "./dist/core/dev.js"
+        }
+      },
+      "import": {
+        "types": "./dist/core/index.d.ts",
+        "default": "./dist/core/index.js"
+      }
+    },
+    "./style.css": "./dist/index/index.css"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.6.0"
+  },
+  "devDependencies": {
+    "@prosemirror-adapter/solid": "^0.5.5",
+    "@types/node": "^24.10.1",
+    "esbuild": "^0.28.2",
+    "lucide-solid": "^1.21.0",
+    "prosemirror-commands": "^1.7.2",
+    "prosemirror-history": "^1.5.0",
+    "prosemirror-keymap": "^1.2.3",
+    "prosemirror-model": "^1.25.11",
+    "prosemirror-state": "^1.4.4",
+    "prosemirror-view": "^1.42.2",
+    "solid-js": "^1.9.13",
+    "tsup": "^8.5.1",
+    "tsup-preset-solid": "^2.2.0",
+    "typescript": "^6.0.3"
+  },
+  "peerDependencies": {
+    "@prosemirror-adapter/solid": "^0.5.5",
+    "lucide-solid": "^1.21.0",
+    "prosemirror-commands": "^1.7.2",
+    "prosemirror-history": "^1.5.0",
+    "prosemirror-keymap": "^1.2.3",
+    "prosemirror-model": "^1.25.11",
+    "prosemirror-state": "^1.4.4",
+    "prosemirror-view": "^1.42.2",
+    "solid-js": "^1.9.13"
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}

@@ -1,5 +1,6 @@
 import { actions } from "astro:actions";
 import { createForm, Field as FormField, Form, reset } from "@formisch/solid";
+import { RichTextEditor } from "@alfanjauhari/solid-prosemirror";
 import { PencilIcon, PlusIcon, Trash2Icon, XIcon } from "lucide-solid";
 import { createSignal, For, Show } from "solid-js";
 import * as v from "valibot";
@@ -8,7 +9,6 @@ import { Button } from "../ui/button";
 import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { Spinner } from "../ui/spinner";
-import { RichTextEditor } from "./rich-text-editor";
 
 interface Feed {
 	id: string;
@@ -25,7 +25,7 @@ const FeedSchema = v.object({
 	tag: v.pipe(v.string("Tag is required"), v.minLength(1, "Tag is required")),
 	content: v.pipe(
 		v.string(),
-		v.check((content) => content.replace(/<[^>]*>/g, "").trim().length > 0, "Content is required")
+		v.check((content) => content.replace(/<[^>]*>/g, "").trim().length > 0, "Content is required"),
 	),
 	draft: v.boolean(),
 });
@@ -202,7 +202,7 @@ export function FeedsPanel(props: { feeds: Feed[] }) {
 							<p
 								class={cn(
 									"font-mono text-xs",
-									status()?.type === "error" ? "text-destructive" : "text-foreground/50"
+									status()?.type === "error" ? "text-destructive" : "text-foreground/50",
 								)}
 							>
 								{status()?.text}

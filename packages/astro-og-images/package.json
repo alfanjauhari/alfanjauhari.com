@@ -1,0 +1,51 @@
+{
+  "name": "@alfanjauhari/astro-og-images",
+  "version": "0.1.0",
+  "description": "Generate Open Graph images from prerendered Astro pages.",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./path": {
+      "types": "./dist/path.d.ts",
+      "import": "./dist/path.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@takumi-rs/core": "^2.10.0",
+    "@types/react": "^19.2.0",
+    "jsdom": "^29.1.1",
+    "takumi-js": "^2.10.0"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^28.0.3",
+    "@types/node": "^24.10.1",
+    "astro": "^7.2.4",
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3"
+  },
+  "peerDependencies": {
+    "astro": "^7.2.0"
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}

@@ -1,27 +1,9 @@
-import type { ReactElementLike } from "takumi-js/helpers";
+import { element, type RenderInput } from "@alfanjauhari/astro-og-images";
 
 export interface OgTemplateInput {
 	description?: string;
 	pathname: string;
 	title: string;
-}
-
-type ElementChild = ReactElementLike | string | number | null;
-
-function element(
-	type: string,
-	props: Record<string, unknown> = {},
-	...children: ElementChild[]
-): ReactElementLike {
-	const elementProps = { ...props };
-
-	if (children.length === 1) {
-		elementProps.children = children[0];
-	} else if (children.length > 1) {
-		elementProps.children = children;
-	}
-
-	return { props: elementProps, type };
 }
 
 function getPageType(pathname: string) {
@@ -56,7 +38,7 @@ function header(type: string) {
 						letterSpacing: -1,
 					},
 				},
-				"AJ."
+				"AJ.",
 			),
 			element(
 				"span",
@@ -70,8 +52,8 @@ function header(type: string) {
 						textTransform: "uppercase",
 					},
 				},
-				"Alfan Jauhari"
-			)
+				"Alfan Jauhari",
+			),
 		),
 		type !== "page"
 			? element(
@@ -104,10 +86,10 @@ function header(type: string) {
 								textTransform: "uppercase",
 							},
 						},
-						type === "home" ? "Portfolio" : type
-					)
+						type === "home" ? "Portfolio" : type,
+					),
 				)
-			: null
+			: null,
 	);
 }
 
@@ -126,7 +108,7 @@ function homeContent() {
 					margin: 0,
 				},
 			},
-			"Alfan Jauhari"
+			"Alfan Jauhari",
 		),
 		element(
 			"p",
@@ -140,8 +122,8 @@ function homeContent() {
 					maxWidth: 760,
 				},
 			},
-			"A passionate Product Engineer. I build pixel-perfect interfaces and scalable systems for everyone."
-		)
+			"A passionate Product Engineer. I build pixel-perfect interfaces and scalable systems for everyone.",
+		),
 	);
 }
 
@@ -161,7 +143,7 @@ function pageContent(title: string, meta: string | undefined) {
 					maxWidth: 920,
 				},
 			},
-			title
+			title,
 		),
 		meta
 			? element(
@@ -179,9 +161,9 @@ function pageContent(title: string, meta: string | undefined) {
 							paddingLeft: 24,
 						},
 					},
-					meta
+					meta,
 				)
-			: null
+			: null,
 	);
 }
 
@@ -211,14 +193,14 @@ function footer() {
 				"div",
 				{ tw: "flex flex-col" },
 				element("span", { style: labelStyle }, "Website"),
-				element("span", { style: { fontSize: 18, fontWeight: 500 } }, "alfanjauhari.com")
+				element("span", { style: { fontSize: 18, fontWeight: 500 } }, "alfanjauhari.com"),
 			),
 			element(
 				"div",
 				{ tw: "flex flex-col" },
 				element("span", { style: labelStyle }, "Twitter"),
-				element("span", { style: { fontSize: 18, fontWeight: 500 } }, "@alfanjauhari_")
-			)
+				element("span", { style: { fontSize: 18, fontWeight: 500 } }, "@alfanjauhari_"),
+			),
 		),
 		element(
 			"span",
@@ -231,16 +213,12 @@ function footer() {
 					textTransform: "uppercase",
 				},
 			},
-			"Tulungagung, ID"
-		)
+			"Tulungagung, ID",
+		),
 	);
 }
 
-export function renderOgTemplate({
-	description,
-	pathname,
-	title,
-}: OgTemplateInput): ReactElementLike {
+export function renderOgTemplate({ description, pathname, title }: OgTemplateInput): RenderInput {
 	const type = getPageType(pathname);
 	const displayTitle = title.replace(/ — Alfan Jauhari$/, "");
 	const meta = trimText(description, 180);
@@ -260,8 +238,8 @@ export function renderOgTemplate({
 		element(
 			"div",
 			{ tw: "flex flex-1 flex-col justify-center" },
-			type === "home" ? homeContent() : pageContent(displayTitle, meta)
+			type === "home" ? homeContent() : pageContent(displayTitle, meta),
 		),
-		footer()
+		footer(),
 	);
 }

@@ -1,17 +1,17 @@
-export type OgImageFormat = "png" | "webp" | "jpeg";
+import { OutputFormat } from "takumi-js";
 
 export function getOgImagePath({
 	format = "webp",
 	site,
 	url,
 }: {
-	format?: OgImageFormat;
+	format?: OutputFormat;
 	site: URL | undefined;
 	url: URL;
 }) {
 	if (!site) {
 		throw new Error(
-			"`site` must be set in your Astro configuration: https://docs.astro.build/en/reference/configuration-reference/#site"
+			"`site` must be set in your Astro configuration: https://docs.astro.build/en/reference/configuration-reference/#site",
 		);
 	}
 

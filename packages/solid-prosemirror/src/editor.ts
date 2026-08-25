@@ -196,7 +196,7 @@ function observerPlugin(callbacks: EditorCallbacks): Plugin {
 export function createEditor(
 	element: HTMLElement,
 	initialHtml: string | undefined,
-	callbacks: EditorCallbacks
+	callbacks: EditorCallbacks,
 ): EditorView {
 	const state = EditorState.create({
 		schema,

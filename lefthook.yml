@@ -1,6 +1,6 @@
 pre-commit:
   jobs:
-    - run: pnpm run format {staged_files}
+    - run: pnpm exec oxfmt {staged_files}
       glob:
         - "*.css"
         - "*.ts"
@@ -19,7 +19,7 @@ pre-push:
         - "*.tsx"
         - "*.json"
 
-    - run: pnpm run lint {push_files}
+    - run: pnpm exec oxlint {push_files}
       glob:
         - "*.ts"
         - "*.js"
