@@ -1,6 +1,6 @@
 {
   "name": "@alfanjauhari/solid-prosemirror",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A SolidJS rich text editor built on ProseMirror.",
   "license": "MIT",
   "files": [
