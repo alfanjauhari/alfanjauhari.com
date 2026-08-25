@@ -1,0 +1,59 @@
+{
+  "name": "@alfanjauhari/config",
+  "version": "0.1.0",
+  "description": "Shared Oxc, TypeScript, Oxfmt, and Tailwind configuration presets.",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "type": "module",
+  "exports": {
+    "./oxfmt": {
+      "types": "./dist/oxfmt.d.ts",
+      "import": "./dist/oxfmt.js"
+    },
+    "./oxlint": {
+      "types": "./dist/oxlint.d.ts",
+      "import": "./dist/oxlint.js"
+    },
+    "./oxlint/base": {
+      "types": "./dist/oxlint.d.ts",
+      "import": "./dist/oxlint.js"
+    },
+    "./oxlint/solid": {
+      "types": "./dist/oxlint-solid.d.ts",
+      "import": "./dist/oxlint-solid.js"
+    },
+    "./tailwind-typography": {
+      "types": "./dist/tailwind-typography.d.ts",
+      "import": "./dist/tailwind-typography.js"
+    },
+    "./tsconfig/astro-solid": "./dist/tsconfig.astro-solid.json",
+    "./tsconfig/base": "./dist/tsconfig.base.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "devDependencies": {
+    "astro": "^7.2.4",
+    "oxfmt": "^0.63.0",
+    "oxlint": "^1.79.0",
+    "solid-js": "^1.9.13",
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3"
+  },
+  "peerDependencies": {
+    "oxfmt": "^0.63.0",
+    "oxlint": "^1.79.0"
+  },
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}

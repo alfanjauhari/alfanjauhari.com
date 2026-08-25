@@ -1,9 +1,22 @@
 import { ProsemirrorAdapterProvider } from "@prosemirror-adapter/solid";
 import { createSignal, onCleanup, onMount } from "solid-js";
 import type { EditorView } from "prosemirror-view";
-import { cn } from "../../../lib/utils";
+import { type ClassValue, clsx } from "clsx";
+import { extendTailwindMerge } from "tailwind-merge";
 import { createEditor, defaultTools, type RichTextTool } from "./editor";
-import "prosemirror-view/style/prosemirror.css";
+import "../style.css";
+
+const twMerge = extendTailwindMerge({
+	extend: {
+		theme: {
+			text: ["xxs"],
+		},
+	},
+});
+
+function cn(...inputs: ClassValue[]) {
+	return twMerge(clsx(inputs));
+}
 
 export interface RichTextEditorProps {
 	defaultValue?: string;
@@ -16,13 +29,13 @@ export function RichTextEditor(props: RichTextEditorProps) {
 	const tools = () => props.tools ?? defaultTools;
 	const [activeIds, setActiveIds] = createSignal<Set<string>>(new Set());
 
-	let editorDom: HTMLDivElement | undefined;
+	let editorDomRef: HTMLDivElement | undefined;
 	let view: EditorView | undefined;
 
 	onMount(() => {
-		if (!editorDom) return;
+		if (!editorDomRef) return;
 
-		view = createEditor(editorDom, props.defaultValue, {
+		view = createEditor(editorDomRef, props.defaultValue, {
 			tools: tools(),
 			onChange: (html) => props.onChange?.(html),
 			onActiveChange: (ids) => setActiveIds(ids),
@@ -58,7 +71,7 @@ export function RichTextEditor(props: RichTextEditorProps) {
 									"inline-flex items-center justify-center size-8 rounded-md cursor-pointer transition-colors",
 									activeIds().has(tool.id)
 										? "bg-foreground/10 text-foreground"
-										: "text-foreground/50 hover:bg-foreground/5 hover:text-foreground/70"
+										: "text-foreground/50 hover:bg-foreground/5 hover:text-foreground/70",
 								)}
 							>
 								<Icon class="size-4" />
@@ -67,7 +80,7 @@ export function RichTextEditor(props: RichTextEditorProps) {
 					})}
 				</div>
 				<div
-					ref={editorDom}
+					ref={editorDomRef}
 					class="prose prose-sm dark:prose-invert max-w-none min-h-20 px-3 py-2 *:focus:outline-none"
 				/>
 			</div>

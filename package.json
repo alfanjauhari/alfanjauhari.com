@@ -1,13 +1,31 @@
 {
-  "name": "alfanjauhari",
+  "name": "alfanjauhari.com",
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "astro": "pnpm --filter @alfanjauhari/web astro",
     "build": "turbo build",
-    "typecheck": "turbo typecheck"
+    "db:generate": "pnpm --filter @alfanjauhari/web db:generate",
+    "db:migrate": "pnpm --filter @alfanjauhari/web db:migrate",
+    "deploy": "pnpm --filter @alfanjauhari/web deploy",
+    "dev": "turbo dev --filter=@alfanjauhari/web...",
+    "format": "pnpm --filter @alfanjauhari/config build && oxfmt",
+    "format:check": "pnpm --filter @alfanjauhari/config build && oxfmt --check",
+    "generate-types": "pnpm --filter @alfanjauhari/web generate-types",
+    "lint": "turbo lint",
+    "lint:fix": "turbo lint:fix",
+    "preview": "pnpm --filter @alfanjauhari/web preview",
+    "release": "turbo run build lint typecheck && changeset publish",
+    "typecheck": "turbo typecheck",
+    "version-packages": "changeset version"
   },
   "devDependencies": {
-    "turbo": "^2.10.11"
+    "@alfanjauhari/config": "workspace:*",
+    "@changesets/cli": "^2.29.5",
+    "oxfmt": "^0.63.0",
+    "oxlint": "^1.79.0",
+    "turbo": "^2.10.11",
+    "typescript": "^6.0.3"
   },
   "devEngines": {
     "packageManager": {
@@ -15,8 +33,8 @@
       "version": "11.17.0"
     }
   },
-  "dependencies": {
-    "oxfmt": "^0.63.0",
-    "oxlint": "^1.79.0"
-  }
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "packageManager": "pnpm@11.17.0"
 }
