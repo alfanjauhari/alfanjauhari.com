@@ -19,7 +19,7 @@ pre-push:
         - "*.tsx"
         - "*.json"
 
-    - run: pnpm exec oxlint {push_files}
+    - run: pnpm exec oxlint {push_files} --no-error-on-unmatched-pattern
       glob:
         - "*.ts"
         - "*.js"
