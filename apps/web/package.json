@@ -68,6 +68,6 @@
     "vite-plugin-lucide-preprocess": "^1.5.0"
   },
   "engines": {
-    "node": ">=22.13.0"
+    "node": ">=24.19.0"
   }
 }
