@@ -3,6 +3,9 @@
   "version": "0.2.0",
   "description": "A SolidJS rich text editor built on ProseMirror.",
   "license": "MIT",
+  "repository": {
+    "url": "https://github.com/alfanjauhari/alfanjauhari.com"
+  },
   "files": [
     "dist",
     "README.md",

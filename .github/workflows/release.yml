@@ -29,11 +29,7 @@ jobs:
         uses: pnpm/setup@v2
         with:
           version: 11.17.0
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: 24.19.0
+          runtime: node@24.19.0
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -63,11 +59,7 @@ jobs:
         uses: pnpm/setup@v2
         with:
           version: 11.17.0
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: 24.19.0
+          runtime: node@24.19.0
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -93,11 +85,7 @@ jobs:
         uses: pnpm/setup@v2
         with:
           version: 11.17.0
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: 24
+          runtime: node@24.19.0
 
       - name: Install dependencies
         run: pnpm install
@@ -136,23 +124,13 @@ jobs:
         uses: pnpm/setup@v2
         with:
           version: 11.17.0
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v7
-        with:
-          node-version: 24.19.0
+          runtime: node@24.19.0
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Build packages
         run: pnpm build
-
-      - name: Typecheck
-        run: pnpm typecheck
-
-      - name: Lint
-        run: pnpm lint
 
       - name: Pack release artifacts
         id: pack

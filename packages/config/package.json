@@ -3,6 +3,9 @@
   "version": "0.2.0",
   "description": "Shared Oxc, TypeScript, Oxfmt, and Tailwind configuration presets.",
   "license": "MIT",
+  "repository": {
+    "url": "https://github.com/alfanjauhari/alfanjauhari.com"
+  },
   "files": [
     "dist",
     "README.md",
