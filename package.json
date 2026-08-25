@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@alfanjauhari/config": "workspace:*",
-    "@changesets/cli": "^2.29.5",
+    "@changesets/cli": "^3.0.1",
     "oxfmt": "^0.63.0",
     "oxlint": "^1.79.0",
     "turbo": "^2.10.11",
