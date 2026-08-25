@@ -119,7 +119,7 @@ jobs:
 
   publish:
     name: Publish packages
-    needs: select-mode
+    needs: pack
     if: needs.select-mode.outputs.mode == 'publish'
     runs-on: ubuntu-latest
     permissions:
