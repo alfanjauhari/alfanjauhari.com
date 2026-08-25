@@ -67,7 +67,13 @@ export default function ogImages(options: OgImageOptions): AstroIntegration {
 						const element = await options.render({ ...page, ...pageDetails });
 
 						const imageBuffer = await render(element, options);
-						const imageFile = htmlFile.replace(/\.html$/, `.${options.format}`);
+
+						// Remove the .html extension from the image file if the URL does not end with .html
+						// This is possible if we build astro with build.format = "file"
+						const shouldRemoveHtmlExtension = !pageDetails.url.endsWith(".html");
+						const imageFile = shouldRemoveHtmlExtension
+							? htmlFile.replace(/\.html$/, `.${options.format}`)
+							: `${htmlFile}.${options.format}`;
 
 						await writeFile(imageFile, imageBuffer);
 
