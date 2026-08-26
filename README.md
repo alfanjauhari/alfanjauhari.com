@@ -193,4 +193,4 @@ The release workflow creates or updates a version pull request, validates and pa
 
 ## License
 
-Each public package under `packages/` includes its own MIT license. The repository as a whole does not currently declare a single root license.
+Each public package under `packages/` includes its own MIT license; For this whole project please refer to this file [LICENSE](./LICENSE)
