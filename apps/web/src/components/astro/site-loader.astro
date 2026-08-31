@@ -1,0 +1,432 @@
+---
+const name = [
+	{ text: "Alfan", indexClass: "[--word-index:0]" },
+	{ text: "Jauhari", indexClass: "[--word-index:1]" },
+];
+const description = [
+	{ text: "building", indexClass: "[--word-index:3]" },
+	{ text: "pixel-perfect", indexClass: "[--word-index:4]" },
+	{ text: "interfaces", indexClass: "[--word-index:5]" },
+	{ text: "and", indexClass: "[--word-index:6]" },
+	{ text: "scalable", indexClass: "[--word-index:7]" },
+	{ text: "systems", indexClass: "[--word-index:8]" },
+	{ text: "for", indexClass: "[--word-index:9]" },
+	{ text: "everyone.", indexClass: "[--word-index:10]" },
+];
+
+const wordMaskClass = "inline-block overflow-hidden pb-[0.2em]";
+const wordClass =
+	"inline-block translate-y-[115%] transition-transform duration-750 ease-[cubic-bezier(0.16,1,0.3,1)] delay-[calc(120ms+var(--word-index)*52ms)] group-data-[state=visible]:translate-y-0 group-data-[state=exiting]:-translate-y-[115%] group-data-[state=exiting]:duration-480 group-data-[state=exiting]:delay-[calc((12-var(--word-index))*18ms)] motion-reduce:translate-none motion-reduce:transition-none";
+---
+
+<div
+	id="site-loader"
+	class="group fixed inset-0 isolate z-9999 hidden text-foreground in-data-[site-loader=active]:block in-data-[site-loader=exiting]:block"
+	role="progressbar"
+	aria-label="Loading Alfan Jauhari — building pixel-perfect interfaces and scalable systems for everyone."
+	aria-valuemin="0"
+	aria-valuemax="100"
+	aria-valuenow="0"
+>
+	<div
+		class="absolute inset-0 grid grid-rows-3 *:bg-background *:transition-transform *:duration-700 *:ease-[cubic-bezier(0.77,0,0.18,1)] *:group-data-[state=exiting]:translate-x-[101%] *:even:group-data-[state=exiting]:translate-x-[-101%] motion-reduce:transition-none"
+		aria-hidden="true"
+	>
+		<span></span>
+		<span></span>
+		<span></span>
+	</div>
+
+	<div
+		class="pointer-events-none absolute inset-3 z-1 opacity-0 transition-opacity duration-700 delay-300 ease-out group-data-[state=visible]:opacity-100 group-data-[state=exiting]:opacity-0 group-data-[state=exiting]:duration-250 group-data-[state=exiting]:delay-0 motion-reduce:transition-none md:inset-6"
+		aria-hidden="true"
+	>
+		<div class="absolute inset-0 border border-foreground/10">
+			<span
+				class="absolute -top-px -left-px size-6 border-t border-l border-foreground/35"
+			></span>
+			<span
+				class="absolute -top-px -right-px size-6 border-t border-r border-foreground/35"
+			></span>
+			<span
+				class="absolute -bottom-px -left-px size-6 border-b border-l border-foreground/35"
+			></span>
+			<span
+				class="absolute -right-px -bottom-px size-6 border-r border-b border-foreground/35"
+			></span>
+		</div>
+	</div>
+
+	<div
+		class="relative z-2 grid h-full w-full grid-rows-[auto_1fr_auto] p-6 md:p-12"
+	>
+		<div
+			class="flex justify-between font-mono text-xxs leading-none tracking-[0.14em] uppercase opacity-0 transition-opacity duration-400 delay-100 ease-[ease] group-data-[state=visible]:opacity-100 group-data-[state=exiting]:opacity-0 group-data-[state=exiting]:duration-250 group-data-[state=exiting]:delay-0 motion-reduce:transition-none"
+			aria-hidden="true"
+		>
+			<span>AJ&ensp;/&ensp;Portfolio</span>
+			<span class="flex items-center gap-2">
+				<span class="size-1.5 rounded-full bg-current motion-safe:animate-pulse"
+				></span>
+				<span data-loader-label>Loading</span>
+			</span>
+		</div>
+
+		<div class="max-w-312 self-center md:pl-[8vw]" aria-hidden="true">
+			<p
+				class="m-0 flex flex-wrap gap-x-[0.22em] gap-y-0 font-serif italic text-[clamp(4rem,10vw,8.5rem)] leading-[0.88] tracking-[-0.065em]"
+				data-loader-title
+			>
+				{
+					name.map((word) => (
+						<span class:list={[wordMaskClass, "p-3"]}>
+							<span
+								class:list={[wordClass, word.indexClass]}
+								data-loader-title-word
+							>
+								{word.text}
+							</span>
+						</span>
+					))
+				}
+			</p>
+			<p
+				class="mt-[clamp(1.5rem,4vw,3rem)] flex max-w-228 flex-wrap gap-x-[0.28em] gap-y-[0.1em] text-[clamp(1.1rem,2.8vw,2.25rem)] leading-[1.15] font-normal tracking-[-0.035em]"
+			>
+				<span class:list={[wordMaskClass, "mr-[0.08em]"]}>
+					<span
+						class:list={[
+							wordClass,
+							"[--word-index:2] font-serif italic opacity-55",
+						]}
+					>
+						—
+					</span>
+				</span>
+				{
+					description.map((word) => (
+						<span class={wordMaskClass}>
+							<span class:list={[wordClass, word.indexClass]}>{word.text}</span>
+						</span>
+					))
+				}
+			</p>
+		</div>
+
+		<div
+			class="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4 transition-opacity duration-250 ease-[ease] group-data-[state=exiting]:opacity-0"
+			aria-hidden="true"
+		>
+			<div
+				class="h-px overflow-hidden bg-accent opacity-0 transition-opacity duration-400 delay-180 ease-[ease] group-data-[state=visible]:opacity-100 motion-reduce:transition-none"
+			>
+				<span
+					class="block h-full w-0 bg-current transition-[width] duration-180 ease-[cubic-bezier(0.22,1,0.36,1)]"
+					data-loader-progress></span>
+			</div>
+			<p
+				class="m-0 min-w-[4.2ch] text-right font-mono text-[clamp(2rem,5vw,4.5rem)] leading-[0.8] font-normal tracking-[-0.08em] opacity-0 transition-opacity duration-400 delay-180 ease-[ease] [font-variant-numeric:tabular-nums] group-data-[state=visible]:opacity-100 motion-reduce:transition-none"
+			>
+				<span data-loader-count>0</span><sup
+					class="ml-[0.2em] align-top text-[0.22em] tracking-normal">%</sup
+				>
+			</p>
+		</div>
+	</div>
+</div>
+
+<script>
+	const loader = document.getElementById("site-loader");
+	const documentElement = document.documentElement;
+
+	if (!(loader instanceof HTMLElement)) {
+		delete documentElement.dataset.siteLoader;
+		documentElement.classList.remove("overflow-hidden");
+	} else if (documentElement.dataset.siteLoader !== "active") {
+		documentElement.classList.remove("overflow-hidden");
+		loader.remove();
+	} else {
+		documentElement.classList.add("overflow-hidden");
+		const count = loader.querySelector<HTMLElement>("[data-loader-count]");
+		const progressBar = loader.querySelector<HTMLElement>(
+			"[data-loader-progress]",
+		);
+		const label = loader.querySelector<HTMLElement>("[data-loader-label]");
+		const reducedMotion = window.matchMedia(
+			"(prefers-reduced-motion: reduce)",
+		).matches;
+
+		let progress = 0;
+		let pageReady = document.readyState === "complete";
+		let finishing = false;
+		const startedAt = performance.now();
+
+		const randomBetween = (minimum: number, maximum: number) =>
+			Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
+		const waitFor = (duration: number) =>
+			new Promise<void>((resolve) => window.setTimeout(resolve, duration));
+
+		const copyTypography = (
+			element: HTMLElement,
+			styles: CSSStyleDeclaration,
+		) => {
+			element.style.color = styles.color;
+			element.style.fontFamily = styles.fontFamily;
+			element.style.fontSize = styles.fontSize;
+			element.style.fontStyle = styles.fontStyle;
+			element.style.fontWeight = styles.fontWeight;
+			element.style.letterSpacing = styles.letterSpacing;
+			element.style.lineHeight = styles.lineHeight;
+			element.style.textTransform = styles.textTransform;
+		};
+
+		const transformAt = (x: number, y: number, scale: number) =>
+			`translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0) scale(${scale.toFixed(4)})`;
+
+		const animateTitleToLogo = async () => {
+			const sourceTitle = loader.querySelector<HTMLElement>(
+				"[data-loader-title]",
+			);
+			const sourceWords = Array.from(
+				loader.querySelectorAll<HTMLElement>("[data-loader-title-word]"),
+			);
+			const targetLogo =
+				document.querySelector<HTMLElement>("[data-site-logo]");
+
+			if (!sourceTitle || sourceWords.length === 0 || !targetLogo) {
+				return;
+			}
+
+			const sourceRect = sourceTitle.getBoundingClientRect();
+			const sourceWordRects = sourceWords.map((word) =>
+				word.getBoundingClientRect(),
+			);
+			const targetRect = targetLogo.getBoundingClientRect();
+
+			if (
+				sourceRect.width === 0 ||
+				sourceRect.height === 0 ||
+				targetRect.width === 0 ||
+				targetRect.height === 0
+			) {
+				return;
+			}
+
+			const sourceLeft = Math.min(...sourceWordRects.map((rect) => rect.left));
+			const sourceTop = Math.min(...sourceWordRects.map((rect) => rect.top));
+			const sourceRight = Math.max(
+				...sourceWordRects.map((rect) => rect.right),
+			);
+			const sourceBottom = Math.max(
+				...sourceWordRects.map((rect) => rect.bottom),
+			);
+			const sourceCenter = {
+				x: (sourceLeft + sourceRight) / 2,
+				y: (sourceTop + sourceBottom) / 2,
+			};
+			const targetCenter = {
+				x: targetRect.left + targetRect.width / 2,
+				y: targetRect.top + targetRect.height / 2,
+			};
+			const sourceStyles = window.getComputedStyle(sourceTitle);
+			const targetStyles = window.getComputedStyle(targetLogo);
+			const sourceFontSize = Number.parseFloat(sourceStyles.fontSize);
+			const targetFontSize = Number.parseFloat(targetStyles.fontSize);
+			const finalSourceScale = Math.max(
+				0.1,
+				Math.min(1, targetFontSize / sourceFontSize),
+			);
+			const initialTargetScale = Math.max(
+				1,
+				Math.min(8, sourceFontSize / targetFontSize),
+			);
+
+			const sourceGhost = sourceTitle.cloneNode(true) as HTMLElement;
+			sourceGhost.removeAttribute("data-loader-title");
+			sourceGhost.setAttribute("aria-hidden", "true");
+			sourceGhost.style.position = "fixed";
+			sourceGhost.style.top = `${sourceRect.top}px`;
+			sourceGhost.style.left = `${sourceRect.left}px`;
+			sourceGhost.style.zIndex = "10000";
+			sourceGhost.style.width = `${sourceRect.width}px`;
+			sourceGhost.style.height = `${sourceRect.height}px`;
+			sourceGhost.style.margin = "0";
+			sourceGhost.style.pointerEvents = "none";
+			sourceGhost.style.transformOrigin = `${sourceCenter.x - sourceRect.left}px ${
+				sourceCenter.y - sourceRect.top
+			}px`;
+			sourceGhost.style.willChange = "transform, opacity";
+			sourceGhost
+				.querySelectorAll<HTMLElement>("[data-loader-title-word]")
+				.forEach((word) => {
+					word.style.translate = "none";
+					word.style.transition = "none";
+				});
+
+			const targetGhost = document.createElement("span");
+			targetGhost.textContent = targetLogo.textContent?.trim() || "AJ.";
+			targetGhost.setAttribute("aria-hidden", "true");
+			copyTypography(targetGhost, targetStyles);
+			targetGhost.style.position = "fixed";
+			targetGhost.style.top = `${targetRect.top}px`;
+			targetGhost.style.left = `${targetRect.left}px`;
+			targetGhost.style.zIndex = "10000";
+			targetGhost.style.display = "block";
+			targetGhost.style.whiteSpace = "nowrap";
+			targetGhost.style.pointerEvents = "none";
+			targetGhost.style.transformOrigin = "center";
+			targetGhost.style.willChange = "transform, opacity";
+
+			const previousTargetVisibility = targetLogo.style.visibility;
+			document.body.appendChild(sourceGhost);
+			document.body.appendChild(targetGhost);
+			sourceTitle.style.visibility = "hidden";
+			targetLogo.style.visibility = "hidden";
+
+			const sourceX = targetCenter.x - sourceCenter.x;
+			const sourceY = targetCenter.y - sourceCenter.y;
+			const targetX = sourceCenter.x - targetCenter.x;
+			const targetY = sourceCenter.y - targetCenter.y;
+			const duration = 900;
+			const easing = "cubic-bezier(0.16, 1, 0.3, 1)";
+			const sourceMiddleScale = 1 + (finalSourceScale - 1) * 0.42;
+			const targetMiddleScale = 1 + (initialTargetScale - 1) * 0.32;
+
+			try {
+				const sourceAnimation = sourceGhost.animate(
+					[
+						{ opacity: 1, transform: transformAt(0, 0, 1), offset: 0 },
+						{
+							opacity: 1,
+							transform: transformAt(
+								sourceX * 0.42,
+								sourceY * 0.42,
+								sourceMiddleScale,
+							),
+							offset: 0.38,
+						},
+						{
+							opacity: 0,
+							transform: transformAt(sourceX, sourceY, finalSourceScale),
+							offset: 0.72,
+						},
+						{
+							opacity: 0,
+							transform: transformAt(sourceX, sourceY, finalSourceScale),
+							offset: 1,
+						},
+					],
+					{ duration, easing, fill: "forwards" },
+				);
+				const targetAnimation = targetGhost.animate(
+					[
+						{
+							opacity: 0,
+							transform: transformAt(targetX, targetY, initialTargetScale),
+							offset: 0,
+						},
+						{
+							opacity: 0,
+							transform: transformAt(targetX, targetY, initialTargetScale),
+							offset: 0.2,
+						},
+						{
+							opacity: 1,
+							transform: transformAt(
+								targetX * 0.32,
+								targetY * 0.32,
+								targetMiddleScale,
+							),
+							offset: 0.68,
+						},
+						{ opacity: 1, transform: transformAt(0, 0, 1), offset: 1 },
+					],
+					{ duration, easing, fill: "forwards" },
+				);
+
+				await Promise.allSettled([
+					sourceAnimation.finished,
+					targetAnimation.finished,
+				]);
+				targetLogo.style.visibility = previousTargetVisibility;
+				sourceGhost.remove();
+				targetGhost.remove();
+			} catch {
+				targetLogo.style.visibility = previousTargetVisibility;
+				sourceGhost.remove();
+				targetGhost.remove();
+			}
+		};
+
+		const setProgress = (nextProgress: number) => {
+			progress = Math.min(100, nextProgress);
+			if (count) count.textContent = String(progress);
+			if (progressBar) progressBar.style.width = `${progress}%`;
+			loader.setAttribute("aria-valuenow", String(progress));
+		};
+
+		const finish = async () => {
+			if (finishing) return;
+			finishing = true;
+			setProgress(100);
+			if (label) label.textContent = "Ready";
+
+			try {
+				localStorage.setItem("alfanjauhari:loader-seen", "true");
+			} catch {
+				console.warn(
+					"Unable to store loader-seen flag in localStorage. This may be due to storage restrictions.",
+				);
+			}
+
+			await waitFor(reducedMotion ? 50 : 220);
+			if (!reducedMotion && "fonts" in document) await document.fonts.ready;
+
+			const titleTransition = reducedMotion
+				? Promise.resolve()
+				: animateTitleToLogo();
+			loader.dataset.state = "exiting";
+			documentElement.dataset.siteLoader = "exiting";
+
+			await Promise.all([titleTransition, waitFor(reducedMotion ? 50 : 1050)]);
+			loader.remove();
+			delete documentElement.dataset.siteLoader;
+			documentElement.classList.remove("overflow-hidden");
+		};
+
+		const tick = () => {
+			const elapsed = performance.now() - startedAt;
+			const canComplete = (pageReady && elapsed >= 1650) || elapsed >= 4000;
+			const maximum = canComplete ? 100 : 94;
+			const increment =
+				progress < 55 ? randomBetween(4, 11) : randomBetween(1, 6);
+
+			setProgress(Math.min(maximum, progress + increment));
+
+			if (progress === 100) {
+				void finish();
+				return;
+			}
+
+			window.setTimeout(tick, randomBetween(55, 145));
+		};
+
+		window.addEventListener(
+			"load",
+			() => {
+				pageReady = true;
+			},
+			{ once: true },
+		);
+
+		if (reducedMotion) {
+			loader.dataset.state = "visible";
+			void finish();
+		} else {
+			requestAnimationFrame(() => {
+				loader.dataset.state = "visible";
+				tick();
+			});
+		}
+	}
+</script>

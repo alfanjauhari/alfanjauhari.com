@@ -79,25 +79,34 @@ const process = [
 		</div>
 	</section>
 
-	<section id="methodology" class="mb-40">
+	<section id="methodology" class="mb-40" data-motion-reveal>
 		<h2 class="font-serif text-5xl md:text-6xl mb-16">Methodology</h2>
 
-		<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+		<div class="methodology-track grid grid-cols-1 gap-8 md:grid-cols-4">
+			<div class="methodology-line" aria-hidden="true"></div>
 			{
-				process.map((step) => (
-					<div class="relative flex flex-col group">
-						<span class="font-mono text-sm text-foreground/40 mb-6 block">
-							{step.id}
-						</span>
+				process.map((step, index) => (
+					<article
+						class="methodology-step group relative flex flex-col"
+						data-motion-item
+						style={`--motion-delay: ${index * 110}ms`}
+						tabindex="0"
+					>
+						<div class="methodology-heading mb-6 flex items-center">
+							<span class="methodology-index block w-fit shrink-0 bg-background font-mono text-sm text-foreground/40">
+								{step.id}
+							</span>
+							<span class="methodology-segment" aria-hidden="true"></span>
+						</div>
 						<div>
-							<h3 class="text-3xl font-serif mb-4 group-hover:translate-x-2 transition-transform duration-300">
+							<h3 class="mb-4 font-serif text-3xl transition-transform duration-300 group-hover:translate-x-2 group-focus-visible:translate-x-2">
 								{step.title}
 							</h3>
 							<p class="text-sm text-foreground/60 leading-relaxed font-normal">
 								{step.desc}
 							</p>
 						</div>
-					</div>
+					</article>
 				))
 			}
 		</div>
@@ -108,16 +117,22 @@ const process = [
 		<div class="flex flex-col gap-12 pb-24">
 			{
 				works.map((work) => (
-					<div class="sticky top-30">
-						<div class="bg-background border border-border rounded-lg overflow-hidden flex flex-col md:flex-row h-125 group relative">
+					<div class="work-card-stage sticky top-30">
+						<article
+							class="work-card group relative flex h-125 flex-col overflow-hidden rounded-lg border border-border bg-background md:flex-row"
+							data-pointer-tilt
+							data-tilt-max="4"
+							data-tilt-parallax="10"
+						>
 							<a
 								href={`/works/${work.id}`}
-								class="absolute inset-0 z-40"
+								class="work-card-link absolute inset-0 z-40"
 								aria-label={`Learn more about ${work.data.title}...`}
 							/>
-							<div class="w-full md:w-1/2 lg:w-7/12 relative overflow-hidden cursor-pointer">
+							<div class="work-card-media relative w-full cursor-pointer overflow-hidden md:w-1/2 lg:w-7/12">
 								<div
-									class="absolute inset-0 grayscale group-hover:grayscale-0 bg-no-repeat bg-cover bg-center group-hover:scale-105 duration-700 ease-in"
+									class="work-card-image absolute -inset-3 bg-cover bg-center bg-no-repeat grayscale duration-700 ease-out group-hover:grayscale-0"
+									data-tilt-layer="image"
 									style={`background-image: url(${work.data.thumbnail})`}
 								/>
 								<div class="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
@@ -126,7 +141,10 @@ const process = [
 									</div>
 								</div>
 							</div>
-							<div class="w-full md:w-1/2 lg:w-5/12 p-8 lg:p-12 flex flex-col justify-between relative z-30">
+							<div
+								class="work-card-content relative z-30 flex w-full flex-col justify-between p-8 md:w-1/2 lg:w-5/12 lg:p-12"
+								data-tilt-layer="content"
+							>
 								<div>
 									<div class="flex justify-between items-start mb-6">
 										<span class="text-xs font-mono">{work.data.year}</span>
@@ -148,7 +166,7 @@ const process = [
 									))}
 								</div>
 							</div>
-						</div>
+						</article>
 					</div>
 				))
 			}
@@ -196,3 +214,9 @@ const process = [
 		</div>
 	</section>
 </BaseLayout>
+
+<script>
+	import { initializeMotion } from "../lib/motion";
+
+	initializeMotion();
+</script>

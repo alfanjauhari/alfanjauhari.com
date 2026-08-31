@@ -35,20 +35,27 @@ import { Image } from "astro:assets";
 				</div>
 			</div>
 
-			<div
-				class="relative h-100 lg:h-auto rounded-lg overflow-hidden grayscale hover:grayscale-0 transition-all duration-700"
-			>
-				<Image
-					width={400}
-					height={600}
-					widths={[400, 800, 1200]}
-					format="webp"
-					sizes="(max-width: 1024px) 100vw, 400px"
-					src="/images/about/profile.avif"
-					alt="Alfan Jauhari"
-					class="absolute inset-0 w-full h-full object-cover opacity-80 hover:scale-105 transition-transform duration-1000"
-					style="object-position: 50% 20%"
-				/>
+			<div class="about-portrait-stage h-100 lg:h-auto">
+				<div
+					class="about-portrait relative h-full overflow-hidden rounded-lg"
+					data-pointer-tilt
+					data-tilt-max="5"
+					data-tilt-parallax="8"
+				>
+					<Image
+						width={400}
+						height={600}
+						widths={[400, 800, 1200]}
+						format="webp"
+						sizes="(max-width: 1024px) 100vw, 400px"
+						src="/images/about/profile.avif"
+						alt="Alfan Jauhari"
+						class="about-portrait-image absolute -inset-3 h-[calc(100%+1.5rem)] w-[calc(100%+1.5rem)] object-cover"
+						data-tilt-layer="image"
+						style="object-position: 50% 20%"
+					/>
+					<div class="about-portrait-highlight absolute inset-0" aria-hidden="true"></div>
+				</div>
 			</div>
 		</section>
 
@@ -73,8 +80,9 @@ import { Image } from "astro:assets";
 				</div>
 			</div>
 
-			<div class="lg:col-span-8">
-				<div class="group py-8 border-t border-border first:border-0">
+			<div class="experience-timeline lg:col-span-8" data-timeline>
+				<div class="experience-line" aria-hidden="true"></div>
+				<article class="experience-entry group py-8" data-timeline-entry>
 					<div
 						class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-2"
 					>
@@ -100,8 +108,8 @@ import { Image } from "astro:assets";
 						animation and complex operations while optimizing React and Next.js
 						for higher performance and smaller bundle sizes.
 					</p>
-				</div>
-				<div class="group py-8 border-t border-border">
+				</article>
+				<article class="experience-entry group py-8" data-timeline-entry>
 					<div
 						class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-2"
 					>
@@ -125,7 +133,7 @@ import { Image } from "astro:assets";
 						Docker. Collaborated with large cross-functional teams and optimized
 						the system using Next.js to enhance performance and user experience.
 					</p>
-				</div>
+				</article>
 			</div>
 		</section>
 
@@ -234,3 +242,9 @@ import { Image } from "astro:assets";
 		</section>
 	</div>
 </BaseLayout>
+
+<script>
+	import { initializeMotion } from "../lib/motion";
+
+	initializeMotion();
+</script>
