@@ -43,7 +43,7 @@ const footerWordmark = "ALFAN".split("");
 		<script is:inline>
 			(() => {
 				try {
-					// if (localStorage.getItem("alfanjauhari:loader-seen")) return;
+					if (localStorage.getItem("alfanjauhari:loader-seen")) return;
 				} catch {
 					// Keep the first-visit loader available when storage is restricted.
 				}
