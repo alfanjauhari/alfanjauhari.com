@@ -1,0 +1,15 @@
+---
+import Seo from "../components/Seo.astro";
+import Layout from "../layouts/Layout.astro";
+
+const title = "A reusable branded OG image template";
+const description = "The renderer module owns the shared brand frame while the page only owns its metadata.";
+---
+
+<Layout {title} {description}>
+	<Fragment slot="head"><Seo {title} {description} /></Fragment>
+	<main>
+		<h1>{title}</h1>
+		<p>{description}</p>
+	</main>
+</Layout>

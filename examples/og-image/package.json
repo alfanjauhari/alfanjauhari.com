@@ -1,0 +1,23 @@
+{
+  "name": "@alfanjauhari/example-og-image",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "predev": "pnpm --filter @alfanjauhari/astro-og-images build",
+    "dev": "astro dev",
+    "prebuild": "pnpm --filter @alfanjauhari/astro-og-images build",
+    "build": "astro build",
+    "preview": "astro preview",
+    "pretypecheck": "pnpm --filter @alfanjauhari/astro-og-images build",
+    "typecheck": "astro check"
+  },
+  "dependencies": {
+    "@alfanjauhari/astro-og-images": "workspace:*"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "astro": "^7.2.4",
+    "typescript": "^6.0.3"
+  }
+}

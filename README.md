@@ -12,8 +12,12 @@ This is a pnpm and Turborepo monorepo. The website is built with Astro, MDX, Sol
 | [`@alfanjauhari/astro-og-images`](./packages/astro-og-images)     | Build-time Open Graph images for prerendered Astro pages |
 | [`@alfanjauhari/config`](./packages/config)                       | Shared Oxfmt, Oxlint, TypeScript, and Tailwind presets   |
 | [`@alfanjauhari/solid-prosemirror`](./packages/solid-prosemirror) | SolidJS rich-text editor built on ProseMirror            |
+| [`examples/og-image`](./examples/og-image)                        | Astro project demonstrating OG image implementations     |
+| [`examples/prosemirror`](./examples/prosemirror)                  | Client-only SolidJS project demonstrating the editor     |
 
-The website consumes all three packages through `workspace:*`. Packages are built before the application through Turborepo's dependency graph.
+The website consumes all three packages through `workspace:*`. The example projects are private workspace packages and are built before their package dependencies through Turborepo's dependency graph.
+
+Copyable package implementations live in [`examples`](./examples/README.md).
 
 ## Stack
 

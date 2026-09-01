@@ -1,0 +1,15 @@
+---
+import Seo from "../components/Seo.astro";
+import Layout from "../layouts/Layout.astro";
+
+const title = "A minimal Astro OG image";
+const description = "The smallest complete setup uses an inline-style element tree and a shared metadata component.";
+---
+
+<Layout {title} {description}>
+	<Fragment slot="head"><Seo {title} {description} /></Fragment>
+	<main>
+		<h1>{title}</h1>
+		<p>{description}</p>
+	</main>
+</Layout>

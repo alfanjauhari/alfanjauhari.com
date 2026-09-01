@@ -1,0 +1,15 @@
+---
+import Seo from "../components/Seo.astro";
+import Layout from "../layouts/Layout.astro";
+
+const title = "Route-aware OG image rendering";
+const description = "The renderer receives the complete Open Graph input and selects a palette from the page type.";
+---
+
+<Layout {title} {description} type="article">
+	<Fragment slot="head"><Seo {title} {description} type="article" /></Fragment>
+	<article>
+		<h1>{title}</h1>
+		<p>{description}</p>
+	</article>
+</Layout>

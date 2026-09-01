@@ -1,0 +1,36 @@
+{
+  "name": "@alfanjauhari/example-prosemirror",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "predev": "pnpm --filter @alfanjauhari/solid-prosemirror build",
+    "dev": "vite",
+    "prebuild": "pnpm --filter @alfanjauhari/solid-prosemirror build",
+    "build": "vite build",
+    "preview": "vite preview",
+    "pretypecheck": "pnpm --filter @alfanjauhari/solid-prosemirror build",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@alfanjauhari/solid-prosemirror": "workspace:*",
+    "@prosemirror-adapter/solid": "^0.5.5",
+    "lucide-solid": "^1.21.0",
+    "prosemirror-commands": "^1.7.2",
+    "prosemirror-history": "^1.5.0",
+    "prosemirror-keymap": "^1.2.3",
+    "prosemirror-model": "^1.25.11",
+    "prosemirror-state": "^1.4.4",
+    "prosemirror-view": "^1.42.2",
+    "solid-js": "^1.9.13"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.20",
+    "@tailwindcss/vite": "^4.3.1",
+    "@types/node": "^24.10.1",
+    "tailwindcss": "^4.3.1",
+    "typescript": "^6.0.3",
+    "vite": "^8.2.2",
+    "vite-plugin-solid": "^2.11.14"
+  }
+}

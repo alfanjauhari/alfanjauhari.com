@@ -1,0 +1,22 @@
+---
+import Seo from "../components/Seo.astro";
+import Layout from "../layouts/Layout.astro";
+
+const title = "Astro OG image examples";
+const description = "One Astro project, three renderer implementations, and matching Open Graph metadata.";
+---
+
+<Layout {title} {description}>
+	<Fragment slot="head"><Seo {title} {description} /></Fragment>
+	<main>
+		<h1>{title}</h1>
+		<p>{description}</p>
+		<nav aria-label="Examples">
+			<ul>
+				<li><a href="/minimal">Minimal renderer</a></li>
+				<li><a href="/branded">Branded renderer</a></li>
+				<li><a href="/route-aware">Route-aware renderer</a></li>
+			</ul>
+		</nav>
+	</main>
+</Layout>

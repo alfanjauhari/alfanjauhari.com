@@ -1,0 +1,25 @@
+---
+import { getOgImagePath } from "@alfanjauhari/astro-og-images/path";
+
+interface Props {
+	description?: string;
+	title: string;
+	type?: string;
+}
+
+const { description, title, type = "website" } = Astro.props;
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
+const ogImage = getOgImagePath({
+	format: "webp",
+	site: Astro.site,
+	url: Astro.url,
+});
+---
+
+<title>{title}</title>
+{description && <meta name="description" content={description} />}
+<meta property="og:title" content={title} />
+{description && <meta property="og:description" content={description} />}
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:type" content={type} />
+<meta property="og:image" content={ogImage} />

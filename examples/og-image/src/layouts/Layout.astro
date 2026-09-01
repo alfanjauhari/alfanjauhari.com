@@ -1,0 +1,19 @@
+---
+interface Props {
+	description: string;
+	title: string;
+	type?: string;
+}
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<slot name="head" />
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>

@@ -172,3 +172,5 @@ pnpm --filter @alfanjauhari/solid-prosemirror typecheck
 ```
 
 This package is licensed under the [MIT License](./LICENSE).
+
+See the [Solid ProseMirror examples](../../examples/prosemirror) for the packaged editor, custom toolbar, and low-level API implementations.

@@ -155,3 +155,5 @@ pnpm --filter @alfanjauhari/astro-og-images typecheck
 ```
 
 This package is licensed under the [MIT License](./LICENSE).
+
+See the [OG image examples](../../examples/og-image) for minimal, branded, and route-aware implementations.
