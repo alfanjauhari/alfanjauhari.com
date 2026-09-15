@@ -1,192 +1,24 @@
-import type {
-	Dependencies,
-	SandboxSetup,
-	SandpackBundlerFiles,
-	SandpackClient,
-	UnsubscribeFunction,
-} from "@codesandbox/sandpack-client";
-import { loadSandpackClient } from "@codesandbox/sandpack-client";
+import LiveCodes, { type Playground as LiveCodesPlayground } from "livecodes/solid";
 import { CodeXmlIcon, EyeIcon, RotateCcwIcon, TerminalIcon } from "lucide-solid";
 import { init } from "modern-monaco";
 import type * as Monaco from "modern-monaco/editor-core";
 import { type Component, createSignal, For, onCleanup, onMount } from "solid-js";
-import { cn } from "../../lib/utils";
+import { cn } from "@/lib/utils";
+import {
+	buildLiveCodesConfig,
+	formatConsoleValue,
+	getFileByName,
+	getLanguage,
+	playgroundPath,
+	resolveEntry,
+	type PlaygroundFile,
+} from "./playground-utils";
+import { createLiveCodesRuntime, type LiveCodesRuntime } from "./playground-runtime";
 
-export interface PlaygroundFile {
-	name: string;
-	content: string;
-}
+export type { PlaygroundFile } from "./playground-utils";
 
-const LANG_MAP: Record<string, string> = {
-	html: "html",
-	css: "css",
-	js: "javascript",
-	jsx: "javascript",
-	mjs: "javascript",
-	cjs: "javascript",
-	ts: "typescript",
-	tsx: "typescript",
-	json: "json",
-	md: "markdown",
-};
-
-function getLanguage(filename: string): string {
-	const ext = filename.split(".").pop() ?? "";
-	return LANG_MAP[ext] ?? "plaintext";
-}
-
-function sandpackPath(name: string): string {
-	return name.startsWith("/") ? name : `/${name}`;
-}
-
-function hasExtension(name: string, extensions: string[]): boolean {
-	return extensions.some((extension) => name.endsWith(extension));
-}
-
-function getPreviewEntry(files: PlaygroundFile[], entryFile?: string): string {
-	const entry = entryFile ?? files[0]?.name ?? "index.html";
-	return hasExtension(entry, [".html", ".htm"]) ? sandpackPath(entry) : "/index.html";
-}
-
-function getRuntimeEntry(files: PlaygroundFile[], entryFile?: string): string {
-	const entry = entryFile ?? files[0]?.name ?? "index.html";
-	return sandpackPath(entry);
-}
-
-function getGeneratedRuntimeEntry(files: PlaygroundFile[], entryFile?: string): string {
-	const runtimeEntry = getRuntimeEntry(files, entryFile);
-	return hasExtension(runtimeEntry, [".jsx", ".tsx"]) ? "/index.tsx" : runtimeEntry;
-}
-
-/**
- * Injected into the sandbox iframe's HTML to capture console.log/warn/error etc.
- * and forward them to the parent window via postMessage. Falls back to
- * JSON.stringify for non-serializable objects so they still appear in the
- * playground console panel.
- */
-const CONSOLE_HOOK_INLINE = (playgroundId: string) =>
-	`<script>window.__PLAYGROUND_ID__=${JSON.stringify(playgroundId)};(function(){var m=["log","debug","info","warn","error"];for(var i=0;i<m.length;i++){(function(method){var o=console[method];console[method]=function(){try{window.parent.postMessage({source:"playground-console",playgroundId:window.__PLAYGROUND_ID__,log:{method:method,data:Array.prototype.slice.call(arguments)}},"*")}catch(_){window.parent.postMessage({source:"playground-console",playgroundId:window.__PLAYGROUND_ID__,log:{method:method,data:Array.prototype.slice.call(arguments).map(function(a){return(typeof a==="object"&&a!==null?JSON.stringify(a,null,2):String(a))})}},"*")};o.apply(console,arguments)}})(m[i])}})();</script>`;
-
-function buildGeneratedHtml(runtimeEntry: string, playgroundId: string): string {
-	return `<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Playground</title>
-    ${CONSOLE_HOOK_INLINE(playgroundId)}
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="${runtimeEntry}"></script>
-  </body>
-</html>`;
-}
-
-function decodeHtmlEntities(value: string): string {
-	const textarea = document.createElement("textarea");
-	textarea.innerHTML = value;
-	return textarea.value;
-}
-
-/**
- * When the user's entry file is a .jsx/.tsx module, Sandpack's parcel
- * template needs an HTML entry. We auto-generate a /index.tsx wrapper that
- * imports the user's component as the default export and renders it into
- * #root via React 18's createRoot API.
- */
-function buildReactEntry(runtimeEntry: string): string {
-	return `import React from "react";
-import { createRoot } from "react-dom/client";
-import App from "${runtimeEntry}";
-
-createRoot(document.getElementById("root")!).render(<App />);`;
-}
-
-function injectConsoleHook(html: string, playgroundId: string): string {
-	if (html.includes("playground-console")) return html;
-	const hook = CONSOLE_HOOK_INLINE(playgroundId);
-	return html.includes("</head>")
-		? html.replace("</head>", `${hook}\n  </head>`)
-		: `${hook}\n${html}`;
-}
-
-function getSandboxDependencies(files: PlaygroundFile[]): Dependencies {
-	const needsReact = files.some((file) => hasExtension(file.name, [".jsx", ".tsx"]));
-	return needsReact ? { react: "latest", "react-dom": "latest" } : {};
-}
-
-function createModelUri(monaco: MonacoInstance, playgroundId: string, name: string): Monaco.Uri {
-	return monaco.Uri.parse(`file:///${playgroundId}${sandpackPath(name)}`);
-}
-
-/**
- * Builds the complete Sandpack sandbox configuration from the user's files.
- *
- * Flow:
- *  1. Copy all user files into the sandbox under their sandpack paths.
- *  2. If the runtime entry is .jsx/.tsx, generate a React bootstrap wrapper
- *     (see buildReactEntry) so parcel can serve it as /index.tsx.
- *  3. Determine the HTML preview entry:
- *     - If the user already provides an HTML file, use it (after injecting
- *       the console hook script).
- *     - Otherwise generate a minimal HTML shell that loads the runtime entry.
- */
-function buildSandboxSetup(
-	files: PlaygroundFile[],
-	playgroundId: string,
-	entryFile?: string
-): SandboxSetup {
-	const bundledFiles: SandpackBundlerFiles = {};
-	for (const file of files) {
-		bundledFiles[sandpackPath(file.name)] = { code: file.content };
-	}
-
-	const sourceEntry = getRuntimeEntry(files, entryFile);
-	const runtimeEntry = getGeneratedRuntimeEntry(files, entryFile);
-	const previewEntry = getPreviewEntry(files, entryFile);
-	if (runtimeEntry !== sourceEntry && !bundledFiles[runtimeEntry]) {
-		bundledFiles[runtimeEntry] = { code: buildReactEntry(sourceEntry) };
-	}
-	if (bundledFiles[previewEntry]) {
-		bundledFiles[previewEntry].code = injectConsoleHook(
-			bundledFiles[previewEntry].code,
-			playgroundId
-		);
-	} else {
-		bundledFiles[previewEntry] = {
-			code: buildGeneratedHtml(runtimeEntry, playgroundId),
-		};
-	}
-
-	return {
-		dependencies: getSandboxDependencies(files),
-		files: bundledFiles,
-		entry: previewEntry,
-		template: "parcel",
-	};
-}
-
-/**
- * Extracts playground source files from MDX content. MDX authors wrap each
- * file in <template data-playground-file="filename.ext"> elements inside a
- * container marked with data-playground-root. The browser parses HTML entities
- * inside <template> tags, so we decode them back before use.
- */
-function extractMdxFiles(root: Element): PlaygroundFile[] {
-	const templates = root.querySelectorAll<HTMLTemplateElement>("template[data-playground-file]");
-	const result: PlaygroundFile[] = [];
-	for (const template of templates) {
-		const name = template.dataset.playgroundFile ?? "file";
-		const content = decodeHtmlEntities(template.content.textContent ?? "");
-		result.push({ name, content });
-	}
-	return result;
-}
-
-type MonacoInstance = typeof Monaco;
-type MonacoEditor = Monaco.editor.IStandaloneCodeEditor;
-type MonacoModel = Monaco.editor.ITextModel;
+// #region Public types
+type ViewMode = "editor" | "split" | "preview" | "console";
 
 interface ConsoleLog {
 	id: string;
@@ -194,115 +26,124 @@ interface ConsoleLog {
 	data: unknown[];
 }
 
-function parseMessageData(raw: string): unknown {
-	try {
-		return JSON.parse(raw);
-	} catch {
-		return raw;
-	}
-}
-
-/**
- * Formats any console argument into a human-readable string for display
- * in the console panel. Handles primitives, Error stacks, and complex
- * objects (via JSON.stringify with a custom replacer for functions/symbols).
- */
-function formatConsoleValue(value: unknown, depth = 0): string {
-	if (typeof value === "string") return value;
-	if (value === undefined) return "undefined";
-	if (value === null) return "null";
-	if (typeof value === "function") return value.toString();
-	if (value instanceof Error) return value.stack ?? value.message;
-	if (typeof value === "boolean") return value.toString();
-	if (typeof value === "number") return String(value);
-	if (typeof value === "bigint") return String(value);
-	if (typeof value === "symbol") return value.toString();
-	if (typeof value === "object") {
-		try {
-			return JSON.stringify(
-				value,
-				(_key, v) => {
-					if (typeof v === "function") return v.toString();
-					if (typeof v === "symbol") return v.toString();
-					if (typeof v === "bigint") return String(v);
-					return v;
-				},
-				depth > 0 ? 2 : undefined
-			);
-		} catch {
-			return String(value);
-		}
-	}
-	return String(value);
-}
-
 interface PlaygroundProps {
 	files?: PlaygroundFile[];
 	entryFile?: string;
 }
 
+type MonacoInstance = typeof Monaco;
+type MonacoEditor = Monaco.editor.IStandaloneCodeEditor;
+type MonacoModel = Monaco.editor.ITextModel;
+// #endregion
+
+// #region Monaco helpers
+function createModelUri(monaco: MonacoInstance, playgroundId: string, name: string): Monaco.Uri {
+	return monaco.Uri.parse(`file:///${playgroundId}${playgroundPath(name)}`);
+}
+
+function defineMonacoThemes(monaco: MonacoInstance): void {
+	const latte = {
+		base: "vs" as const,
+		inherit: true,
+		rules: [] as {
+			token: string;
+			foreground?: string;
+			fontStyle?: string;
+		}[],
+		colors: {
+			"editor.background": "#eff1f5",
+			"editor.foreground": "#4c4f69",
+			"editorLineNumber.foreground": "#bcc0cc",
+			"editorLineNumber.activeForeground": "#4c4f69",
+			"editor.selectionBackground": "#ccd0da",
+			"editorCursor.foreground": "#1e66f5",
+			"editor.inactiveSelectionBackground": "#e6e9ef",
+			"editorBracketMatch.background": "#ccd0da",
+			"editorBracketMatch.border": "#bcc0cc",
+		},
+	};
+	const mocha = {
+		base: "vs-dark" as const,
+		inherit: true,
+		rules: [] as {
+			token: string;
+			foreground?: string;
+			fontStyle?: string;
+		}[],
+		colors: {
+			"editor.background": "#1e1e2e",
+			"editor.foreground": "#cdd6f4",
+			"editorLineNumber.foreground": "#585b70",
+			"editorLineNumber.activeForeground": "#cdd6f4",
+			"editor.selectionBackground": "#313244",
+			"editorCursor.foreground": "#89b4fa",
+			"editor.inactiveSelectionBackground": "#313244",
+			"editorBracketMatch.background": "#313244",
+			"editorBracketMatch.border": "#585b70",
+		},
+	};
+
+	monaco.editor.defineTheme("catppuccin-latte", latte);
+	monaco.editor.defineTheme("catppuccin-mocha", mocha);
+}
+// #endregion
+
 export const Playground: Component<PlaygroundProps> = (props) => {
+	// #region Component identity and initial inputs
 	const playgroundId = `playground-${crypto.randomUUID()}`;
 	const initialFiles = props.files ?? [];
-	let resolvedEntry = props.entryFile ?? initialFiles[0]?.name ?? "index.html";
+	let resolvedEntry = resolveEntry(initialFiles, props.entryFile);
+	// #endregion
 
+	// #region Active file state
 	const [activeFile, setActiveFile] = createSignal(resolvedEntry);
-	const [files, setFiles] = createSignal<PlaygroundFile[]>(initialFiles);
-	const [viewMode, setViewMode] = createSignal<"editor" | "split" | "preview" | "console">("split");
-	const [consoleLogs, setConsoleLogs] = createSignal<ConsoleLog[]>([]);
+	// #endregion
 
+	// #region File state
+	const [files, setFiles] = createSignal<PlaygroundFile[]>(initialFiles);
+	// #endregion
+
+	// #region View state
+	const [viewMode, setViewMode] = createSignal<ViewMode>("split");
+	// #endregion
+
+	// #region Preview and console state
+	const [previewHtml, setPreviewHtml] = createSignal("");
+	const [consoleLogs, setConsoleLogs] = createSignal<ConsoleLog[]>([]);
+	const [sandboxError, setSandboxError] = createSignal<string>();
+	// #endregion
+
+	// #region Readiness state
+	const [editorReady, setEditorReady] = createSignal(false);
+	// #endregion
+
+	// #region DOM refs
 	let playgroundContainer!: HTMLDivElement;
 	let editorContainer!: HTMLDivElement;
-	let previewContainer!: HTMLDivElement;
-	let monacoInstance: MonacoInstance;
-	let monacoEditor: MonacoEditor;
-	let sandpackClient: SandpackClient | undefined;
-	let sandpackIframe: HTMLIFrameElement | undefined;
-	let unsubscribeSandpack: UnsubscribeFunction | undefined;
-	let consoleLogId = 0;
+	let previewFrame!: HTMLIFrameElement;
+	// #endregion
 
+	// #region Monaco refs and models
+	let monacoInstance: MonacoInstance | undefined;
+	let monacoEditor: MonacoEditor | undefined;
+	let editorContentSubscription: Monaco.IDisposable | undefined;
 	const models = new Map<string, MonacoModel>();
+	// #endregion
+
+	// #region LiveCodes refs and subscriptions
+	let liveCodesRuntime: LiveCodesRuntime | undefined;
+	let debounceTimer: ReturnType<typeof setTimeout> | undefined;
+	let disposed = false;
+	let consoleLogId = 0;
+	// #endregion
+
+	// #region Theme refs
 	let themeObserver: MutationObserver | undefined;
-	let mq: MediaQueryList | undefined;
-	let mqHandler: (() => void) | undefined;
+	let mediaQuery: MediaQueryList | undefined;
+	let mediaQueryHandler: (() => void) | undefined;
+	// #endregion
 
-	function defineMonacoThemes(m: MonacoInstance) {
-		const latte = {
-			base: "vs" as const,
-			inherit: true,
-			rules: [] as { token: string; foreground?: string; fontStyle?: string }[],
-			colors: {
-				"editor.background": "#eff1f5",
-				"editor.foreground": "#4c4f69",
-				"editorLineNumber.foreground": "#bcc0cc",
-				"editorLineNumber.activeForeground": "#4c4f69",
-				"editor.selectionBackground": "#ccd0da",
-				"editorCursor.foreground": "#1e66f5",
-				"editor.inactiveSelectionBackground": "#e6e9ef",
-				"editorBracketMatch.background": "#ccd0da",
-				"editorBracketMatch.border": "#bcc0cc",
-			},
-		};
-		const mocha = {
-			base: "vs-dark" as const,
-			inherit: true,
-			rules: [] as { token: string; foreground?: string; fontStyle?: string }[],
-			colors: {
-				"editor.background": "#1e1e2e",
-				"editor.foreground": "#cdd6f4",
-				"editorLineNumber.foreground": "#585b70",
-				"editorLineNumber.activeForeground": "#cdd6f4",
-				"editor.selectionBackground": "#313244",
-				"editorCursor.foreground": "#89b4fa",
-				"editor.inactiveSelectionBackground": "#313244",
-				"editorBracketMatch.background": "#313244",
-				"editorBracketMatch.border": "#585b70",
-			},
-		};
-		m.editor.defineTheme("catppuccin-latte", latte as Monaco.editor.IStandaloneThemeData);
-		m.editor.defineTheme("catppuccin-mocha", mocha as Monaco.editor.IStandaloneThemeData);
-	}
-
+	// #region Monaco theme functions
 	function getMonacoTheme(): string {
 		const attr = document.documentElement.getAttribute("data-theme");
 		if (attr === "dark") return "catppuccin-mocha";
@@ -312,95 +153,181 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 			: "catppuccin-latte";
 	}
 
-	function applyMonacoTheme() {
-		if (monacoEditor) {
-			monacoInstance?.editor.setTheme(getMonacoTheme());
+	function applyMonacoTheme(): void {
+		if (!monacoEditor || !monacoInstance) return;
+
+		const theme = getMonacoTheme();
+		monacoInstance.editor.setTheme(theme);
+		monacoEditor.updateOptions({ theme });
+	}
+	// #endregion
+
+	// #region Console functions
+	function appendConsoleLog(method: string, data: unknown[]): void {
+		if (method === "clear") {
+			setConsoleLogs([]);
+			return;
+		}
+
+		setConsoleLogs((logs) => [
+			...logs,
+			{
+				id: `console-${consoleLogId++}`,
+				method,
+				data,
+			},
+		]);
+	}
+
+	function getConsoleMethodClass(method: string): string {
+		switch (method) {
+			case "error":
+				return "text-destructive";
+			case "warn":
+				return "text-yellow-600 dark:text-yellow-400";
+			case "info":
+				return "text-blue-600 dark:text-blue-400";
+			default:
+				return "text-muted-foreground";
+		}
+	}
+	// #endregion
+
+	// #region LiveCodes readiness
+	function handleLiveCodesReady(sdk: LiveCodesPlayground): void {
+		if (disposed) {
+			sdk.destroy().catch(() => {});
+			return;
+		}
+
+		liveCodesRuntime = createLiveCodesRuntime(sdk, {
+			onCode: (result) => setPreviewHtml(result),
+			onConsole: appendConsoleLog,
+		});
+
+		if (editorReady()) updateLiveCodes();
+	}
+	// #endregion
+
+	// #region LiveCodes synchronization
+	/**
+	 * Pushes the current file snapshot into LiveCodes after a short pause.
+	 * Monaco state is updated immediately; only compilation is debounced so
+	 * typing remains responsive while LiveCodes avoids redundant builds.
+	 */
+	async function updateLiveCodes(): Promise<void> {
+		const runtime = liveCodesRuntime;
+		if (disposed || !runtime || !files().length) return;
+
+		try {
+			setSandboxError(undefined);
+			const code = await runtime.sync(buildLiveCodesConfig(files(), resolvedEntry, activeFile()));
+			if (!disposed && runtime === liveCodesRuntime) {
+				setPreviewHtml(code.result);
+			}
+		} catch (error) {
+			if (!disposed && runtime === liveCodesRuntime) {
+				setSandboxError(
+					error instanceof Error ? error.message : "Unable to update the playground.",
+				);
+			}
 		}
 	}
 
-	function dispose() {
-		monacoEditor?.dispose();
-		for (const model of models.values()) {
-			model.dispose();
+	function clearDebouncedUpdate(): void {
+		if (!debounceTimer) return;
+
+		clearTimeout(debounceTimer);
+		debounceTimer = undefined;
+	}
+
+	function scheduleLiveCodesUpdate(): void {
+		clearDebouncedUpdate();
+		debounceTimer = setTimeout(() => {
+			debounceTimer = undefined;
+			updateLiveCodes();
+		}, 500);
+	}
+	// #endregion
+
+	// #region Monaco model functions
+	function createModel(name: string, content: string): MonacoModel {
+		if (!monacoInstance) {
+			throw new Error("Monaco is not initialized.");
 		}
-		models.clear();
+
+		const model = monacoInstance.editor.createModel(
+			content,
+			getLanguage(name),
+			createModelUri(monacoInstance, playgroundId, name),
+		);
+		models.set(name, model);
+		return model;
 	}
 
-	function getFileContent(name: string): string {
-		const file = files().find((f) => f.name === name);
-		return file?.content ?? "";
-	}
-
-	function syncContentFromEditor() {
-		if (!monacoEditor) return;
+	function updateActiveFileFromModel(): void {
 		const name = activeFile();
 		const model = models.get(name);
 		if (!model) return;
+
 		const content = model.getValue();
 		setFiles((currentFiles) =>
-			currentFiles.map((file) => (file.name === name ? { ...file, content } : file))
+			currentFiles.map((file) =>
+				file.name === name && file.content !== content ? { ...file, content } : file,
+			),
 		);
+		scheduleLiveCodesUpdate();
 	}
 
-	function updateSandpack() {
-		if (!sandpackClient) return;
-		syncContentFromEditor();
-		const setup = buildSandboxSetup(files(), playgroundId, resolvedEntry);
-		sandpackClient.updateSandbox(setup);
+	function handleEditorContentChange(): void {
+		updateActiveFileFromModel();
 	}
+	// #endregion
 
+	// #region File switching
 	/**
-	 * Editor → sandbox sync pipeline:
-	 *  1. User types in Monaco → onDidChangeModelContent fires.
-	 *  2. A 500ms debounce (debouncedUpdate) waits for typing to pause.
-	 *  3. syncContentFromEditor pulls the latest content from the Monaco
-	 *     model into the files signal.
-	 *  4. updateSandpack rebuilds the sandbox setup and pushes it to
-	 *     Sandpack, triggering a hot reload in the preview.
+	 * Switches Monaco models instead of copying content through LiveCodes.
+	 * Each authored file keeps its own model, while LiveCodes only receives the
+	 * active file snapshot when compilation is scheduled.
 	 */
-	let debounceTimer: ReturnType<typeof setTimeout>;
-	function debouncedUpdate() {
-		clearTimeout(debounceTimer);
-		debounceTimer = setTimeout(updateSandpack, 500);
-	}
+	function switchFile(name: string): void {
+		if (name === activeFile() || !monacoEditor) return;
 
-	/**
-	 * Switches the editor to a different file tab. Saves current editor
-	 * content back to the files signal, then lazily creates a Monaco model
-	 * for the target file if one doesn't exist yet.
-	 */
-	function switchFile(name: string) {
-		if (name === activeFile()) return;
-		if (!monacoEditor) return;
+		const file = getFileByName(files(), name);
+		if (!file) return;
 
-		syncContentFromEditor();
-
-		if (!models.has(name)) {
-			const content = getFileContent(name);
-			const lang = getLanguage(name);
-			const model = monacoInstance.editor.createModel(
-				content,
-				lang,
-				createModelUri(monacoInstance, playgroundId, name)
-			);
-			models.set(name, model);
-		}
-
-		const model = models.get(name);
-		monacoEditor.setModel(model ?? null);
+		const model = models.get(name) ?? createModel(name, file.content);
+		monacoEditor.setModel(model);
 		setActiveFile(name);
-		requestAnimationFrame(() => monacoEditor.layout());
+		requestAnimationFrame(() => monacoEditor?.layout());
 	}
+	// #endregion
 
-	function refreshPreview() {
-		syncContentFromEditor();
+	// #region Refresh
+	async function refreshPreview(): Promise<void> {
+		clearDebouncedUpdate();
 		setConsoleLogs([]);
-		if (sandpackClient) {
-			const setup = buildSandboxSetup(files(), playgroundId, resolvedEntry);
-			sandpackClient.updateSandbox(setup);
+
+		const runtime = liveCodesRuntime;
+		if (!runtime) return;
+
+		try {
+			setSandboxError(undefined);
+			const code = await runtime.run();
+			if (!disposed && runtime === liveCodesRuntime) {
+				setPreviewHtml(code.result);
+			}
+		} catch (error) {
+			if (!disposed && runtime === liveCodesRuntime) {
+				setSandboxError(
+					error instanceof Error ? error.message : "Unable to refresh the playground.",
+				);
+			}
 		}
 	}
+	// #endregion
 
+	// #region View helpers
 	function getEditorClass(): string {
 		return viewMode() === "preview" || viewMode() === "console"
 			? "hidden"
@@ -416,82 +343,53 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 				? "md:w-1/2 border-t md:border-t-0 md:border-l"
 				: "w-full border-t";
 	}
+	// #endregion
 
-	function appendConsoleLog(method: string, data: unknown[], fromSandpackClient?: boolean) {
-		const processed = fromSandpackClient
-			? data.map((item) => (typeof item === "string" ? parseMessageData(item) : item))
-			: data;
-
-		setConsoleLogs((logs) => [
-			...logs,
-			{ id: `console-${consoleLogId++}`, method, data: processed },
-		]);
+	// #region MDX extraction
+	function decodeHtmlEntities(value: string): string {
+		const textarea = document.createElement("textarea");
+		textarea.innerHTML = value;
+		return textarea.value;
 	}
 
-	/**
-	 * Console output arrives via two paths:
-	 *  1. Sandpack's own console listener (readSandpackMessage) — catches
-	 *     bundler diagnostics and runtime logs from the iframe's evaluation.
-	 *  2. window.postMessage (readWindowMessage) — catches console calls
-	 *     captured by the inline CONSOLE_HOOK_INLINE script injected into the
-	 *     preview HTML. This covers logs that Sandpack's listener may miss.
-	 */
-	function readSandpackMessage(
-		message: Parameters<SandpackClient["listen"]>[0] extends (message: infer T) => void ? T : never
-	) {
-		if (message.type !== "console") return;
-		for (const log of message.log) {
-			appendConsoleLog(log.method, log.data, true);
+	function extractMdxFiles(root: Element): PlaygroundFile[] {
+		const templates = root.querySelectorAll<HTMLTemplateElement>("template[data-playground-file]");
+		const result: PlaygroundFile[] = [];
+
+		for (const template of templates) {
+			const name = template.dataset.playgroundFile ?? "file";
+			const content = decodeHtmlEntities(template.content.textContent ?? "");
+			result.push({ name, content });
 		}
-	}
 
-	function readWindowMessage(event: MessageEvent<unknown>) {
-		if (event.source !== sandpackIframe?.contentWindow) return;
-		const data = event.data as {
-			source?: unknown;
-			playgroundId?: unknown;
-			log?: unknown;
-		} | null;
-		if (data?.source !== "playground-console") return;
-		if (data.playgroundId !== playgroundId) return;
-		const log = data.log as { method?: unknown; data?: unknown };
-		if (!log || typeof log.method !== "string") return;
-		const logData = Array.isArray(log.data) ? log.data : [];
-		appendConsoleLog(log.method, logData);
+		return result;
 	}
+	// #endregion
 
-	onMount(async () => {
-		// If no files were passed as props, extract them from MDX
-		// <template data-playground-file> elements in the parent
+	// #region Initialization
+	/**
+	 * Initializes the two deliberately separate clients: Monaco presents the
+	 * file-tab UX, while LiveCodes compiles the three logical runtime inputs.
+	 * Either client may become ready first, so initialization checks both sides
+	 * before scheduling the first synchronization.
+	 */
+	async function initialize(): Promise<void> {
+		let currentFiles = files();
 		if (!props.files?.length) {
 			const root = playgroundContainer.closest("[data-playground-root]");
-			const extractedFiles = root ? extractMdxFiles(root) : [];
-			setFiles(extractedFiles);
-			resolvedEntry = props.entryFile ?? extractedFiles[0]?.name ?? "index.html";
-			setActiveFile(resolvedEntry);
+			currentFiles = root ? extractMdxFiles(root) : [];
+			setFiles(currentFiles);
 		}
 
+		if (!currentFiles.length) return;
+
+		resolvedEntry = resolveEntry(currentFiles, props.entryFile);
+		setActiveFile(resolvedEntry);
 		monacoInstance = await init();
-
-		try {
-			// biome-ignore lint/suspicious/noExplicitAny: modern-monaco types don't include languages namespace
-			const instance = monacoInstance as any;
-			instance.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
-				noSemanticValidation: true,
-				noSyntaxValidation: false,
-			});
-			instance.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
-				noSemanticValidation: true,
-				noSyntaxValidation: false,
-			});
-		} catch {
-			// languages.typescript not available in modern-monaco — no diagnostics to suppress
-		}
+		if (disposed || !monacoInstance) return;
 
 		defineMonacoThemes(monacoInstance);
-
 		monacoEditor = monacoInstance.editor.create(editorContainer, {
-			theme: getMonacoTheme(),
 			automaticLayout: true,
 			minimap: { enabled: false },
 			scrollBeyondLastLine: false,
@@ -502,83 +400,97 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 			fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace",
 		});
 
-		const firstFile = files().find((f) => f.name === resolvedEntry);
+		const firstFile = getFileByName(currentFiles, resolvedEntry);
 		if (firstFile) {
-			const lang = getLanguage(firstFile.name);
-			const model = monacoInstance.editor.createModel(
-				firstFile.content,
-				lang,
-				createModelUri(monacoInstance, playgroundId, firstFile.name)
-			);
-			models.set(firstFile.name, model);
-			monacoEditor.setModel(model);
+			monacoEditor.setModel(createModel(firstFile.name, firstFile.content));
 		}
 
-		monacoEditor.onDidChangeModelContent(() => {
-			debouncedUpdate();
-		});
-		window.addEventListener("message", readWindowMessage);
+		editorContentSubscription = monacoEditor.onDidChangeModelContent(handleEditorContentChange);
+		setEditorReady(true);
+		applyMonacoTheme();
 
-		// Create the sandbox iframe and load Sandpack client
-		sandpackIframe = document.createElement("iframe");
-		sandpackIframe.style.width = "100%";
-		sandpackIframe.style.height = "100%";
-		sandpackIframe.style.border = "none";
-		sandpackIframe.style.minHeight = "320px";
-		sandpackIframe.src = "about:blank";
-		previewContainer.appendChild(sandpackIframe);
-
-		try {
-			const setup = buildSandboxSetup(files(), playgroundId, resolvedEntry);
-			sandpackClient = await loadSandpackClient(sandpackIframe, setup, {
-				clearConsoleOnFirstCompile: false,
-				showOpenInCodeSandbox: false,
-				showLoadingScreen: true,
-			});
-			unsubscribeSandpack = sandpackClient.listen(readSandpackMessage);
-		} catch (err) {
-			console.error("Sandpack client failed to load:", err);
-		}
-
-		// Keep Monaco theme in sync with the site's light/dark mode.
-		// Observes [data-theme] attribute changes (manual toggle) and
-		// listens for prefers-color-scheme media query changes (OS setting).
 		themeObserver = new MutationObserver(applyMonacoTheme);
 		themeObserver.observe(document.documentElement, {
 			attributes: true,
 			attributeFilter: ["data-theme"],
 		});
 
-		mq = window.matchMedia("(prefers-color-scheme: dark)");
-		mqHandler = applyMonacoTheme;
-		mq.addEventListener("change", mqHandler);
+		mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+		mediaQueryHandler = applyMonacoTheme;
+		mediaQuery.addEventListener("change", mediaQueryHandler);
+
+		if (liveCodesRuntime) updateLiveCodes();
+	}
+	// #endregion
+
+	// #region Disposal
+	/**
+	 * Disposes subscriptions, Monaco models, and the headless LiveCodes
+	 * instance together. This prevents delayed compiler or iframe events from
+	 * updating a detached playground after Astro removes the component.
+	 */
+	async function disposePlayground(): Promise<void> {
+		const runtime = liveCodesRuntime;
+		liveCodesRuntime = undefined;
+
+		try {
+			await runtime?.destroy();
+		} catch {
+			// Cleanup should remain best-effort when the iframe is already gone.
+		}
+
+		editorContentSubscription?.dispose();
+		editorContentSubscription = undefined;
+		monacoEditor?.dispose();
+		monacoEditor = undefined;
+		setEditorReady(false);
+
+		for (const model of models.values()) model.dispose();
+		models.clear();
+		previewFrame.srcdoc = "";
+	}
+	// #endregion
+
+	// #region Solid lifecycle
+	onMount(() => {
+		initialize().catch((error: unknown) => {
+			if (!disposed) {
+				setSandboxError(error instanceof Error ? error.message : "Unable to load the playground.");
+			}
+		});
 	});
 
 	onCleanup(() => {
-		unsubscribeSandpack?.();
-		clearTimeout(debounceTimer);
-		window.removeEventListener("message", readWindowMessage);
+		disposed = true;
+		clearDebouncedUpdate();
 		themeObserver?.disconnect();
-		if (mq && mqHandler) mq.removeEventListener("change", mqHandler);
-		dispose();
+		if (mediaQuery && mediaQueryHandler) {
+			mediaQuery.removeEventListener("change", mediaQueryHandler);
+		}
+		disposePlayground();
 	});
+	// #endregion
 
+	// #region Render
 	return (
 		<div
 			ref={playgroundContainer}
-			class="not-prose my-8 rounded-lg overflow-hidden border border-border"
+			class="not-prose my-8 overflow-hidden rounded-lg border border-border"
 		>
+			<LiveCodes class="hidden" headless loading="eager" sdkReady={handleLiveCodesReady} />
+
 			<div class="flex items-center justify-between border-b border-border bg-secondary/30 px-3 py-1.5">
 				<div class="flex items-center gap-0.5 overflow-x-auto">
 					<For each={files()}>
 						{(file) => (
 							<button
 								type="button"
-								class={`shrink-0 px-3 py-1 text-xs font-mono rounded-sm cursor-pointer transition-colors ${
+								class={cn(
+									"shrink-0 cursor-pointer rounded-sm px-3 py-1 font-mono text-xs transition-colors",
 									activeFile() === file.name
 										? "bg-background text-foreground"
-										: "text-foreground/50 hover:text-foreground hover:bg-secondary/50"
-								}`}
+										: "text-foreground/50 hover:bg-secondary/50 hover:text-foreground",
+								)}
 								onClick={() => switchFile(file.name)}
 							>
 								{file.name}
@@ -587,28 +499,32 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 					</For>
 				</div>
 
-				<div class="flex items-center gap-1 shrink-0 ml-2">
-					<div class="flex items-center border-l border-border ml-1 pl-1">
+				<div class="ml-2 flex shrink-0 items-center gap-1">
+					<div class="ml-1 flex items-center border-l border-border pl-1">
 						<button
 							type="button"
-							class={`p-1 rounded cursor-pointer transition-colors ${
+							class={cn(
+								"cursor-pointer rounded p-1 transition-colors",
 								viewMode() === "editor"
-									? "text-foreground bg-secondary/50"
-									: "text-foreground/50 hover:text-foreground"
-							}`}
+									? "bg-secondary/50 text-foreground"
+									: "text-foreground/50 hover:text-foreground",
+							)}
 							onClick={() => setViewMode("editor")}
+							aria-pressed={viewMode() === "editor"}
 							title="Editor only"
 						>
 							<CodeXmlIcon class="size-3.5" />
 						</button>
 						<button
 							type="button"
-							class={`p-1 rounded cursor-pointer transition-colors ${
+							class={cn(
+								"cursor-pointer rounded p-1 transition-colors",
 								viewMode() === "split"
-									? "text-foreground bg-secondary/50"
-									: "text-foreground/50 hover:text-foreground"
-							}`}
+									? "bg-secondary/50 text-foreground"
+									: "text-foreground/50 hover:text-foreground",
+							)}
 							onClick={() => setViewMode("split")}
+							aria-pressed={viewMode() === "split"}
 							title="Split view"
 						>
 							<svg
@@ -625,24 +541,28 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 						</button>
 						<button
 							type="button"
-							class={`p-1 rounded cursor-pointer transition-colors ${
+							class={cn(
+								"cursor-pointer rounded p-1 transition-colors",
 								viewMode() === "preview"
-									? "text-foreground bg-secondary/50"
-									: "text-foreground/50 hover:text-foreground"
-							}`}
+									? "bg-secondary/50 text-foreground"
+									: "text-foreground/50 hover:text-foreground",
+							)}
 							onClick={() => setViewMode("preview")}
+							aria-pressed={viewMode() === "preview"}
 							title="Preview only"
 						>
 							<EyeIcon class="size-3.5" />
 						</button>
 						<button
 							type="button"
-							class={`p-1 rounded cursor-pointer transition-colors ${
+							class={cn(
+								"cursor-pointer rounded p-1 transition-colors",
 								viewMode() === "console"
-									? "text-foreground bg-secondary/50"
-									: "text-foreground/50 hover:text-foreground"
-							}`}
+									? "bg-secondary/50 text-foreground"
+									: "text-foreground/50 hover:text-foreground",
+							)}
 							onClick={() => setViewMode("console")}
+							aria-pressed={viewMode() === "console"}
 							title="Console"
 						>
 							<TerminalIcon class="size-3.5" />
@@ -651,8 +571,8 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 
 					<button
 						type="button"
-						class="p-1 rounded text-foreground/50 hover:text-foreground cursor-pointer transition-colors"
-						onClick={refreshPreview}
+						class="cursor-pointer rounded p-1 text-foreground/50 transition-colors hover:text-foreground"
+						onClick={() => refreshPreview()}
 						title="Refresh preview"
 					>
 						<RotateCcwIcon class="size-3.5" />
@@ -665,37 +585,57 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 					<div ref={editorContainer} class="h-full min-h-80" />
 				</div>
 
-				<div class={cn(`${getOutputClass()} border-border bg-white`, "min-h-80")}>
+				<div class={cn(getOutputClass(), "border-border bg-background text-foreground min-h-80")}>
+					<div class={cn(viewMode() === "console" ? "hidden" : "h-full", "min-h-80")}>
+						<iframe
+							ref={previewFrame}
+							class="h-full min-h-80 w-full border-none"
+							title="Playground preview"
+							sandbox="allow-downloads allow-forms allow-modals allow-popups allow-presentation allow-scripts"
+							srcdoc={previewHtml()}
+						/>
+					</div>
 					<div
-						ref={previewContainer}
-						class={cn(viewMode() === "console" ? "hidden" : "h-full", "min-h-80")}
-					/>
-					<div
-						class={cn(viewMode() === "console" ? "h-full bg-zinc-950 p-3" : "hidden", "min-h-80")}
+						class={cn(
+							viewMode() === "console"
+								? "h-full max-h-128 overflow-auto bg-background p-3"
+								: "hidden",
+							"min-h-80",
+						)}
 					>
-						<For
-							each={consoleLogs()}
-							fallback={<p class="font-mono text-xs text-zinc-500">Console is empty.</p>}
-						>
-							{(log) => (
-								<div class="mb-1 flex gap-2 font-mono text-xs text-zinc-100">
-									<span class="shrink-0 text-zinc-500">{log.method}</span>
-									<span class="whitespace-pre-wrap wrap-break-word">
-										<For each={log.data}>
-											{(value, index) => (
-												<>
-													<span>{formatConsoleValue(value)}</span>
-													{index() < log.data.length - 1 ? " " : ""}
-												</>
-											)}
-										</For>
-									</span>
-								</div>
-							)}
-						</For>
+						{sandboxError() ? (
+							<div class="rounded border border-destructive/30 bg-destructive/5 p-3 font-mono text-xs text-destructive">
+								<p class="mb-1 font-semibold">Playground error</p>
+								<p class="wrap-break-word whitespace-pre-wrap">{sandboxError()}</p>
+							</div>
+						) : (
+							<For
+								each={consoleLogs()}
+								fallback={<p class="font-mono text-xs text-muted-foreground">Console is empty.</p>}
+							>
+								{(log) => (
+									<div class="mb-1 flex gap-2 font-mono text-xs text-foreground">
+										<span class={cn("shrink-0", getConsoleMethodClass(log.method))}>
+											{log.method}
+										</span>
+										<span class="wrap-break-word whitespace-pre-wrap">
+											<For each={log.data}>
+												{(value, index) => (
+													<>
+														<span>{formatConsoleValue(value)}</span>
+														{index() < log.data.length - 1 ? " " : ""}
+													</>
+												)}
+											</For>
+										</span>
+									</div>
+								)}
+							</For>
+						)}
 					</div>
 				</div>
 			</div>
 		</div>
 	);
+	// #endregion
 };

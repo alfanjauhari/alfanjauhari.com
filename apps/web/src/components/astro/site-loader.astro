@@ -404,7 +404,7 @@ const wordClass =
 			setProgress(Math.min(maximum, progress + increment));
 
 			if (progress === 100) {
-				void finish();
+				finish();
 				return;
 			}
 
@@ -421,7 +421,7 @@ const wordClass =
 
 		if (reducedMotion) {
 			loader.dataset.state = "visible";
-			void finish();
+			finish();
 		} else {
 			requestAnimationFrame(() => {
 				loader.dataset.state = "visible";
