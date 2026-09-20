@@ -1,0 +1,159 @@
+---
+import CollectionToolbar from "./collection-toolbar.astro";
+import { getPublicFeedsData } from "@/lib/feeds";
+import { formatDate } from "@/lib/utils";
+
+const search = Astro.url.searchParams.get("search")?.trim() ?? "";
+const filter = Astro.url.searchParams.get("filter") ?? "";
+const sort =
+	Astro.url.searchParams.get("sort") === "oldest" ? "oldest" : "newest";
+const requestedPage = Number(Astro.url.searchParams.get("page") ?? "0");
+const page =
+	Number.isInteger(requestedPage) && requestedPage >= 0 ? requestedPage : 0;
+
+const { items, hasMore, tags } = await getPublicFeedsData(page, {
+	search,
+	tag: filter,
+	sort: sort,
+});
+
+const filterOptions = [
+	{ label: "All tags", value: "" },
+	...tags.map((tag) => ({ label: tag, value: tag })),
+];
+---
+
+<div class="flex flex-col" data-feed-list>
+	<CollectionToolbar
+		search={search}
+		searchPlaceholder="Search feeds"
+		filter={filter}
+		filterLabel="Filter by tag"
+		filterOptions={filterOptions}
+		sort={sort}
+		sortOptions={[
+			{ label: "Newest first", value: "newest" },
+			{ label: "Oldest first", value: "oldest" },
+		]}
+	>
+		<span slot="result-count">
+			{items.length} {items.length === 1 ? "result" : "results"}
+		</span>
+	</CollectionToolbar>
+
+	{items.length > 0 ? (
+		<>
+			{items.map((feed) => (
+				<article
+					class="border-b border-border py-8 first:pt-0 last:border-b-0"
+					data-feed-item
+				>
+					<div class="mb-3 flex items-center gap-4">
+						<span class="text-xs font-mono uppercase tracking-widest text-foreground/50">
+							{formatDate(new Date(feed.createdAt))}
+						</span>
+						<span class="border border-border px-2 py-0.5 text-xxs font-mono uppercase tracking-widest text-foreground/60">
+							{feed.tag}
+						</span>
+					</div>
+					<div
+						class="prose prose-sm dark:prose-invert max-w-2xl"
+						set:html={feed.content}
+					/>
+				</article>
+			))}
+
+			{hasMore && (
+				<div
+					class="flex justify-center py-8"
+					data-feed-loader
+					data-next-page={page + 1}
+				>
+					<span
+						class="hidden text-xs font-mono uppercase tracking-widest text-foreground/40"
+						data-feed-loading
+					>
+						Loading...
+					</span>
+				</div>
+			)}
+		</>
+	) : (
+		<div class="flex flex-col items-center gap-3 py-24 text-center">
+			<p class="font-serif text-4xl text-foreground">
+				{search || filter ? "Nothing found." : "Quiet for now."}
+			</p>
+			<p class="max-w-sm text-foreground/80">
+				{search || filter
+					? "Try a different search or clear the active filter."
+					: "Nothing has been posted yet. Check back soon."}
+			</p>
+		</div>
+	)}
+</div>
+
+<script>
+	const feedList = document.querySelector<HTMLElement>("[data-feed-list]");
+	const feedLoader = feedList?.querySelector<HTMLElement>("[data-feed-loader]");
+
+	if (feedList && feedLoader) {
+		let loading = false;
+
+		const loadMore = async () => {
+			if (loading || !feedLoader.dataset.nextPage) return;
+
+			loading = true;
+			const loadingLabel = feedLoader.querySelector<HTMLElement>(
+				"[data-feed-loading]",
+			);
+			loadingLabel?.classList.remove("hidden");
+
+			try {
+				const url = new URL(window.location.href);
+				url.searchParams.set("page", feedLoader.dataset.nextPage);
+				const response = await fetch(url);
+
+				if (!response.ok) throw new Error("Unable to load more feeds");
+
+				const html = await response.text();
+				const nextDocument = new DOMParser().parseFromString(html, "text/html");
+				const nextItems = nextDocument.querySelectorAll("[data-feed-item]");
+
+				for (const item of nextItems) {
+					feedList.insertBefore(item, feedLoader);
+				}
+
+				const resultCount = feedList.querySelector<HTMLElement>(
+					"[data-collection-result-count]",
+				);
+				const count = feedList.querySelectorAll("[data-feed-item]").length;
+				if (resultCount) {
+					resultCount.textContent = `${count} ${count === 1 ? "result" : "results"}`;
+				}
+
+				const nextLoader =
+					nextDocument.querySelector<HTMLElement>("[data-feed-loader]");
+				if (nextLoader?.dataset.nextPage) {
+					feedLoader.dataset.nextPage = nextLoader.dataset.nextPage;
+				} else {
+					feedLoader.remove();
+					observer.disconnect();
+				}
+			} catch {
+				loadingLabel?.classList.add("hidden");
+			} finally {
+				loading = false;
+				loadingLabel?.classList.add("hidden");
+			}
+		};
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (entries[0]?.isIntersecting) loadMore();
+			},
+			{ rootMargin: "200px" },
+		);
+
+		observer.observe(feedLoader);
+	}
+</script>

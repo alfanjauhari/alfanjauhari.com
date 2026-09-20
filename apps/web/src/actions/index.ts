@@ -29,7 +29,7 @@ import {
 	isAdminEmail,
 } from "../lib/dashboard";
 import { sendEmail } from "../lib/email";
-import { getPublicFeedsData } from "../lib/feeds";
+import { getPublicFeedsData, type FeedSort } from "../lib/feeds";
 import { verifyTurnstileToken } from "../lib/turnstile";
 import { redactEmail } from "../utils/security";
 import { env } from "cloudflare:workers";
@@ -156,17 +156,17 @@ export const server = {
 						and(
 							eq(comments.refTable, "updates"),
 							eq(comments.refId, slug),
-							eq(comments.status, "published")
+							eq(comments.status, "published"),
 						),
 						sessionUser
 							? and(
 									eq(comments.refTable, "updates"),
 									eq(comments.refId, slug),
 									eq(comments.userId, sessionUser.id),
-									inArray(comments.status, ["deleted", "deleted_by_admin"])
+									inArray(comments.status, ["deleted", "deleted_by_admin"]),
 								)
-							: undefined
-					)
+							: undefined,
+					),
 				);
 
 			const countResult = await client.$count(baseQuery);
@@ -367,8 +367,8 @@ export const server = {
 						and(
 							eq(likes.refTable, "updates"),
 							eq(likes.refId, slug),
-							eq(likes.userId, sessionUser.id)
-						)
+							eq(likes.userId, sessionUser.id),
+						),
 					)
 					.returning({ id: likes.id });
 
@@ -529,9 +529,16 @@ export const server = {
 	getPublicFeeds: defineAction({
 		input: z.object({
 			page: z.number().default(0),
+			search: z.string().default(""),
+			tag: z.string().default(""),
+			sort: z.enum(["newest", "oldest"]).default("newest"),
 		}),
-		handler: async ({ page }) => {
-			return getPublicFeedsData(page);
+		handler: async ({ page, search, tag, sort }) => {
+			return getPublicFeedsData(page, {
+				search,
+				tag,
+				sort: sort as FeedSort,
+			});
 		},
 	}),
 };

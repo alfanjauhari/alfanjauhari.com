@@ -41,7 +41,7 @@ function createModelUri(monaco: MonacoInstance, playgroundId: string, name: stri
 	return monaco.Uri.parse(`file:///${playgroundId}${playgroundPath(name)}`);
 }
 
-function defineMonacoThemes(monaco: MonacoInstance): void {
+function defineMonacoThemes(monaco: MonacoInstance) {
 	const latte = {
 		base: "vs" as const,
 		inherit: true,
@@ -153,7 +153,7 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 			: "catppuccin-latte";
 	}
 
-	function applyMonacoTheme(): void {
+	function applyMonacoTheme() {
 		if (!monacoEditor || !monacoInstance) return;
 
 		const theme = getMonacoTheme();
@@ -163,7 +163,7 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 	// #endregion
 
 	// #region Console functions
-	function appendConsoleLog(method: string, data: unknown[]): void {
+	function appendConsoleLog(method: string, data: unknown[]) {
 		if (method === "clear") {
 			setConsoleLogs([]);
 			return;
@@ -194,7 +194,7 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 	// #endregion
 
 	// #region LiveCodes readiness
-	function handleLiveCodesReady(sdk: LiveCodesPlayground): void {
+	function handleLiveCodesReady(sdk: LiveCodesPlayground) {
 		if (disposed) {
 			sdk.destroy().catch(() => {});
 			return;
@@ -234,14 +234,14 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 		}
 	}
 
-	function clearDebouncedUpdate(): void {
+	function clearDebouncedUpdate() {
 		if (!debounceTimer) return;
 
 		clearTimeout(debounceTimer);
 		debounceTimer = undefined;
 	}
 
-	function scheduleLiveCodesUpdate(): void {
+	function scheduleLiveCodesUpdate() {
 		clearDebouncedUpdate();
 		debounceTimer = setTimeout(() => {
 			debounceTimer = undefined;
@@ -265,7 +265,7 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 		return model;
 	}
 
-	function updateActiveFileFromModel(): void {
+	function updateActiveFileFromModel() {
 		const name = activeFile();
 		const model = models.get(name);
 		if (!model) return;
@@ -279,7 +279,7 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 		scheduleLiveCodesUpdate();
 	}
 
-	function handleEditorContentChange(): void {
+	function handleEditorContentChange() {
 		updateActiveFileFromModel();
 	}
 	// #endregion
@@ -290,7 +290,7 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 	 * Each authored file keeps its own model, while LiveCodes only receives the
 	 * active file snapshot when compilation is scheduled.
 	 */
-	function switchFile(name: string): void {
+	function switchFile(name: string) {
 		if (name === activeFile() || !monacoEditor) return;
 
 		const file = getFileByName(files(), name);

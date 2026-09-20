@@ -1,0 +1,110 @@
+---
+import { ChevronRightIcon, CodeXmlIcon, HashIcon } from "lucide-solid";
+import CollectionToolbar from "./collection-toolbar.astro";
+import { getAllSnippets } from "@/lib/content";
+
+const items = await getAllSnippets().then((res) =>
+	res.map((snippet) => ({
+		...snippet.data,
+		id: snippet.id,
+	})),
+);
+
+const search = Astro.url.searchParams.get("search")?.trim() ?? "";
+const filter = Astro.url.searchParams.get("filter") ?? "";
+const requestedSort = Astro.url.searchParams.get("sort");
+const sort = ["title-asc", "title-desc"].includes(requestedSort ?? "")
+	? requestedSort!
+	: "title-asc";
+const query = search.toLowerCase();
+
+const filterOptions = [
+	{ label: "All languages", value: "" },
+	...Array.from(new Set(items.map((item) => item.language).filter(Boolean)))
+		.sort((a, b) => a.localeCompare(b))
+		.map((language) => ({ label: language, value: language })),
+];
+
+const visibleItems = items
+	.filter((item) => {
+		const searchableText = [
+			item.title,
+			item.summary,
+			item.language,
+			...item.tags,
+		];
+		const matchesSearch =
+			!query ||
+			searchableText.some((value) => value.toLowerCase().includes(query));
+		return matchesSearch && (!filter || item.language === filter);
+	})
+	.sort((a, b) =>
+		sort === "title-desc"
+			? b.title.localeCompare(a.title)
+			: a.title.localeCompare(b.title),
+	);
+---
+
+<CollectionToolbar
+	search={search}
+	searchPlaceholder="Search snippets"
+	filter={filter}
+	filterLabel="Filter by language"
+	filterOptions={filterOptions}
+	sort={sort}
+	sortOptions={[
+		{ label: "Title A–Z", value: "title-asc" },
+		{ label: "Title Z–A", value: "title-desc" },
+	]}
+>
+	<span slot="result-count">
+		{visibleItems.length} {visibleItems.length === 1 ? "result" : "results"}
+	</span>
+</CollectionToolbar>
+
+{visibleItems.length > 0 ? (
+	<div class="grid grid-cols-1 gap-px border border-border md:grid-cols-2 lg:grid-cols-3">
+		{visibleItems.map((snippet) => (
+			<a href={`/snippets/${snippet.id}`} class="block h-full">
+				<div class="group flex h-full flex-col justify-between p-8">
+					<div>
+						<div class="mb-6 flex items-start justify-between">
+							<div class="rounded-sm bg-primary/20 p-3">
+								<CodeXmlIcon class="size-5" />
+							</div>
+							<span class="text-xs font-mono uppercase tracking-widest text-foreground/40">
+								{snippet.language}
+							</span>
+						</div>
+
+						<h3 class="mb-3 font-serif text-2xl decoration-1 underline-offset-4 group-hover:underline">
+							{snippet.title}
+						</h3>
+						<p class="mb-6 text-sm font-light leading-relaxed text-foreground/60">
+							{snippet.summary}
+						</p>
+					</div>
+
+					<div class="mt-4 flex items-center justify-between border-t border-foreground/80 pt-4">
+						<div class="flex gap-2">
+							{snippet.tags.slice(0, 2).map((tag) => (
+								<span class="flex items-center text-xxs font-mono uppercase text-foreground/50">
+									<HashIcon class="mr-0.5 size-2.5" />
+									{tag}
+								</span>
+							))}
+						</div>
+						<ChevronRightIcon class="size-4 text-foreground/40 transition-transform group-hover:translate-x-1" />
+					</div>
+				</div>
+			</a>
+		))}
+	</div>
+) : (
+	<div class="flex flex-col items-center gap-3 py-24 text-center">
+		<p class="font-serif text-4xl text-foreground">Nothing found.</p>
+		<p class="max-w-sm text-foreground/60">
+			Try a different search or clear the active filter.
+		</p>
+	</div>
+)}

@@ -1,0 +1,141 @@
+---
+import {
+	ArrowDownAZIcon,
+	ChevronDownIcon,
+	ListFilterIcon,
+	SearchIcon,
+} from "lucide-solid";
+import { Input } from "../solid/ui/input";
+
+interface CollectionOption {
+	label: string;
+	value: string;
+}
+
+interface Props {
+	search: string;
+	searchPlaceholder: string;
+	filter: string;
+	filterLabel: string;
+	filterOptions: CollectionOption[];
+	sort: string;
+	sortOptions: CollectionOption[];
+}
+
+const {
+	search,
+	searchPlaceholder,
+	filter,
+	filterLabel,
+	filterOptions,
+	sort,
+	sortOptions,
+} = Astro.props;
+
+const selectClass =
+	"h-11 w-full appearance-none border border-border bg-background px-3 pr-9 text-xs font-mono uppercase tracking-widest text-foreground outline-none transition-colors hover:border-foreground/50 focus-visible:border-foreground focus-visible:ring-2 focus-visible:ring-ring/50";
+---
+
+<form
+	method="get"
+	action={Astro.url.pathname}
+	class="mb-12 border-y border-border py-5"
+	data-collection-form
+	aria-label="Collection controls"
+>
+	<div class="grid gap-5 lg:grid-cols-[minmax(16rem,1fr)_auto] lg:items-end">
+		<label class="block">
+			<span class="mb-2 flex items-center gap-2 text-xxs font-mono uppercase tracking-[0.2em] text-foreground/50">
+				<SearchIcon class="size-3.5" aria-hidden="true" />
+				Search
+			</span>
+			<Input
+				data-slot="input"
+				type="search"
+				name="search"
+				value={search}
+				placeholder={searchPlaceholder}
+				aria-label={searchPlaceholder}
+				autocomplete="off"
+				data-collection-search
+			/>
+		</label>
+
+		<div class="grid gap-4 sm:grid-cols-2 lg:min-w-105">
+			<label class="relative block">
+				<span class="mb-2 flex items-center gap-2 text-xxs font-mono uppercase tracking-[0.2em] text-foreground/50">
+					<ListFilterIcon class="size-3.5" aria-hidden="true" />
+					{filterLabel}
+				</span>
+				<select
+					name="filter"
+					aria-label={filterLabel}
+					class={selectClass}
+					onchange="this.form.requestSubmit()"
+				>
+					{filterOptions.map((option) => (
+						<option value={option.value} selected={option.value === filter}>
+							{option.label}
+						</option>
+					))}
+				</select>
+				<ChevronDownIcon
+					class="pointer-events-none absolute right-3 bottom-3 size-4 text-foreground/50"
+					aria-hidden="true"
+				/>
+			</label>
+
+			<label class="relative block">
+				<span class="mb-2 flex items-center gap-2 text-xxs font-mono uppercase tracking-[0.2em] text-foreground/50">
+					<ArrowDownAZIcon class="size-3.5" aria-hidden="true" />
+					Sort
+				</span>
+				<select
+					name="sort"
+					aria-label="Sort results"
+					class={selectClass}
+					onchange="this.form.requestSubmit()"
+				>
+					{sortOptions.map((option) => (
+						<option value={option.value} selected={option.value === sort}>
+							{option.label}
+						</option>
+					))}
+				</select>
+				<ChevronDownIcon
+					class="pointer-events-none absolute right-3 bottom-3 size-4 text-foreground/50"
+					aria-hidden="true"
+				/>
+			</label>
+		</div>
+	</div>
+
+	<p
+		class="mt-5 text-xxs font-mono uppercase tracking-[0.2em] text-foreground/40"
+		data-collection-result-count
+		aria-live="polite"
+	>
+		<slot name="result-count" />
+	</p>
+	<button type="submit" class="sr-only">
+		Apply collection filters
+	</button>
+</form>
+
+<script>
+	const forms = document.querySelectorAll<HTMLFormElement>(
+		"[data-collection-form]",
+	);
+
+	for (const form of forms) {
+		const search = form.querySelector<HTMLInputElement>(
+			"[data-collection-search]",
+		);
+		let timeout: ReturnType<typeof setTimeout> | undefined;
+
+		search?.addEventListener("input", () => {
+			if (timeout) clearTimeout(timeout);
+			timeout = setTimeout(() => form.requestSubmit(), 750);
+		});
+	}
+</script>

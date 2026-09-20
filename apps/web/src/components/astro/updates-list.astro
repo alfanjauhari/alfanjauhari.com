@@ -1,0 +1,109 @@
+---
+import { ArrowUpRightIcon } from "lucide-solid";
+import CollectionToolbar from "./collection-toolbar.astro";
+import { calculateReadingTime, formatDate } from "@/lib/utils";
+import { getCollection } from "astro:content";
+
+const items = await getCollection("updates").then((res) =>
+	res.map((update) => ({
+		...update.data,
+		id: update.id,
+		body: update.body,
+	})),
+);
+
+const search = Astro.url.searchParams.get("search")?.trim() ?? "";
+const filter = Astro.url.searchParams.get("filter") ?? "";
+const requestedSort = Astro.url.searchParams.get("sort");
+
+const sort = ["newest", "oldest", "title"].includes(requestedSort ?? "")
+	? requestedSort!
+	: "newest";
+const query = search.toLowerCase();
+
+const filterOptions = [
+	{ label: "All tags", value: "" },
+	...Array.from(
+		new Set(
+			items.map((item) => item.tag).filter((tag): tag is string => !!tag),
+		),
+	)
+		.sort((a, b) => a.localeCompare(b))
+		.map((tag) => ({ label: tag, value: tag })),
+];
+
+const visibleItems = items
+	.filter((item) => {
+		const matchesSearch =
+			!query ||
+			[item.title, item.summary, item.tag]
+				.filter((f): f is string => !!f)
+				.some((value) => value.toLowerCase().includes(query));
+		return matchesSearch && (!filter || item.tag === filter);
+	})
+	.sort((a, b) => {
+		if (sort === "oldest") return a.date.getTime() - b.date.getTime();
+		if (sort === "title") return a.title.localeCompare(b.title);
+		return b.date.getTime() - a.date.getTime();
+	})
+	.map((update) => ({
+		...update,
+		readingTime: update.body ? calculateReadingTime(update.body) : 1,
+	}));
+---
+
+<CollectionToolbar
+	search={search}
+	searchPlaceholder="Search updates"
+	filter={filter}
+	filterLabel="Filter by tag"
+	filterOptions={filterOptions}
+	sort={sort}
+	sortOptions={[
+		{ label: "Newest first", value: "newest" },
+		{ label: "Oldest first", value: "oldest" },
+		{ label: "Title A–Z", value: "title" },
+	]}
+>
+	<span slot="result-count">
+		{visibleItems.length} {visibleItems.length === 1 ? "result" : "results"}
+	</span>
+</CollectionToolbar>
+
+{visibleItems.length > 0 ? (
+	<div class="flex flex-col gap-y-12 lg:gap-y-24">
+		{visibleItems.map((update) => (
+			<a href={`/updates/${update.id}`}>
+				<article class="group cursor-pointer">
+					<div class="mb-4 flex flex-col justify-between gap-8 md:flex-row">
+						<h3 class="max-w-4xl font-serif text-4xl transition-opacity duration-300 group-hover:opacity-70 md:text-6xl">
+							{update.title}
+						</h3>
+						<ArrowUpRightIcon class="hidden size-12 transform opacity-0 transition-all duration-300 group-hover:translate-x-2 group-hover:-translate-y-2 group-hover:opacity-100 lg:block" />
+					</div>
+					<div class="mt-6 mb-8 flex flex-wrap gap-4 text-xs font-mono uppercase tracking-widest text-foreground/50 md:gap-8">
+						<span>{formatDate(new Date(update.date))}</span>
+						{update.tag && (
+							<>
+								<span class="text-foreground/30">/</span>
+								<span>{update.tag}</span>
+							</>
+						)}
+						<span class="text-foreground/30">/</span>
+						<span>{update.readingTime} Minute Reading Time</span>
+					</div>
+					<p class="max-w-2xl leading-relaxed text-foreground/60">
+						{update.summary}
+					</p>
+				</article>
+			</a>
+		))}
+	</div>
+) : (
+	<div class="flex flex-col items-center gap-3 py-24 text-center">
+		<p class="font-serif text-4xl text-foreground">Nothing found.</p>
+		<p class="max-w-sm text-foreground/60">
+			Try a different search or clear the active filter.
+		</p>
+	</div>
+)}
