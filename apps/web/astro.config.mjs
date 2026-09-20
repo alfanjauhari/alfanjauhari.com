@@ -10,6 +10,7 @@ import ogImages from "@alfanjauhari/astro-og-images";
 import { defineConfig, envField } from "astro/config";
 import mermaid from "astro-mermaid";
 import viteLucidePreprocess from "vite-plugin-lucide-preprocess";
+import { satteri } from "@astrojs/markdown-satteri";
 import { renderOgTemplate } from "./src/integrations/og/template.ts";
 
 /**
@@ -49,6 +50,7 @@ export default defineConfig({
 		}),
 		mermaid(),
 		mdx({
+			processor: satteri(),
 			shikiConfig: {
 				themes: {
 					light: "catppuccin-latte",

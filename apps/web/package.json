@@ -24,6 +24,7 @@
     "@alfanjauhari/solid-prosemirror": "workspace:*",
     "@astrojs/cloudflare": "^14.2.3",
     "@astrojs/markdown-remark": "^7.2.4",
+    "@astrojs/markdown-satteri": "^0.4.1",
     "@astrojs/mdx": "^7.0.7",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.3",
