@@ -546,7 +546,6 @@ html[data-motion-ready="true"] [data-motion-reveal][data-motion-visible="true"] 
 }
 
 html[data-motion-ready="true"] .experience-entry {
-	opacity: 0.38;
 	transform: translateY(1rem);
 }
 
