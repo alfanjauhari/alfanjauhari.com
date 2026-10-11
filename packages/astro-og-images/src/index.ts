@@ -6,6 +6,7 @@ import type { AstroIntegration } from "astro";
 import { render, RenderInput, RenderOptions } from "takumi-js";
 
 import { extractOgMetadata } from "./extract";
+import { normalizeBasePath } from "./url-path";
 
 export interface OgRenderInput {
 	description?: string;
@@ -85,7 +86,7 @@ export default function ogImages(options: OgImageOptions): AstroIntegration {
 						await writeFile(imageFile, imageBuffer);
 
 						const expectedImagePath = path.posix
-							.join(base, getRelativePath(outputDir, imageFile))
+							.join(normalizeBasePath(base), getRelativePath(outputDir, imageFile))
 							.replace(/^\/+/, "");
 						const actualImagePath = getImagePath(pageDetails.image);
 
