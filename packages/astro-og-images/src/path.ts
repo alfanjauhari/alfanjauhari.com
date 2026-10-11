@@ -26,8 +26,10 @@ export function getOgImagePath({
 	}
 
 	const basePath = base.replace(/\/?$/, "/");
-	if (target === `${basePath}404/index.${format}`) return new URL(`${basePath}404.${format}`, site).toString();
-	if (target === `${basePath}500/index.${format}`) return new URL(`${basePath}500.${format}`, site).toString();
+	if (target === `${basePath}404/index.${format}`)
+		return new URL(`${basePath}404.${format}`, site).toString();
+	if (target === `${basePath}500/index.${format}`)
+		return new URL(`${basePath}500.${format}`, site).toString();
 
 	return new URL(target.slice(1), site).toString();
 }

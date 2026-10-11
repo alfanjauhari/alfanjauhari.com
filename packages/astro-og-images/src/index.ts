@@ -16,9 +16,7 @@ export interface OgRenderInput {
 	url: string;
 }
 
-export type OgRender = (
-	input: OgRenderInput,
-) => RenderInput | Promise<RenderInput>;
+export type OgRender = (input: OgRenderInput) => RenderInput | Promise<RenderInput>;
 export type OgImageOptions = RenderOptions & {
 	render: OgRender;
 	verbose?: boolean;
@@ -36,10 +34,7 @@ async function fileExists(filePath: string) {
 async function getHtmlFile(outputDir: string, pathname: string) {
 	const normalizedPath = pathname.replace(/^\/+/, "");
 	const directoryPath = path.join(outputDir, normalizedPath, "index.html");
-	const filePath = path.join(
-		outputDir,
-		`${normalizedPath.replace(/\/$/, "")}.html`,
-	);
+	const filePath = path.join(outputDir, `${normalizedPath.replace(/\/$/, "")}.html`);
 
 	if (await fileExists(directoryPath)) return directoryPath;
 	if (await fileExists(filePath)) return filePath;
@@ -82,9 +77,7 @@ export default function ogImages(options: OgImageOptions): AstroIntegration {
 
 						// Remove the .html extension from the image file if the URL does not end with .html
 						// This is possible if we build astro with build.format = "file"
-						const shouldRemoveHtmlExtension = !pageDetails.url.endsWith(
-							".html",
-						);
+						const shouldRemoveHtmlExtension = !pageDetails.url.endsWith(".html");
 						const imageFile = shouldRemoveHtmlExtension
 							? htmlFile.replace(/\.html$/, `.${options.format}`)
 							: `${htmlFile}.${options.format}`;
@@ -115,12 +108,7 @@ export default function ogImages(options: OgImageOptions): AstroIntegration {
 export { extractOgMetadata } from "./extract";
 export type { OgPageDetails } from "./extract";
 export { element } from "./element";
-export type {
-	ElementChild,
-	ElementNode,
-	ElementProps,
-	ElementType,
-} from "./element";
+export type { ElementChild, ElementNode, ElementProps, ElementType } from "./element";
 export type { ReactElementLike } from "takumi-js/helpers";
 export type { RenderInput, RenderOptions } from "takumi-js";
 export * from "@takumi-rs/core";
