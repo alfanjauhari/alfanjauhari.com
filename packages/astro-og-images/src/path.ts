@@ -1,10 +1,12 @@
 import { OutputFormat } from "takumi-js";
 
 export function getOgImagePath({
+	base = "/",
 	format = "webp",
 	site,
 	url,
 }: {
+	base?: string;
 	format?: OutputFormat;
 	site: URL | undefined;
 	url: URL;
@@ -23,8 +25,9 @@ export function getOgImagePath({
 		target += `.${format}`;
 	}
 
-	if (target === `/404/index.${format}`) return new URL(`404.${format}`, site).toString();
-	if (target === `/500/index.${format}`) return new URL(`500.${format}`, site).toString();
+	const basePath = base.replace(/\/?$/, "/");
+	if (target === `${basePath}404/index.${format}`) return new URL(`${basePath}404.${format}`, site).toString();
+	if (target === `${basePath}500/index.${format}`) return new URL(`${basePath}500.${format}`, site).toString();
 
 	return new URL(target.slice(1), site).toString();
 }

@@ -1,9 +1,11 @@
-import type { AstroIntegration } from "astro";
 import { access, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+
+import type { AstroIntegration } from "astro";
+import { render, RenderInput, RenderOptions } from "takumi-js";
+
 import { extractOgMetadata } from "./extract";
-import { render, RenderOptions, RenderInput } from "takumi-js";
 
 export interface OgRenderInput {
 	description?: string;
@@ -14,7 +16,9 @@ export interface OgRenderInput {
 	url: string;
 }
 
-export type OgRender = (input: OgRenderInput) => RenderInput | Promise<RenderInput>;
+export type OgRender = (
+	input: OgRenderInput,
+) => RenderInput | Promise<RenderInput>;
 export type OgImageOptions = RenderOptions & {
 	render: OgRender;
 	verbose?: boolean;
@@ -32,7 +36,10 @@ async function fileExists(filePath: string) {
 async function getHtmlFile(outputDir: string, pathname: string) {
 	const normalizedPath = pathname.replace(/^\/+/, "");
 	const directoryPath = path.join(outputDir, normalizedPath, "index.html");
-	const filePath = path.join(outputDir, `${normalizedPath.replace(/\/$/, "")}.html`);
+	const filePath = path.join(
+		outputDir,
+		`${normalizedPath.replace(/\/$/, "")}.html`,
+	);
 
 	if (await fileExists(directoryPath)) return directoryPath;
 	if (await fileExists(filePath)) return filePath;
@@ -49,9 +56,14 @@ function getImagePath(image: string) {
 }
 
 export default function ogImages(options: OgImageOptions): AstroIntegration {
+	let base = "/";
+
 	return {
 		name: "og-images",
 		hooks: {
+			"astro:config:done": ({ config }) => {
+				base = config.base;
+			},
 			"astro:build:done": async ({ dir, logger, pages }) => {
 				const outputDir = fileURLToPath(dir);
 
@@ -70,14 +82,18 @@ export default function ogImages(options: OgImageOptions): AstroIntegration {
 
 						// Remove the .html extension from the image file if the URL does not end with .html
 						// This is possible if we build astro with build.format = "file"
-						const shouldRemoveHtmlExtension = !pageDetails.url.endsWith(".html");
+						const shouldRemoveHtmlExtension = !pageDetails.url.endsWith(
+							".html",
+						);
 						const imageFile = shouldRemoveHtmlExtension
 							? htmlFile.replace(/\.html$/, `.${options.format}`)
 							: `${htmlFile}.${options.format}`;
 
 						await writeFile(imageFile, imageBuffer);
 
-						const expectedImagePath = getRelativePath(outputDir, imageFile);
+						const expectedImagePath = path.posix
+							.join(base, getRelativePath(outputDir, imageFile))
+							.replace(/^\/+/, "");
 						const actualImagePath = getImagePath(pageDetails.image);
 
 						if (actualImagePath !== expectedImagePath) {
@@ -99,7 +115,12 @@ export default function ogImages(options: OgImageOptions): AstroIntegration {
 export { extractOgMetadata } from "./extract";
 export type { OgPageDetails } from "./extract";
 export { element } from "./element";
-export type { ElementChild, ElementNode, ElementProps, ElementType } from "./element";
+export type {
+	ElementChild,
+	ElementNode,
+	ElementProps,
+	ElementType,
+} from "./element";
 export type { ReactElementLike } from "takumi-js/helpers";
 export type { RenderInput, RenderOptions } from "takumi-js";
 export * from "@takumi-rs/core";
