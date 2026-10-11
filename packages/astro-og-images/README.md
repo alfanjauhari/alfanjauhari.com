@@ -134,6 +134,7 @@ import { getOgImagePath } from "@alfanjauhari/astro-og-images/path";
 ```
 
 Returns the absolute image URL for an Astro page. It throws when Astro's `site` option is missing. When your site uses a non-root `base`, pass `base: import.meta.env.BASE_URL` (or the equivalent config value).
+Non-ASCII characters in the base path are URL-encoded consistently when building image URLs and validating generated paths.
 
 ### Other Exports
 
