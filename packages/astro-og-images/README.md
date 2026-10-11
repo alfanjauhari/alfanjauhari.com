@@ -58,6 +58,7 @@ const title = "Page title";
 const description = "Page description";
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
 const image = getOgImagePath({
+  base: import.meta.env.BASE_URL,
   format: "webp",
   site: Astro.site,
   url: Astro.url,
@@ -132,7 +133,7 @@ Creates a React-element-like object understood by Takumi without requiring React
 import { getOgImagePath } from "@alfanjauhari/astro-og-images/path";
 ```
 
-Returns the absolute image URL for an Astro page. It throws when Astro's `site` option is missing.
+Returns the absolute image URL for an Astro page. It throws when Astro's `site` option is missing. When your site uses a non-root `base`, pass `base: import.meta.env.BASE_URL` (or the equivalent config value).
 
 ### Other Exports
 
