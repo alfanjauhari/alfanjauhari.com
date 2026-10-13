@@ -33,7 +33,7 @@
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@takumi-rs/core": "^2.14.0",
+    "@takumi-rs/core": "^2.15.1",
     "@types/react": "^19.3.0",
     "jsdom": "^30.1.2",
     "takumi-js": "^2.14.0"
