@@ -15,9 +15,10 @@
     "lint": "turbo lint",
     "lint:fix": "turbo lint:fix",
     "preview": "pnpm --filter @alfanjauhari/web preview",
-    "release": "turbo run build lint typecheck && changeset publish",
+    "release": "turbo run build lint typecheck test && changeset publish",
     "typecheck": "turbo typecheck",
-    "version-packages": "changeset version"
+    "version-packages": "changeset version",
+    "test": "turbo test"
   },
   "devDependencies": {
     "@alfanjauhari/config": "workspace:*",

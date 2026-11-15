@@ -3,7 +3,7 @@ import { createForm, Form, Field as FormField, type FormStore, reset } from "@fo
 import { HeartIcon, MessageSquareIcon, Reply, ReplyIcon, SendIcon, XIcon } from "lucide-solid";
 import { createSignal, For, onMount, Show, type Component } from "solid-js";
 import * as v from "valibot";
-import { commentsTree, type CommentWithReplies } from "../../lib/comments";
+import { commentsTree, type Comment, type CommentWithReplies } from "../../lib/comments";
 import { cn, formatDate } from "../../lib/utils";
 import { Button, buttonVariants } from "./ui/button";
 import { Field, FieldError } from "./ui/field";
@@ -11,7 +11,6 @@ import { Skeleton } from "./ui/skeleton";
 import { Spinner } from "./ui/spinner";
 import { Textarea } from "./ui/textarea";
 import { Turnstile } from "./turnstile";
-import { type Comment } from "../../lib/comments";
 import { getTurnstileTokenFromForm } from "../../utils/security";
 
 const CommentSchema = v.object({
@@ -158,6 +157,8 @@ function CommentField(props: CommentFieldProps) {
 
 interface CommentFormProps {
 	slug: string;
+	parentId?: string;
+	placeholder?: string;
 	onPosted: () => void;
 }
 
@@ -178,69 +179,10 @@ function CommentForm(props: CommentFormProps) {
 		const { error: actionError } = await actions.addComment(
 			toFormData({
 				slug: props.slug,
-				content: output.content,
-				turnstileToken: token,
-			})
-		);
-
-		resetTurnstile?.();
-
-		if (actionError) {
-			if (actionError.code === "UNAUTHORIZED") {
-				redirectToLogin(props.slug);
-				return;
-			}
-
-			setError(actionError.message);
-			return;
-		}
-
-		reset(form);
-		props.onPosted();
-	};
-
-	return (
-		<Form of={form} onSubmit={onSubmit} class="mt-4">
-			<CommentField
-				form={form}
-				placeholder="Add to the discussion..."
-				submitting={form.isSubmitting}
-				error={error()}
-			/>
-
-			<Turnstile class="mt-4" registerReset={(reset) => (resetTurnstile = reset)} />
-		</Form>
-	);
-}
-
-interface ReplyFormProps {
-	slug: string;
-	parentId: string;
-	placeholder: string;
-	onPosted: () => void;
-}
-
-function ReplyForm(props: ReplyFormProps) {
-	const form = createForm({ schema: CommentSchema });
-	const [error, setError] = createSignal<string>();
-	let resetTurnstile: (() => void) | undefined;
-
-	const onSubmit = async (output: v.InferOutput<typeof CommentSchema>, event: SubmitEvent) => {
-		setError(undefined);
-
-		const token = getTurnstileTokenFromForm(event);
-		if (!token) {
-			setError("Turnstile verification failed. Please try again.");
-			return;
-		}
-
-		const { error: actionError } = await actions.addComment(
-			toFormData({
-				slug: props.slug,
 				parentId: props.parentId,
 				content: output.content,
 				turnstileToken: token,
-			})
+			}),
 		);
 
 		resetTurnstile?.();
@@ -263,7 +205,7 @@ function ReplyForm(props: ReplyFormProps) {
 		<Form of={form} onSubmit={onSubmit} class="mt-4">
 			<CommentField
 				form={form}
-				placeholder={props.placeholder}
+				placeholder={props.placeholder ?? "Add to the discussion..."}
 				submitting={form.isSubmitting}
 				error={error()}
 			/>
@@ -341,7 +283,7 @@ const ContentComment: Component<ContentCommentProps> = (props) => {
 			</div>
 
 			<Show when={isReplying()}>
-				<ReplyForm
+				<CommentForm
 					slug={props.slug}
 					parentId={props.comment.id}
 					placeholder={`Replying to ${props.comment.user.name}...`}
@@ -413,7 +355,7 @@ export function ContentInteractions(props: ContentInteractionsProps) {
 			setLikes(
 				previous.isLiked
 					? { isLiked: false, totalCount: Math.max(0, previous.totalCount - 1) }
-					: { isLiked: true, totalCount: previous.totalCount + 1 }
+					: { isLiked: true, totalCount: previous.totalCount + 1 },
 			);
 		}
 

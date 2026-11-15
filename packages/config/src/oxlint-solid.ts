@@ -1,14 +1,9 @@
 import { defineConfig } from "oxlint";
+import base from "./oxlint";
 
 export default defineConfig({
-	plugins: ["typescript", "unicorn", "oxc"],
-	categories: {
-		correctness: "error",
-	},
+	extends: [base],
 	rules: {
 		"no-unassigned-vars": "off",
-	},
-	env: {
-		builtin: true,
 	},
 });

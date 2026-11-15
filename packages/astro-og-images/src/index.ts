@@ -27,8 +27,10 @@ async function fileExists(filePath: string) {
 	try {
 		await access(filePath);
 		return true;
-	} catch {
-		return false;
+	} catch (error) {
+		const { code } = error as NodeJS.ErrnoException;
+		if (code === "ENOENT" || code === "ENOTDIR") return false;
+		throw error;
 	}
 }
 
@@ -76,8 +78,7 @@ export default function ogImages(options: OgImageOptions): AstroIntegration {
 
 						const imageBuffer = await render(element, options);
 
-						// Remove the .html extension from the image file if the URL does not end with .html
-						// This is possible if we build astro with build.format = "file"
+						// Astro's file output can produce .html files whose public URL omits the extension.
 						const shouldRemoveHtmlExtension = !pageDetails.url.endsWith(".html");
 						const imageFile = shouldRemoveHtmlExtension
 							? htmlFile.replace(/\.html$/, `.${options.format}`)

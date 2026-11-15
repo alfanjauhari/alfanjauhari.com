@@ -10,6 +10,8 @@ Two runnable workspace projects for the reusable packages in this repository.
 Start either project from the repository root:
 
 ```sh
-pnpm --filter @alfanjauhari/example-og-image dev
-pnpm --filter @alfanjauhari/example-prosemirror dev
+pnpm exec turbo dev --filter=@alfanjauhari/example-og-image
+pnpm exec turbo dev --filter=@alfanjauhari/example-prosemirror
 ```
+
+These commands use the workspace task graph to build package dependencies before starting the example.

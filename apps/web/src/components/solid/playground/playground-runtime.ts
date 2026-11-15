@@ -1,6 +1,4 @@
 import type { Code, Config, Playground as LiveCodesPlayground } from "livecodes";
-
-// #region Public types
 export interface LiveCodesRuntimeHandlers {
 	onCode: (result: string) => void;
 	onConsole: (method: string, args: unknown[]) => void;
@@ -11,9 +9,6 @@ export interface LiveCodesRuntime {
 	run(): Promise<Code>;
 	destroy(): Promise<void>;
 }
-// #endregion
-
-// #region Runtime factory
 /**
  * Wraps the asynchronous LiveCodes SDK in a serialized queue. Monaco can
  * produce updates faster than compilation completes; serializing SDK work
@@ -72,4 +67,3 @@ export function createLiveCodesRuntime(
 		},
 	};
 }
-// #endregion

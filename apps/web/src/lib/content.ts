@@ -17,17 +17,7 @@ export async function getAllWorks() {
 	return works.sort((a, b) => b.data.year - a.data.year);
 }
 
-export async function getWorkBySlug(slug: string) {
-	const works = await getCollection("works");
-	return works.find((w) => w.id === slug);
-}
-
 export async function getAllSnippets() {
 	const snippets = await getCollection("snippets");
 	return snippets;
-}
-
-export async function getSnippetBySlug(slug: string) {
-	const snippets = await getCollection("snippets");
-	return snippets.find((s) => s.id === slug);
 }

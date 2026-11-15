@@ -29,6 +29,9 @@
     },
     "db:migrate": {
       "cache": false
+    },
+    "test": {
+      "dependsOn": ["^build"]
     }
   }
 }

@@ -18,10 +18,8 @@ const presetOptions: preset.PresetOptions = {
 	modify_esbuild_options(esbuildOptions, permutation) {
 		if (permutation.type.jsx) return esbuildOptions;
 
-		return {
-			...esbuildOptions,
-			conditions: permutation.type.server ? ["solid", "node"] : ["solid", "browser"],
-		};
+		esbuildOptions.conditions = permutation.type.server ? ["solid", "node"] : ["solid", "browser"];
+		return esbuildOptions;
 	},
 };
 

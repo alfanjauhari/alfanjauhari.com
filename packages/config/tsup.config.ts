@@ -14,6 +14,5 @@ export default defineConfig({
 	platform: "node",
 	sourcemap: true,
 	target: "es2022",
-	// for json files
 	publicDir: "static",
 });

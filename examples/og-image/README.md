@@ -17,6 +17,8 @@ Every page uses `getOgImagePath()` from `src/components/Seo.astro`. The metadata
 Run it from the repository root:
 
 ```sh
-pnpm --filter @alfanjauhari/example-og-image dev
-pnpm --filter @alfanjauhari/example-og-image build
+pnpm exec turbo dev --filter=@alfanjauhari/example-og-image
+pnpm exec turbo build --filter=@alfanjauhari/example-og-image
 ```
+
+These commands use the workspace task graph to build package dependencies before starting the example.

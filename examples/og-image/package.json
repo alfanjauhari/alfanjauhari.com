@@ -4,12 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "predev": "pnpm --filter @alfanjauhari/astro-og-images build",
     "dev": "astro dev",
-    "prebuild": "pnpm --filter @alfanjauhari/astro-og-images build",
     "build": "astro build",
     "preview": "astro preview",
-    "pretypecheck": "pnpm --filter @alfanjauhari/astro-og-images build",
     "typecheck": "astro check"
   },
   "dependencies": {

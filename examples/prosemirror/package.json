@@ -4,12 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "predev": "pnpm --filter @alfanjauhari/solid-prosemirror build",
     "dev": "vite",
-    "prebuild": "pnpm --filter @alfanjauhari/solid-prosemirror build",
     "build": "vite build",
     "preview": "vite preview",
-    "pretypecheck": "pnpm --filter @alfanjauhari/solid-prosemirror build",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {

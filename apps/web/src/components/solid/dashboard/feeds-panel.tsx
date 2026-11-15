@@ -10,14 +10,7 @@ import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { Spinner } from "../ui/spinner";
 
-interface Feed {
-	id: string;
-	tag: string;
-	content: string;
-	draft: boolean;
-	createdAt: string;
-	updatedAt: string;
-}
+import type { FeedItem as Feed } from "../../../lib/feed-model";
 
 type FormMode = { type: "create" } | { type: "edit"; feed: Feed };
 

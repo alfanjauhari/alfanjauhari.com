@@ -1,12 +1,30 @@
-import type { ActionReturnType } from "astro/actions/runtime/entrypoints/server.js";
-import { actions } from "astro:actions";
-
 export type CommentStatus = "published" | "deleted" | "deleted_by_admin";
 
-export type Comment = Exclude<
-	ActionReturnType<typeof actions.getUpdateComments>["data"],
-	undefined
->["comments"][number];
+export interface CommentUser {
+	id: string;
+	name: string;
+	email: string;
+	image: string | null;
+}
+
+export interface CommentRecord {
+	id: string;
+	refTable: string;
+	refId: string;
+	userId: string;
+	content: string;
+	status: CommentStatus;
+	parentId: string | null;
+	rootId: string | null;
+	createdAt: string;
+	updatedAt: string;
+	user: CommentUser;
+	parent: { id: string; content: string; createdAt: string; user: CommentUser | null } | null;
+}
+
+export interface Comment extends CommentRecord {
+	user: CommentUser & { emailVerified: boolean };
+}
 
 export interface CommentNode {
 	id: string;

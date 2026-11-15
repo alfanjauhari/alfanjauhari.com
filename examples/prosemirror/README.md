@@ -11,8 +11,10 @@ This is a client-only Vite + SolidJS project with three implementations of `@alf
 Run it from the repository root:
 
 ```sh
-pnpm --filter @alfanjauhari/example-prosemirror dev
-pnpm --filter @alfanjauhari/example-prosemirror build
+pnpm exec turbo dev --filter=@alfanjauhari/example-prosemirror
+pnpm exec turbo build --filter=@alfanjauhari/example-prosemirror
 ```
 
 The project uses Tailwind CSS and Tailwind Typography because the packaged editor's shell is styled with those utilities. The ProseMirror stylesheet is imported from `src/main.tsx`.
+
+These commands use the workspace task graph to build package dependencies before starting the example.

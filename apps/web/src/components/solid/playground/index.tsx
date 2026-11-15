@@ -16,8 +16,6 @@ import {
 import { createLiveCodesRuntime, type LiveCodesRuntime } from "./playground-runtime";
 
 export type { PlaygroundFile } from "./playground-utils";
-
-// #region Public types
 type ViewMode = "editor" | "split" | "preview" | "console";
 
 interface ConsoleLog {
@@ -34,9 +32,6 @@ interface PlaygroundProps {
 type MonacoInstance = typeof Monaco;
 type MonacoEditor = Monaco.editor.IStandaloneCodeEditor;
 type MonacoModel = Monaco.editor.ITextModel;
-// #endregion
-
-// #region Monaco helpers
 function createModelUri(monaco: MonacoInstance, playgroundId: string, name: string): Monaco.Uri {
 	return monaco.Uri.parse(`file:///${playgroundId}${playgroundPath(name)}`);
 }
@@ -86,64 +81,32 @@ function defineMonacoThemes(monaco: MonacoInstance) {
 	monaco.editor.defineTheme("catppuccin-latte", latte);
 	monaco.editor.defineTheme("catppuccin-mocha", mocha);
 }
-// #endregion
 
 export const Playground: Component<PlaygroundProps> = (props) => {
-	// #region Component identity and initial inputs
 	const playgroundId = `playground-${crypto.randomUUID()}`;
 	const initialFiles = props.files ?? [];
 	let resolvedEntry = resolveEntry(initialFiles, props.entryFile);
-	// #endregion
-
-	// #region Active file state
 	const [activeFile, setActiveFile] = createSignal(resolvedEntry);
-	// #endregion
-
-	// #region File state
 	const [files, setFiles] = createSignal<PlaygroundFile[]>(initialFiles);
-	// #endregion
-
-	// #region View state
 	const [viewMode, setViewMode] = createSignal<ViewMode>("split");
-	// #endregion
-
-	// #region Preview and console state
 	const [previewHtml, setPreviewHtml] = createSignal("");
 	const [consoleLogs, setConsoleLogs] = createSignal<ConsoleLog[]>([]);
 	const [sandboxError, setSandboxError] = createSignal<string>();
-	// #endregion
-
-	// #region Readiness state
 	const [editorReady, setEditorReady] = createSignal(false);
-	// #endregion
-
-	// #region DOM refs
 	let playgroundContainer!: HTMLDivElement;
 	let editorContainer!: HTMLDivElement;
 	let previewFrame!: HTMLIFrameElement;
-	// #endregion
-
-	// #region Monaco refs and models
 	let monacoInstance: MonacoInstance | undefined;
 	let monacoEditor: MonacoEditor | undefined;
 	let editorContentSubscription: Monaco.IDisposable | undefined;
 	const models = new Map<string, MonacoModel>();
-	// #endregion
-
-	// #region LiveCodes refs and subscriptions
 	let liveCodesRuntime: LiveCodesRuntime | undefined;
 	let debounceTimer: ReturnType<typeof setTimeout> | undefined;
 	let disposed = false;
 	let consoleLogId = 0;
-	// #endregion
-
-	// #region Theme refs
 	let themeObserver: MutationObserver | undefined;
 	let mediaQuery: MediaQueryList | undefined;
 	let mediaQueryHandler: (() => void) | undefined;
-	// #endregion
-
-	// #region Monaco theme functions
 	function getMonacoTheme(): string {
 		const attr = document.documentElement.getAttribute("data-theme");
 		if (attr === "dark") return "catppuccin-mocha";
@@ -160,9 +123,6 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 		monacoInstance.editor.setTheme(theme);
 		monacoEditor.updateOptions({ theme });
 	}
-	// #endregion
-
-	// #region Console functions
 	function appendConsoleLog(method: string, data: unknown[]) {
 		if (method === "clear") {
 			setConsoleLogs([]);
@@ -191,9 +151,6 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 				return "text-muted-foreground";
 		}
 	}
-	// #endregion
-
-	// #region LiveCodes readiness
 	function handleLiveCodesReady(sdk: LiveCodesPlayground) {
 		if (disposed) {
 			sdk.destroy().catch(() => {});
@@ -207,14 +164,6 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 
 		if (editorReady()) updateLiveCodes();
 	}
-	// #endregion
-
-	// #region LiveCodes synchronization
-	/**
-	 * Pushes the current file snapshot into LiveCodes after a short pause.
-	 * Monaco state is updated immediately; only compilation is debounced so
-	 * typing remains responsive while LiveCodes avoids redundant builds.
-	 */
 	async function updateLiveCodes(): Promise<void> {
 		const runtime = liveCodesRuntime;
 		if (disposed || !runtime || !files().length) return;
@@ -248,9 +197,6 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 			updateLiveCodes();
 		}, 500);
 	}
-	// #endregion
-
-	// #region Monaco model functions
 	function createModel(name: string, content: string): MonacoModel {
 		if (!monacoInstance) {
 			throw new Error("Monaco is not initialized.");
@@ -278,18 +224,6 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 		);
 		scheduleLiveCodesUpdate();
 	}
-
-	function handleEditorContentChange() {
-		updateActiveFileFromModel();
-	}
-	// #endregion
-
-	// #region File switching
-	/**
-	 * Switches Monaco models instead of copying content through LiveCodes.
-	 * Each authored file keeps its own model, while LiveCodes only receives the
-	 * active file snapshot when compilation is scheduled.
-	 */
 	function switchFile(name: string) {
 		if (name === activeFile() || !monacoEditor) return;
 
@@ -301,9 +235,6 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 		setActiveFile(name);
 		requestAnimationFrame(() => monacoEditor?.layout());
 	}
-	// #endregion
-
-	// #region Refresh
 	async function refreshPreview(): Promise<void> {
 		clearDebouncedUpdate();
 		setConsoleLogs([]);
@@ -325,9 +256,6 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 			}
 		}
 	}
-	// #endregion
-
-	// #region View helpers
 	function getEditorClass(): string {
 		return viewMode() === "preview" || viewMode() === "console"
 			? "hidden"
@@ -343,9 +271,6 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 				? "md:w-1/2 border-t md:border-t-0 md:border-l"
 				: "w-full border-t";
 	}
-	// #endregion
-
-	// #region MDX extraction
 	function decodeHtmlEntities(value: string): string {
 		const textarea = document.createElement("textarea");
 		textarea.innerHTML = value;
@@ -364,15 +289,6 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 
 		return result;
 	}
-	// #endregion
-
-	// #region Initialization
-	/**
-	 * Initializes the two deliberately separate clients: Monaco presents the
-	 * file-tab UX, while LiveCodes compiles the three logical runtime inputs.
-	 * Either client may become ready first, so initialization checks both sides
-	 * before scheduling the first synchronization.
-	 */
 	async function initialize(): Promise<void> {
 		let currentFiles = files();
 		if (!props.files?.length) {
@@ -405,7 +321,7 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 			monacoEditor.setModel(createModel(firstFile.name, firstFile.content));
 		}
 
-		editorContentSubscription = monacoEditor.onDidChangeModelContent(handleEditorContentChange);
+		editorContentSubscription = monacoEditor.onDidChangeModelContent(updateActiveFileFromModel);
 		setEditorReady(true);
 		applyMonacoTheme();
 
@@ -421,14 +337,6 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 
 		if (liveCodesRuntime) updateLiveCodes();
 	}
-	// #endregion
-
-	// #region Disposal
-	/**
-	 * Disposes subscriptions, Monaco models, and the headless LiveCodes
-	 * instance together. This prevents delayed compiler or iframe events from
-	 * updating a detached playground after Astro removes the component.
-	 */
 	async function disposePlayground(): Promise<void> {
 		const runtime = liveCodesRuntime;
 		liveCodesRuntime = undefined;
@@ -449,9 +357,6 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 		models.clear();
 		previewFrame.srcdoc = "";
 	}
-	// #endregion
-
-	// #region Solid lifecycle
 	onMount(() => {
 		initialize().catch((error: unknown) => {
 			if (!disposed) {
@@ -469,9 +374,6 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 		}
 		disposePlayground();
 	});
-	// #endregion
-
-	// #region Render
 	return (
 		<div
 			ref={playgroundContainer}
@@ -637,5 +539,4 @@ export const Playground: Component<PlaygroundProps> = (props) => {
 			</div>
 		</div>
 	);
-	// #endregion
 };

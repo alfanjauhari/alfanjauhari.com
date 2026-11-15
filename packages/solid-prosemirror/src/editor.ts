@@ -108,35 +108,33 @@ function toggleBlockquote(view: EditorView) {
 	wrapIn(schema.nodes.blockquote)(view.state, view.dispatch);
 }
 
-export const defaultTools: RichTextTool[] = [
-	{
-		id: "bold",
-		title: "Bold",
-		icon: BoldIcon,
-		run: (view) => toggleMark(schema.marks.strong)(view.state, view.dispatch),
-		isActive: (state) => isMarkActive(state, schema.marks.strong),
-	},
-	{
-		id: "italic",
-		title: "Italic",
-		icon: ItalicIcon,
-		run: (view) => toggleMark(schema.marks.em)(view.state, view.dispatch),
-		isActive: (state) => isMarkActive(state, schema.marks.em),
-	},
+const markTools = [
+	{ id: "bold", title: "Bold", icon: BoldIcon, mark: schema.marks.strong, shortcut: "Mod-b" },
+	{ id: "italic", title: "Italic", icon: ItalicIcon, mark: schema.marks.em, shortcut: "Mod-i" },
 	{
 		id: "underline",
 		title: "Underline",
 		icon: UnderlineIcon,
-		run: (view) => toggleMark(schema.marks.underline)(view.state, view.dispatch),
-		isActive: (state) => isMarkActive(state, schema.marks.underline),
+		mark: schema.marks.underline,
+		shortcut: "Mod-u",
 	},
 	{
 		id: "strikethrough",
 		title: "Strikethrough",
 		icon: StrikethroughIcon,
-		run: (view) => toggleMark(schema.marks.strike)(view.state, view.dispatch),
-		isActive: (state) => isMarkActive(state, schema.marks.strike),
+		mark: schema.marks.strike,
+		shortcut: "Mod-Shift-x",
 	},
+];
+
+export const defaultTools: RichTextTool[] = [
+	...markTools.map(({ id, title, icon, mark }): RichTextTool => ({
+		id,
+		title,
+		icon,
+		run: (view) => toggleMark(mark)(view.state, view.dispatch),
+		isActive: (state) => isMarkActive(state, mark),
+	})),
 	{
 		id: "blockquote",
 		title: "Blockquote",
@@ -204,12 +202,9 @@ export function createEditor(
 		plugins: [
 			history(),
 			keymap(baseKeymap),
-			keymap({
-				"Mod-b": toggleMark(schema.marks.strong),
-				"Mod-i": toggleMark(schema.marks.em),
-				"Mod-u": toggleMark(schema.marks.underline),
-				"Mod-Shift-x": toggleMark(schema.marks.strike),
-			}),
+			keymap(
+				Object.fromEntries(markTools.map(({ shortcut, mark }) => [shortcut, toggleMark(mark)])),
+			),
 			observerPlugin(callbacks),
 		],
 	});

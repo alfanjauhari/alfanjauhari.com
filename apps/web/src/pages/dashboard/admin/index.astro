@@ -3,12 +3,12 @@ import CommentRecord from "@/components/astro/dashboard/admin-comment.astro";
 import { FeedsPanel } from "../../../components/solid/dashboard/feeds-panel";
 import { LogoutButton } from "../../../components/solid/dashboard/logout-button";
 import BaseLayout from "@/layouts/base-layout.astro";
+import { isAdminEmail } from "../../../lib/authorization";
 import { commentsTree } from "../../../lib/comments";
 import {
 	getAdminFeedsData,
 	getAllCommentsData,
 	getUpdatesListData,
-	isAdminEmail,
 } from "../../../lib/dashboard";
 import { cn, formatDate } from "../../../lib/utils";
 

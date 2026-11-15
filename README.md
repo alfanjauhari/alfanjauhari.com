@@ -15,7 +15,7 @@ This is a pnpm and Turborepo monorepo. The website is built with Astro, MDX, Sol
 | [`examples/og-image`](./examples/og-image)                        | Astro project demonstrating OG image implementations     |
 | [`examples/prosemirror`](./examples/prosemirror)                  | Client-only SolidJS project demonstrating the editor     |
 
-The website consumes all three packages through `workspace:*`. The example projects are private workspace packages and are built before their package dependencies through Turborepo's dependency graph.
+The website consumes all three packages through `workspace:*`. The example projects are private workspace packages and are built after their package dependencies through Turborepo's dependency graph.
 
 Copyable package implementations live in [`examples`](./examples/README.md).
 
@@ -44,6 +44,8 @@ Published content lives in Astro content collections:
 | `snippets` | `apps/web/src/content/snippets` | Technical notes and examples |
 
 Interactive features use Astro Actions and SolidJS. D1 stores Better Auth records, short-form feeds, threaded comments, and likes. Public feed HTML is sanitized before rendering.
+
+Within `apps/web/src`, `pages` owns routes, `actions` groups server endpoints by feature, and `lib` holds shared models, policies, and queries. The action registry preserves the public endpoint names. Browser-safe models live in `lib/comments.ts` and `lib/feed-model.ts`; server comment queries and serialization live in `lib/comment-data.ts`. MDX component registration lives in `components/mdx/index.ts`.
 
 Open Graph images are generated from prerendered page metadata at the end of every Astro build. Runtime-only routes do not receive generated images.
 
@@ -136,6 +138,7 @@ Run commands from the repository root:
 | `pnpm preview`          | Preview the built website locally                                              |
 | `pnpm astro -- <args>`  | Run the Astro CLI for `apps/web`                                               |
 | `pnpm typecheck`        | Typecheck the application and packages                                         |
+| `pnpm test`             | Run automated regression tests through Turborepo                               |
 | `pnpm lint`             | Run workspace lint tasks                                                       |
 | `pnpm lint:fix`         | Run workspace lint tasks with fixes                                            |
 | `pnpm format`           | Build the config package and format the repository                             |
@@ -147,7 +150,7 @@ Run commands from the repository root:
 | `pnpm version-packages` | Apply Changesets package versions                                              |
 | `pnpm release`          | Validate and publish versioned packages                                        |
 
-There is currently no automated test suite. Repository validation consists of builds, typechecking, linting, and formatting checks.
+Run `pnpm test` for the automated regression tests. Repository validation also includes builds, typechecking, linting, and formatting checks.
 
 ## Database Changes
 
@@ -171,7 +174,7 @@ pnpm --filter @alfanjauhari/web exec wrangler d1 migrations apply DATABASE --rem
 
 Add an MDX file to the appropriate directory under `apps/web/src/content`. Collection frontmatter is validated by `apps/web/src/content.config.ts`, and dynamic detail routes are generated from collection IDs.
 
-Images and other static files belong in `apps/web/public`. Interactive MDX playgrounds and custom rendering components live under `apps/web/src/components/mdx`.
+Images and other static files belong in `apps/web/public`. Custom rendering components and their shared registry live under `apps/web/src/components/mdx`. The interactive playground implementation and its tests live together under `apps/web/src/components/solid/playground`.
 
 ## Deployment
 

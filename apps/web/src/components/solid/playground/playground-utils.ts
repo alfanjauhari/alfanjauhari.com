@@ -1,15 +1,10 @@
 import type { Config, Language } from "livecodes";
-
-// #region Public types
 export interface PlaygroundFile {
 	name: string;
 	content: string;
 }
 
 export type LiveCodesEditor = "markup" | "style" | "script";
-// #endregion
-
-// #region Constants
 const LANG_MAP: Record<string, string> = {
 	html: "html",
 	css: "css",
@@ -32,9 +27,6 @@ const SCRIPT_EXTENSIONS = [".js", ".jsx", ".mjs", ".cjs", ".ts", ".tsx"];
 const CSS_EXTENSIONS = [".css", ".scss", ".sass", ".less"];
 const CSS_MODULE_PATTERN = /\.module\.(?:css|scss|sass|less)$/i;
 const CSS_IMPORT_PATTERN = /(["'])(\.{1,2}\/[^"']+\.(?:css|scss|sass|less))\1/g;
-// #endregion
-
-// #region File helpers
 export function getExtension(filename: string): string {
 	const lastDot = filename.lastIndexOf(".");
 	return lastDot === -1 ? "" : filename.slice(lastDot).toLowerCase();
@@ -122,9 +114,6 @@ export function getLiveCodesEditor(filename: string): LiveCodesEditor {
 export function getCssFiles(files: PlaygroundFile[]): PlaygroundFile[] {
 	return files.filter((file) => hasExtension(file.name, CSS_EXTENSIONS));
 }
-// #endregion
-
-// #region CSS import adapter
 function cssFileMatchesImport(file: PlaygroundFile, importPath: string): boolean {
 	const importedName = importPath.replace(/^(?:\.\.?\/)+/, "");
 	const fileName = file.name.replaceAll("\\", "/").replace(/^\/+/, "");
@@ -153,15 +142,6 @@ export function normalizeLiveCodesImports(
 		return `${quote}./style${moduleSuffix}${extension}${quote}`;
 	});
 }
-
-// #endregion
-
-// #region LiveCodes configuration
-/**
- * Builds the three logical LiveCodes inputs from the file-tab model.
- * LiveCodes owns compilation and execution; this adapter only selects the
- * source files and combines the style inputs required by the existing UX.
- */
 export function buildLiveCodesConfig(
 	files: PlaygroundFile[],
 	entryFile?: string,
@@ -208,10 +188,6 @@ export function buildLiveCodesConfig(
 		processors: hasCssModules ? ["cssmodules"] : [],
 	};
 }
-
-// #endregion
-
-// #region Console formatting
 export function formatConsoleValue(value: unknown, depth = 0): string {
 	if (typeof value === "string") return value;
 	if (value === undefined) return "undefined";
@@ -248,4 +224,3 @@ export function formatConsoleValue(value: unknown, depth = 0): string {
 	}
 	return String(value);
 }
-// #endregion
